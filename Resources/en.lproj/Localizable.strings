@@ -1,0 +1,4 @@
+DISHES = "Dishes";
+SEARCH = "Search";
+ME = "Me";
+SETTINGS = "Settings";

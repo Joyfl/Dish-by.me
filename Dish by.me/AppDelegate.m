@@ -7,6 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "DishViewController.h"
+#import "SearchViewController.h"
+#import "MeViewController.h"
+#import "SettingsViewController.h"
 
 @implementation AppDelegate
 
@@ -21,9 +25,50 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+	
+	tabBarController = [[UITabBarController alloc] init];
+	tabBarController.delegate = self;
+//	tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar.png"];
+	
+	DishViewController *dishViewController = [[DishViewController alloc] init];
+	UINavigationController *dishNavigationController = [[UINavigationController alloc] initWithRootViewController:dishViewController];
+	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
+//	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
+	[dishViewController release];
+	
+	SearchViewController *searchViewController = [[SearchViewController alloc] init];
+	UINavigationController *searchNavigationController = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+	searchNavigationController.title = NSLocalizedString( @"SEARCH", @"" );
+//	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
+	[searchViewController release];
+	
+	MeViewController *meViewController = [[MeViewController alloc] init];
+	UINavigationController *meNavigationController = [[UINavigationController alloc] initWithRootViewController:meViewController];
+	meNavigationController.title = NSLocalizedString( @"ME", @"" );;
+//	meNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
+	[meViewController release];
+	
+	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
+	UINavigationController *settingsNavigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+	settingsNavigationController.title = NSLocalizedString( @"SETTINGS", @"" );
+//	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
+	[settingsViewController release];
+	
+	tabBarController.viewControllers = [NSArray arrayWithObjects:
+										dishNavigationController,
+										searchNavigationController,
+										[[[UIViewController alloc] init] autorelease],
+										meNavigationController,
+										settingsNavigationController,
+										nil];
+	[self.window addSubview:tabBarController.view];
+	[dishNavigationController release];
+	[searchNavigationController release];
+	[meNavigationController release];
+	[settingsNavigationController release];
+	
     return YES;
 }
 

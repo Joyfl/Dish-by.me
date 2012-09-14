@@ -1,0 +1,4 @@
+DISHES = "요리";
+SEARCH = "검색";
+ME = "나";
+SETTINGS = "설정";
