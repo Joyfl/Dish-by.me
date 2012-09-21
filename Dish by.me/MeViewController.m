@@ -8,18 +8,14 @@
 
 #import "MeViewController.h"
 
-@interface MeViewController ()
-
-@end
-
 @implementation MeViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)init
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
+    self = [super init];
+	
+	
+	
     return self;
 }
 

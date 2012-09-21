@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APILoader.h"
 
-@interface DishViewController : UIViewController
+@interface DishViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, APILoaderDelegate>
+{
+	UITableView *tableView;
+	NSMutableArray *dishes;
+	APILoader *loader;
+}
 
 @end

@@ -8,18 +8,14 @@
 
 #import "SearchViewController.h"
 
-@interface SearchViewController ()
-
-@end
-
 @implementation SearchViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)init
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
+    self = [super init];
+	
+	
+	
     return self;
 }
 

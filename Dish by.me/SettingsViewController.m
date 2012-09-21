@@ -8,18 +8,14 @@
 
 #import "SettingsViewController.h"
 
-@interface SettingsViewController ()
-
-@end
-
 @implementation SettingsViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)init
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
+    self = [super init];
+	
+	
+	
     return self;
 }
 
