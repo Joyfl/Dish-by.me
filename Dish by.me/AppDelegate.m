@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "DishByMeNavigationController.h"
 #import "DishListViewController.h"
 #import "SearchViewController.h"
 #import "MeViewController.h"
@@ -34,28 +35,28 @@
 	tabBarController.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tab_bar_bg_selected.png"];
 	
 	DishListViewController *dishListViewController = [[DishListViewController alloc] init];
-	UINavigationController *dishNavigationController = [[UINavigationController alloc] initWithRootViewController:dishListViewController];
+	DishByMeNavigationController *dishNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:dishListViewController];
 //	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
 	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_dish.png"];
 	dishNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[dishListViewController release];
 	
 	SearchViewController *searchViewController = [[SearchViewController alloc] init];
-	UINavigationController *searchNavigationController = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+	DishByMeNavigationController *searchNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:searchViewController];
 //	searchNavigationController.title = NSLocalizedString( @"SEARCH", @"" );
 	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_search.png"];
 	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[searchViewController release];
 	
 	MeViewController *meViewController = [[MeViewController alloc] init];
-	UINavigationController *meNavigationController = [[UINavigationController alloc] initWithRootViewController:meViewController];
+	DishByMeNavigationController *meNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:meViewController];
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
 	meNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
 	meNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[meViewController release];
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
-	UINavigationController *settingsNavigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+	DishByMeNavigationController *settingsNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:settingsViewController];
 //	settingsNavigationController.title = NSLocalizedString( @"SETTINGS", @"" );
 	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_settings.png"];
 	settingsNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
