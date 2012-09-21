@@ -27,6 +27,7 @@ enum {
 	tableView.delegate = self;
 	tableView.dataSource = self;
 	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	tableView.backgroundColor = [UIColor colorWithRed:0xF3 / 255.0 green:0xEE / 255.0 blue:0xEA / 255.0 alpha:1];
 	[self.view addSubview:tableView];
 	
 	dishes = [[NSMutableArray alloc] init];
@@ -103,8 +104,8 @@ enum {
 	return ceil( dishes.count / 3.0 );
 }
 
-#define gap 11
-#define len 92
+#define gap 14
+#define len 88
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -16,7 +16,16 @@
 - (id)initWithDish:(Dish *)_dish
 {
 	self = [super init];
-	[self setImage:[UIImage imageNamed:@"temp_dish.png"] forState:UIControlStateNormal];
+	self.imageEdgeInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
+	[self setBackgroundImage:[UIImage imageNamed:@"temp_dish.png"] forState:UIControlStateNormal];
+	
+	// 180 (테두리 포함 190)
+	// 164 사진
+	
+//	UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_tile_border.png"]];
+//	[self addSubview:borderView];
+	
+	[self setImage:[UIImage imageNamed:@"dish_tile_border.png"] forState:UIControlStateNormal];
 	
 	dish = _dish;
 	
@@ -50,7 +59,7 @@
 		
 		dispatch_async( dispatch_get_main_queue(), ^{
 			dish.photo = [UIImage imageWithData:data];
-			[self setImage:dish.photo forState:UIControlStateNormal];
+			[self setBackgroundImage:dish.photo forState:UIControlStateNormal];
 		} );
 		
 		[data release];
