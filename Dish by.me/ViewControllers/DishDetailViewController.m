@@ -179,7 +179,7 @@ enum {
 		}
 		else if( indexPath.row == kRowYum )
 		{
-			cell.textLabel.text = [NSString stringWithFormat:@"%d명이 침을 질질 흘립니다.", dish.yumCount];;
+			cell.textLabel.text = [NSString stringWithFormat:@"%d명이 침을 질질 흘립니다.", dish.yumCount];
 		}
 	}
 	

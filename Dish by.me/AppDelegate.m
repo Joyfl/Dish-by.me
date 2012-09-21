@@ -30,30 +30,35 @@
 	
 	tabBarController = [[UITabBarController alloc] init];
 	tabBarController.delegate = self;
-//	tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar.png"];
+	tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar_bg.png"];
+	tabBarController.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tab_bar_bg_selected.png"];
 	
 	DishListViewController *dishListViewController = [[DishListViewController alloc] init];
 	UINavigationController *dishNavigationController = [[UINavigationController alloc] initWithRootViewController:dishListViewController];
-	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
-//	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
+//	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
+	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_dish.png"];
+	dishNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[dishListViewController release];
 	
 	SearchViewController *searchViewController = [[SearchViewController alloc] init];
 	UINavigationController *searchNavigationController = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-	searchNavigationController.title = NSLocalizedString( @"SEARCH", @"" );
-//	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
+//	searchNavigationController.title = NSLocalizedString( @"SEARCH", @"" );
+	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_search.png"];
+	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[searchViewController release];
 	
 	MeViewController *meViewController = [[MeViewController alloc] init];
 	UINavigationController *meNavigationController = [[UINavigationController alloc] initWithRootViewController:meViewController];
-	meNavigationController.title = NSLocalizedString( @"ME", @"" );;
-//	meNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
+//	meNavigationController.title = NSLocalizedString( @"ME", @"" );
+	meNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
+	meNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[meViewController release];
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
 	UINavigationController *settingsNavigationController = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
-	settingsNavigationController.title = NSLocalizedString( @"SETTINGS", @"" );
-//	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
+//	settingsNavigationController.title = NSLocalizedString( @"SETTINGS", @"" );
+	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_settings.png"];
+	settingsNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[settingsViewController release];
 	
 	tabBarController.viewControllers = [NSArray arrayWithObjects:
@@ -68,6 +73,13 @@
 	[searchNavigationController release];
 	[meNavigationController release];
 	[settingsNavigationController release];
+	
+	UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	cameraButton.frame = CGRectMake( 128, -1, 64, 50 );
+	[cameraButton setImage:[UIImage imageNamed:@"tab_camera.png"] forState:UIControlStateNormal];
+	[cameraButton setImage:[UIImage imageNamed:@"tab_camera_highlighted.png"] forState:UIControlStateHighlighted];
+	[cameraButton addTarget:self action:@selector(cameraButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[tabBarController.tabBar addSubview:cameraButton];
 	
     return YES;
 }
@@ -97,6 +109,15 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
 	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+#pragma mark -
+#pragma mark Selectors
+
+- (void)cameraButtonDidTouchUpInside
+{
+	
 }
 
 @end
