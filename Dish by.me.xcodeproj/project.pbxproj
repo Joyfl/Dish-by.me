@@ -134,14 +134,14 @@
 		03178840160C76DB0041DAD7 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				03178841160C76DB0041DAD7 /* DishDetailViewController.h */,
-				03178842160C76DB0041DAD7 /* DishDetailViewController.m */,
 				03178843160C76DB0041DAD7 /* DishListViewController.h */,
 				03178844160C76DB0041DAD7 /* DishListViewController.m */,
-				03178845160C76DB0041DAD7 /* MeViewController.h */,
-				03178846160C76DB0041DAD7 /* MeViewController.m */,
+				03178841160C76DB0041DAD7 /* DishDetailViewController.h */,
+				03178842160C76DB0041DAD7 /* DishDetailViewController.m */,
 				03178847160C76DB0041DAD7 /* SearchViewController.h */,
 				03178848160C76DB0041DAD7 /* SearchViewController.m */,
+				03178845160C76DB0041DAD7 /* MeViewController.h */,
+				03178846160C76DB0041DAD7 /* MeViewController.m */,
 				03178849160C76DB0041DAD7 /* SettingsViewController.h */,
 				0317884A160C76DB0041DAD7 /* SettingsViewController.m */,
 			);
