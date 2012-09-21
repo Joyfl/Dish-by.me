@@ -36,6 +36,7 @@
 		03C899B6160B1674001E488B /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C899A9160B1674001E488B /* SBJsonUTF8Stream.m */; };
 		03C899B7160B1674001E488B /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C899AB160B1674001E488B /* SBJsonWriter.m */; };
 		03C899BA160B1693001E488B /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C899B9160B1693001E488B /* Utils.m */; };
+		03CB7409160C937700A5C6A3 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB7408160C937700A5C6A3 /* Comment.m */; };
 		03E34F541605AE3E00BFBE87 /* APILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E34F531605AE3E00BFBE87 /* APILoader.m */; };
 /* End PBXBuildFile section */
 
@@ -97,6 +98,8 @@
 		03C899AB160B1674001E488B /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		03C899B8160B1693001E488B /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		03C899B9160B1693001E488B /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		03CB7407160C937700A5C6A3 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Comment.h; path = Models/Comment.h; sourceTree = "<group>"; };
+		03CB7408160C937700A5C6A3 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Comment.m; path = Models/Comment.m; sourceTree = "<group>"; };
 		03E34F521605AE3E00BFBE87 /* APILoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APILoader.h; sourceTree = "<group>"; };
 		03E34F531605AE3E00BFBE87 /* APILoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APILoader.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -122,13 +125,6 @@
 				03178839160C6DDC0041DAD7 /* DishTileItem.m */,
 			);
 			name = Views;
-			sourceTree = "<group>";
-		};
-		0317883F160C76B90041DAD7 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 		03178840160C76DB0041DAD7 /* ViewControllers */ = {
@@ -179,7 +175,6 @@
 		03B598011602FDC0007BD6AF /* Dish by.me */ = {
 			isa = PBXGroup;
 			children = (
-				0317883F160C76B90041DAD7 /* ViewControllers */,
 				03B5980A1602FDC0007BD6AF /* AppDelegate.h */,
 				03B5980B1602FDC0007BD6AF /* AppDelegate.m */,
 				03E34F521605AE3E00BFBE87 /* APILoader.h */,
@@ -222,6 +217,8 @@
 			children = (
 				03C8998A160B126E001E488B /* Dish.h */,
 				03C8998B160B126E001E488B /* Dish.m */,
+				03CB7407160C937700A5C6A3 /* Comment.h */,
+				03CB7408160C937700A5C6A3 /* Comment.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -348,6 +345,7 @@
 				0317884D160C76DB0041DAD7 /* MeViewController.m in Sources */,
 				0317884E160C76DB0041DAD7 /* SearchViewController.m in Sources */,
 				0317884F160C76DB0041DAD7 /* SettingsViewController.m in Sources */,
+				03CB7409160C937700A5C6A3 /* Comment.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

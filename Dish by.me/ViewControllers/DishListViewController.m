@@ -11,6 +11,7 @@
 #import "Dish.h"
 #import "Utils.h"
 #import "DishTileItem.h"
+#import "DishDetailViewController.h"
 
 @implementation DishListViewController
 
@@ -128,6 +129,7 @@ enum {
 				Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
 				DishTileItem *dishItem = [[DishTileItem alloc] initWithDish:dish];
 				dishItem.frame = CGRectMake( gap * ( i + 1 ) + len * i, gap, len, len );
+				[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 				[dishItem loadPhoto];
 				[cell addSubview:dishItem];
 				[dishItem release];
@@ -136,6 +138,16 @@ enum {
 	}
 	
 	return cell;
+}
+
+
+#pragma mark -
+#pragma mark Selectors
+
+- (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem
+{
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:dishTileItem.dish];
+	[self.navigationController pushViewController:dishDetailViewController animated:YES];
 }
 
 @end
