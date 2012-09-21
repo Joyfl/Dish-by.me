@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "DishViewController.h"
+#import "DishListViewController.h"
 #import "SearchViewController.h"
 #import "MeViewController.h"
 #import "SettingsViewController.h"
@@ -32,11 +32,11 @@
 	tabBarController.delegate = self;
 //	tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar.png"];
 	
-	DishViewController *dishViewController = [[DishViewController alloc] init];
-	UINavigationController *dishNavigationController = [[UINavigationController alloc] initWithRootViewController:dishViewController];
+	DishListViewController *dishListViewController = [[DishListViewController alloc] init];
+	UINavigationController *dishNavigationController = [[UINavigationController alloc] initWithRootViewController:dishListViewController];
 	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
 //	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@".png"];
-	[dishViewController release];
+	[dishListViewController release];
 	
 	SearchViewController *searchViewController = [[SearchViewController alloc] init];
 	UINavigationController *searchNavigationController = [[UINavigationController alloc] initWithRootViewController:searchViewController];

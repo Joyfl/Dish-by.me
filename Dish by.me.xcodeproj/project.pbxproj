@@ -20,7 +20,7 @@
 		03B5982716030529007BD6AF /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B5982616030529007BD6AF /* SearchViewController.m */; };
 		03B5982A16030538007BD6AF /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B5982916030538007BD6AF /* MeViewController.m */; };
 		03B5982D16030540007BD6AF /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B5982C16030540007BD6AF /* SettingsViewController.m */; };
-		03B5982E16030633007BD6AF /* DishViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B5982F16030633007BD6AF /* DishViewController.m */; };
+		03B5982E16030633007BD6AF /* DishListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B5982F16030633007BD6AF /* DishListViewController.m */; };
 		03C8998C160B126E001E488B /* Dish.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C8998B160B126E001E488B /* Dish.m */; };
 		03C899AC160B1674001E488B /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C89994160B1674001E488B /* NSObject+SBJson.m */; };
 		03C899AD160B1674001E488B /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C89997160B1674001E488B /* SBJsonParser.m */; };
@@ -53,7 +53,7 @@
 		03B598091602FDC0007BD6AF /* Dish by.me-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Dish by.me-Prefix.pch"; sourceTree = "<group>"; };
 		03B5980A1602FDC0007BD6AF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		03B5980B1602FDC0007BD6AF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		03B598161603009E007BD6AF /* DishViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DishViewController.h; sourceTree = "<group>"; };
+		03B598161603009E007BD6AF /* DishListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DishListViewController.h; sourceTree = "<group>"; };
 		03B598221603046E007BD6AF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		03B5982416030475007BD6AF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		03B5982516030529007BD6AF /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 		03B5982916030538007BD6AF /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
 		03B5982B16030540007BD6AF /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		03B5982C16030540007BD6AF /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
-		03B5982F16030633007BD6AF /* DishViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DishViewController.m; sourceTree = "<group>"; };
+		03B5982F16030633007BD6AF /* DishListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DishListViewController.m; sourceTree = "<group>"; };
 		03C89987160B0FC2001E488B /* Const.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Const.h; sourceTree = "<group>"; };
 		03C8998A160B126E001E488B /* Dish.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Dish.h; path = Models/Dish.h; sourceTree = "<group>"; };
 		03C8998B160B126E001E488B /* Dish.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Dish.m; path = Models/Dish.m; sourceTree = "<group>"; };
@@ -154,8 +154,8 @@
 			children = (
 				03B5980A1602FDC0007BD6AF /* AppDelegate.h */,
 				03B5980B1602FDC0007BD6AF /* AppDelegate.m */,
-				03B598161603009E007BD6AF /* DishViewController.h */,
-				03B5982F16030633007BD6AF /* DishViewController.m */,
+				03B598161603009E007BD6AF /* DishListViewController.h */,
+				03B5982F16030633007BD6AF /* DishListViewController.m */,
 				03B5982516030529007BD6AF /* SearchViewController.h */,
 				03B5982616030529007BD6AF /* SearchViewController.m */,
 				03B5982816030538007BD6AF /* MeViewController.h */,
@@ -306,7 +306,7 @@
 			files = (
 				03B598081602FDC0007BD6AF /* main.m in Sources */,
 				03B5980C1602FDC0007BD6AF /* AppDelegate.m in Sources */,
-				03B5982E16030633007BD6AF /* DishViewController.m in Sources */,
+				03B5982E16030633007BD6AF /* DishListViewController.m in Sources */,
 				03B5982716030529007BD6AF /* SearchViewController.m in Sources */,
 				03B5982A16030538007BD6AF /* MeViewController.m in Sources */,
 				03B5982D16030540007BD6AF /* SettingsViewController.m in Sources */,

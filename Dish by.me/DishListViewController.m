@@ -6,13 +6,13 @@
 //  Copyright (c) 2012년 Joyfl. All rights reserved.
 //
 
-#import "DishViewController.h"
+#import "DishListViewController.h"
 #import "Const.h"
 #import "Dish.h"
 #import "Utils.h"
 #import "DishTileItem.h"
 
-@implementation DishViewController
+@implementation DishListViewController
 
 enum {
 	kTokenIdDishes = 0
