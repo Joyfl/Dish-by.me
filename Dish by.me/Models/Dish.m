@@ -7,9 +7,10 @@
 //
 
 #import "Dish.h"
+#import "Const.h"
 
 @implementation Dish
 
-@synthesize dishId, userId, name, message, time, yumCount, commentCount;
+@synthesize dishId, userId, name, message, time, yumCount, commentCount, photo, thumbnail;
 
 @end

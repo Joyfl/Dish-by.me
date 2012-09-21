@@ -123,9 +123,10 @@ enum {
 			{
 				NSLog( @"i : %d", indexPath.row * 3 + i );
 				
-				DishTileItem *dishItem = [[DishTileItem alloc] initWithDish:[dishes objectAtIndex:indexPath.row * 3 + i]];
+				Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
+				DishTileItem *dishItem = [[DishTileItem alloc] initWithDish:dish];
 				dishItem.frame = CGRectMake( gap * ( i + 1 ) + len * i, gap, len, len );
-				[dishItem setImage:[UIImage imageNamed:@"temp_dish.png"] forState:UIControlStateNormal];
+				[dishItem loadPhoto];
 				[cell addSubview:dishItem];
 				[dishItem release];
 			}

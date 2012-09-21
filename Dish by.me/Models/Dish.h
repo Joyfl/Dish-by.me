@@ -17,6 +17,8 @@
 	NSDate *time;
 	NSInteger yumCount;
 	NSInteger commentCount;
+	UIImage *thumbnail;
+	UIImage *photo;
 }
 
 @property (nonatomic, assign) NSInteger dishId;
@@ -26,5 +28,7 @@
 @property (nonatomic, retain) NSDate *time;
 @property (nonatomic, assign) NSInteger yumCount;
 @property (nonatomic, assign) NSInteger commentCount;
+@property (nonatomic, retain) UIImage *thumbnail;
+@property (nonatomic, retain) UIImage *photo;
 
 @end

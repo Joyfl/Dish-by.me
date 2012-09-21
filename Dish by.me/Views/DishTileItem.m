@@ -7,6 +7,7 @@
 //
 
 #import "DishTileItem.h"
+#import "Const.h"
 
 @implementation DishTileItem
 
@@ -15,10 +16,45 @@
 - (id)initWithDish:(Dish *)_dish
 {
 	self = [super init];
+	[self setImage:[UIImage imageNamed:@"temp_dish.png"] forState:UIControlStateNormal];
 	
 	dish = _dish;
 	
 	return self;
+}
+
+- (void)loadThumbnail
+{
+	dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
+		NSString *rootURL = WEB_ROOT_URL;
+		NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/images/thumbnail/dish/%d", rootURL, dish.dishId]]];
+		if( data == nil )
+			return;
+		
+		dispatch_async( dispatch_get_main_queue(), ^{
+			dish.photo = [UIImage imageWithData: data];
+		} );
+		
+		[data release];
+	});
+}
+
+- (void)loadPhoto
+{
+	dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
+		NSString *rootURL = WEB_ROOT_URL;
+		NSString *url = [NSString stringWithFormat:@"%@/images/original/dish/%d_%d.jpg", rootURL, dish.dishId, dish.userId];
+		NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:url]];
+		if( data == nil )
+			return;
+		
+		dispatch_async( dispatch_get_main_queue(), ^{
+			dish.photo = [UIImage imageWithData:data];
+			[self setImage:dish.photo forState:UIControlStateNormal];
+		} );
+		
+		[data release];
+	});
 }
 
 @end

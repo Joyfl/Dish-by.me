@@ -6,4 +6,5 @@
 //  Copyright (c) 2012년 Joyfl. All rights reserved.
 //
 
-#define API_ROOT_URL	@"http://api.dishby.me/";
+#define WEB_ROOT_URL	@"http://www.dishby.me";
+#define API_ROOT_URL	@"http://api.dishby.me";
