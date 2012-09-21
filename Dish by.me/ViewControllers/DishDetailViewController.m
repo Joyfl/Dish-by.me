@@ -29,7 +29,8 @@ enum {
 	tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
 	tableView.delegate = self;
 	tableView.dataSource = self;
-//	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	tableView.backgroundColor = [UIColor colorWithRed:0xF3 / 255.0 green:0xEE / 255.0 blue:0xEA / 255.0 alpha:1];
 	[self.view addSubview:tableView];
 	
 	dish = [_dish retain];
@@ -46,6 +47,8 @@ enum {
 	DishByMeBarButtonItem *backButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = backButton;
 	[backButton release];
+	
+	self.navigationItem.title = dish.name;
 	
 	return self;
 }
@@ -164,19 +167,50 @@ enum {
 	{
 		if( indexPath.row == kRowPhoto )
 		{
-			UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 10, 10, 300, 300 )];
-			imageView.image = dish.photo;
-			
 			UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
+			
+			UIImageView *imageView = [[UIImageView alloc] initWithImage:dish.photo];
+			imageView.frame = CGRectMake( 10, 10, 300, 300 );
 			[bgView addSubview:imageView];
 			[imageView release];
+			
+			UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_border.png"]];
+			borderView.frame = CGRectMake( 0, 0, 320, 320 );
+			[bgView addSubview:borderView];
+			[borderView release];
 			
 			cell.backgroundView = bgView;
 			[bgView release];
 		}
 		else if( indexPath.row == kRowMessage )
 		{
-			cell.textLabel.text = dish.message;
+			UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
+			
+			UIImageView *topView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_message_box_top.png"]];
+			topView.frame = CGRectMake( 8, 0, 304, 15 );
+			[bgView addSubview:topView];
+			[topView release];
+			
+			UIImageView *centerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_message_box_center.png"]];
+			centerView.frame = CGRectMake( 8, 15, 304, 20 );
+			[bgView addSubview:centerView];
+			
+			UIImageView *bottomView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_message_box_bottom.png"]];
+			bottomView.frame = CGRectMake( 8, 15 + centerView.frame.size.height, 304, 15 );
+			[bgView addSubview:bottomView];
+			[bottomView release];
+			[centerView release];
+			
+			cell.backgroundView = bgView;
+			[bgView release];
+			
+			UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 15, 280, 20 )];
+			messageLabel.text = dish.message;
+			messageLabel.textColor = [UIColor colorWithRed:126 / 255.0 green:128 / 255.0 blue:129 / 255.0 alpha:1];
+			messageLabel.font = [UIFont boldSystemFontOfSize:15];
+			[cell addSubview:messageLabel];
+			
+//			cell.textLabel.text = dish.message;
 		}
 		else if( indexPath.row == kRowRecipe )
 		{
