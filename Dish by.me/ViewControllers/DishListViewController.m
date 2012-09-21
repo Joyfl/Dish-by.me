@@ -39,6 +39,8 @@ enum {
 	[loader addTokenWithTokenId:0 url:[NSString stringWithFormat:@"%@/dish", rootUrl] method:APILoaderMethodGET params:nil];
 	[loader startLoading];
 	
+	self.navigationItem.title = @"Dish by.me";
+	
     return self;
 }
 

@@ -11,6 +11,7 @@
 #import "Comment.h"
 #import "Const.h"
 #import "Utils.h"
+#import "DishByMeBarButtonItem.h"
 
 @implementation DishDetailViewController
 
@@ -41,6 +42,10 @@ enum {
 	[loader startLoading];
 	
 	comments = [[NSMutableArray alloc] init];
+	
+	DishByMeBarButtonItem *backButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
+	self.navigationItem.leftBarButtonItem = backButton;
+	[backButton release];
 	
 	return self;
 }
@@ -199,6 +204,15 @@ enum {
 	}
 	
 	return cell;
+}
+
+
+#pragma mark -
+#pragma mark Selectors
+
+- (void)backButtonDidTouchUpInside
+{
+	[self.navigationController popViewControllerAnimated:YES];
 }
 
 @end
