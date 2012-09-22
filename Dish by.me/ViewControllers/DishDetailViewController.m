@@ -136,10 +136,10 @@ enum {
 					return 320;
 					
 				case kRowMessage:
-					return 55;
+					return 63;
 					
 				case kRowRecipe:
-					return 70;
+					return 60;
 					
 				case kRowYum:
 					return 50;
@@ -201,6 +201,11 @@ enum {
 			[bottomView release];
 			[centerView release];
 			
+			UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
+			dotLineView.frame = CGRectMake( 8, bottomView.frame.origin.y + 28, 304, 2 );
+			[bgView addSubview:dotLineView];
+			[dotLineView release];
+			
 			cell.backgroundView = bgView;
 			[bgView release];
 			
@@ -216,13 +221,8 @@ enum {
 		{
 			UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 70 )];
 			
-			UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
-			dotLineView.frame = CGRectMake( 8, 8, 304, 2 );
-			[bgView addSubview:dotLineView];
-			[dotLineView release];
-			
 			UIButton *recipeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-			recipeButton.frame = CGRectMake( 0, 20, 320, 50 );
+			recipeButton.frame = CGRectMake( 0, 10, 320, 50 );
 			[recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
 			[recipeButton setTitle:@"레시피 보기" forState:UIControlStateNormal];
@@ -234,7 +234,7 @@ enum {
 			[bgView addSubview:recipeButton];
 			
 			UIImageView *bottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
-			bottomLine.frame = CGRectMake( 0, 64, 320, 10 );
+			bottomLine.frame = CGRectMake( 0, 54, 320, 10 );
 			[bgView addSubview:bottomLine];
 			
 			[cell addSubview:bgView];
