@@ -120,13 +120,13 @@
 	
 	NSMutableData *body = [NSMutableData data];
 	
-	NSString *boundary = [NSString stringWithString:@"---------------------------14737809831466499882746641449"];
+	NSString *boundary = @"---------------------------14737809831466499882746641449";
 	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
 	[request addValue:contentType forHTTPHeaderField:@"Content-Type"];
 	
 	[body appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
 	
-	[body appendData:[[NSString stringWithString:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+	[body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
 	
 	for( id key in token.params )
 	{
@@ -147,7 +147,7 @@
 		else if( [object isKindOfClass:[UIImage class]] )
 		{
 			[body appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"xoulzzang\"\r\n", key] dataUsingEncoding:NSUTF8StringEncoding]];
-			[body appendData:[[NSString stringWithString:@"Content-Type: image/jpeg\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+			[body appendData:[@"Content-Type: image/jpeg\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
 			[body appendData:[NSData dataWithData:UIImageJPEGRepresentation( object, 1.0 )]];
 		}
 		else
@@ -155,7 +155,7 @@
 			NSLog( @"other class : %@=%@", key, [object class] );
 		}
 		
-		[body appendData:[[NSString stringWithString:@"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+		[body appendData:[@"\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
 	}
 	
     [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];

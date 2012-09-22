@@ -69,7 +69,7 @@
 										meNavigationController,
 										settingsNavigationController,
 										nil];
-	[self.window addSubview:tabBarController.view];
+	self.window.rootViewController = tabBarController;
 	[dishNavigationController release];
 	[searchNavigationController release];
 	[meNavigationController release];

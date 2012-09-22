@@ -8,15 +8,12 @@
 
 #import "DishByMeNavigationController.h"
 
-@interface DishByMeNavigationController ()
-
-@end
 
 @implementation DishByMeNavigationController
 
-- (id)init
+- (id)initWithRootViewController:rootViewController
 {
-	self = [super init];
+	self = [super initWithRootViewController:rootViewController];
 	
 	[self.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigation_bar.png"] forBarMetrics:UIBarMetricsDefault];
 	

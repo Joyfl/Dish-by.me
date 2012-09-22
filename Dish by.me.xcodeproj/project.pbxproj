@@ -15,6 +15,9 @@
 		0317884D160C76DB0041DAD7 /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178846160C76DB0041DAD7 /* MeViewController.m */; };
 		0317884E160C76DB0041DAD7 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178848160C76DB0041DAD7 /* SearchViewController.m */; };
 		0317884F160C76DB0041DAD7 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0317884A160C76DB0041DAD7 /* SettingsViewController.m */; };
+		0359EA53160D6506009CDA41 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA52160D6506009CDA41 /* Default-568h@2x.png */; };
+		0359EA57160D6736009CDA41 /* navigation_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA55160D6736009CDA41 /* navigation_bar.png */; };
+		0359EA58160D6736009CDA41 /* navigation_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA56160D6736009CDA41 /* navigation_bar@2x.png */; };
 		03B597FC1602FDC0007BD6AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FB1602FDC0007BD6AF /* UIKit.framework */; };
 		03B597FE1602FDC0007BD6AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FD1602FDC0007BD6AF /* Foundation.framework */; };
 		03B598001602FDC0007BD6AF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FF1602FDC0007BD6AF /* CoreGraphics.framework */; };
@@ -48,8 +51,6 @@
 		03CB7481160CA8D400A5C6A3 /* tab_icon_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03CB7479160CA8D400A5C6A3 /* tab_icon_search@2x.png */; };
 		03CB7482160CA8D400A5C6A3 /* tab_icon_settings@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03CB747A160CA8D400A5C6A3 /* tab_icon_settings@2x.png */; };
 		03CB7485160CA92C00A5C6A3 /* tab_icon_settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 03CB7484160CA92C00A5C6A3 /* tab_icon_settings.png */; };
-		03CB748C160CAABE00A5C6A3 /* navigation_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 03CB748A160CAABE00A5C6A3 /* navigation_bar.png */; };
-		03CB748D160CAABE00A5C6A3 /* navigation_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03CB748B160CAABE00A5C6A3 /* navigation_bar@2x.png */; };
 		03CB7494160CAB6D00A5C6A3 /* dish_tile_border.png in Resources */ = {isa = PBXBuildFile; fileRef = 03CB7490160CAB6D00A5C6A3 /* dish_tile_border.png */; };
 		03CB7495160CAB6D00A5C6A3 /* dish_tile_border@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03CB7491160CAB6D00A5C6A3 /* dish_tile_border@2x.png */; };
 		03CB7499160CC04100A5C6A3 /* tab_camera_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03CB7496160CC04100A5C6A3 /* tab_camera_highlighted@2x.png */; };
@@ -89,6 +90,9 @@
 		03178848160C76DB0041DAD7 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		03178849160C76DB0041DAD7 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		0317884A160C76DB0041DAD7 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		0359EA52160D6506009CDA41 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		0359EA55160D6736009CDA41 /* navigation_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigation_bar.png; sourceTree = "<group>"; };
+		0359EA56160D6736009CDA41 /* navigation_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation_bar@2x.png"; sourceTree = "<group>"; };
 		03B597F71602FDC0007BD6AF /* Dish by.me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dish by.me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03B597FB1602FDC0007BD6AF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		03B597FD1602FDC0007BD6AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -145,8 +149,6 @@
 		03CB7479160CA8D400A5C6A3 /* tab_icon_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_icon_search@2x.png"; sourceTree = "<group>"; };
 		03CB747A160CA8D400A5C6A3 /* tab_icon_settings@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_icon_settings@2x.png"; sourceTree = "<group>"; };
 		03CB7484160CA92C00A5C6A3 /* tab_icon_settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tab_icon_settings.png; sourceTree = "<group>"; };
-		03CB748A160CAABE00A5C6A3 /* navigation_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigation_bar.png; sourceTree = "<group>"; };
-		03CB748B160CAABE00A5C6A3 /* navigation_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation_bar@2x.png"; sourceTree = "<group>"; };
 		03CB7490160CAB6D00A5C6A3 /* dish_tile_border.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = dish_tile_border.png; path = Resources/dish_tile_border.png; sourceTree = "<group>"; };
 		03CB7491160CAB6D00A5C6A3 /* dish_tile_border@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dish_tile_border@2x.png"; path = "Resources/dish_tile_border@2x.png"; sourceTree = "<group>"; };
 		03CB7496160CC04100A5C6A3 /* tab_camera_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tab_camera_highlighted@2x.png"; sourceTree = "<group>"; };
@@ -277,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				03B598231603046E007BD6AF /* Localizable.strings */,
+				0359EA52160D6506009CDA41 /* Default-568h@2x.png */,
 				030D8AC1160B5DC300BF843D /* dish_tile_loading.png */,
 				030D8AC2160B5DC300BF843D /* dish_tile_loading@2x.png */,
 				03CB7490160CAB6D00A5C6A3 /* dish_tile_border.png */,
@@ -366,8 +369,8 @@
 		03CB7489160CAABE00A5C6A3 /* navigation_bar */ = {
 			isa = PBXGroup;
 			children = (
-				03CB748A160CAABE00A5C6A3 /* navigation_bar.png */,
-				03CB748B160CAABE00A5C6A3 /* navigation_bar@2x.png */,
+				0359EA55160D6736009CDA41 /* navigation_bar.png */,
+				0359EA56160D6736009CDA41 /* navigation_bar@2x.png */,
 				03CB74A6160CC47800A5C6A3 /* navigation_bar_button_back.png */,
 				03CB74A7160CC47800A5C6A3 /* navigation_bar_button_back@2x.png */,
 				03CB74A8160CC47800A5C6A3 /* navigation_bar_button.png */,
@@ -455,8 +458,6 @@
 				03CB7481160CA8D400A5C6A3 /* tab_icon_search@2x.png in Resources */,
 				03CB7482160CA8D400A5C6A3 /* tab_icon_settings@2x.png in Resources */,
 				03CB7485160CA92C00A5C6A3 /* tab_icon_settings.png in Resources */,
-				03CB748C160CAABE00A5C6A3 /* navigation_bar.png in Resources */,
-				03CB748D160CAABE00A5C6A3 /* navigation_bar@2x.png in Resources */,
 				03CB7494160CAB6D00A5C6A3 /* dish_tile_border.png in Resources */,
 				03CB7495160CAB6D00A5C6A3 /* dish_tile_border@2x.png in Resources */,
 				03CB7499160CC04100A5C6A3 /* tab_camera_highlighted@2x.png in Resources */,
@@ -476,6 +477,9 @@
 				03CB74BF160CCCFE00A5C6A3 /* dish_detail_message_box_center@2x.png in Resources */,
 				03CB74C0160CCCFE00A5C6A3 /* dish_detail_message_box_top.png in Resources */,
 				03CB74C1160CCCFE00A5C6A3 /* dish_detail_message_box_top@2x.png in Resources */,
+				0359EA53160D6506009CDA41 /* Default-568h@2x.png in Resources */,
+				0359EA57160D6736009CDA41 /* navigation_bar.png in Resources */,
+				0359EA58160D6736009CDA41 /* navigation_bar@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -588,6 +592,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Dish by.me/Dish by.me-Prefix.pch";
 				INFOPLIST_FILE = "Dish by.me/Dish by.me-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -599,6 +604,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Dish by.me/Dish by.me-Prefix.pch";
 				INFOPLIST_FILE = "Dish by.me/Dish by.me-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
