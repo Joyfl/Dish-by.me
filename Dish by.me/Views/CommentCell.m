@@ -49,6 +49,7 @@
 	messageView.textColor = [Utils colorWithHex:0x6B6663 alpha:1.0];
 	messageView.backgroundColor = [UIColor clearColor];
 	messageView.font = [UIFont systemFontOfSize:13];
+	messageView.editable = NO;
 	[messageView sizeToFit];
 	[self addSubview:messageView];
 	
