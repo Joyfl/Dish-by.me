@@ -25,7 +25,7 @@
 	[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 	[self addSubview:profileImageButton];
 	
-	UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 3, 270, 30 )];
+	UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 2, 270, 30 )];
 	nameLabel.text = comment.name;
 	nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
 	nameLabel.font = [UIFont boldSystemFontOfSize:14];
@@ -44,7 +44,7 @@
 	timeLabel.backgroundColor = [UIColor clearColor];
 	[self addSubview:timeLabel];
 	
-	UITextView *messageView = [[UITextView alloc] initWithFrame:CGRectMake( 43, 18, 270, 30 )];
+	UITextView *messageView = [[UITextView alloc] initWithFrame:CGRectMake( 43, 16, 270, 30 )];
 	messageView.text = comment.message;
 	messageView.textColor = [Utils colorWithHex:0x6B6663 alpha:1.0];
 	messageView.backgroundColor = [UIColor clearColor];
