@@ -14,4 +14,6 @@
 + (id)parseJSON:(NSString *)json;
 + (NSString *)writeJSON:(id)object;
 
++ (UIColor *)colorWithHex:(NSInteger)color alpha:(CGFloat)alpha;
+
 @end

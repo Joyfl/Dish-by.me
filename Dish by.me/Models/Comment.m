@@ -10,6 +10,6 @@
 
 @implementation Comment
 
-@synthesize userId, name, message;
+@synthesize userId, name, message, userPhoto;
 
 @end

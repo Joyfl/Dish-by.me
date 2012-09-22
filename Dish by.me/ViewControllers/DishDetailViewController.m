@@ -12,6 +12,7 @@
 #import "Const.h"
 #import "Utils.h"
 #import "DishByMeBarButtonItem.h"
+#import "CommentCell.h"
 
 @implementation DishDetailViewController
 
@@ -116,7 +117,7 @@ enum {
 			return 4;
 			
 		case 1:
-			return comments.count;
+			return comments.count * 2 - 1;
 			
 		case 2:
 			return 1;
@@ -148,7 +149,9 @@ enum {
 			
 		// Comment
 		case 1:
-			return 50;
+			if( indexPath.row % 2 == 0 )
+				return 50;
+			return 2;
 		
 		// Leave a comment
 		case 2:
@@ -160,11 +163,11 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	UITableViewCell *cell = [[UITableViewCell alloc] init];
-	cell.selectionStyle = UITableViewCellSelectionStyleNone;
-	
 	if( indexPath.section == 0 )
 	{
+		UITableViewCell *cell = [[UITableViewCell alloc] init];
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		
 		if( indexPath.row == kRowPhoto )
 		{
 			UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
@@ -248,24 +251,42 @@ enum {
 			cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
 			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
+		
+		return cell;
 	}
 	
 	// Comments
 	else if( indexPath.section == 1 )
 	{
-		Comment *comment = [comments objectAtIndex:indexPath.row];
-		cell.textLabel.text = comment.message;
-		cell.detailTextLabel.text = comment.name;
-		NSLog( @"comment" );
+		if( indexPath.row % 2 == 0 )
+		{
+			Comment *comment = [comments objectAtIndex:indexPath.row / 2];
+			CommentCell *cell = [[CommentCell alloc] initWithComment:comment];
+			
+			return cell;
+		}
+		else
+		{
+			UITableViewCell *cell = [[UITableViewCell alloc] init];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			
+			UIImageView *lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line.png"]];
+			cell.backgroundView = lineView;
+			[lineView release];
+			
+			return cell;
+		}
 	}
 	
 	// Leave comment
 	else if( indexPath.section == 2 )
 	{
-		
+		UITableViewCell *cell = [[UITableViewCell alloc] init];
+		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		return cell;
 	}
 	
-	return cell;
+	return nil;
 }
 
 

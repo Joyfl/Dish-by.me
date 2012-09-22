@@ -13,10 +13,12 @@
 	NSInteger userId;
 	NSString *name;
 	NSString *message;
+	UIImage *userPhoto;
 }
 
 @property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, retain) NSString *name;
 @property (nonatomic, retain) NSString *message;
+@property (nonatomic, retain) UIImage *userPhoto;
 
 @end

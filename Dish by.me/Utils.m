@@ -22,4 +22,12 @@
 	return [[writer autorelease] stringWithObject:object];
 }
 
++ (UIColor *)colorWithHex:(NSInteger)color alpha:(CGFloat)alpha
+{
+	NSInteger red = ( color >> 16 ) & 0xFF;
+	NSInteger green = ( color >> 8 ) & 0xFF;
+	NSInteger blue = color & 0xFF;
+	return [UIColor colorWithRed:red / 255.0 green:green / 255.0 blue:blue / 255.0 alpha:alpha];
+}
+
 @end
