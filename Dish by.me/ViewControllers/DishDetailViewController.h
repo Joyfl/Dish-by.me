@@ -13,10 +13,15 @@
 
 @interface DishDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, APILoaderDelegate>
 {
-	UITableView *tableView;
 	Dish *dish;
 	APILoader *loader;
 	NSMutableArray *comments;
+	
+	UITableView *tableView;
+	BOOL scrollEnabled;
+	
+	UIView *commentBar;
+	UITextField *commentInput;
 }
 
 - (id)initWithDish:(Dish *)dish;

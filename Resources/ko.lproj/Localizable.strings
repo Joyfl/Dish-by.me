@@ -3,3 +3,4 @@ SEARCH = "검색";
 ME = "나";
 SETTINGS = "설정";
 BACK = "뒤로";
+SEND = "전송";

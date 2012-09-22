@@ -3,3 +3,4 @@ SEARCH = "Search";
 ME = "Me";
 SETTINGS = "Settings";
 BACK = "Back";
+SEND = "Send";

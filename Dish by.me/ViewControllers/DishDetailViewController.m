@@ -13,6 +13,7 @@
 #import "Utils.h"
 #import "DishByMeBarButtonItem.h"
 #import "CommentCell.h"
+#import "DishByMeButton.h"
 
 @implementation DishDetailViewController
 
@@ -50,6 +51,31 @@ enum {
 	[backButton release];
 	
 	self.navigationItem.title = dish.name;
+	
+	commentBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 367, 320, 40 )];
+	
+	UIImageView *commentBarBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tool_bar.png"]];
+	[commentBar addSubview:commentBarBg];
+	[commentBarBg release];
+	
+	UIImageView *commentInputBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"textfield_bg.png"]];
+	commentInputBg.frame = CGRectMake( 5, 5, 235, 30 );
+	[commentBar addSubview:commentInputBg];
+	[commentInputBg release];
+	
+	commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 10, 10, 230, 20 )];
+	[commentInput addTarget:self action:@selector(commentInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
+	[commentBar addSubview:commentInput];
+	[commentInput release];
+	
+	DishByMeButton *sendButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEND", @"" )];
+	sendButton.frame = CGRectMake( 250, 5, 60, 30 );
+	[commentBar addSubview:sendButton];
+	[sendButton release];
+	
+	[tableView addSubview:commentBar];
+	
+	scrollEnabled = YES;
 	
 	return self;
 }
@@ -155,7 +181,7 @@ enum {
 		
 		// Leave a comment
 		case 2:
-			return 50;
+			return 40;
 	}
 	
 	return 0;
@@ -289,8 +315,6 @@ enum {
 			return cell;
 		}
 	}
-	
-	// Leave comment
 	else if( indexPath.section == 2 )
 	{
 		UITableViewCell *cell = [[UITableViewCell alloc] init];
@@ -299,6 +323,26 @@ enum {
 	}
 	
 	return nil;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	if( !scrollEnabled ) return;
+	
+	if( scrollView.contentSize.height - scrollView.contentOffset.y > 367 )
+	{
+		commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
+	}
+	else
+	{
+		commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + 327, 320, 40 );
+	}
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+	scrollEnabled = YES;
+	[commentInput resignFirstResponder];
 }
 
 
@@ -313,6 +357,16 @@ enum {
 - (void)recipeButtonDidTouchUpInside
 {
 	NSLog( @"recipe" );
+}
+
+- (void)commentInputDidBeginEditing
+{
+	scrollEnabled = NO;
+	
+	[tableView setContentOffset:CGPointMake( 0, tableView.contentSize.height - 216 + 15 ) animated:YES];
+	[UIView animateWithDuration:0.25 animations:^{
+		commentBar.frame = CGRectMake( 0, tableView.contentSize.height - 41, 320, 40 );
+	}];
 }
 
 @end
