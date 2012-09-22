@@ -2,3 +2,4 @@ DISHES = "Dishes";
 SEARCH = "Search";
 ME = "Me";
 SETTINGS = "Settings";
+BACK = "Back";

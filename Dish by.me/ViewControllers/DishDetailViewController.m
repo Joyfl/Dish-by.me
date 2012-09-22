@@ -136,7 +136,7 @@ enum {
 					return 320;
 					
 				case kRowMessage:
-					return 100;
+					return 55;
 					
 				case kRowRecipe:
 					return 100;
@@ -206,15 +206,39 @@ enum {
 			
 			UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 15, 280, 20 )];
 			messageLabel.text = dish.message;
-			messageLabel.textColor = [UIColor colorWithRed:126 / 255.0 green:128 / 255.0 blue:129 / 255.0 alpha:1];
+			messageLabel.textColor = [UIColor colorWithRed:0x80 / 255.0 green:0x82 / 255.0 blue:0x83 / 255.0 alpha:1];
 			messageLabel.font = [UIFont boldSystemFontOfSize:15];
+			messageLabel.shadowOffset = CGSizeMake( 0, 1 );
+			messageLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 			[cell addSubview:messageLabel];
-			
-//			cell.textLabel.text = dish.message;
 		}
 		else if( indexPath.row == kRowRecipe )
 		{
+			UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
 			
+			UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
+			dotLineView.frame = CGRectMake( 8, 8, 304, 2 );
+			[bgView addSubview:dotLineView];
+			[dotLineView release];
+			
+			UIButton *recipeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+			recipeButton.frame = CGRectMake( 0, 20, 320, 50 );
+			[recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
+			[recipeButton setTitle:@"레시피 보기" forState:UIControlStateNormal];
+			[recipeButton setTitleColor:[UIColor colorWithRed:0x5B / 255.0 green:0x50 / 255.0 blue:0x46 / 255.0 alpha:1.0] forState:UIControlStateNormal];
+			[recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
+			recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
+			recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+			[bgView addSubview:recipeButton];
+			
+			UIImageView *bottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
+			bottomLine.frame = CGRectMake( 0, 64, 320, 10 );
+			[bgView addSubview:bottomLine];
+			
+			[cell addSubview:bgView];
+			[bgView release];
 		}
 		else if( indexPath.row == kRowYum )
 		{
@@ -247,6 +271,11 @@ enum {
 - (void)backButtonDidTouchUpInside
 {
 	[self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)recipeButtonDidTouchUpInside
+{
+	NSLog( @"recipe" );
 }
 
 @end

@@ -22,7 +22,7 @@
 	switch( type )
 	{
 		case DishByMeBarButtonItemTypeNormal:
-			bg = [UIImage imageNamed:@"navigation_bar_button.png"];
+			bg = [UIImage imageNamed:@"button.png"];
 			button.frame = CGRectMake( 0, 0, 60, 30 );
 			break;
 			
