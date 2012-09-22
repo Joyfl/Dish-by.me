@@ -117,7 +117,7 @@ enum {
 			return 4;
 			
 		case 1:
-			return comments.count * 2 - 1;
+			return comments.count * 2;
 			
 		case 2:
 			return 1;
@@ -150,8 +150,8 @@ enum {
 		// Comment
 		case 1:
 			if( indexPath.row % 2 == 0 )
-				return 50;
-			return 2;
+				return 2;
+			return 50;
 		
 		// Leave a comment
 		case 2:
@@ -258,9 +258,21 @@ enum {
 	// Comments
 	else if( indexPath.section == 1 )
 	{
-		if( indexPath.row % 2 == 0 )
+		if( indexPath.row == 0 )
 		{
-			Comment *comment = [comments objectAtIndex:indexPath.row / 2];
+			UITableViewCell *cell = [[UITableViewCell alloc] init];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			
+			UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
+			dotLineView.frame = CGRectMake( 8, 0, 304, 2 );
+			[cell addSubview:dotLineView];
+			[dotLineView release];
+			
+			return cell;
+		}
+		else if( indexPath.row % 2 == 1 )
+		{
+			Comment *comment = [comments objectAtIndex:floor( indexPath.row / 2.0 )];
 			CommentCell *cell = [[CommentCell alloc] initWithComment:comment];
 			
 			return cell;
