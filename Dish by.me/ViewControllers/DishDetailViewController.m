@@ -139,10 +139,10 @@ enum {
 					return 55;
 					
 				case kRowRecipe:
-					return 100;
+					return 70;
 					
 				case kRowYum:
-					return 100;
+					return 50;
 			}
 			break;
 			
@@ -214,7 +214,7 @@ enum {
 		}
 		else if( indexPath.row == kRowRecipe )
 		{
-			UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
+			UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 70 )];
 			
 			UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
 			dotLineView.frame = CGRectMake( 8, 8, 304, 2 );
@@ -242,7 +242,11 @@ enum {
 		}
 		else if( indexPath.row == kRowYum )
 		{
-			cell.textLabel.text = [NSString stringWithFormat:@"%d명이 침을 질질 흘립니다.", dish.yumCount];
+			cell.textLabel.text = [NSString stringWithFormat:@"   %d명이 좋아합니다.", dish.yumCount];
+			cell.textLabel.textColor = [UIColor colorWithRed:0x80 / 255.0 green:0x82 / 255.0 blue:0x83 / 255.0 alpha:1.0];
+			cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
+			cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
+			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
 	}
 	
