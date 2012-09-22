@@ -50,6 +50,7 @@
 	messageView.backgroundColor = [UIColor clearColor];
 	messageView.font = [UIFont systemFontOfSize:13];
 	messageView.editable = NO;
+	messageView.scrollEnabled = NO;
 	[messageView sizeToFit];
 	[self addSubview:messageView];
 	
