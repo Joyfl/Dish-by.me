@@ -7,7 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APILoader.h"
 
-@interface ProfileViewController : UIViewController
+@class User;
+
+@interface ProfileViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, APILoaderDelegate>
+{
+	User *user;
+	
+	UIButton *profileImage;
+	UIImageView *arrowView;
+	UITableView *tableView;
+	NSMutableArray *dishes;
+	APILoader *loader;
+}
 
 @end

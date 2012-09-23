@@ -68,13 +68,13 @@
 										dishNavigationController,
 										searchNavigationController,
 										[[[UIViewController alloc] init] autorelease],
-										meNavigationController,
+										profileNavigationController,
 										settingsNavigationController,
 										nil];
 	self.window.rootViewController = tabBarController;
 	[dishNavigationController release];
 	[searchNavigationController release];
-	[meNavigationController release];
+	[profileNavigationController release];
 	[settingsNavigationController release];
 	
 	UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];

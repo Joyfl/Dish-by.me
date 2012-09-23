@@ -10,6 +10,6 @@
 
 @implementation User
 
-@synthesize userId, name, dishCount, yumCount;
+@synthesize userId, name, bio, dishCount, yumCount, photo;
 
 @end

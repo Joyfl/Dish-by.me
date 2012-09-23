@@ -110,12 +110,9 @@ enum {
 	return ceil( dishes.count / 3.0 );
 }
 
-#define gap 14
-#define len 88
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return len + gap;
+	return DISH_TILE_LEN + DISH_TILE_GAP;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -131,11 +128,9 @@ enum {
 		{			
 			if( dishes.count > indexPath.row * 3 + i )
 			{
-				NSLog( @"i : %d", indexPath.row * 3 + i );
-				
 				Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
 				DishTileItem *dishItem = [[DishTileItem alloc] initWithDish:dish];
-				dishItem.frame = CGRectMake( gap * ( i + 1 ) + len * i, gap, len, len );
+				dishItem.frame = CGRectMake( DISH_TILE_GAP * ( i + 1 ) + DISH_TILE_LEN * i, DISH_TILE_GAP, DISH_TILE_LEN, DISH_TILE_LEN );
 				[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 				[dishItem loadPhoto];
 				[cell addSubview:dishItem];

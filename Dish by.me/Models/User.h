@@ -12,13 +12,17 @@
 {
 	NSInteger userId;
 	NSString *name;
+	NSString *bio;
 	NSInteger dishCount;
 	NSInteger yumCount;
+	UIImage *photo;
 }
 
 @property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *bio;
 @property (nonatomic, assign) NSInteger dishCount;
 @property (nonatomic, assign) NSInteger yumCount;
+@property (nonatomic, retain) UIImage *photo;
 
 @end
