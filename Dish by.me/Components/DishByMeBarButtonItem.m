@@ -29,7 +29,7 @@
 		case DishByMeBarButtonItemTypeBack:
 			bg = [UIImage imageNamed:@"navigation_bar_button_back.png"];
 			button.frame = CGRectMake( 0, 0, 60, 30 );
-			button.titleEdgeInsets = UIEdgeInsetsMake( -1, 8, 0, 0 );
+			button.titleEdgeInsets = UIEdgeInsetsMake( 0, 8, 0, 0 );
 			break;
 	}
 	

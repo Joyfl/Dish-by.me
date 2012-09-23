@@ -69,13 +69,16 @@ enum {
 	[commentBar addSubview:commentInputBg];
 	[commentInputBg release];
 	
-	commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 10, 10, 230, 20 )];
+	commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
+	commentInput.font = [UIFont systemFontOfSize:13];
+	commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
 	[commentInput addTarget:self action:@selector(commentInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
 	[commentBar addSubview:commentInput];
 	[commentInput release];
 	
 	DishByMeButton *sendButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEND", @"" )];
 	sendButton.frame = CGRectMake( 250, 5, 60, 30 );
+	sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[commentBar addSubview:sendButton];
 	[sendButton release];

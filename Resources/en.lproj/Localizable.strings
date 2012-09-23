@@ -3,4 +3,5 @@ SEARCH = "Search";
 ME = "Me";
 SETTINGS = "Settings";
 BACK = "Back";
+LEAVE_A_COMMENT = "Leave a comment";
 SEND = "Send";

@@ -3,4 +3,5 @@ SEARCH = "검색";
 ME = "나";
 SETTINGS = "설정";
 BACK = "뒤로";
+LEAVE_A_COMMENT = "댓글 남기기";
 SEND = "전송";
