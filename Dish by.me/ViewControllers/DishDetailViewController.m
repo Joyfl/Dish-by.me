@@ -396,8 +396,12 @@ enum {
 	}
 	else if( indexPath.section == 2 )
 	{
-		UITableViewCell *cell = [[UITableViewCell alloc] init];
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:writeCommentCellId];
+		if( !cell )
+		{
+			[[UITableViewCell alloc] init];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
 		return cell;
 	}
 	
