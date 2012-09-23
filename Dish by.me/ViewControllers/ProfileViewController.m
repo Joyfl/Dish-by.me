@@ -13,6 +13,9 @@
 #import "Dish.h"
 #import "DishTileItem.h"
 
+#define ARROW_LEFT_X	142
+#define ARROW_RIGHT_X	248
+
 @implementation ProfileViewController
 
 enum {
@@ -177,7 +180,7 @@ enum {
 			UIImageView *profileBorder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"profile_border.png"]];
 			profileBorder.frame = CGRectMake( 10, 10, 93, 94 );
 			[cell addSubview:profileBorder];
-//			[profileBorder release];
+			[profileBorder release];
 			
 			UIButton *bioButton = [[UIButton alloc] initWithFrame:CGRectMake( 103, 10, 211, 47 )];
 			bioButton.titleLabel.font = [UIFont systemFontOfSize:13];
@@ -199,27 +202,61 @@ enum {
 			
 			UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 10, 165, 30 )];
 			bioLabel.text = user.bio;
-			bioLabel.textColor = [Utils colorWithHex:0x666666 alpha:1];
+			bioLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
 			bioLabel.font = [UIFont systemFontOfSize:13];
 			bioLabel.backgroundColor = [UIColor clearColor];
 			bioLabel.numberOfLines = 2;
 			[bioButton addSubview:bioLabel];
 			
 			[cell addSubview:bioButton];
-//			[bioButton release];
+			[bioButton release];
 			
 			UIButton *dishButton = [[UIButton alloc] initWithFrame:CGRectMake( 103, 57, 104, 47 )];
 			[dishButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_left.png"] forState:UIControlStateNormal];
+			[dishButton addTarget:self action:@selector(dishButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell addSubview:dishButton];
-//			[editButton release];
+			[dishButton release];
 			
-			UIButton *feedButton = [[UIButton alloc] initWithFrame:CGRectMake( 207, 57, 107, 47 )];
-			[feedButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_right.png"] forState:UIControlStateNormal];
-			[cell addSubview:feedButton];
-//			[feedButton release];
+			UILabel *dishCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 94, 20 )];
+			dishCountLabel.text = [NSString stringWithFormat:@"%d", user.dishCount];
+			dishCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
+			dishCountLabel.textAlignment = NSTextAlignmentCenter;
+			dishCountLabel.font = [UIFont boldSystemFontOfSize:20];
+			dishCountLabel.backgroundColor = [UIColor clearColor];
+			[dishButton addSubview:dishCountLabel];
+			
+			UILabel *dishLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 94, 20 )];
+			dishLabel.text = @"Dishes";
+			dishLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			dishLabel.textAlignment = NSTextAlignmentCenter;
+			dishLabel.font = [UIFont systemFontOfSize:13];
+			dishLabel.backgroundColor = [UIColor clearColor];
+			[dishButton addSubview:dishLabel];
+			
+			UIButton *likeButton = [[UIButton alloc] initWithFrame:CGRectMake( 207, 57, 107, 47 )];
+			[likeButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_right.png"] forState:UIControlStateNormal];
+			[likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[cell addSubview:likeButton];
+			[likeButton release];
+			
+			UILabel *likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
+			likeCountLabel.text = [NSString stringWithFormat:@"%d", user.yumCount];
+			likeCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
+			likeCountLabel.textAlignment = NSTextAlignmentCenter;
+			likeCountLabel.font = [UIFont boldSystemFontOfSize:20];
+			likeCountLabel.backgroundColor = [UIColor clearColor];
+			[likeButton addSubview:likeCountLabel];
+			
+			UILabel *likeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 97, 20 )];
+			likeLabel.text = @"Likes";
+			likeLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			likeLabel.textAlignment = NSTextAlignmentCenter;
+			likeLabel.font = [UIFont systemFontOfSize:13];
+			likeLabel.backgroundColor = [UIColor clearColor];
+			[likeButton addSubview:likeLabel];
 			
 			arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
-			arrowView.frame = CGRectMake( 142, 101, 25, 11 );
+			arrowView.frame = CGRectMake( ARROW_LEFT_X, 101, 25, 11 );
 			[cell addSubview:arrowView];
 		}
 		
@@ -253,6 +290,24 @@ enum {
 	}
 	
 	return nil;
+}
+
+
+#pragma mark -
+#pragma mark Selectors
+
+- (void)dishButtonDidTouchUpInside
+{
+	CGRect frame = arrowView.frame;
+	frame.origin.x = ARROW_LEFT_X;
+	arrowView.frame = frame;
+}
+
+- (void)likeButtonDidTouchUpInside
+{
+	CGRect frame = arrowView.frame;
+	frame.origin.x = ARROW_RIGHT_X;
+	arrowView.frame = frame;
 }
 
 @end
