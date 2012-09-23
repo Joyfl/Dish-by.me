@@ -13,9 +13,16 @@
 @interface CommentCell : UITableViewCell
 {
 	Comment *comment;
+	
 	UIButton *profileImageButton;
+	UILabel *nameLabel;
+	UILabel *timeLabel;
+	UITextView *messageView;
 }
 
-- (id)initWithComment:(Comment *)comment;
+@property (nonatomic, retain) Comment *comment;
+
+- (id)initWithResueIdentifier:(NSString *)resueIdentifier;
+- (void)loadProfileImage;
 
 @end
