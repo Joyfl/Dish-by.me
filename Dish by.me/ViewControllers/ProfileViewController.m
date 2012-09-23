@@ -12,6 +12,7 @@
 #import "User.h"
 #import "Dish.h"
 #import "DishTileItem.h"
+#import "DishDetailViewController.h"
 
 #define ARROW_LEFT_X	142
 #define ARROW_RIGHT_X	248
@@ -376,6 +377,12 @@ enum {
 	CGRect frame = arrowView.frame;
 	frame.origin.x = ARROW_RIGHT_X;
 	arrowView.frame = frame;
+}
+
+- (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem
+{
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:dishTileItem.dish];
+	[self.navigationController pushViewController:dishDetailViewController animated:YES];
 }
 
 @end
