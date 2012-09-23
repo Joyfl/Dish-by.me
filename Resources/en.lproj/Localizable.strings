@@ -3,5 +3,6 @@ SEARCH = "Search";
 ME = "Me";
 SETTINGS = "Settings";
 BACK = "Back";
+SHOW_RECIPE = "Show Recipe";
 LEAVE_A_COMMENT = "Leave a comment";
 SEND = "Send";

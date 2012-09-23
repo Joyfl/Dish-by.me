@@ -84,10 +84,12 @@ enum {
 			Dish *dish = [[Dish alloc] init];
 			dish.dishId = [[d objectForKey:@"dish_id"] integerValue];
 			dish.userId = [[d objectForKey:@"user_id"] integerValue];
-			dish.name = [d objectForKey:@"name"];
+			dish.name = [d objectForKey:@"name"];NSLog( @"%@", dish.name );
 			dish.message = [d objectForKey:@"message"];
 //			dish.time = [d objectForKey:@"dish_id"];
 			dish.hasRecipe = [[d objectForKey:@"has_recipe"] boolValue];
+			if( dish.hasRecipe )
+				dish.recipe = [d objectForKey:@"recipe"];
 			dish.yumCount = [[d objectForKey:@"yum_count"] integerValue];
 			dish.commentCount = [[d objectForKey:@"comment_count"] integerValue];
 			[dishes addObject:dish];

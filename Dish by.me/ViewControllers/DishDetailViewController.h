@@ -20,8 +20,11 @@
 	UITableView *tableView;
 	BOOL scrollEnabled;
 	
+	UIButton *recipeButton;
 	UIView *commentBar;
 	UITextField *commentInput;
+	
+	UIImageView *dim;
 }
 
 - (id)initWithDish:(Dish *)dish;

@@ -16,6 +16,7 @@
 	NSString *message;
 	NSDate *time;
 	BOOL hasRecipe;
+	NSString *recipe;
 	NSInteger yumCount;
 	NSInteger commentCount;
 	UIImage *thumbnail;
@@ -28,6 +29,7 @@
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSDate *time;
 @property (nonatomic, assign) BOOL hasRecipe;
+@property (nonatomic, retain) NSString *recipe;
 @property (nonatomic, assign) NSInteger yumCount;
 @property (nonatomic, assign) NSInteger commentCount;
 @property (nonatomic, retain) UIImage *thumbnail;

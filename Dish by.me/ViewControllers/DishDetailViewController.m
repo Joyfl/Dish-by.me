@@ -14,6 +14,8 @@
 #import "DishByMeBarButtonItem.h"
 #import "CommentCell.h"
 #import "DishByMeButton.h"
+#import "RecipeView.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation DishDetailViewController
 
@@ -85,6 +87,10 @@ enum {
 	
 	[tableView addSubview:commentBar];
 	
+	dim = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
+	dim.alpha = 0;
+	[self.view addSubview:dim];
+	
 	scrollEnabled = YES;
 	
 	return self;
@@ -99,7 +105,14 @@ enum {
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
+	[dish release];
+	[loader release];
+	[comments release];
+	[tableView release];
+	[recipeButton release];
+	[commentBar release];
+	[commentInput release];
+	[dim release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -312,11 +325,10 @@ enum {
 				
 				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 70 )];
 				
-				UIButton *recipeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-				recipeButton.frame = CGRectMake( 0, 10, 320, 50 );
+				recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 10, 320, 50 )];
 				[recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 				[recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
-				[recipeButton setTitle:@"레시피 보기" forState:UIControlStateNormal];
+				[recipeButton setTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) forState:UIControlStateNormal];
 				[recipeButton setTitleColor:[UIColor colorWithRed:0x5B / 255.0 green:0x50 / 255.0 blue:0x46 / 255.0 alpha:1.0] forState:UIControlStateNormal];
 				[recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
 				recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -439,7 +451,28 @@ enum {
 
 - (void)recipeButtonDidTouchUpInside
 {
-	NSLog( @"recipe" );
+	RecipeView *recipeView = [[RecipeView alloc] initWithRecipe:dish.recipe closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside:)];
+	[self.view addSubview:recipeView];
+	
+	CGRect originalFrame = recipeView.frame;
+	recipeView.frame = CGRectMake( 7, -originalFrame.size.height, originalFrame.size.width, originalFrame.size.height );
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		dim.alpha = 1;
+		recipeView.frame = originalFrame;
+	}];
+}
+
+- (void)closeButtonDidTouchUpInside:(UIButton *)closeButton
+{
+	RecipeView *recipeView = (RecipeView *)closeButton.superview;
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		dim.alpha = 0;
+		recipeView.frame = CGRectMake( 7, -recipeView.frame.size.height, recipeView.frame.size.width, recipeView.frame.size.height );
+	}];
+	
+	[recipeView release];
 }
 
 - (void)commentInputDidBeginEditing
