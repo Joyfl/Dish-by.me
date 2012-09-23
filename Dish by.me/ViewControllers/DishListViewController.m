@@ -87,6 +87,7 @@ enum {
 			dish.name = [d objectForKey:@"name"];
 			dish.message = [d objectForKey:@"message"];
 //			dish.time = [d objectForKey:@"dish_id"];
+			dish.hasRecipe = [[d objectForKey:@"has_recipe"] boolValue];
 			dish.yumCount = [[d objectForKey:@"yum_count"] integerValue];
 			dish.commentCount = [[d objectForKey:@"comment_count"] integerValue];
 			[dishes addObject:dish];

@@ -16,8 +16,8 @@
 - (id)initWithDish:(Dish *)_dish
 {
 	self = [super init];
-	self.imageEdgeInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
-	[self setImage:[UIImage imageNamed:@"dish_tile_border.png"] forState:UIControlStateNormal];
+	self.imageEdgeInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );	
+	[self setImage:[UIImage imageNamed:_dish.hasRecipe ? @"dish_tile_border_ribbon.png" : @"dish_tile_border.png"] forState:UIControlStateNormal];
 	[self setBackgroundImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal];	
 	
 	dish = _dish;

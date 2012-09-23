@@ -192,7 +192,9 @@ enum {
 					return 63;
 					
 				case kRowRecipe:
-					return 60;
+					if( dish.hasRecipe )
+						return 60;
+					return 0;
 					
 				case kRowYum:
 					return 50;
@@ -274,6 +276,9 @@ enum {
 		}
 		else if( indexPath.row == kRowRecipe )
 		{
+			if( !dish.hasRecipe )
+				return cell;
+			
 			UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 70 )];
 			
 			UIButton *recipeButton = [UIButton buttonWithType:UIButtonTypeCustom];
