@@ -23,7 +23,7 @@ enum {
 {
     self = [super init];
 	
-	tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 480 ) style:UITableViewStylePlain];
+	tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 ) style:UITableViewStylePlain];
 	tableView.delegate = self;
 	tableView.dataSource = self;
 	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
