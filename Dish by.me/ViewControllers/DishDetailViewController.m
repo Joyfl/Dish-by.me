@@ -21,9 +21,10 @@
 
 enum {
 	kRowPhoto = 0,
-	kRowMessage = 1,
-	kRowRecipe = 2,
-	kRowYum = 3,
+	kRowProfile = 1,
+	kRowMessage = 2,
+	kRowRecipe = 3,
+	kRowYum = 4,
 };
 
 enum {
@@ -58,7 +59,7 @@ enum {
 	self.navigationItem.leftBarButtonItem = backButton;
 	[backButton release];
 	
-	self.navigationItem.title = dish.name;
+	self.navigationItem.title = dish.dishName;
 	
 	commentBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 367, 320, 40 )];
 	
@@ -182,7 +183,7 @@ enum {
 	switch( section )
 	{
 		case 0:
-			return 4;
+			return 5;
 			
 		case 1:
 			return comments.count * 2;
@@ -203,6 +204,9 @@ enum {
 			{
 				case kRowPhoto:
 					return 320;
+					
+				case kRowProfile:
+					return 35;
 					
 				case kRowMessage:
 					return 63;
@@ -268,6 +272,55 @@ enum {
 			
 			return cell;
 		}
+		
+		else if( indexPath.row == kRowProfile )
+		{
+			UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:messageCellId];
+			if( !cell )
+			{
+				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:messageCellId];
+				cell.selectionStyle = UITableViewCellSelectionStyleNone;
+				
+				UIButton *profileImageButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+				profileImageButton.frame = CGRectMake( 10, 3, 30, 30 );
+				[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
+				[cell addSubview:profileImageButton];
+				
+				dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
+					NSString *rootURL = WEB_ROOT_URL;
+					NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/images/thumbnail/profile/%d.jpg", rootURL, dish.userId]]];
+					if( data == nil )
+						return;
+					
+					dispatch_async( dispatch_get_main_queue(), ^{
+						[profileImageButton setBackgroundImage:[UIImage imageWithData:data] forState:UIControlStateNormal];
+					} );
+					
+					[data release];
+				});
+				
+				UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 2, 270, 30 )];
+				nameLabel.text = dish.userName;
+				nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
+				nameLabel.font = [UIFont boldSystemFontOfSize:14];
+				nameLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
+				nameLabel.shadowOffset = CGSizeMake( 0, 1 );
+				nameLabel.backgroundColor = [UIColor clearColor];
+				[cell addSubview:nameLabel];
+				
+				UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 260, 0, 50, 30 )];
+#warning 임시 date
+				timeLabel.text = @"10분 전";
+				timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
+				timeLabel.font = [UIFont systemFontOfSize:10];
+				timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
+				timeLabel.shadowOffset = CGSizeMake( 0, 1 );
+				timeLabel.backgroundColor = [UIColor clearColor];
+				[cell addSubview:timeLabel];
+			}
+			return cell;
+		}
+		
 		else if( indexPath.row == kRowMessage )
 		{
 			UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:messageCellId];

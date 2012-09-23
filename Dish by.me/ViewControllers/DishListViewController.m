@@ -83,8 +83,9 @@ enum {
 		{
 			Dish *dish = [[Dish alloc] init];
 			dish.dishId = [[d objectForKey:@"dish_id"] integerValue];
+			dish.dishName = [d objectForKey:@"dish_name"];
 			dish.userId = [[d objectForKey:@"user_id"] integerValue];
-			dish.name = [d objectForKey:@"name"];NSLog( @"%@", dish.name );
+			dish.userName = [d objectForKey:@"user_name"];
 			dish.message = [d objectForKey:@"message"];
 //			dish.time = [d objectForKey:@"dish_id"];
 			dish.hasRecipe = [[d objectForKey:@"has_recipe"] boolValue];

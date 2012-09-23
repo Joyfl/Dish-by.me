@@ -11,8 +11,9 @@
 @interface Dish : NSObject
 {
 	NSInteger dishId;
+	NSString *dishName;
 	NSInteger userId;
-	NSString *name;
+	NSString *userName;
 	NSString *message;
 	NSDate *time;
 	BOOL hasRecipe;
@@ -24,8 +25,9 @@
 }
 
 @property (nonatomic, assign) NSInteger dishId;
+@property (nonatomic, retain) NSString *dishName;
 @property (nonatomic, assign) NSInteger userId;
-@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *userName;
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, retain) NSDate *time;
 @property (nonatomic, assign) BOOL hasRecipe;
