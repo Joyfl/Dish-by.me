@@ -24,6 +24,12 @@ enum {
 	kRowYum = 3,
 };
 
+enum {
+	kTokenIdComment = 0,
+	kTokenIdLike = 1,
+	kTokenIdSendComment = 2
+};
+
 - (id)initWithDish:(Dish *)_dish
 {
 	self = [super init];
@@ -41,7 +47,7 @@ enum {
 	loader.delegate = self;
 	NSString *rootURL = API_ROOT_URL;
 	NSString *url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, dish.dishId];
-	[loader addTokenWithTokenId:0 url:url method:APILoaderMethodGET params:nil];
+	[loader addTokenWithTokenId:kTokenIdComment url:url method:APILoaderMethodGET params:nil];
 	[loader startLoading];
 	
 	comments = [[NSMutableArray alloc] init];
@@ -70,6 +76,7 @@ enum {
 	
 	DishByMeButton *sendButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEND", @"" )];
 	sendButton.frame = CGRectMake( 250, 5, 60, 30 );
+	[sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[commentBar addSubview:sendButton];
 	[sendButton release];
 	
@@ -108,9 +115,10 @@ enum {
 
 - (void)loadingDidFinish:(APILoaderToken *)token
 {
-	if( token.tokenId == 0 )
+	NSDictionary *result = [Utils parseJSON:token.data];
+	
+	if( token.tokenId == kTokenIdComment )
 	{
-		NSDictionary *result = [Utils parseJSON:token.data];
 		NSArray *data = [result objectForKey:@"data"];
 		
 		for( NSDictionary *d in data )
@@ -123,6 +131,24 @@ enum {
 		}
 		
 		[tableView reloadData];
+	}
+	
+	else if( token.tokenId == kTokenIdSendComment )
+	{
+		if( [[result objectForKey:@"status"] isEqualToString:@"ok"] )
+		{
+			Comment *comment = [[Comment alloc] init];
+			
+#warning User에서 가져와야 함
+			comment.userId = 1;
+			comment.name = @"전수열";
+			comment.message = commentInput.text;
+			[comments addObject:comment];
+			
+			[tableView reloadData];
+			commentInput.text = @"";
+			commentInput.enabled = YES;
+		}
 	}
 }
 
@@ -367,6 +393,25 @@ enum {
 	[UIView animateWithDuration:0.25 animations:^{
 		commentBar.frame = CGRectMake( 0, tableView.contentSize.height - 41, 320, 40 );
 	}];
+}
+
+- (void)sendButtonDidTouchUpInside
+{
+	scrollEnabled = YES;
+	
+	
+	if( commentInput.text.length == 0 )
+	{
+		return;
+	}
+	
+	commentInput.enabled = NO;
+	
+	NSString *rootURL = API_ROOT_URL;
+	NSString *url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, dish.dishId];
+	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:commentInput.text, @"message", nil];
+	[loader addTokenWithTokenId:kTokenIdSendComment url:url method:APILoaderMethodPOST params:params];
+	[loader startLoading];
 }
 
 @end
