@@ -142,7 +142,7 @@ enum {
 		{
 			Comment *comment = [[Comment alloc] init];
 			comment.userId = [[d objectForKey:@"user_id"] integerValue];
-			comment.name = [d objectForKey:@"name"];
+			comment.name = [d objectForKey:@"user_name"];
 			comment.message = [d objectForKey:@"message"];
 			[comments addObject:comment];
 		}
