@@ -11,7 +11,10 @@
 
 @implementation RecipeView
 
-- (id)initWithRecipe:(NSString *)recipe closeButtonTarget:(id)target closeButtonAction:(SEL)action
+@synthesize recipeView;
+
+
+- (id)initWithTitle:(NSString *)title recipe:(NSString *)recipe closeButtonTarget:(id)target closeButtonAction:(SEL)action
 {
 	self = [super init];
 	
@@ -32,7 +35,7 @@
 	[self addSubview:bottomView];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 103, 20, 100, 20 )];
-	titleLabel.text = NSLocalizedString( @"SHOW_RECIPE", @"" );
+	titleLabel.text = title;
 	titleLabel.textColor = [Utils colorWithHex:0x5B5046 alpha:1];
 	titleLabel.textAlignment = NSTextAlignmentCenter;
 	titleLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.8];
@@ -46,7 +49,7 @@
 	[closeButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 	[self addSubview:closeButton];
 	
-	UITextView *recipeView = [[UITextView alloc] initWithFrame:CGRectMake( 10, 60, 280, 200 )];
+	recipeView = [[UITextView alloc] initWithFrame:CGRectMake( 10, 60, 280, 200 )];
 	recipeView.text = recipe;
 	recipeView.textColor = [Utils colorWithHex:0x6B6663 alpha:1.0];
 	recipeView.textAlignment = NSTextAlignmentCenter;
@@ -70,7 +73,6 @@
 	[bottomView release];
 	[titleLabel release];
 	[closeButton release];
-	[recipeView release];
 	
 	return self;
 }

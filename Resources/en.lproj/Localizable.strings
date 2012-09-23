@@ -4,5 +4,6 @@ ME = "Me";
 SETTINGS = "Settings";
 BACK = "Back";
 SHOW_RECIPE = "Show Recipe";
+WRITE_RECIPE = "Write Recipe";
 LEAVE_A_COMMENT = "Leave a comment";
 SEND = "Send";

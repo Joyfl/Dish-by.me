@@ -8,7 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@interface WritingViewController : UIViewController
+@class RecipeView;
+
+@interface WritingViewController : UIViewController <UIScrollViewDelegate>
+{
+	UIImage *photo;
+	UIScrollView *scrollView;
+	UIImageView *dim;
+	RecipeView *recipeView;
+	CGRect recipeViewOriginalFrame;
+}
 
 - (id)initWithPhoto:(UIImage *)photo;
 

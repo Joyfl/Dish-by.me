@@ -331,16 +331,16 @@ enum {
 				
 				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
 				
-				UIImageView *topView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_message_box_top.png"]];
+				UIImageView *topView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_top.png"]];
 				topView.frame = CGRectMake( 8, 0, 304, 15 );
 				[bgView addSubview:topView];
 				[topView release];
 				
-				UIImageView *centerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_message_box_center.png"]];
+				UIImageView *centerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_center.png"]];
 				centerView.frame = CGRectMake( 8, 15, 304, 20 );
 				[bgView addSubview:centerView];
 				
-				UIImageView *bottomView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_message_box_bottom.png"]];
+				UIImageView *bottomView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_bottom.png"]];
 				bottomView.frame = CGRectMake( 8, 15 + centerView.frame.size.height, 304, 15 );
 				[bgView addSubview:bottomView];
 				[bottomView release];
@@ -504,7 +504,7 @@ enum {
 
 - (void)recipeButtonDidTouchUpInside
 {
-	RecipeView *recipeView = [[RecipeView alloc] initWithRecipe:dish.recipe closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside:)];
+	RecipeView *recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) recipe:dish.recipe closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside:)];
 	[self.view addSubview:recipeView];
 	
 	CGRect originalFrame = recipeView.frame;

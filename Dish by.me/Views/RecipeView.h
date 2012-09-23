@@ -9,7 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @interface RecipeView : UIView
+{
+	UITextView *recipeView;
+}
 
-- (id)initWithRecipe:(NSString *)recipe closeButtonTarget:(id)target closeButtonAction:(SEL)action;
+@property (nonatomic, retain) UITextView *recipeView;
+
+- (id)initWithTitle:(NSString *)title recipe:(NSString *)recipe closeButtonTarget:(id)target closeButtonAction:(SEL)action;
 
 @end
