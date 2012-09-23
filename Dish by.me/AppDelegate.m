@@ -12,7 +12,7 @@
 #import "SearchViewController.h"
 #import "MeViewController.h"
 #import "SettingsViewController.h"
-#import "PhotoEditingViewController.h"
+#import "WritingViewController.h"
 #import "CameraOverlayViewController.h"
 
 @implementation AppDelegate
@@ -184,11 +184,11 @@
 {
 	[tabBarController dismissViewControllerAnimated:NO completion:nil];
 	
-	PhotoEditingViewController *photoEditingViewController = [[PhotoEditingViewController alloc] initWithPhoto:image];
-	DishByMeNavigationController *navController = [[DishByMeNavigationController alloc] initWithRootViewController:photoEditingViewController];
+	WritingViewController *writingViewController = [[WritingViewController alloc] initWithPhoto:image];
+	DishByMeNavigationController *navController = [[DishByMeNavigationController alloc] initWithRootViewController:writingViewController];
 	[tabBarController presentViewController:navController animated:NO completion:nil];
 	
-	[photoEditingViewController release];
+	[writingViewController release];
 	[navController release];
 }
 
