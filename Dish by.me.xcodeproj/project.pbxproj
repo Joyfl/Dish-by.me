@@ -43,6 +43,8 @@
 		031AAB33160F0F5C007B42B3 /* dim.png in Resources */ = {isa = PBXBuildFile; fileRef = 031AAB31160F0F5C007B42B3 /* dim.png */; };
 		031AAB34160F0F5C007B42B3 /* dim@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 031AAB32160F0F5C007B42B3 /* dim@2x.png */; };
 		031AAB37160F23A1007B42B3 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB36160F23A1007B42B3 /* User.m */; };
+		031AAB3D160F3B4F007B42B3 /* WritingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB3C160F3B4F007B42B3 /* WritingViewController.m */; };
+		031AAB4C160F42CB007B42B3 /* CameraOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */; };
 		0359EA53160D6506009CDA41 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA52160D6506009CDA41 /* Default-568h@2x.png */; };
 		0359EA57160D6736009CDA41 /* navigation_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA55160D6736009CDA41 /* navigation_bar.png */; };
 		0359EA58160D6736009CDA41 /* navigation_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA56160D6736009CDA41 /* navigation_bar@2x.png */; };
@@ -155,6 +157,10 @@
 		031AAB32160F0F5C007B42B3 /* dim@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "dim@2x.png"; path = "Resources/dim@2x.png"; sourceTree = "<group>"; };
 		031AAB35160F23A1007B42B3 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = User.h; path = Models/User.h; sourceTree = "<group>"; };
 		031AAB36160F23A1007B42B3 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = User.m; path = Models/User.m; sourceTree = "<group>"; };
+		031AAB3B160F3B4F007B42B3 /* WritingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WritingViewController.h; sourceTree = "<group>"; };
+		031AAB3C160F3B4F007B42B3 /* WritingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WritingViewController.m; sourceTree = "<group>"; };
+		031AAB4A160F42CB007B42B3 /* CameraOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraOverlayViewController.h; sourceTree = "<group>"; };
+		031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraOverlayViewController.m; sourceTree = "<group>"; };
 		0359EA52160D6506009CDA41 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		0359EA55160D6736009CDA41 /* navigation_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigation_bar.png; sourceTree = "<group>"; };
 		0359EA56160D6736009CDA41 /* navigation_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation_bar@2x.png"; sourceTree = "<group>"; };
@@ -287,6 +293,10 @@
 				03178846160C76DB0041DAD7 /* MeViewController.m */,
 				03178849160C76DB0041DAD7 /* SettingsViewController.h */,
 				0317884A160C76DB0041DAD7 /* SettingsViewController.m */,
+				031AAB4A160F42CB007B42B3 /* CameraOverlayViewController.h */,
+				031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */,
+				031AAB3B160F3B4F007B42B3 /* WritingViewController.h */,
+				031AAB3C160F3B4F007B42B3 /* WritingViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -674,6 +684,8 @@
 				031AAB0B160DE2CD007B42B3 /* DishByMeButton.m in Sources */,
 				031AAB12160EFD33007B42B3 /* RecipeView.m in Sources */,
 				031AAB37160F23A1007B42B3 /* User.m in Sources */,
+				031AAB3D160F3B4F007B42B3 /* WritingViewController.m in Sources */,
+				031AAB4C160F42CB007B42B3 /* CameraOverlayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
