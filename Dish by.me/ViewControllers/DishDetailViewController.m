@@ -399,7 +399,7 @@ enum {
 		UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:writeCommentCellId];
 		if( !cell )
 		{
-			[[UITableViewCell alloc] init];
+			cell = [[UITableViewCell alloc] init];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 		}
 		return cell;
