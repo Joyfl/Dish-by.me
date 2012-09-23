@@ -10,7 +10,7 @@
 #import "DishByMeNavigationController.h"
 #import "DishListViewController.h"
 #import "SearchViewController.h"
-#import "MeViewController.h"
+#import "ProfileViewController.h"
 #import "SettingsViewController.h"
 #import "WritingViewController.h"
 #import "CameraOverlayViewController.h"
@@ -50,12 +50,12 @@
 	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[searchViewController release];
 	
-	MeViewController *meViewController = [[MeViewController alloc] init];
-	DishByMeNavigationController *meNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:meViewController];
+	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+	DishByMeNavigationController *profileNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:profileViewController];
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
-	meNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
-	meNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
-	[meViewController release];
+	profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
+	profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
+	[profileViewController release];
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
 	DishByMeNavigationController *settingsNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:settingsViewController];

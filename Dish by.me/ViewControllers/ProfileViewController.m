@@ -6,9 +6,9 @@
 //  Copyright (c) 2012년 Joyfl. All rights reserved.
 //
 
-#import "MeViewController.h"
+#import "ProfileViewController.h"
 
-@implementation MeViewController
+@implementation ProfileViewController
 
 - (id)init
 {

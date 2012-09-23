@@ -12,7 +12,7 @@
 		0317883A160C6DDC0041DAD7 /* DishTileItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178839160C6DDC0041DAD7 /* DishTileItem.m */; };
 		0317884B160C76DB0041DAD7 /* DishDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178842160C76DB0041DAD7 /* DishDetailViewController.m */; };
 		0317884C160C76DB0041DAD7 /* DishListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178844160C76DB0041DAD7 /* DishListViewController.m */; };
-		0317884D160C76DB0041DAD7 /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178846160C76DB0041DAD7 /* MeViewController.m */; };
+		0317884D160C76DB0041DAD7 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178846160C76DB0041DAD7 /* ProfileViewController.m */; };
 		0317884E160C76DB0041DAD7 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178848160C76DB0041DAD7 /* SearchViewController.m */; };
 		0317884F160C76DB0041DAD7 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0317884A160C76DB0041DAD7 /* SettingsViewController.m */; };
 		031AAAF4160DAB8B007B42B3 /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAAF3160DAB8B007B42B3 /* CommentCell.m */; };
@@ -119,8 +119,8 @@
 		03178842160C76DB0041DAD7 /* DishDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DishDetailViewController.m; sourceTree = "<group>"; };
 		03178843160C76DB0041DAD7 /* DishListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DishListViewController.h; sourceTree = "<group>"; };
 		03178844160C76DB0041DAD7 /* DishListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DishListViewController.m; sourceTree = "<group>"; };
-		03178845160C76DB0041DAD7 /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
-		03178846160C76DB0041DAD7 /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
+		03178845160C76DB0041DAD7 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
+		03178846160C76DB0041DAD7 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		03178847160C76DB0041DAD7 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		03178848160C76DB0041DAD7 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		03178849160C76DB0041DAD7 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
@@ -289,8 +289,8 @@
 				03178842160C76DB0041DAD7 /* DishDetailViewController.m */,
 				03178847160C76DB0041DAD7 /* SearchViewController.h */,
 				03178848160C76DB0041DAD7 /* SearchViewController.m */,
-				03178845160C76DB0041DAD7 /* MeViewController.h */,
-				03178846160C76DB0041DAD7 /* MeViewController.m */,
+				03178845160C76DB0041DAD7 /* ProfileViewController.h */,
+				03178846160C76DB0041DAD7 /* ProfileViewController.m */,
 				03178849160C76DB0041DAD7 /* SettingsViewController.h */,
 				0317884A160C76DB0041DAD7 /* SettingsViewController.m */,
 				031AAB4A160F42CB007B42B3 /* CameraOverlayViewController.h */,
@@ -674,7 +674,7 @@
 				0317883A160C6DDC0041DAD7 /* DishTileItem.m in Sources */,
 				0317884B160C76DB0041DAD7 /* DishDetailViewController.m in Sources */,
 				0317884C160C76DB0041DAD7 /* DishListViewController.m in Sources */,
-				0317884D160C76DB0041DAD7 /* MeViewController.m in Sources */,
+				0317884D160C76DB0041DAD7 /* ProfileViewController.m in Sources */,
 				0317884E160C76DB0041DAD7 /* SearchViewController.m in Sources */,
 				0317884F160C76DB0041DAD7 /* SettingsViewController.m in Sources */,
 				03CB7409160C937700A5C6A3 /* Comment.m in Sources */,
