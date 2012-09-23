@@ -18,7 +18,16 @@
 	UIButton *profileImage;
 	UIImageView *arrowView;
 	UITableView *tableView;
+	
 	NSMutableArray *dishes;
+	NSMutableArray *likes;
+	
+	// 0 : dishes
+	// 1 : likes
+	NSInteger selectedTab;
+	
+	NSInteger tmpUserId;
+	
 	APILoader *loader;
 }
 
