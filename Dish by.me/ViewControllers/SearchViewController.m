@@ -170,6 +170,8 @@
 	[dishes removeAllObjects];
 	[tableView reloadData];
 	
+	[searchInput resignFirstResponder];
+	
 	NSString *rootUrl = API_ROOT_URL;
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:searchInput.text, @"query", nil];
 	[loader addTokenWithTokenId:0 url:[NSString stringWithFormat:@"%@/search", rootUrl] method:APILoaderMethodGET params:params];
