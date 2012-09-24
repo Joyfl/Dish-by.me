@@ -184,10 +184,10 @@
 //	if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
 //		UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
 	
-	[self performSelector:@selector(presentPhotoEditingViewControllerWithImage:) withObject:image afterDelay:0.5];
+	[self performSelector:@selector(presentWritingViewControllerWithImage:) withObject:image afterDelay:0.5];
 }
 
-- (void)presentPhotoEditingViewControllerWithImage:(UIImage *)image
+- (void)presentWritingViewControllerWithImage:(UIImage *)image
 {
 	[tabBarController dismissViewControllerAnimated:NO completion:nil];
 	
