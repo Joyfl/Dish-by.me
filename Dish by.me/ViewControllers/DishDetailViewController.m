@@ -15,6 +15,7 @@
 #import "CommentCell.h"
 #import "DishByMeButton.h"
 #import "RecipeView.h"
+#import "UserManager.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation DishDetailViewController
@@ -156,9 +157,8 @@ enum {
 		{
 			Comment *comment = [[Comment alloc] init];
 			
-#warning User에서 가져와야 함
-			comment.userId = 1;
-			comment.name = @"전수열";
+			comment.userId = [UserManager userId];
+			comment.name = [UserManager userName];
 			comment.message = commentInput.text;
 			[comments addObject:comment];
 			

@@ -26,9 +26,9 @@
 	// 1 : likes
 	NSInteger selectedTab;
 	
-	NSInteger tmpUserId;
-	
 	APILoader *loader;
 }
+
+- (void)activateWithUserId:(NSInteger)userId;
 
 @end

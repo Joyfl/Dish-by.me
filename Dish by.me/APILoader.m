@@ -7,6 +7,7 @@
 //
 
 #import "APILoader.h"
+#import "UserManager.h"
 
 @implementation APILoaderToken
 
@@ -44,9 +45,11 @@
 
 - (void)addTokenWithTokenId:(NSInteger)tokenId url:(NSString *)url method:(NSInteger)method params:(NSMutableDictionary *)params
 {
-#warning Temp access_token
-	if( !params ) params = [[NSMutableDictionary alloc] init];
-	[params setObject:@"6fbc683119232495c787dcd0c26fee9e925ff341" forKey:@"access_token"];
+	if( [UserManager accessToken] )
+	{
+		if( !params ) params = [[NSMutableDictionary alloc] init];
+		[params setObject:[UserManager accessToken] forKey:@"access_token"];
+	}
 	
 	APILoaderToken *token = [[APILoaderToken alloc] initWithTokenId:tokenId url:url method:method params:params];
 	[self addToken:token];

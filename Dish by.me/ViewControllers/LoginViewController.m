@@ -15,7 +15,7 @@
 
 @implementation LoginViewController
 
-- (id)init
+- (id)initWithTarget:(id)_target action:(SEL)_action
 {
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
@@ -66,12 +66,15 @@
 	loader = [[APILoader alloc] init];
 	loader.delegate = self;
 	
+	target = _target;
+	action = _action;
+	
 	return self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	self.navigationController.navigationBarHidden = YES;
+//	self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewDidLoad
@@ -182,10 +185,10 @@
 	[[SettingsManager manager] setSetting:[data objectForKey:@"access_token"] forKey:SETTING_KEY_ACCESS_TOKEN];
 	[[SettingsManager manager] setSetting:emailInput.text forKey:SETTING_KEY_EMAIL];
 	[[SettingsManager manager] setSetting:passwordInput.text forKey:SETTING_KEY_PASSWORD];
-//	[[SettingsManager manager] setSetting:(NSNumber *)[data objectForKey:@"userid"] forKey:SETTING_KEY_USER_ID];
-//	[[SettingsManager manager] setSetting:[data objectForKey:@"name"] forKey:SETTING_KEY_USER_NAME];
+	[[SettingsManager manager] setSetting:(NSNumber *)[data objectForKey:@"user_id"] forKey:SETTING_KEY_USER_ID];
 	[[SettingsManager manager] flush];
 	
+	[target performSelector:action];
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 

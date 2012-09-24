@@ -15,6 +15,11 @@
 	UITextField *passwordInput;
 	
 	APILoader *loader;
+	
+	id target;
+	SEL action;
 }
+
+- (id)initWithTarget:(id)target action:(SEL)action;
 
 @end

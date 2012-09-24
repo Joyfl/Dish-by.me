@@ -13,6 +13,8 @@
 #import "Dish.h"
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
+#import "UserManager.h"
+#import "SettingsManager.h"
 
 #define ARROW_LEFT_X	142
 #define ARROW_RIGHT_X	248
@@ -30,33 +32,24 @@ enum {
     self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	
-	tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
-	tableView.delegate = self;
-	tableView.dataSource = self;
-	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
-	[self.view addSubview:tableView];
-	
 	dishes = [[NSMutableArray alloc] init];
 	likes = [[NSMutableArray alloc] init];
 	
 	loader = [[APILoader alloc] init];
 	loader.delegate = self;
 	
-	tmpUserId = 1;
-	
-	NSString *rootUrl = API_ROOT_URL;
-#warning 임시 user_id
-	[loader addTokenWithTokenId:kTokenIdUser url:[NSString stringWithFormat:@"%@/user/%d", rootUrl, tmpUserId] method:APILoaderMethodGET params:nil];
-#warning 임시 user_id
-	[loader addTokenWithTokenId:kTokenIdDishes url:[NSString stringWithFormat:@"%@/user/%d/dish", rootUrl, tmpUserId] method:APILoaderMethodGET params:nil];
-#warning 임시 user_id
-	[loader addTokenWithTokenId:kTokenIdLikes url:[NSString stringWithFormat:@"%@/user/%d/yum", rootUrl, tmpUserId] method:APILoaderMethodGET params:nil];
-	[loader startLoading];
-	
 	self.navigationItem.title = @"Dish by.me";
 	
-    return self;
+	return self;
+}
+
+- (void)activateWithUserId:(NSInteger)userId
+{
+	NSString *rootUrl = API_ROOT_URL;
+	[loader addTokenWithTokenId:kTokenIdUser url:[NSString stringWithFormat:@"%@/user/%d", rootUrl, userId] method:APILoaderMethodGET params:nil];
+	[loader addTokenWithTokenId:kTokenIdDishes url:[NSString stringWithFormat:@"%@/user/%d/dish", rootUrl, userId] method:APILoaderMethodGET params:nil];
+	[loader addTokenWithTokenId:kTokenIdLikes url:[NSString stringWithFormat:@"%@/user/%d/yum", rootUrl, userId] method:APILoaderMethodGET params:nil];
+	[loader startLoading];
 }
 
 - (void)viewDidLoad
@@ -98,6 +91,8 @@ enum {
 		user.dishCount = [[result objectForKey:@"dish_count"] integerValue];
 		user.yumCount = [[result objectForKey:@"yum_count"] integerValue];
 		
+		[[SettingsManager manager] setSetting:user.name forKey:SETTING_KEY_USER_NAME];
+		
 		self.navigationItem.title = user.name;
 		
 		dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
@@ -137,7 +132,12 @@ enum {
 			[dish release];
 		}
 		
-		[tableView reloadData];
+		tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
+		tableView.delegate = self;
+		tableView.dataSource = self;
+		tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+		tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+		[self.view addSubview:tableView];
 	}
 	
 	else if( token.tokenId == kTokenIdLikes )
@@ -219,9 +219,8 @@ enum {
 			bioButton.titleLabel.textAlignment = NSTextAlignmentLeft;
 			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top.png"] forState:UIControlStateNormal];
 			
-#warning 임시 user_id(1)
 			// My profile
-			if( user.userId == tmpUserId )
+			if( user.userId == [UserManager userId] )
 			{
 				bioButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[bioButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];

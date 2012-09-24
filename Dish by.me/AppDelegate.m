@@ -54,7 +54,7 @@
 	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[searchViewController release];
 	
-	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+	profileViewController = [[ProfileViewController alloc] init];
 	DishByMeNavigationController *profileNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:profileViewController];
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
 	profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
@@ -201,12 +201,17 @@
 
 - (void)presentLoginViewController
 {
-	LoginViewController *loginViewController = [[LoginViewController alloc] init];
+	LoginViewController *loginViewController = [[LoginViewController alloc] initWithTarget:self action:@selector(loginDidFinish)];
 	DishByMeNavigationController *navController = [[DishByMeNavigationController alloc] initWithRootViewController:loginViewController];
 	[tabBarController presentViewController:navController animated:YES completion:nil];
 	
 	[loginViewController release];
 	[navController release];
+}
+
+- (void)loginDidFinish
+{
+	[profileViewController activateWithUserId:[UserManager userId]];
 }
 
 @end

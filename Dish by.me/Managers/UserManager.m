@@ -14,7 +14,7 @@
 
 + (BOOL)loggedIn
 {
-	NSString *key = SETTING_KEY_USER_ID;
+	NSString *key = SETTING_KEY_ACCESS_TOKEN;
 	return [[SettingsManager manager] getSettingForKey:key] != nil;
 }
 
