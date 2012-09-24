@@ -20,7 +20,10 @@
 	UITableView *tableView;
 	BOOL scrollEnabled;
 	
+	CGFloat messageRowHeight;
+	
 	UIButton *recipeButton;
+	UIButton *likeButton;
 	UIView *commentBar;
 	UITextField *commentInput;
 	

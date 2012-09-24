@@ -165,6 +165,18 @@ enum {
 		[tableView reloadData];
 	}
 	
+	else if( token.tokenId == kTokenIdLike )
+	{
+		NSLog( @"%@", token.data );
+		if( [[result objectForKey:@"status"] isEqualToString:@"ok"] )
+		{
+			likeButton.enabled = NO;
+			[UIView animateWithDuration:0.25 animations:^{
+				likeButton.frame = CGRectMake( 320, 14, 100, 25 );
+			}];
+		}
+	}
+	
 	else if( token.tokenId == kTokenIdSendComment )
 	{
 		if( [[result objectForKey:@"status"] isEqualToString:@"ok"] )
@@ -223,7 +235,7 @@ enum {
 					return 35;
 					
 				case kRowMessage:
-					return 63;
+					return messageRowHeight;
 					
 				case kRowRecipe:
 					if( dish.hasRecipe )
@@ -343,38 +355,65 @@ enum {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:messageCellId];
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				
-				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
-				
 				UIImageView *topView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_top.png"]];
 				topView.frame = CGRectMake( 8, 0, 304, 15 );
-				[bgView addSubview:topView];
+				[cell addSubview:topView];
 				[topView release];
 				
+				UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 15, 280, 20 )];
+				messageLabel.text = dish.message;
+				messageLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+				messageLabel.font = [UIFont boldSystemFontOfSize:14];
+				messageLabel.shadowOffset = CGSizeMake( 0, 1 );
+				messageLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+				messageLabel.backgroundColor = [UIColor clearColor];
+				messageLabel.numberOfLines = 0;
+				[messageLabel sizeToFit];
+				
 				UIImageView *centerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_center.png"]];
-				centerView.frame = CGRectMake( 8, 15, 304, 20 );
-				[bgView addSubview:centerView];
+				centerView.frame = CGRectMake( 8, 15, 304, messageLabel.frame.size.height + 38 );
+				[cell addSubview:centerView];
+				
+				UIImageView *messageBoxDotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_dot_line.png"]];
+				messageBoxDotLineView.frame = CGRectMake( 17, 22 + messageLabel.frame.size.height, 285, 2 );
+				[cell addSubview:messageBoxDotLineView];
+				[messageBoxDotLineView release];
+				
+				UILabel *forkedFromLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 32 + messageLabel.frame.size.height, 280, 20 )];
+				forkedFromLabel.text = @"헤헤헤를 포크했습니다.";
+				forkedFromLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+				forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
+				forkedFromLabel.shadowOffset = CGSizeMake( 0, 1 );
+				forkedFromLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+				forkedFromLabel.backgroundColor = [UIColor clearColor];
+				
+				UIButton *forkedButton = [[UIButton alloc] initWithFrame:CGRectMake( 265, 32 + messageLabel.frame.size.height, 40, 20 )];
+				forkedButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+				forkedButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+				forkedButton.titleLabel.textAlignment = NSTextAlignmentRight;
+				[forkedButton setTitle:[NSString stringWithFormat:@"%d", dish.forkCount] forState:UIControlStateNormal];
+				[forkedButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+				[forkedButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
+				[forkedButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
+				forkedButton.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 30 );
 				
 				UIImageView *bottomView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_bottom.png"]];
 				bottomView.frame = CGRectMake( 8, 15 + centerView.frame.size.height, 304, 15 );
-				[bgView addSubview:bottomView];
+				[cell addSubview:bottomView];
 				[bottomView release];
 				[centerView release];
 				
 				UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
-				dotLineView.frame = CGRectMake( 8, bottomView.frame.origin.y + 28, 304, 2 );
-				[bgView addSubview:dotLineView];
+				dotLineView.frame = CGRectMake( 8, bottomView.frame.origin.y + 25, 304, 2 );
+				[cell addSubview:dotLineView];
 				[dotLineView release];
 				
-				cell.backgroundView = bgView;
-				[bgView release];
-				
-				UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 15, 280, 20 )];
-				messageLabel.text = dish.message;
-				messageLabel.textColor = [UIColor colorWithRed:0x80 / 255.0 green:0x82 / 255.0 blue:0x83 / 255.0 alpha:1];
-				messageLabel.font = [UIFont boldSystemFontOfSize:15];
-				messageLabel.shadowOffset = CGSizeMake( 0, 1 );
-				messageLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 				[cell addSubview:messageLabel];
+				[cell addSubview:forkedFromLabel];
+				[cell addSubview:forkedButton];
+				
+				messageRowHeight = 75 + messageLabel.frame.size.height;
+				[tableView reloadData];
 			}
 			
 			return cell;
@@ -421,10 +460,15 @@ enum {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:yumCellId];
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				cell.textLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_LIKE", @"" ), dish.yumCount];
-				cell.textLabel.textColor = [UIColor colorWithRed:0x80 / 255.0 green:0x82 / 255.0 blue:0x83 / 255.0 alpha:1.0];
+				cell.textLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
 				cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 				cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
 				cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+				
+				likeButton = [[UIButton alloc] initWithFrame:CGRectMake( 220, 14, 100, 25 )];
+				[likeButton setBackgroundImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
+				[likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+				[cell addSubview:likeButton];
 			}
 			
 			return cell;
@@ -552,6 +596,13 @@ enum {
 	}];
 	
 	[recipeView release];
+}
+
+- (void)likeButtonDidTouchUpInside
+{
+#warning Const에서 가져오기
+	[loader addTokenWithTokenId:kTokenIdLike url:[NSString stringWithFormat:@"http://api.dishby.me/dish/%d/yum", dish.dishId] method:APILoaderMethodPOST params:nil];
+	[loader startLoading];
 }
 
 - (void)commentInputDidBeginEditing

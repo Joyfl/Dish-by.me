@@ -18,6 +18,7 @@ LOGIN_WITH_FACEBOOK = "페이스북으로 로그인";
 // DishDetailView
 EDIT = "수정하기";
 FORK = "포크하기";
+N_LIKE = "%@를 포크했습니다.";
 N_LIKE = "	%d명이 이 요리를 찜했습니다.";
 SHOW_RECIPE = "레시피 보기";
 LEAVE_A_COMMENT = "댓글 남기기";
