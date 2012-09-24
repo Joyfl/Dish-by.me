@@ -59,15 +59,16 @@
 	[messageBoxTopView release];
 	
 	UIImageView *messageBoxCenterView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_center.png"]];
-	messageBoxCenterView.frame = CGRectMake( 8, 355, 304, 80 );
+	messageBoxCenterView.frame = CGRectMake( 8, 365, 304, 70 );
 	[scrollView addSubview:messageBoxCenterView];
 	
 	UIImageView *messageBoxBottomView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_bottom.png"]];
 	messageBoxBottomView.frame = CGRectMake( 8, 355 + messageBoxCenterView.frame.size.height, 304, 15 );
 	[scrollView addSubview:messageBoxBottomView];
 	
-	UITextView *messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 20, 355, 280, 80 )];
+	UITextView *messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 360, 290, 70 )];
 	messageInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	messageInput.backgroundColor = [UIColor clearColor];
 	messageInput.font = [UIFont boldSystemFontOfSize:15];
 	messageInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	messageInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
@@ -92,6 +93,7 @@
 	dim.alpha = 0;
 	[self.view addSubview:dim];
 	
+#warning closeButton이 제대로 눌리지 않음 - closeButton 터치 후 텍스트필드 터치하면 이벤트 트리거됨.
 	recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"WRITE_RECIPE", @"" ) recipe:@"\n\n\n\n" closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside)];
 	recipeView.recipeView.text = @"";
 	recipeView.recipeView.editable = YES;
@@ -124,6 +126,8 @@
 
 - (void)recipeButtonDidTouchUpInside
 {
+	scrollView.userInteractionEnabled = NO;
+	
 	[UIView animateWithDuration:0.25 animations:^{
 		dim.alpha = 1;
 		recipeView.frame = recipeViewOriginalFrame;
@@ -134,9 +138,14 @@
 
 - (void)closeButtonDidTouchUpInside
 {
+	[recipeView.recipeView resignFirstResponder];
+	
 	[UIView animateWithDuration:0.25 animations:^{
 		dim.alpha = 0;
 		recipeView.frame = CGRectMake( 7, -recipeView.frame.size.height, recipeView.frame.size.width, recipeView.frame.size.height );
+		scrollView.frame = CGRectMake( 0, 0, 320, 416 );
+	} completion:^(BOOL finished) {
+		scrollView.userInteractionEnabled = YES;
 	}];
 }
 
