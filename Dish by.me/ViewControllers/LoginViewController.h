@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APILoader.h"
 
-@interface LoginViewController : UIViewController
+@interface LoginViewController : UIViewController <UITextFieldDelegate, APILoaderDelegate>
+{
+	UITextField *emailInput;
+	UITextField *passwordInput;
+	
+	APILoader *loader;
+}
 
 @end

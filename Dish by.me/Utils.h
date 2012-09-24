@@ -16,4 +16,6 @@
 
 + (UIColor *)colorWithHex:(NSInteger)color alpha:(CGFloat)alpha;
 
++ (NSString *)sha1:(NSString *)input;
+
 @end

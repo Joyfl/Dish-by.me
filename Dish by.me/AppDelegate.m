@@ -14,6 +14,8 @@
 #import "SettingsViewController.h"
 #import "WritingViewController.h"
 #import "CameraOverlayViewController.h"
+#import "LoginViewController.h"
+#import "UserManager.h"
 
 @implementation AppDelegate
 
@@ -122,7 +124,10 @@
 
 - (void)cameraButtonDidTouchUpInside
 {
-	[self presentActionSheet];
+	if( [UserManager loggedIn] )
+		[self presentActionSheet];
+	else
+		[self presentLoginViewController];
 }
 
 #pragma mark -
@@ -191,6 +196,16 @@
 	[tabBarController presentViewController:navController animated:NO completion:nil];
 	
 	[writingViewController release];
+	[navController release];
+}
+
+- (void)presentLoginViewController
+{
+	LoginViewController *loginViewController = [[LoginViewController alloc] init];
+	DishByMeNavigationController *navController = [[DishByMeNavigationController alloc] initWithRootViewController:loginViewController];
+	[tabBarController presentViewController:navController animated:YES completion:nil];
+	
+	[loginViewController release];
 	[navController release];
 }
 

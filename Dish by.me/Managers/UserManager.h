@@ -11,6 +11,7 @@
 @interface UserManager : NSObject
 
 + (BOOL)loggedIn;
++ (NSString *)accessToken;
 + (NSInteger)userId;
 + (NSNumber *)userIdNumber;
 + (NSString *)userName;

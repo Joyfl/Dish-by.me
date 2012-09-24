@@ -18,6 +18,12 @@
 	return [[SettingsManager manager] getSettingForKey:key] != nil;
 }
 
++ (NSString *)accessToken
+{
+	NSString *key = SETTING_KEY_ACCESS_TOKEN;
+	return [[SettingsManager manager] getSettingForKey:key];
+}
+
 + (NSInteger)userId
 {
 	NSString *key = SETTING_KEY_USER_ID;
