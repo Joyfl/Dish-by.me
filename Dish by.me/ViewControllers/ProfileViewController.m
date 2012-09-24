@@ -259,7 +259,7 @@ enum {
 			[dishButton addSubview:dishCountLabel];
 			
 			UILabel *dishLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 94, 20 )];
-			dishLabel.text = @"Dishes";
+			dishLabel.text = NSLocalizedString( @"DISHES", @"" );
 			dishLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
 			dishLabel.textAlignment = NSTextAlignmentCenter;
 			dishLabel.font = [UIFont systemFontOfSize:13];
@@ -281,7 +281,7 @@ enum {
 			[likeButton addSubview:likeCountLabel];
 			
 			UILabel *likeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 97, 20 )];
-			likeLabel.text = @"Likes";
+			likeLabel.text = NSLocalizedString( @"LIKES", @"" );
 			likeLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
 			likeLabel.textAlignment = NSTextAlignmentCenter;
 			likeLabel.font = [UIFont systemFontOfSize:13];
