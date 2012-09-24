@@ -29,39 +29,70 @@
 	[self.view addGestureRecognizer:gestureRecognizer];
 	[gestureRecognizer release];
 	
-	emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 38, 162, 245, 31 )];
+	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_bg.png"]];
+	[self.view addSubview:bgView];
+	[bgView release];
+	
+	UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake( 280, 15, 26, 26 )];
+	[closeButton setBackgroundImage:[UIImage imageNamed:@"login_close_button.png"] forState:UIControlStateNormal];
+	[self.view addSubview:closeButton];
+	[closeButton release];
+	
+	forkAndKnife = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fork_knife.png"]];
+	forkAndKnife.frame = CGRectMake( 140, 55, 80, 90 );
+	[self.view addSubview:forkAndKnife];
+	[forkAndKnife release];
+	
+	loginBox = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_box.png"]];
+	loginBox.frame = CGRectMake( 65, 193, 230, 75 );
+	[self.view addSubview:loginBox];
+	[loginBox release];
+	
+	emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 203, 245, 31 )];
 	emailInput.delegate = self;
 	emailInput.placeholder = NSLocalizedString( @"EMAIL", @"" );
-	emailInput.font = [UIFont boldSystemFontOfSize:15];
-	emailInput.textColor = [UIColor colorWithRed:0.392 green:0.313 blue:0.250 alpha:1.0];
+	emailInput.font = [UIFont boldSystemFontOfSize:13];
+	emailInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
 	emailInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	emailInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-	emailInput.layer.shadowOpacity = 0.5;
+	emailInput.layer.shadowOpacity = 1;
 	emailInput.layer.shadowRadius = 0;
 	emailInput.keyboardType = UIKeyboardTypeEmailAddress;
 	emailInput.returnKeyType = UIReturnKeyNext;
 	emailInput.autocorrectionType = UITextAutocorrectionTypeNo;
 	emailInput.autocapitalizationType = UITextAutocapitalizationTypeNone;
-	[emailInput setValue:[UIColor colorWithRed:0.788 green:0.635 blue:0.517 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
+	[emailInput setValue:[Utils colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+	[emailInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
 	[emailInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:emailInput];
 	[emailInput release];
 	
-	passwordInput = [[UITextField alloc] initWithFrame:CGRectMake( 38, 203, 245, 31 )];
+	passwordInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 240, 245, 31 )];
 	passwordInput.delegate = self;
 	passwordInput.placeholder = NSLocalizedString( @"PASSWORD", @"" );
-	passwordInput.font = [UIFont boldSystemFontOfSize:15];
-	passwordInput.textColor = [UIColor colorWithRed:0.392 green:0.313 blue:0.250 alpha:1.0];
+	passwordInput.font = [UIFont boldSystemFontOfSize:13];
+	passwordInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
 	passwordInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	passwordInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-	passwordInput.layer.shadowOpacity = 0.5;
+	passwordInput.layer.shadowOpacity = 1;
 	passwordInput.layer.shadowRadius = 0;
 	passwordInput.secureTextEntry = YES;
 	passwordInput.returnKeyType = UIReturnKeyGo;
-	[passwordInput setValue:[UIColor colorWithRed:0.788 green:0.635 blue:0.517 alpha:1.0] forKeyPath:@"placeholderLabel.textColor"];
+	[passwordInput setValue:[Utils colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+	[passwordInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
 	[passwordInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:passwordInput];
 	[passwordInput release];
+	
+	loginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 290, 230, 40 )];
+	[loginButton setBackgroundImage:[UIImage imageNamed:@"login_button.png"] forState:UIControlStateNormal];
+	[self.view addSubview:loginButton];
+	[loginButton release];
+	
+	facebookLoginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 340, 230, 40 )];
+	[facebookLoginButton setBackgroundImage:[UIImage imageNamed:@"login_facebook_button.png"] forState:UIControlStateNormal];
+	[self.view addSubview:facebookLoginButton];
+	[facebookLoginButton release];
 	
 	loader = [[APILoader alloc] init];
 	loader.delegate = self;
@@ -74,7 +105,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-//	self.navigationController.navigationBarHidden = YES;
+	self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewDidLoad
@@ -91,6 +122,34 @@
 
 
 #pragma mark -
+#pragma mark Animations
+
+- (void)animateUp
+{
+	[UIView animateWithDuration:0.25 animations:^{
+		forkAndKnife.frame = CGRectMake( 140, 10, 80, 90 );
+		loginBox.frame = CGRectMake( 65, 108, 230, 75 );
+		emailInput.frame = CGRectMake( 75, 118, 245, 31 );
+		passwordInput.frame = CGRectMake( 75, 155, 245, 31 );
+		loginButton.frame = CGRectMake( 65, 195, 230, 40 );
+		facebookLoginButton.frame = CGRectMake( 65, 245, 230, 40 );
+	}];
+}
+
+- (void)animateDown
+{
+	[UIView animateWithDuration:0.25 animations:^{
+		forkAndKnife.frame = CGRectMake( 140, 55, 80, 90 );
+		loginBox.frame = CGRectMake( 65, 193, 230, 75 );
+		emailInput.frame = CGRectMake( 75, 203, 245, 31 );
+		passwordInput.frame = CGRectMake( 75, 240, 245, 31 );
+		loginButton.frame = CGRectMake( 65, 290, 230, 40 );
+		facebookLoginButton.frame = CGRectMake( 65, 340, 230, 40 );
+	}];
+}
+
+
+#pragma mark -
 #pragma mark Selectors
 
 - (void)cancelButtonDidTouchUpInside
@@ -102,10 +161,16 @@
 {
 	[emailInput resignFirstResponder];
 	[passwordInput resignFirstResponder];
+	[self animateDown];
 }
 
 #pragma mark -
 #pragma mark UITextFieldDelegate
+
+- (void)inputEditingDidBegin
+{
+	[self animateUp];
+}
 
 - (void)inputEditChanged:(id)sender
 {
@@ -141,6 +206,8 @@
 	
 	[self loginWithEmail:email password:[Utils sha1:password]];
 	[textField resignFirstResponder];
+	[self animateDown];
+	
 	return NO;
 }
 

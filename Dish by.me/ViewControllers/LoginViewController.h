@@ -11,8 +11,12 @@
 
 @interface LoginViewController : UIViewController <UITextFieldDelegate, APILoaderDelegate>
 {
+	UIImageView *forkAndKnife;
+	UIImageView *loginBox;
 	UITextField *emailInput;
 	UITextField *passwordInput;
+	UIButton *loginButton;
+	UIButton *facebookLoginButton;
 	
 	APILoader *loader;
 	
