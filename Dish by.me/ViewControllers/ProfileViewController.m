@@ -122,6 +122,7 @@ enum {
 			dish.userId = [[d objectForKey:@"user_id"] integerValue];
 			dish.userName = [d objectForKey:@"user_name"];
 			dish.message = [d objectForKey:@"message"];
+			dish.forkedFrom = [[d objectForKey:@"forked_from"] integerValue];
 //			dish.time = [d objectForKey:@"dish_id"];
 			dish.hasRecipe = [[d objectForKey:@"has_recipe"] boolValue];
 			if( dish.hasRecipe )
@@ -152,6 +153,7 @@ enum {
 			dish.userId = [[d objectForKey:@"user_id"] integerValue];
 			dish.userName = [d objectForKey:@"user_name"];
 			dish.message = [d objectForKey:@"message"];
+			dish.forkedFrom = [[d objectForKey:@"forked_from"] integerValue];
 //			dish.time = [d objectForKey:@"dish_id"];
 			dish.hasRecipe = [[d objectForKey:@"has_recipe"] boolValue];
 			if( dish.hasRecipe )
