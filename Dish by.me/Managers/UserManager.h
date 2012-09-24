@@ -10,4 +10,12 @@
 
 @interface UserManager : NSObject
 
++ (BOOL)loggedIn;
++ (NSInteger)userId;
++ (NSNumber *)userIdNumber;
++ (NSString *)userName;
++ (NSString *)email;
++ (NSString *)password;
++ (void)logout;
+
 @end
