@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APILoader.h"
 
-@interface SearchViewController : UIViewController
+@interface SearchViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, APILoaderDelegate>
+{
+	UIView *searchBar;
+	UITextField *searchInput;
+	UITableView *tableView;
+	
+	NSMutableArray *dishes;
+	APILoader *loader;
+}
 
 @end

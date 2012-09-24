@@ -163,6 +163,7 @@
 								   nameInput.text, @"dish_name",
 								   messageInput.text, @"message",
 								   recipeView.recipeView.text, @"recipe", nil];
+#warning Const에 있는걸로 가져다쓰기
 	[loader addTokenWithTokenId:0 url:@"http://api.dishby.me/dish" method:APILoaderMethodPOST params:params];
 	[loader startLoading];
 }

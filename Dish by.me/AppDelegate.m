@@ -44,7 +44,9 @@
 	[dishListViewController release];
 	
 	SearchViewController *searchViewController = [[SearchViewController alloc] init];
-	DishByMeNavigationController *searchNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:searchViewController];
+	UINavigationController *searchNavigationController = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+	searchNavigationController.navigationBar.shadowImage = [[[UIImage alloc] init] autorelease];
+	[searchNavigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigation_bar_no_border.png"] forBarMetrics:UIBarMetricsDefault];
 //	searchNavigationController.title = NSLocalizedString( @"SEARCH", @"" );
 	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_search.png"];
 	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
