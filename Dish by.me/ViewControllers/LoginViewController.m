@@ -24,17 +24,21 @@
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	[cancelButton release];
 	
-	UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-	gestureRecognizer.cancelsTouchesInView = NO;
-	[self.view addGestureRecognizer:gestureRecognizer];
-	[gestureRecognizer release];
+//	UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
+//	gestureRecognizer.cancelsTouchesInView = NO;
+//	[self.view addGestureRecognizer:gestureRecognizer];
+//	[gestureRecognizer release];
 	
-	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_bg.png"]];
+	UIButton *bgView = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 460 )];
+	bgView.adjustsImageWhenHighlighted = NO;
+	[bgView setBackgroundImage:[UIImage imageNamed:@"login_bg.png"] forState:UIControlStateNormal];
+	[bgView addTarget:self action:@selector(bgViewDidTouchDown) forControlEvents:UIControlEventTouchDown];
 	[self.view addSubview:bgView];
 	[bgView release];
 	
 	UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake( 280, 15, 26, 26 )];
 	[closeButton setBackgroundImage:[UIImage imageNamed:@"login_close_button.png"] forState:UIControlStateNormal];
+	[closeButton addTarget:self action:@selector(closeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:closeButton];
 	[closeButton release];
 	
@@ -85,12 +89,24 @@
 	[passwordInput release];
 	
 	loginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 290, 230, 40 )];
+	loginButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+	loginButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[loginButton setTitle:NSLocalizedString( @"LOGIN", @"" ) forState:UIControlStateNormal];
+	[loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[loginButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
 	[loginButton setBackgroundImage:[UIImage imageNamed:@"login_button.png"] forState:UIControlStateNormal];
+	[loginButton addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:loginButton];
 	[loginButton release];
 	
 	facebookLoginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 340, 230, 40 )];
+	facebookLoginButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+	facebookLoginButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[facebookLoginButton setTitle:NSLocalizedString( @"LOGIN_WITH_FACEBOOK", @"" ) forState:UIControlStateNormal];
+	[facebookLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[facebookLoginButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
 	[facebookLoginButton setBackgroundImage:[UIImage imageNamed:@"login_facebook_button.png"] forState:UIControlStateNormal];
+	[facebookLoginButton addTarget:self action:@selector(facebookLoginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:facebookLoginButton];
 	[facebookLoginButton release];
 	
@@ -152,17 +168,18 @@
 #pragma mark -
 #pragma mark Selectors
 
-- (void)cancelButtonDidTouchUpInside
+- (void)closeButtonDidTouchUpInside
 {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)dismissKeyboard
+- (void)bgViewDidTouchDown
 {
 	[emailInput resignFirstResponder];
 	[passwordInput resignFirstResponder];
 	[self animateDown];
 }
+
 
 #pragma mark -
 #pragma mark UITextFieldDelegate
@@ -190,23 +207,7 @@
 		return NO;
 	}
 	
-	NSString *email = emailInput.text;
-	if( email.length == 0 )
-	{
-		[emailInput becomeFirstResponder];
-		return NO;
-	}
-	
-	NSString *password = passwordInput.text;
-	if( password.length == 0 )
-	{
-		[passwordInput becomeFirstResponder];
-		return NO;
-	}
-	
-	[self loginWithEmail:email password:[Utils sha1:password]];
-	[textField resignFirstResponder];
-	[self animateDown];
+	[self login];
 	
 	return NO;
 }
@@ -215,19 +216,42 @@
 #pragma mark -
 #pragma mark Login
 
-- (void)signUpButtonDidTouchUpInside
+- (void)facebookLoginButtonDidTouchUpInside
 {
-//	SignUpViewController *signUpViewController = [[SignUpViewController alloc] init];
-//	[self.navigationController pushViewController:signUpViewController animated:YES];
-//	[signUpViewController release];
+	
 }
 
-- (void)loginWithEmail:(NSString *)email password:(NSString *)password
+- (void)login
 {
+	NSString *email = emailInput.text;
+	if( email.length == 0 )
+	{
+		[emailInput becomeFirstResponder];
+		return;
+	}
+	
+	NSString *password = passwordInput.text;
+	if( password.length == 0 )
+	{
+		[passwordInput becomeFirstResponder];
+		return;
+	}
+	
 	NSString *rootUrl = API_ROOT_URL;
-	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:email, @"email", password, @"password", nil];
+	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:email, @"email", [Utils sha1:password], @"password", nil];
 	[loader addTokenWithTokenId:0 url:[NSString stringWithFormat:@"%@/auth", rootUrl] method:APILoaderMethodGET params:params];
 	[loader startLoading];
+	
+	[emailInput resignFirstResponder];
+	[passwordInput resignFirstResponder];
+	[self animateDown];
+}
+
+- (void)signUpButtonDidTouchUpInside
+{
+	//	SignUpViewController *signUpViewController = [[SignUpViewController alloc] init];
+	//	[self.navigationController pushViewController:signUpViewController animated:YES];
+	//	[signUpViewController release];
 }
 
 
@@ -242,7 +266,7 @@
 - (void)loadingDidFinish:(APILoaderToken *)token
 {
 	NSDictionary *data = [Utils parseJSON:token.data];
-	
+	NSLog( @"%@", token.data );
 	if( [data objectForKey:@"error"] )
 	{
 		[[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"LOGIN_FAILED_MSG", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] autorelease] show];
