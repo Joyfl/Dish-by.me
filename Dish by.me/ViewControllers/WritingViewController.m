@@ -10,6 +10,7 @@
 #import "DishByMeBarButtonItem.h"
 #import "RecipeView.h"
 #import "Utils.h"
+#import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation WritingViewController
@@ -158,10 +159,17 @@
 
 - (void)uploadButtonDidTouchUpInside
 {
+	scrollView.userInteractionEnabled = NO;
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		dim.alpha = 1;
+	}];
+	 
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
 								   photo, @"photo",
 								   nameInput.text, @"dish_name",
 								   messageInput.text, @"message",
+								   [(AppDelegate *)[UIApplication sharedApplication].delegate currentWritingForkedFrom], @"forked_from",
 								   recipeView.recipeView.text, @"recipe", nil];
 #warning Const에 있는걸로 가져다쓰기
 	[loader addTokenWithTokenId:0 url:@"http://api.dishby.me/dish" method:APILoaderMethodPOST params:params];
@@ -179,7 +187,11 @@
 
 - (void)loadingDidFinish:(APILoaderToken *)token
 {
-	NSLog( @"result : %@", token.data );
+	NSDictionary *data = [Utils parseJSON:token.data];
+	if( [[data objectForKey:@"status"] isEqualToString:@"ok"] )
+	{
+		[self dismissViewControllerAnimated:YES completion:nil];
+	}
 }
 
 @end

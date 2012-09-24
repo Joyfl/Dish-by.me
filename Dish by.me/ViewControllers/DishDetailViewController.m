@@ -16,6 +16,7 @@
 #import "DishByMeButton.h"
 #import "RecipeView.h"
 #import "UserManager.h"
+#import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation DishDetailViewController
@@ -59,6 +60,19 @@ enum {
 	DishByMeBarButtonItem *backButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = backButton;
 	[backButton release];
+	
+	if( dish.userId == [UserManager userId] )
+	{
+		DishByMeBarButtonItem *editButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
+		self.navigationItem.rightBarButtonItem = editButton;
+		[editButton release];
+	}
+	else
+	{
+		DishByMeBarButtonItem *forkButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
+		self.navigationItem.rightBarButtonItem = forkButton;
+		[forkButton release];
+	}
 	
 	self.navigationItem.title = dish.dishName;
 	
@@ -500,6 +514,18 @@ enum {
 - (void)backButtonDidTouchUpInside
 {
 	[self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)editButtonDidTouchUpInside
+{
+	
+}
+
+- (void)forkButtonDidTouchUpInside
+{
+	AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+	appDelegate.currentWritingForkedFrom = dish.dishId;
+	[appDelegate cameraButtonDidTouchUpInside];
 }
 
 - (void)recipeButtonDidTouchUpInside

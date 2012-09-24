@@ -19,7 +19,7 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window;
+@synthesize window = _window, currentWritingForkedFrom;
 
 - (void)dealloc
 {
@@ -138,7 +138,6 @@
 	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString( @"CANCEL", @"" ) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString( @"TAKE_A_PHOTO", @"" ), NSLocalizedString( @"FROM_LIBRARY", @"" ), nil];
 	[actionSheet showInView:self.window];
 	[actionSheet release];
-	
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
