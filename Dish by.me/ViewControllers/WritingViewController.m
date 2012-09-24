@@ -23,6 +23,10 @@
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	[cancelButton release];
 	
+	DishByMeBarButtonItem *uploadButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"UPLOAD", @"" ) target:self action:@selector(uploadButtonDidTouchUpInside)];
+	self.navigationItem.rightBarButtonItem = uploadButton;
+	[uploadButton release];
+	
 	photo = [_photo retain];
 	
 	UIGestureRecognizer *recognizer = [[UIGestureRecognizer alloc] initWithTarget:self action:@selector(gestureDidRecognize)];
@@ -43,7 +47,7 @@
 	borderView.frame = CGRectMake( 5, 5, 310, 340 );
 	[scrollView addSubview:borderView];
 	
-	UITextField *nameInput = [[UITextField alloc] initWithFrame:CGRectMake( 20, 314, 280, 20 )];
+	nameInput = [[UITextField alloc] initWithFrame:CGRectMake( 20, 314, 280, 20 )];
 #warning Need LocalizedString
 	nameInput.placeholder = @"Dish name";
 	nameInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
@@ -66,7 +70,7 @@
 	messageBoxBottomView.frame = CGRectMake( 8, 355 + messageBoxCenterView.frame.size.height, 304, 15 );
 	[scrollView addSubview:messageBoxBottomView];
 	
-	UITextView *messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 360, 290, 70 )];
+	messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 360, 290, 70 )];
 	messageInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
 	messageInput.backgroundColor = [UIColor clearColor];
 	messageInput.font = [UIFont boldSystemFontOfSize:15];
@@ -104,6 +108,9 @@
 	recipeView.frame = CGRectMake( 7, -recipeViewOriginalFrame.size.height, recipeViewOriginalFrame.size.width, recipeViewOriginalFrame.size.height );
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
+	
+	loader = [[APILoader alloc] init];
+	loader.delegate = self;
 	
 	return self;
 }
@@ -147,6 +154,31 @@
 	} completion:^(BOOL finished) {
 		scrollView.userInteractionEnabled = YES;
 	}];
+}
+
+- (void)uploadButtonDidTouchUpInside
+{
+	NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+								   photo, @"photo",
+								   nameInput.text, @"dish_name",
+								   messageInput.text, @"message",
+								   recipeView.recipeView.text, @"recipe", nil];
+	[loader addTokenWithTokenId:0 url:@"http://api.dishby.me/dish" method:APILoaderMethodPOST params:params];
+	[loader startLoading];
+}
+
+
+#pragma mark -
+#pragma mark APILoaderDelegate
+
+- (BOOL)shouldLoadWithToken:(APILoaderToken *)token
+{
+	return YES;
+}
+
+- (void)loadingDidFinish:(APILoaderToken *)token
+{
+	NSLog( @"result : %@", token.data );
 }
 
 @end

@@ -7,16 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "APILoader.h"
 
 @class RecipeView;
 
-@interface WritingViewController : UIViewController <UIScrollViewDelegate>
+@interface WritingViewController : UIViewController <UIScrollViewDelegate, APILoaderDelegate>
 {
 	UIImage *photo;
 	UIScrollView *scrollView;
+	UITextField *nameInput;
+	UITextView *messageInput;
+	
 	UIImageView *dim;
 	RecipeView *recipeView;
 	CGRect recipeViewOriginalFrame;
+	
+	APILoader *loader;
 }
 
 - (id)initWithPhoto:(UIImage *)photo;
