@@ -12,6 +12,7 @@
 #import "Dish.h"
 #import "DishTileItem.h"
 #import "DishByMeButton.h"
+#import "DishDetailViewController.h"
 
 @implementation SearchViewController
 
@@ -177,6 +178,12 @@
 	NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:searchInput.text, @"query", nil];
 	[loader addTokenWithTokenId:0 url:[NSString stringWithFormat:@"%@/search", rootUrl] method:APILoaderMethodGET params:params];
 	[loader startLoading];
+}
+
+- (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem
+{
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:dishTileItem.dish];
+	[self.navigationController pushViewController:dishDetailViewController animated:YES];
 }
 
 @end
