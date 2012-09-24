@@ -118,6 +118,25 @@
 	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+#pragma mark -
+#pragma mark UITabBarDelegate
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+	// ProfileView 선택시
+	if( [[(UINavigationController *)viewController viewControllers] objectAtIndex:0] == profileViewController )
+	{
+		// 로그인이 되어있지 않으면 LoginView를 띄움
+		if( ![UserManager loggedIn] )
+		{
+			[self presentLoginViewController];
+			return NO;
+		}
+	}
+	
+	return YES;
+}
+
 
 #pragma mark -
 #pragma mark Selectors
