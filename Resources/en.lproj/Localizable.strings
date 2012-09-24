@@ -1,9 +1,42 @@
-DISHES = "Dishes";
-SEARCH = "Search";
-ME = "Me";
-SETTINGS = "Settings";
+// Common
 BACK = "Back";
-SHOW_RECIPE = "Show Recipe";
-WRITE_RECIPE = "Write Recipe";
-LEAVE_A_COMMENT = "Leave a comment";
+OOPS = "Oops";
+I_GOT_IT = "I got it";
+CANCEL = "Cancel";
+
+// Messages
+MESSAGE_LOGIN_FAILED = "Login failed.";
+MESSAGE_NO_SUPPORT_CAMERA = "We're sorry, this device doesn't support camera.";
+MESSAGE_REALLY_CANCEL = "Do you really cancel?";
+
+// Login
+EMAIL = "Email";
+PASSWORD = "Password";
+LOGIN = "Login";
+LOGIN_WITH_FACEBOOK = "Login with Facebook";
+
+// DishDetailView
+EDIT = "Edit";
+FORK = "Fork";
+N_LIKE = "	%d liked it.";
+SHOW_RECIPE = "Show recipe";
+LEAVE_A_COMMENT = "Leave a message";
 SEND = "Send";
+
+// SearchView
+SEARCH_INPUT = "Search dishes";
+SEARCH = "Search";
+
+// WritingView
+TAKE_A_PHOTO = "Take a photo";
+FROM_LIBRARY = "From library";
+INPUT_DISH_NAME = "Dish name";
+INPUT_MESSAGE = "Message";
+WRITE_RECIPE = "Write recipe";
+UPLOAD = "Upload";
+
+// ProfileView
+DISHES = "Dishes";
+LIKES = "Likes";
+
+// SettingsView

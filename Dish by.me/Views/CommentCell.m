@@ -61,7 +61,7 @@
 	nameLabel.text = comment.name;
 #warning 임시 날짜
 	timeLabel.text = @"10분 전에";
-#warning message가 길어질 경우 예외처리 필요
+#warning message가 길어질 경MESSAGE_LOGIN_FAILED우 예외처리 필요
 	messageView.text = comment.message;
 	[messageView sizeToFit];
 }

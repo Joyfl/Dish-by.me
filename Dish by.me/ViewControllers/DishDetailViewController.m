@@ -420,7 +420,7 @@ enum {
 			{
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:yumCellId];
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-				cell.textLabel.text = [NSString stringWithFormat:@"   %d명이 좋아합니다.", dish.yumCount];
+				cell.textLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_LIKE", @"" ), dish.yumCount];
 				cell.textLabel.textColor = [UIColor colorWithRed:0x80 / 255.0 green:0x82 / 255.0 blue:0x83 / 255.0 alpha:1.0];
 				cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 				cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];

@@ -37,7 +37,7 @@
 	searchInput.placeholder = NSLocalizedString( @"SEARCH_INPUT", @"" );
 	[searchBar addSubview:searchInput];
 	
-	DishByMeButton *searchButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEND", @"" )];
+	DishByMeButton *searchButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEARCH", @"" )];
 	searchButton.frame = CGRectMake( 250, 5, 60, 30 );
 	searchButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[searchButton addTarget:self action:@selector(searchButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];

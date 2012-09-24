@@ -49,8 +49,7 @@
 	[scrollView addSubview:borderView];
 	
 	nameInput = [[UITextField alloc] initWithFrame:CGRectMake( 20, 314, 280, 20 )];
-#warning Need LocalizedString
-	nameInput.placeholder = @"Dish name";
+	nameInput.placeholder = NSLocalizedString( @"INPUT_DISH_NAME", @"" );
 	nameInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
 	nameInput.font = [UIFont boldSystemFontOfSize:15];
 	nameInput.layer.shadowOffset = CGSizeMake( 0, 1 );
