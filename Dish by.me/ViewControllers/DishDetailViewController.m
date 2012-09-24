@@ -229,10 +229,10 @@ enum {
 			switch( indexPath.row )
 			{
 				case kRowPhoto:
-					return 320;
+					return 310;
 					
 				case kRowProfile:
-					return 35;
+					return 45;
 					
 				case kRowMessage:
 					return messageRowHeight;
@@ -283,12 +283,12 @@ enum {
 				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
 				
 				UIImageView *imageView = [[UIImageView alloc] initWithImage:dish.photo];
-				imageView.frame = CGRectMake( 10, 10, 300, 300 );
+				imageView.frame = CGRectMake( 11, 11, 298, 298 );
 				[bgView addSubview:imageView];
 				[imageView release];
 				
 				UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_border.png"]];
-				borderView.frame = CGRectMake( 0, 0, 320, 320 );
+				borderView.frame = CGRectMake( 5, 5, 310, 310 );
 				[bgView addSubview:borderView];
 				[borderView release];
 				
@@ -308,7 +308,7 @@ enum {
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				
 				UIButton *profileImageButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-				profileImageButton.frame = CGRectMake( 10, 3, 30, 30 );
+				profileImageButton.frame = CGRectMake( 12, 10, 30, 30 );
 				[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 				[cell addSubview:profileImageButton];
 				
@@ -325,7 +325,7 @@ enum {
 					[data release];
 				});
 				
-				UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 2, 270, 30 )];
+				UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 9, 270, 30 )];
 				nameLabel.text = dish.userName;
 				nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
 				nameLabel.font = [UIFont boldSystemFontOfSize:14];
@@ -334,13 +334,15 @@ enum {
 				nameLabel.backgroundColor = [UIColor clearColor];
 				[cell addSubview:nameLabel];
 				
-				UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 260, 0, 50, 30 )];
+				UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 258, 9, 50, 30 )];
 #warning 임시 date
 				timeLabel.text = @"10분 전";
 				timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
+				timeLabel.textAlignment = NSTextAlignmentRight;
 				timeLabel.font = [UIFont systemFontOfSize:10];
 				timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
 				timeLabel.shadowOffset = CGSizeMake( 0, 1 );
+//				timeLabel.backgroundColor = [UIColor colorWithWhite:0.5 alpha:1];
 				timeLabel.backgroundColor = [UIColor clearColor];
 				[cell addSubview:timeLabel];
 			}
