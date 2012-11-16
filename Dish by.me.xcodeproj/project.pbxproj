@@ -971,11 +971,13 @@
 		03B598101602FDC0007BD6AF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Su Yeol Jeon (E92TEKJ8BD)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Dish by.me/Dish by.me-Prefix.pch";
 				INFOPLIST_FILE = "Dish by.me/Dish by.me-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9BE1CFA5-F5A0-4F82-BEF2-62FCB03C719F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -983,11 +985,13 @@
 		03B598111602FDC0007BD6AF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Su Yeol Jeon (E92TEKJ8BD)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Dish by.me/Dish by.me-Prefix.pch";
 				INFOPLIST_FILE = "Dish by.me/Dish by.me-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9BE1CFA5-F5A0-4F82-BEF2-62FCB03C719F";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

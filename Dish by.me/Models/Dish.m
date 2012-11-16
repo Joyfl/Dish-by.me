@@ -11,6 +11,6 @@
 
 @implementation Dish
 
-@synthesize dishId, dishName, userId, userName, message, forkedFrom, forkCount, time, hasRecipe, recipe, yumCount, commentCount, photo, thumbnail;
+@synthesize dishId, dishName, userId, userName, message, forkedFrom, forkedFromName, forkCount, time, hasRecipe, recipe, yumCount, commentCount, photo, thumbnail;
 
 @end

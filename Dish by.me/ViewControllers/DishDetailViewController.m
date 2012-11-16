@@ -32,7 +32,8 @@ enum {
 enum {
 	kTokenIdComment = 0,
 	kTokenIdLike = 1,
-	kTokenIdSendComment = 2
+	kTokenIdSendComment = 2,
+	kTokenIdForkedFrom = 3,
 };
 
 - (id)initWithDish:(Dish *)_dish
@@ -51,7 +52,15 @@ enum {
 	loader = [[APILoader alloc] init];
 	loader.delegate = self;
 	NSString *rootURL = API_ROOT_URL;
-	NSString *url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, dish.dishId];
+	
+	NSString *url = nil;
+	if( dish.forkedFrom )
+	{
+		url = [NSString stringWithFormat:@"%@/dish/%d", rootURL, dish.forkedFrom];
+		[loader addTokenWithTokenId:kTokenIdForkedFrom url:url method:APILoaderMethodGET params:nil];
+	}
+	
+	url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, dish.dishId];
 	[loader addTokenWithTokenId:kTokenIdComment url:url method:APILoaderMethodGET params:nil];
 	[loader startLoading];
 	
@@ -192,6 +201,12 @@ enum {
 			commentInput.text = @"";
 			commentInput.enabled = YES;
 		}
+	}
+	
+	else if( token.tokenId == kTokenIdForkedFrom )
+	{
+		dish.forkedFromName = [result objectForKey:@"dish_name"];
+		forkedFromLabel.text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), dish.forkedFromName];
 	}
 }
 
@@ -381,8 +396,7 @@ enum {
 				[cell addSubview:messageBoxDotLineView];
 				[messageBoxDotLineView release];
 				
-				UILabel *forkedFromLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 32 + messageLabel.frame.size.height, 280, 20 )];
-				forkedFromLabel.text = @"헤헤헤를 포크했습니다.";
+				forkedFromLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 32 + messageLabel.frame.size.height, 280, 20 )];
 				forkedFromLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
 				forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
 				forkedFromLabel.shadowOffset = CGSizeMake( 0, 1 );

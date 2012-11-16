@@ -18,7 +18,7 @@ LOGIN_WITH_FACEBOOK = "Login with Facebook";
 // DishDetailView
 EDIT = "Edit";
 FORK = "Fork";
-N_LIKE = "Forked from %@.";
+FORKED_FROM_S = "Forked from %@.";
 N_LIKE = "	%d liked it.";
 SHOW_RECIPE = "Show recipe";
 LEAVE_A_COMMENT = "Leave a message";

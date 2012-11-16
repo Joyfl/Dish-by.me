@@ -16,6 +16,7 @@
 	NSString *userName;
 	NSString *message;
 	NSInteger forkedFrom;
+	NSString *forkedFromName;
 	NSInteger forkCount;
 	NSDate *time;
 	BOOL hasRecipe;
@@ -32,6 +33,7 @@
 @property (nonatomic, retain) NSString *userName;
 @property (nonatomic, retain) NSString *message;
 @property (nonatomic, assign) NSInteger forkedFrom;
+@property (nonatomic, retain) NSString *forkedFromName;
 @property (nonatomic, assign) NSInteger forkCount;
 @property (nonatomic, retain) NSDate *time;
 @property (nonatomic, assign) BOOL hasRecipe;

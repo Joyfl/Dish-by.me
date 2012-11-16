@@ -92,6 +92,7 @@ enum {
 			dish.hasRecipe = [[d objectForKey:@"has_recipe"] boolValue];
 			if( dish.hasRecipe )
 				dish.recipe = [d objectForKey:@"recipe"];
+			dish.forkCount = [[d objectForKey:@"fork_count"] integerValue];
 			dish.yumCount = [[d objectForKey:@"yum_count"] integerValue];
 			dish.commentCount = [[d objectForKey:@"comment_count"] integerValue];
 			[dishes addObject:dish];

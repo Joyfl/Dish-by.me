@@ -21,6 +21,7 @@
 	BOOL scrollEnabled;
 	
 	CGFloat messageRowHeight;
+	UILabel *forkedFromLabel;
 	
 	UIButton *recipeButton;
 	UIButton *likeButton;

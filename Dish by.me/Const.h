@@ -10,7 +10,7 @@
 #define DISH_TILE_LEN	88
 
 #define WEB_ROOT_URL	@"http://www.dishby.me";
-#define API_ROOT_URL	@"http://api.dishby.me";
+#define API_ROOT_URL	@"http://xoul.cafe24.com/dishbyme/api/";
 
 #define SETTING_KEY_ACCESS_TOKEN	@"accessToken"
 #define SETTING_KEY_EMAIL			@"email"
