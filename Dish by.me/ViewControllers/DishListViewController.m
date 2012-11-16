@@ -12,6 +12,7 @@
 #import "Utils.h"
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
+#import "DishTileCell.h"
 
 @implementation DishListViewController
 
@@ -120,24 +121,27 @@ enum {
 - (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellId = @"dishCell";
-	UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellId];
-	if( cell == nil )
+	DishTileCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellId];
+	
+	if( !cell )
 	{
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		cell = [[DishTileCell alloc] initWithReuseIdentifier:cellId target:self action:@selector(dishItemDidTouchUpInside:)];
+	}
+	
+	for( NSInteger i = 0; i < 3; i++ )
+	{
+		DishTileItem *dishItem = [cell dishItemAt:i];
 		
-		for( NSInteger i = 0; i < 3; i++ )
-		{			
-			if( dishes.count > indexPath.row * 3 + i )
-			{
-				Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
-				DishTileItem *dishItem = [[DishTileItem alloc] initWithDish:dish];
-				dishItem.frame = CGRectMake( DISH_TILE_GAP * ( i + 1 ) + DISH_TILE_LEN * i, DISH_TILE_GAP, DISH_TILE_LEN, DISH_TILE_LEN );
-				[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-				[dishItem loadPhoto];
-				[cell addSubview:dishItem];
-				[dishItem release];
-			}
+		if( dishes.count > indexPath.row * 3 + i )
+		{
+			dishItem.hidden = NO;
+			
+			Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
+			dishItem.dish = dish;
+		}
+		else
+		{
+			dishItem.hidden = YES;
 		}
 	}
 	

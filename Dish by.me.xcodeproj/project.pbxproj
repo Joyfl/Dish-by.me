@@ -90,6 +90,7 @@
 		033C530B161104A600F0B5E5 /* ribbon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 033C5309161104A600F0B5E5 /* ribbon@2x.png */; };
 		033C530E1611098500F0B5E5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 033C530C1611098400F0B5E5 /* Default.png */; };
 		033C530F1611098500F0B5E5 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 033C530D1611098400F0B5E5 /* Default@2x.png */; };
+		034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 034A0A0E1656779700C7DA93 /* DishTileCell.m */; };
 		0359EA53160D6506009CDA41 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA52160D6506009CDA41 /* Default-568h@2x.png */; };
 		0359EA57160D6736009CDA41 /* navigation_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA55160D6736009CDA41 /* navigation_bar.png */; };
 		0359EA58160D6736009CDA41 /* navigation_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0359EA56160D6736009CDA41 /* navigation_bar@2x.png */; };
@@ -254,6 +255,8 @@
 		033C5309161104A600F0B5E5 /* ribbon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ribbon@2x.png"; path = "Resources/ribbon@2x.png"; sourceTree = "<group>"; };
 		033C530C1611098400F0B5E5 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		033C530D1611098400F0B5E5 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		034A0A0D1656779700C7DA93 /* DishTileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishTileCell.h; path = Views/DishTileCell.h; sourceTree = "<group>"; };
+		034A0A0E1656779700C7DA93 /* DishTileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishTileCell.m; path = Views/DishTileCell.m; sourceTree = "<group>"; };
 		0359EA52160D6506009CDA41 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		0359EA55160D6736009CDA41 /* navigation_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigation_bar.png; sourceTree = "<group>"; };
 		0359EA56160D6736009CDA41 /* navigation_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation_bar@2x.png"; sourceTree = "<group>"; };
@@ -365,6 +368,8 @@
 			children = (
 				03178838160C6DDC0041DAD7 /* DishTileItem.h */,
 				03178839160C6DDC0041DAD7 /* DishTileItem.m */,
+				034A0A0D1656779700C7DA93 /* DishTileCell.h */,
+				034A0A0E1656779700C7DA93 /* DishTileCell.m */,
 				031AAAF2160DAB8B007B42B3 /* CommentCell.h */,
 				031AAAF3160DAB8B007B42B3 /* CommentCell.m */,
 				031AAB10160EFD33007B42B3 /* RecipeView.h */,
@@ -898,6 +903,7 @@
 				033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */,
 				033C52E3161078AC00F0B5E5 /* SettingsManager.m in Sources */,
 				033C52E61610797400F0B5E5 /* UserManager.m in Sources */,
+				034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

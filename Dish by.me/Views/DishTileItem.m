@@ -13,16 +13,28 @@
 
 @synthesize dish;
 
-- (id)initWithDish:(Dish *)_dish
+- (id)init
 {
 	self = [super init];
-	self.imageEdgeInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );	
-	[self setImage:[UIImage imageNamed:_dish.hasRecipe ? @"dish_tile_border_ribbon.png" : @"dish_tile_border.png"] forState:UIControlStateNormal];
-	[self setBackgroundImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal];	
-	
-	dish = _dish;
+	self.imageEdgeInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
+	[self setBackgroundImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal];
 	
 	return self;
+}
+
+- (void)setDish:(Dish *)_dish
+{
+	dish = _dish;
+	[self setImage:[UIImage imageNamed:dish.hasRecipe ? @"dish_tile_border_ribbon.png" : @"dish_tile_border.png"] forState:UIControlStateNormal];
+	
+	if( dish.photo )
+	{
+		[self setBackgroundImage:dish.photo forState:UIControlStateNormal];
+	}
+	else
+	{
+		[self loadPhoto];
+	}
 }
 
 - (void)loadThumbnail

@@ -16,7 +16,6 @@
 
 @property (nonatomic, retain) Dish *dish;
 
-- (id)initWithDish:(Dish *)dish;
 - (void)loadThumbnail;
 - (void)loadPhoto;
 
