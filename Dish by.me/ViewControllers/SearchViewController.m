@@ -7,10 +7,10 @@
 //
 
 #import "SearchViewController.h"
-#import "Const.h"
 #import "Utils.h"
 #import "Dish.h"
 #import "DishTileItem.h"
+#import "DishTileCell.h"
 #import "DishByMeButton.h"
 #import "DishDetailViewController.h"
 
@@ -92,7 +92,7 @@
 
 - (void)loadingDidFinish:(APILoaderToken *)token
 {
-	NSLog( @"%@", token.data );
+//	NSLog( @"%@", token.data );
 	
 	if( token.tokenId == 0 )
 	{
@@ -139,24 +139,27 @@
 - (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellId = @"dishCell";
-	UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellId];
-//	if( cell == nil )
+	DishTileCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellId];
+	
+	if( !cell )
 	{
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-		cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		cell = [[DishTileCell alloc] initWithReuseIdentifier:cellId target:self action:@selector(dishItemDidTouchUpInside:)];
+	}
+	
+	for( NSInteger i = 0; i < 3; i++ )
+	{
+		DishTileItem *dishItem = [cell dishItemAt:i];
 		
-		for( NSInteger i = 0; i < 3; i++ )
+		if( dishes.count > indexPath.row * 3 + i )
 		{
-			if( dishes.count > indexPath.row * 3 + i )
-			{
-				Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
-				DishTileItem *dishItem = [[DishTileItem alloc] initWithDish:dish];
-				dishItem.frame = CGRectMake( DISH_TILE_GAP * ( i + 1 ) + DISH_TILE_LEN * i, DISH_TILE_GAP, DISH_TILE_LEN, DISH_TILE_LEN );
-				[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-				[dishItem loadPhoto];
-				[cell addSubview:dishItem];
-				[dishItem release];
-			}
+			dishItem.hidden = NO;
+			
+			Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
+			dishItem.dish = dish;
+		}
+		else
+		{
+			dishItem.hidden = YES;
 		}
 	}
 	

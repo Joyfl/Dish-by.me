@@ -12,6 +12,7 @@
 #import "User.h"
 #import "Dish.h"
 #import "DishTileItem.h"
+#import "DishTileCell.h"
 #import "DishDetailViewController.h"
 #import "UserManager.h"
 #import "SettingsManager.h"
@@ -298,29 +299,32 @@ enum {
 	
 	else if( indexPath.section == 1 )
 	{
-		UITableViewCell *cell;
+		DishTileCell *cell;
 		
 		// Dishes
 		if( selectedTab == 0 )
 		{
 			cell = [_tableView dequeueReusableCellWithIdentifier:dishCellId];
-			if( cell == nil )
+			
+			if( !cell )
 			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:dishCellId];
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
+				cell = [[DishTileCell alloc] initWithReuseIdentifier:dishCellId target:self action:@selector(dishItemDidTouchUpInside:)];
+			}
+			
+			for( NSInteger i = 0; i < 3; i++ )
+			{
+				DishTileItem *dishItem = [cell dishItemAt:i];
 				
-				for( NSInteger i = 0; i < 3; i++ )
+				if( dishes.count > indexPath.row * 3 + i )
 				{
-					if( dishes.count > indexPath.row * 3 + i )
-					{
-						Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
-						DishTileItem *dishItem = [[DishTileItem alloc] initWithDish:dish];
-						dishItem.frame = CGRectMake( DISH_TILE_GAP * ( i + 1 ) + DISH_TILE_LEN * i, DISH_TILE_GAP, DISH_TILE_LEN, DISH_TILE_LEN );
-						[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-						[dishItem loadPhoto];
-						[cell addSubview:dishItem];
-						[dishItem release];
-					}
+					dishItem.hidden = NO;
+					
+					Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
+					dishItem.dish = dish;
+				}
+				else
+				{
+					dishItem.hidden = YES;
 				}
 			}
 		}
@@ -328,24 +332,27 @@ enum {
 		// Likes
 		else
 		{
-			cell = [_tableView dequeueReusableCellWithIdentifier:likeCellId];
-			if( cell == nil )
+			cell = [_tableView dequeueReusableCellWithIdentifier:dishCellId];
+			
+			if( !cell )
 			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:likeCellId];
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
+				cell = [[DishTileCell alloc] initWithReuseIdentifier:dishCellId target:self action:@selector(dishItemDidTouchUpInside:)];
+			}
+			
+			for( NSInteger i = 0; i < 3; i++ )
+			{
+				DishTileItem *dishItem = [cell dishItemAt:i];
 				
-				for( NSInteger i = 0; i < 3; i++ )
+				if( dishes.count > indexPath.row * 3 + i )
 				{
-					if( likes.count > indexPath.row * 3 + i )
-					{
-						Dish *dish = [likes objectAtIndex:indexPath.row * 3 + i];
-						DishTileItem *dishItem = [[DishTileItem alloc] initWithDish:dish];
-						dishItem.frame = CGRectMake( DISH_TILE_GAP * ( i + 1 ) + DISH_TILE_LEN * i, DISH_TILE_GAP, DISH_TILE_LEN, DISH_TILE_LEN );
-						[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-						[dishItem loadPhoto];
-						[cell addSubview:dishItem];
-						[dishItem release];
-					}
+					dishItem.hidden = NO;
+					
+					Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
+					dishItem.dish = dish;
+				}
+				else
+				{
+					dishItem.hidden = YES;
 				}
 			}
 		}
