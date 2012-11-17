@@ -43,4 +43,6 @@
 @property (nonatomic, retain) UIImage *thumbnail;
 @property (nonatomic, retain) UIImage *photo;
 
+- (id)initWithDictionary:(NSDictionary *)dictionary;
+
 @end
