@@ -42,76 +42,76 @@
 	[self.view addSubview:closeButton];
 	[closeButton release];
 	
-	forkAndKnife = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fork_knife.png"]];
-	forkAndKnife.frame = CGRectMake( 140, 55, 80, 90 );
-	[self.view addSubview:forkAndKnife];
-	[forkAndKnife release];
+	_forkAndKnife = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fork_knife.png"]];
+	_forkAndKnife.frame = CGRectMake( 140, 55, 80, 90 );
+	[self.view addSubview:_forkAndKnife];
+	[_forkAndKnife release];
 	
-	loginBox = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_box.png"]];
-	loginBox.frame = CGRectMake( 65, 193, 230, 75 );
-	[self.view addSubview:loginBox];
-	[loginBox release];
+	_loginBox = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_box.png"]];
+	_loginBox.frame = CGRectMake( 65, 193, 230, 75 );
+	[self.view addSubview:_loginBox];
+	[_loginBox release];
 	
-	emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 203, 245, 31 )];
-	emailInput.delegate = self;
-	emailInput.placeholder = NSLocalizedString( @"EMAIL", @"" );
-	emailInput.font = [UIFont boldSystemFontOfSize:13];
-	emailInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
-	emailInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-	emailInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-	emailInput.layer.shadowOpacity = 1;
-	emailInput.layer.shadowRadius = 0;
-	emailInput.keyboardType = UIKeyboardTypeEmailAddress;
-	emailInput.returnKeyType = UIReturnKeyNext;
-	emailInput.autocorrectionType = UITextAutocorrectionTypeNo;
-	emailInput.autocapitalizationType = UITextAutocapitalizationTypeNone;
-	[emailInput setValue:[Utils colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
-	[emailInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
-	[emailInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
-	[self.view addSubview:emailInput];
-	[emailInput release];
+	_emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 203, 245, 31 )];
+	_emailInput.delegate = self;
+	_emailInput.placeholder = NSLocalizedString( @"EMAIL", @"" );
+	_emailInput.font = [UIFont boldSystemFontOfSize:13];
+	_emailInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	_emailInput.layer.shadowOffset = CGSizeMake( 0, 1 );
+	_emailInput.layer.shadowColor = [UIColor whiteColor].CGColor;
+	_emailInput.layer.shadowOpacity = 1;
+	_emailInput.layer.shadowRadius = 0;
+	_emailInput.keyboardType = UIKeyboardTypeEmailAddress;
+	_emailInput.returnKeyType = UIReturnKeyNext;
+	_emailInput.autocorrectionType = UITextAutocorrectionTypeNo;
+	_emailInput.autocapitalizationType = UITextAutocapitalizationTypeNone;
+	[_emailInput setValue:[Utils colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+	[_emailInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
+	[_emailInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
+	[self.view addSubview:_emailInput];
+	[_emailInput release];
 	
-	passwordInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 240, 245, 31 )];
-	passwordInput.delegate = self;
-	passwordInput.placeholder = NSLocalizedString( @"PASSWORD", @"" );
-	passwordInput.font = [UIFont boldSystemFontOfSize:13];
-	passwordInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
-	passwordInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-	passwordInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-	passwordInput.layer.shadowOpacity = 1;
-	passwordInput.layer.shadowRadius = 0;
-	passwordInput.secureTextEntry = YES;
-	passwordInput.returnKeyType = UIReturnKeyGo;
-	[passwordInput setValue:[Utils colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
-	[passwordInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
-	[passwordInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
-	[self.view addSubview:passwordInput];
-	[passwordInput release];
+	_passwordInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 240, 245, 31 )];
+	_passwordInput.delegate = self;
+	_passwordInput.placeholder = NSLocalizedString( @"PASSWORD", @"" );
+	_passwordInput.font = [UIFont boldSystemFontOfSize:13];
+	_passwordInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	_passwordInput.layer.shadowOffset = CGSizeMake( 0, 1 );
+	_passwordInput.layer.shadowColor = [UIColor whiteColor].CGColor;
+	_passwordInput.layer.shadowOpacity = 1;
+	_passwordInput.layer.shadowRadius = 0;
+	_passwordInput.secureTextEntry = YES;
+	_passwordInput.returnKeyType = UIReturnKeyGo;
+	[_passwordInput setValue:[Utils colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+	[_passwordInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
+	[_passwordInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
+	[self.view addSubview:_passwordInput];
+	[_passwordInput release];
 	
-	loginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 290, 230, 40 )];
-	loginButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
-	loginButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-	[loginButton setTitle:NSLocalizedString( @"LOGIN", @"" ) forState:UIControlStateNormal];
-	[loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[loginButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
-	[loginButton setBackgroundImage:[UIImage imageNamed:@"login_button.png"] forState:UIControlStateNormal];
-	[loginButton addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:loginButton];
-	[loginButton release];
+	_loginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 290, 230, 40 )];
+	_loginButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+	_loginButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[_loginButton setTitle:NSLocalizedString( @"LOGIN", @"" ) forState:UIControlStateNormal];
+	[_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[_loginButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
+	[_loginButton setBackgroundImage:[UIImage imageNamed:@"login_button.png"] forState:UIControlStateNormal];
+	[_loginButton addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:_loginButton];
+	[_loginButton release];
 	
-	facebookLoginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 340, 230, 40 )];
-	facebookLoginButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
-	facebookLoginButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-	[facebookLoginButton setTitle:NSLocalizedString( @"LOGIN_WITH_FACEBOOK", @"" ) forState:UIControlStateNormal];
-	[facebookLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-	[facebookLoginButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
-	[facebookLoginButton setBackgroundImage:[UIImage imageNamed:@"login_facebook_button.png"] forState:UIControlStateNormal];
-	[facebookLoginButton addTarget:self action:@selector(facebookLoginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:facebookLoginButton];
-	[facebookLoginButton release];
+	_facebookLoginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 340, 230, 40 )];
+	_facebookLoginButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+	_facebookLoginButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[_facebookLoginButton setTitle:NSLocalizedString( @"LOGIN_WITH_FACEBOOK", @"" ) forState:UIControlStateNormal];
+	[_facebookLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[_facebookLoginButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
+	[_facebookLoginButton setBackgroundImage:[UIImage imageNamed:@"login_facebook_button.png"] forState:UIControlStateNormal];
+	[_facebookLoginButton addTarget:self action:@selector(facebookLoginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:_facebookLoginButton];
+	[_facebookLoginButton release];
 	
-	loader = [[APILoader alloc] init];
-	loader.delegate = self;
+	_loader = [[JLHTTPLoader alloc] init];
+	_loader.delegate = self;
 	
 	target = _target;
 	action = _action;
@@ -143,24 +143,24 @@
 - (void)animateUp
 {
 	[UIView animateWithDuration:0.25 animations:^{
-		forkAndKnife.frame = CGRectMake( 140, 10, 80, 90 );
-		loginBox.frame = CGRectMake( 65, 108, 230, 75 );
-		emailInput.frame = CGRectMake( 75, 118, 245, 31 );
-		passwordInput.frame = CGRectMake( 75, 155, 245, 31 );
-		loginButton.frame = CGRectMake( 65, 195, 230, 40 );
-		facebookLoginButton.frame = CGRectMake( 65, 245, 230, 40 );
+		_forkAndKnife.frame = CGRectMake( 140, 10, 80, 90 );
+		_loginBox.frame = CGRectMake( 65, 108, 230, 75 );
+		_emailInput.frame = CGRectMake( 75, 118, 245, 31 );
+		_passwordInput.frame = CGRectMake( 75, 155, 245, 31 );
+		_loginButton.frame = CGRectMake( 65, 195, 230, 40 );
+		_facebookLoginButton.frame = CGRectMake( 65, 245, 230, 40 );
 	}];
 }
 
 - (void)animateDown
 {
 	[UIView animateWithDuration:0.25 animations:^{
-		forkAndKnife.frame = CGRectMake( 140, 55, 80, 90 );
-		loginBox.frame = CGRectMake( 65, 193, 230, 75 );
-		emailInput.frame = CGRectMake( 75, 203, 245, 31 );
-		passwordInput.frame = CGRectMake( 75, 240, 245, 31 );
-		loginButton.frame = CGRectMake( 65, 290, 230, 40 );
-		facebookLoginButton.frame = CGRectMake( 65, 340, 230, 40 );
+		_forkAndKnife.frame = CGRectMake( 140, 55, 80, 90 );
+		_loginBox.frame = CGRectMake( 65, 193, 230, 75 );
+		_emailInput.frame = CGRectMake( 75, 203, 245, 31 );
+		_passwordInput.frame = CGRectMake( 75, 240, 245, 31 );
+		_loginButton.frame = CGRectMake( 65, 290, 230, 40 );
+		_facebookLoginButton.frame = CGRectMake( 65, 340, 230, 40 );
 	}];
 }
 
@@ -175,8 +175,8 @@
 
 - (void)bgViewDidTouchDown
 {
-	[emailInput resignFirstResponder];
-	[passwordInput resignFirstResponder];
+	[_emailInput resignFirstResponder];
+	[_passwordInput resignFirstResponder];
 	[self animateDown];
 }
 
@@ -201,9 +201,9 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	if( textField == emailInput )
+	if( textField == _emailInput )
 	{
-		[passwordInput becomeFirstResponder];
+		[_passwordInput becomeFirstResponder];
 		return NO;
 	}
 	
@@ -223,27 +223,27 @@
 
 - (void)login
 {
-	NSString *email = emailInput.text;
+	NSString *email = _emailInput.text;
 	if( email.length == 0 )
 	{
-		[emailInput becomeFirstResponder];
+		[_emailInput becomeFirstResponder];
 		return;
 	}
 	
-	NSString *password = passwordInput.text;
+	NSString *password = _passwordInput.text;
 	if( password.length == 0 )
 	{
-		[passwordInput becomeFirstResponder];
+		[_passwordInput becomeFirstResponder];
 		return;
 	}
 	
 	NSString *rootUrl = API_ROOT_URL;
-	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:email, @"email", [Utils sha1:password], @"password", nil];
-	[loader addTokenWithTokenId:0 url:[NSString stringWithFormat:@"%@/auth", rootUrl] method:APILoaderMethodGET params:params];
-	[loader startLoading];
+//	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:email, @"email", [Utils sha1:password], @"password", nil];
+//	[_loader addrequestWithrequestId:0 url:[NSString stringWithFormat:@"%@/auth", rootUrl] method:APILoaderMethodGET params:params];
+	[_loader startLoading];
 	
-	[emailInput resignFirstResponder];
-	[passwordInput resignFirstResponder];
+	[_emailInput resignFirstResponder];
+	[_passwordInput resignFirstResponder];
 	[self animateDown];
 }
 
@@ -258,24 +258,24 @@
 #pragma mark -
 #pragma mark APILoader
 
-- (BOOL)shouldLoadWithToken:(APILoaderToken *)token
+- (BOOL)shouldLoadWithrequest:(JLHTTPRequest *)request
 {
 	return YES;
 }
 
-- (void)loadingDidFinish:(APILoaderToken *)token
+- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
 {
-	NSDictionary *data = [Utils parseJSON:token.data];
-	NSLog( @"%@", token.data );
+	NSDictionary *data = [Utils parseJSON:response.body];
+	NSLog( @"%@", response.body );
 	if( [data objectForKey:@"error"] )
 	{
 		[[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] autorelease] show];
 		return;
 	}
 	
-	[[SettingsManager manager] setSetting:[data objectForKey:@"access_token"] forKey:SETTING_KEY_ACCESS_TOKEN];
-	[[SettingsManager manager] setSetting:emailInput.text forKey:SETTING_KEY_EMAIL];
-	[[SettingsManager manager] setSetting:passwordInput.text forKey:SETTING_KEY_PASSWORD];
+	[[SettingsManager manager] setSetting:[data objectForKey:@"access_request"] forKey:SETTING_KEY_ACCESS_TOKEN];
+	[[SettingsManager manager] setSetting:_emailInput.text forKey:SETTING_KEY_EMAIL];
+	[[SettingsManager manager] setSetting:_passwordInput.text forKey:SETTING_KEY_PASSWORD];
 	[[SettingsManager manager] setSetting:(NSNumber *)[data objectForKey:@"user_id"] forKey:SETTING_KEY_USER_ID];
 	[[SettingsManager manager] flush];
 	

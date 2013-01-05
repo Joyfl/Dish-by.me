@@ -7,16 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APILoader.h"
+#import "JLHTTPLoader.h"
 
-@interface SearchViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, APILoaderDelegate>
+@interface SearchViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
 {
-	UIView *searchBar;
-	UITextField *searchInput;
-	UITableView *tableView;
+	UIView *_searchBar;
+	UITextField *_searchInput;
+	UITableView *_tableView;
 	
-	NSMutableArray *dishes;
-	APILoader *loader;
+	NSMutableArray *_dishes;
+	JLHTTPLoader *_loader;
 }
 
 @end

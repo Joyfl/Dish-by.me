@@ -23,9 +23,9 @@
 @implementation ProfileViewController
 
 enum {
-	kTokenIdUser = 0,
-	kTokenIdDishes = 1,
-	kTokenIdLikes = 2
+	krequestIdUser = 0,
+	krequestIdDishes = 1,
+	krequestIdLikes = 2
 };
 
 - (id)init
@@ -33,11 +33,11 @@ enum {
     self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	
-	dishes = [[NSMutableArray alloc] init];
-	likes = [[NSMutableArray alloc] init];
+	_dishes = [[NSMutableArray alloc] init];
+	_likes = [[NSMutableArray alloc] init];
 	
-	loader = [[APILoader alloc] init];
-	loader.delegate = self;
+	_loader = [[JLHTTPLoader alloc] init];
+	_loader.delegate = self;
 	
 	self.navigationItem.title = @"Dish by.me";
 	
@@ -47,10 +47,10 @@ enum {
 - (void)activateWithUserId:(NSInteger)userId
 {
 	NSString *rootUrl = API_ROOT_URL;
-	[loader addTokenWithTokenId:kTokenIdUser url:[NSString stringWithFormat:@"%@/user/%d", rootUrl, userId] method:APILoaderMethodGET params:nil];
-	[loader addTokenWithTokenId:kTokenIdDishes url:[NSString stringWithFormat:@"%@/user/%d/dish", rootUrl, userId] method:APILoaderMethodGET params:nil];
-	[loader addTokenWithTokenId:kTokenIdLikes url:[NSString stringWithFormat:@"%@/user/%d/yum", rootUrl, userId] method:APILoaderMethodGET params:nil];
-	[loader startLoading];
+//	[_loader addrequestWithrequestId:krequestIdUser url:[NSString stringWithFormat:@"%@/user/%d", rootUrl, userId] method:JLHTTPLoaderMethodGET params:nil];
+//	[_loader addrequestWithrequestId:krequestIdDishes url:[NSString stringWithFormat:@"%@/user/%d/dish", rootUrl, userId] method:JLHTTPLoaderMethodGET params:nil];
+//	[_loader addrequestWithrequestId:krequestIdLikes url:[NSString stringWithFormat:@"%@/user/%d/yum", rootUrl, userId] method:JLHTTPLoaderMethodGET params:nil];
+	[_loader startLoading];
 }
 
 - (void)viewDidLoad
@@ -72,88 +72,70 @@ enum {
 
 
 #pragma mark -
-#pragma mark APILoaderDelegate
+#pragma mark JLHTTPLoaderDelegate
 
-- (BOOL)shouldLoadWithToken:(APILoaderToken *)token
+- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
 {
-	return YES;
-}
-
-- (void)loadingDidFinish:(APILoaderToken *)token
-{
-	NSDictionary *result = [Utils parseJSON:token.data];
+	NSDictionary *result = [Utils parseJSON:response.body];
 	
-	if( token.tokenId == kTokenIdUser )
+	if( response.requestId == krequestIdUser )
 	{
-		user = [[User alloc] init];
-		user.userId = [[result objectForKey:@"user_id"] integerValue];
-		user.name = [result objectForKey:@"user_name"];
-		user.bio =[result objectForKey:@"bio"];
-		user.dishCount = [[result objectForKey:@"dish_count"] integerValue];
-		user.yumCount = [[result objectForKey:@"yum_count"] integerValue];
+		_user = [[User alloc] init];
+		_user.userId = [[result objectForKey:@"user_id"] integerValue];
+		_user.name = [result objectForKey:@"user_name"];
+		_user.bio =[result objectForKey:@"bio"];
+		_user.dishCount = [[result objectForKey:@"dish_count"] integerValue];
+		_user.yumCount = [[result objectForKey:@"yum_count"] integerValue];
 		
-		[[SettingsManager manager] setSetting:user.name forKey:SETTING_KEY_USER_NAME];
+		[[SettingsManager manager] setSetting:_user.name forKey:SETTING_KEY_USER_NAME];
 		
-		self.navigationItem.title = user.name;
+		self.navigationItem.title = _user.name;
 		
 		dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
 			NSString *rootURL = WEB_ROOT_URL;
-			NSString *url = [NSString stringWithFormat:@"%@/images/original/profile/%d.jpg", rootURL, user.userId];
+			NSString *url = [NSString stringWithFormat:@"%@/images/original/profile/%d.jpg", rootURL, _user.userId];
 			NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:url]];
 			if( data == nil )
 				return;
 			
 			dispatch_async( dispatch_get_main_queue(), ^{
-				user.photo = [UIImage imageWithData:data];
+				_user.photo = [UIImage imageWithData:data];
 			} );
 			
 			[data release];
 		});
 	}
 	
-	else if( token.tokenId == kTokenIdDishes )
+	else if( response.requestId == krequestIdDishes )
 	{
 		NSArray *data = [result objectForKey:@"data"];
 		
 		for( NSDictionary *d in data )
 		{
 			Dish *dish = [[Dish alloc] initWithDictionary:d];
-			[dishes addObject:dish];
+			[_dishes addObject:dish];
 			[dish release];
 		}
 		
-		tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
-		tableView.delegate = self;
-		tableView.dataSource = self;
-		tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-		tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
-		[self.view addSubview:tableView];
+		_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
+		_tableView.delegate = self;
+		_tableView.dataSource = self;
+		_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+		_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+		[self.view addSubview:_tableView];
 	}
 	
-	else if( token.tokenId == kTokenIdLikes )
+	else if( response.requestId == krequestIdLikes )
 	{
 		NSArray *data = [result objectForKey:@"data"];
 		
 		for( NSDictionary *d in data )
 		{
-			Dish *dish = [[Dish alloc] init];
-			dish.dishId = [[d objectForKey:@"dish_id"] integerValue];
-			dish.dishName = [d objectForKey:@"dish_name"];
-			dish.userId = [[d objectForKey:@"user_id"] integerValue];
-			dish.userName = [d objectForKey:@"user_name"];
-			dish.message = [d objectForKey:@"message"];
-			dish.forkedFrom = [[d objectForKey:@"forked_from"] integerValue];
-//			dish.time = [d objectForKey:@"dish_id"];
-			dish.hasRecipe = [[d objectForKey:@"has_recipe"] boolValue];
-			if( dish.hasRecipe )
-				dish.recipe = [d objectForKey:@"recipe"];
-			dish.yumCount = [[d objectForKey:@"yum_count"] integerValue];
-			dish.commentCount = [[d objectForKey:@"comment_count"] integerValue];
-			[likes addObject:dish];
-			[dish release];
+			Dish *dish = [Dish dishFromDictionary:d];
+			[_likes addObject:dish];
 		}
 		
-		[tableView reloadData];
+		[_tableView reloadData];
 	}
 }
 
@@ -171,7 +153,7 @@ enum {
 	if( section == 0 )
 		return 1;
 	
-	return selectedTab == 0 ? ceil( dishes.count / 3.0 ) : ceil( likes.count / 3.0 );
+	return _selectedTab == 0 ? ceil( _dishes.count / 3.0 ) : ceil( _likes.count / 3.0 );
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -182,7 +164,7 @@ enum {
 	return DISH_TILE_LEN + DISH_TILE_GAP;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *profileCellId = @"profileCell";
 	static NSString *dishCellId = @"dishCell";
@@ -190,15 +172,15 @@ enum {
 	
 	if( indexPath.section == 0 )
 	{
-		UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:profileCellId];
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:profileCellId];
 		if( cell == nil )
 		{
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:profileCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			profileImage = [[UIButton alloc] initWithFrame:CGRectMake( 14, 14, 85, 86 )];
-			[profileImage setBackgroundImage:user.photo forState:UIControlStateNormal];
-			[cell addSubview:profileImage];
+			_profileImage = [[UIButton alloc] initWithFrame:CGRectMake( 14, 14, 85, 86 )];
+			[_profileImage setBackgroundImage:_user.photo forState:UIControlStateNormal];
+			[cell addSubview:_profileImage];
 			
 			UIImageView *profileBorder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"profile_border.png"]];
 			profileBorder.frame = CGRectMake( 10, 10, 93, 94 );
@@ -211,7 +193,7 @@ enum {
 			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top.png"] forState:UIControlStateNormal];
 			
 			// My profile
-			if( user.userId == [UserManager userId] )
+			if( _user.userId == [UserManager userId] )
 			{
 				bioButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[bioButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
@@ -223,7 +205,7 @@ enum {
 			}
 			
 			UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 10, 165, 30 )];
-			bioLabel.text = user.bio;
+			bioLabel.text = _user.bio;
 			bioLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
 			bioLabel.font = [UIFont systemFontOfSize:13];
 			bioLabel.backgroundColor = [UIColor clearColor];
@@ -240,7 +222,7 @@ enum {
 			[dishButton release];
 			
 			UILabel *dishCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 94, 20 )];
-			dishCountLabel.text = [NSString stringWithFormat:@"%d", user.dishCount];
+			dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
 			dishCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
 			dishCountLabel.textAlignment = NSTextAlignmentCenter;
 			dishCountLabel.font = [UIFont boldSystemFontOfSize:20];
@@ -262,7 +244,7 @@ enum {
 			[likeButton release];
 			
 			UILabel *likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
-			likeCountLabel.text = [NSString stringWithFormat:@"%d", user.yumCount];
+			likeCountLabel.text = [NSString stringWithFormat:@"%d", _user.yumCount];
 			likeCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
 			likeCountLabel.textAlignment = NSTextAlignmentCenter;
 			likeCountLabel.font = [UIFont boldSystemFontOfSize:20];
@@ -277,9 +259,9 @@ enum {
 			likeLabel.backgroundColor = [UIColor clearColor];
 			[likeButton addSubview:likeLabel];
 			
-			arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
-			arrowView.frame = CGRectMake( ARROW_LEFT_X, 101, 25, 11 );
-			[cell addSubview:arrowView];
+			_arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
+			_arrowView.frame = CGRectMake( ARROW_LEFT_X, 101, 25, 11 );
+			[cell addSubview:_arrowView];
 		}
 		
 		return cell;
@@ -290,9 +272,9 @@ enum {
 		DishTileCell *cell;
 		
 		// Dishes
-		if( selectedTab == 0 )
+		if( _selectedTab == 0 )
 		{
-			cell = [_tableView dequeueReusableCellWithIdentifier:dishCellId];
+			cell = [tableView dequeueReusableCellWithIdentifier:dishCellId];
 			
 			if( !cell )
 			{
@@ -303,11 +285,11 @@ enum {
 			{
 				DishTileItem *dishItem = [cell dishItemAt:i];
 				
-				if( dishes.count > indexPath.row * 3 + i )
+				if( _dishes.count > indexPath.row * 3 + i )
 				{
 					dishItem.hidden = NO;
 					
-					Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
+					Dish *dish = [_dishes objectAtIndex:indexPath.row * 3 + i];
 					dishItem.dish = dish;
 				}
 				else
@@ -320,7 +302,7 @@ enum {
 		// Likes
 		else
 		{
-			cell = [_tableView dequeueReusableCellWithIdentifier:dishCellId];
+			cell = [_tableView dequeueReusableCellWithIdentifier:likeCellId];
 			
 			if( !cell )
 			{
@@ -331,11 +313,11 @@ enum {
 			{
 				DishTileItem *dishItem = [cell dishItemAt:i];
 				
-				if( dishes.count > indexPath.row * 3 + i )
+				if( _dishes.count > indexPath.row * 3 + i )
 				{
 					dishItem.hidden = NO;
 					
-					Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
+					Dish *dish = [_dishes objectAtIndex:indexPath.row * 3 + i];
 					dishItem.dish = dish;
 				}
 				else
@@ -357,22 +339,22 @@ enum {
 
 - (void)dishButtonDidTouchUpInside
 {
-	selectedTab = 0;
-	[tableView reloadData];
+	_selectedTab = 0;
+	[_tableView reloadData];
 	
-	CGRect frame = arrowView.frame;
+	CGRect frame = _arrowView.frame;
 	frame.origin.x = ARROW_LEFT_X;
-	arrowView.frame = frame;
+	_arrowView.frame = frame;
 }
 
 - (void)likeButtonDidTouchUpInside
 {
-	selectedTab = 1;
-	[tableView reloadData];
+	_selectedTab = 1;
+	[_tableView reloadData];
 	
-	CGRect frame = arrowView.frame;
+	CGRect frame = _arrowView.frame;
 	frame.origin.x = ARROW_RIGHT_X;
-	arrowView.frame = frame;
+	_arrowView.frame = frame;
 }
 
 - (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem

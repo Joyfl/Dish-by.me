@@ -30,47 +30,47 @@ enum {
 };
 
 enum {
-	kTokenIdComment = 0,
-	kTokenIdLike = 1,
-	kTokenIdSendComment = 2,
-	kTokenIdForkedFrom = 3,
+	kRequestIdComment = 0,
+	kRequestIdLike = 1,
+	kRequestIdSendComment = 2,
+	kRequestIdForkedFrom = 3,
 };
 
-- (id)initWithDish:(Dish *)_dish
+- (id)initWithDish:(Dish *)dish
 {
 	self = [super init];
 	
-	tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
-	tableView.delegate = self;
-	tableView.dataSource = self;
-	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	tableView.backgroundColor = [UIColor colorWithRed:0xF3 / 255.0 green:0xEE / 255.0 blue:0xEA / 255.0 alpha:1];
-	[self.view addSubview:tableView];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
+	_tableView.delegate = self;
+	_tableView.dataSource = self;
+	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	_tableView.backgroundColor = [UIColor colorWithRed:0xF3 / 255.0 green:0xEE / 255.0 blue:0xEA / 255.0 alpha:1];
+	[self.view addSubview:_tableView];
 	
-	dish = [_dish retain];
+	_dish = [_dish retain];
 	
-	loader = [[APILoader alloc] init];
-	loader.delegate = self;
+	_loader = [[JLHTTPLoader alloc] init];
+	_loader.delegate = self;
 	NSString *rootURL = API_ROOT_URL;
 	
 	NSString *url = nil;
-	if( dish.forkedFrom )
+	if( _dish.forkedFromId )
 	{
-		url = [NSString stringWithFormat:@"%@/dish/%d", rootURL, dish.forkedFrom];
-		[loader addTokenWithTokenId:kTokenIdForkedFrom url:url method:APILoaderMethodGET params:nil];
+		url = [NSString stringWithFormat:@"%@/dish/%d", rootURL, _dish.forkedFromId];
+//		[_loader addRequestWithRequestId:kRequestIdForkedFrom url:url method:JLHTTPLoaderMethodGET params:nil];
 	}
 	
-	url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, dish.dishId];
-	[loader addTokenWithTokenId:kTokenIdComment url:url method:APILoaderMethodGET params:nil];
-	[loader startLoading];
+	url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, _dish.dishId];
+//	[_loader addRequestWithRequestId:kRequestIdComment url:url method:JLHTTPLoaderMethodGET params:nil];
+	[_loader startLoading];
 	
-	comments = [[NSMutableArray alloc] init];
+	_comments = [[NSMutableArray alloc] init];
 	
 	DishByMeBarButtonItem *backButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = backButton;
 	[backButton release];
 	
-	if( dish.userId == [UserManager userId] )
+	if( _dish.userId == [UserManager userId] )
 	{
 		DishByMeBarButtonItem *editButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
 		self.navigationItem.rightBarButtonItem = editButton;
@@ -83,40 +83,40 @@ enum {
 		[forkButton release];
 	}
 	
-	self.navigationItem.title = dish.dishName;
+	self.navigationItem.title = _dish.dishName;
 	
-	commentBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 367, 320, 40 )];
+	_commentBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 367, 320, 40 )];
 	
 	UIImageView *commentBarBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tool_bar.png"]];
-	[commentBar addSubview:commentBarBg];
+	[_commentBar addSubview:commentBarBg];
 	[commentBarBg release];
 	
 	UIImageView *commentInputBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"textfield_bg.png"]];
 	commentInputBg.frame = CGRectMake( 5, 5, 235, 30 );
-	[commentBar addSubview:commentInputBg];
+	[_commentBar addSubview:commentInputBg];
 	[commentInputBg release];
 	
-	commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
-	commentInput.font = [UIFont systemFontOfSize:13];
-	commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
-	[commentInput addTarget:self action:@selector(commentInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
-	[commentBar addSubview:commentInput];
-	[commentInput release];
+	_commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
+	_commentInput.font = [UIFont systemFontOfSize:13];
+	_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
+	[_commentInput addTarget:self action:@selector(commentInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
+	[_commentBar addSubview:_commentInput];
+	[_commentInput release];
 	
 	DishByMeButton *sendButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEND", @"" )];
 	sendButton.frame = CGRectMake( 250, 5, 60, 30 );
 	sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[commentBar addSubview:sendButton];
+	[_commentBar addSubview:sendButton];
 	[sendButton release];
 	
-	[tableView addSubview:commentBar];
+	[_tableView addSubview:_commentBar];
 	
-	dim = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
-	dim.alpha = 0;
-	[self.view addSubview:dim];
+	_dim = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
+	_dim.alpha = 0;
+	[self.view addSubview:_dim];
 	
-	scrollEnabled = YES;
+	_scrollEnabled = YES;
 	
 	return self;
 }
@@ -130,14 +130,14 @@ enum {
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-	[dish release];
-	[loader release];
-	[comments release];
-	[tableView release];
-	[recipeButton release];
-	[commentBar release];
-	[commentInput release];
-	[dim release];
+	[_dish release];
+	[_loader release];
+	[_comments release];
+	[_tableView release];
+	[_recipeButton release];
+	[_commentBar release];
+	[_commentInput release];
+	[_dim release];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -147,18 +147,13 @@ enum {
 
 
 #pragma mark -
-#pragma mark APILoaderDelegate
+#pragma mark JLHTTPLoaderDelegate
 
-- (BOOL)shouldLoadWithToken:(APILoaderToken *)token
+- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
 {
-	return YES;
-}
-
-- (void)loadingDidFinish:(APILoaderToken *)token
-{
-	NSDictionary *result = [Utils parseJSON:token.data];
+	NSDictionary *result = [Utils parseJSON:response.body];
 	
-	if( token.tokenId == kTokenIdComment )
+	if( response.requestId == kRequestIdComment )
 	{
 		NSArray *data = [result objectForKey:@"data"];
 		
@@ -168,25 +163,24 @@ enum {
 			comment.userId = [[d objectForKey:@"user_id"] integerValue];
 			comment.name = [d objectForKey:@"user_name"];
 			comment.message = [d objectForKey:@"message"];
-			[comments addObject:comment];
+			[_comments addObject:comment];
 		}
 		
-		[tableView reloadData];
+		[_tableView reloadData];
 	}
 	
-	else if( token.tokenId == kTokenIdLike )
+	else if( response.requestId == kRequestIdLike )
 	{
-		NSLog( @"%@", token.data );
 		if( [[result objectForKey:@"status"] isEqualToString:@"ok"] )
 		{
-			likeButton.enabled = NO;
+			_likeButton.enabled = NO;
 			[UIView animateWithDuration:0.25 animations:^{
-				likeButton.frame = CGRectMake( 320, 14, 100, 25 );
+				_likeButton.frame = CGRectMake( 320, 14, 100, 25 );
 			}];
 		}
 	}
 	
-	else if( token.tokenId == kTokenIdSendComment )
+	else if( response.requestId == kRequestIdSendComment )
 	{
 		if( [[result objectForKey:@"status"] isEqualToString:@"ok"] )
 		{
@@ -194,19 +188,19 @@ enum {
 			
 			comment.userId = [UserManager userId];
 			comment.name = [UserManager userName];
-			comment.message = commentInput.text;
-			[comments addObject:comment];
+			comment.message = _commentInput.text;
+			[_comments addObject:comment];
 			
-			[tableView reloadData];
-			commentInput.text = @"";
-			commentInput.enabled = YES;
+			[_tableView reloadData];
+			_commentInput.text = @"";
+			_commentInput.enabled = YES;
 		}
 	}
 	
-	else if( token.tokenId == kTokenIdForkedFrom )
+	else if( response.requestId == kRequestIdForkedFrom )
 	{
-		dish.forkedFromName = [result objectForKey:@"dish_name"];
-		forkedFromLabel.text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), dish.forkedFromName];
+		_dish.forkedFromName = [result objectForKey:@"dish_name"];
+		_forkedFromLabel.text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), _dish.forkedFromName];
 	}
 }
 
@@ -227,7 +221,7 @@ enum {
 			return 5;
 			
 		case 1:
-			return comments.count * 2;
+			return _comments.count * 2;
 			
 		case 2:
 			return 1;
@@ -242,33 +236,33 @@ enum {
 	{
 		case 0:
 			switch( indexPath.row )
-			{
-				case kRowPhoto:
-					return 310;
-					
-				case kRowProfile:
-					return 45;
-					
-				case kRowMessage:
-					return messageRowHeight;
-					
-				case kRowRecipe:
-					if( dish.hasRecipe )
-						return 60;
-					return 0;
-					
-				case kRowYum:
-					return 50;
-			}
+		{
+			case kRowPhoto:
+				return 310;
+				
+			case kRowProfile:
+				return 45;
+				
+			case kRowMessage:
+				return _messageRowHeight;
+				
+			case kRowRecipe:
+				if( _dish.recipe )
+					return 60;
+				return 0;
+				
+			case kRowYum:
+				return 50;
+		}
 			break;
 			
-		// Comment
+			// Comment
 		case 1:
 			if( indexPath.row % 2 == 0 )
 				return 2;
 			return 50;
-		
-		// Leave a comment
+			
+			// Leave a comment
 		case 2:
 			return 40;
 	}
@@ -276,7 +270,7 @@ enum {
 	return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *photoCellId = @"photoCellId";
 	static NSString *messageCellId = @"messageCellId";
@@ -289,7 +283,7 @@ enum {
 	{
 		if( indexPath.row == kRowPhoto )
 		{
-			UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:photoCellId];
+			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:photoCellId];
 			if( !cell )
 			{
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:photoCellId];
@@ -297,7 +291,7 @@ enum {
 				
 				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
 				
-				UIImageView *imageView = [[UIImageView alloc] initWithImage:dish.photo];
+				UIImageView *imageView = [[UIImageView alloc] initWithImage:_dish.photo];
 				imageView.frame = CGRectMake( 11, 11, 298, 298 );
 				[bgView addSubview:imageView];
 				[imageView release];
@@ -316,7 +310,7 @@ enum {
 		
 		else if( indexPath.row == kRowProfile )
 		{
-			UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:messageCellId];
+			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCellId];
 			if( !cell )
 			{
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:messageCellId];
@@ -329,7 +323,7 @@ enum {
 				
 				dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
 					NSString *rootURL = WEB_ROOT_URL;
-					NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/images/thumbnail/profile/%d.jpg", rootURL, dish.userId]]];
+					NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/images/thumbnail/profile/%d.jpg", rootURL, _dish.userId]]];
 					if( data == nil )
 						return;
 					
@@ -341,7 +335,7 @@ enum {
 				});
 				
 				UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 9, 270, 30 )];
-				nameLabel.text = dish.userName;
+				nameLabel.text = _dish.userName;
 				nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
 				nameLabel.font = [UIFont boldSystemFontOfSize:14];
 				nameLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
@@ -357,7 +351,7 @@ enum {
 				timeLabel.font = [UIFont systemFontOfSize:10];
 				timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
 				timeLabel.shadowOffset = CGSizeMake( 0, 1 );
-//				timeLabel.backgroundColor = [UIColor colorWithWhite:0.5 alpha:1];
+				//				timeLabel.backgroundColor = [UIColor colorWithWhite:0.5 alpha:1];
 				timeLabel.backgroundColor = [UIColor clearColor];
 				[cell addSubview:timeLabel];
 			}
@@ -378,7 +372,7 @@ enum {
 				[topView release];
 				
 				UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 15, 280, 20 )];
-				messageLabel.text = dish.message;
+				messageLabel.text = _dish.description;
 				messageLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
 				messageLabel.font = [UIFont boldSystemFontOfSize:14];
 				messageLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -396,18 +390,18 @@ enum {
 				[cell addSubview:messageBoxDotLineView];
 				[messageBoxDotLineView release];
 				
-				forkedFromLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 32 + messageLabel.frame.size.height, 280, 20 )];
-				forkedFromLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
-				forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
-				forkedFromLabel.shadowOffset = CGSizeMake( 0, 1 );
-				forkedFromLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
-				forkedFromLabel.backgroundColor = [UIColor clearColor];
+				_forkedFromLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 32 + messageLabel.frame.size.height, 280, 20 )];
+				_forkedFromLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+				_forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
+				_forkedFromLabel.shadowOffset = CGSizeMake( 0, 1 );
+				_forkedFromLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+				_forkedFromLabel.backgroundColor = [UIColor clearColor];
 				
 				UIButton *forkedButton = [[UIButton alloc] initWithFrame:CGRectMake( 265, 32 + messageLabel.frame.size.height, 40, 20 )];
 				forkedButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
 				forkedButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 				forkedButton.titleLabel.textAlignment = NSTextAlignmentRight;
-				[forkedButton setTitle:[NSString stringWithFormat:@"%d", dish.forkCount] forState:UIControlStateNormal];
+				[forkedButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
 				[forkedButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
 				[forkedButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
 				[forkedButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
@@ -425,11 +419,11 @@ enum {
 				[dotLineView release];
 				
 				[cell addSubview:messageLabel];
-				[cell addSubview:forkedFromLabel];
+				[cell addSubview:_forkedFromLabel];
 				[cell addSubview:forkedButton];
 				
-				messageRowHeight = 75 + messageLabel.frame.size.height;
-				[tableView reloadData];
+				_messageRowHeight = 75 + messageLabel.frame.size.height;
+				[_tableView reloadData];
 			}
 			
 			return cell;
@@ -442,21 +436,21 @@ enum {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:recipeCellId];
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				
-				if( !dish.hasRecipe )
+				if( !_dish.recipe )
 					return cell;
 				
 				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 70 )];
 				
-				recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 10, 320, 50 )];
-				[recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-				[recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
-				[recipeButton setTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) forState:UIControlStateNormal];
-				[recipeButton setTitleColor:[UIColor colorWithRed:0x5B / 255.0 green:0x50 / 255.0 blue:0x46 / 255.0 alpha:1.0] forState:UIControlStateNormal];
-				[recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
-				recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-				recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
-				recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
-				[bgView addSubview:recipeButton];
+				_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 10, 320, 50 )];
+				[_recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+				[_recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
+				[_recipeButton setTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) forState:UIControlStateNormal];
+				[_recipeButton setTitleColor:[UIColor colorWithRed:0x5B / 255.0 green:0x50 / 255.0 blue:0x46 / 255.0 alpha:1.0] forState:UIControlStateNormal];
+				[_recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
+				_recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+				_recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
+				_recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+				[bgView addSubview:_recipeButton];
 				
 				UIImageView *bottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
 				bottomLine.frame = CGRectMake( 0, 54, 320, 10 );
@@ -475,16 +469,16 @@ enum {
 			{
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:yumCellId];
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-				cell.textLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_LIKE", @"" ), dish.yumCount];
+				cell.textLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_LIKE", @"" ), _dish.bookmarkCount];
 				cell.textLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
 				cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 				cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
 				cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 				
-				likeButton = [[UIButton alloc] initWithFrame:CGRectMake( 220, 14, 100, 25 )];
-				[likeButton setBackgroundImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
-				[likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-				[cell addSubview:likeButton];
+				_likeButton = [[UIButton alloc] initWithFrame:CGRectMake( 220, 14, 100, 25 )];
+				[_likeButton setBackgroundImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
+				[_likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+				[cell addSubview:_likeButton];
 			}
 			
 			return cell;
@@ -508,7 +502,7 @@ enum {
 		}
 		else if( indexPath.row % 2 == 1 )
 		{
-			Comment *comment = [comments objectAtIndex:floor( indexPath.row / 2.0 )];
+			Comment *comment = [_comments objectAtIndex:floor( indexPath.row / 2.0 )];
 			CommentCell *cell = [_tableView dequeueReusableCellWithIdentifier:commentCellId];
 			if( !cell )
 			{
@@ -549,22 +543,22 @@ enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-	if( !scrollEnabled ) return;
+	if( !_scrollEnabled ) return;
 	
 	if( scrollView.contentSize.height - scrollView.contentOffset.y > 367 )
 	{
-		commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
+		_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
 	}
 	else
 	{
-		commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + 327, 320, 40 );
+		_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + 327, 320, 40 );
 	}
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-	scrollEnabled = YES;
-	[commentInput resignFirstResponder];
+	_scrollEnabled = YES;
+	[_commentInput resignFirstResponder];
 }
 
 
@@ -584,20 +578,20 @@ enum {
 - (void)forkButtonDidTouchUpInside
 {
 	AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-	appDelegate.currentWritingForkedFrom = dish.dishId;
+	appDelegate.currentWritingForkedFrom = _dish.dishId;
 	[appDelegate cameraButtonDidTouchUpInside];
 }
 
 - (void)recipeButtonDidTouchUpInside
 {
-	RecipeView *recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) recipe:dish.recipe closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside:)];
+	RecipeView *recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) recipe:_dish.recipe closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside:)];
 	[self.view addSubview:recipeView];
 	
 	CGRect originalFrame = recipeView.frame;
 	recipeView.frame = CGRectMake( 7, -originalFrame.size.height, originalFrame.size.width, originalFrame.size.height );
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		dim.alpha = 1;
+		_dim.alpha = 1;
 		recipeView.frame = originalFrame;
 	}];
 }
@@ -607,7 +601,7 @@ enum {
 	RecipeView *recipeView = (RecipeView *)closeButton.superview;
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		dim.alpha = 0;
+		_dim.alpha = 0;
 		recipeView.frame = CGRectMake( 7, -recipeView.frame.size.height, recipeView.frame.size.width, recipeView.frame.size.height );
 	}];
 	
@@ -617,37 +611,37 @@ enum {
 - (void)likeButtonDidTouchUpInside
 {
 #warning Const에서 가져오기
-	[loader addTokenWithTokenId:kTokenIdLike url:[NSString stringWithFormat:@"http://api.dishby.me/dish/%d/yum", dish.dishId] method:APILoaderMethodPOST params:nil];
-	[loader startLoading];
+//	[_loader addRequestWithRequestId:kRequestIdLike url:[NSString stringWithFormat:@"http://api.dishby.me/dish/%d/yum", _dish.dishId] method:JLHTTPLoaderMethodPOST params:nil];
+	[_loader startLoading];
 }
 
 - (void)commentInputDidBeginEditing
 {
-	scrollEnabled = NO;
+	_scrollEnabled = NO;
 	
-	[tableView setContentOffset:CGPointMake( 0, tableView.contentSize.height - 216 + 15 ) animated:YES];
+	[_tableView setContentOffset:CGPointMake( 0, _tableView.contentSize.height - 216 + 15 ) animated:YES];
 	[UIView animateWithDuration:0.25 animations:^{
-		commentBar.frame = CGRectMake( 0, tableView.contentSize.height - 41, 320, 40 );
+		_commentBar.frame = CGRectMake( 0, _tableView.contentSize.height - 41, 320, 40 );
 	}];
 }
 
 - (void)sendButtonDidTouchUpInside
 {
-	scrollEnabled = YES;
+	_scrollEnabled = YES;
 	
 	
-	if( commentInput.text.length == 0 )
+	if( _commentInput.text.length == 0 )
 	{
 		return;
 	}
 	
-	commentInput.enabled = NO;
+	_commentInput.enabled = NO;
 	
 	NSString *rootURL = API_ROOT_URL;
-	NSString *url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, dish.dishId];
-	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:commentInput.text, @"message", nil];
-	[loader addTokenWithTokenId:kTokenIdSendComment url:url method:APILoaderMethodPOST params:params];
-	[loader startLoading];
+	NSString *url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, _dish.dishId];
+	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:_commentInput.text, @"message", nil];
+//	[_loader addRequestWithRequestId:kRequestIdSendComment url:url method:JLHTTPLoaderMethodPOST params:params];
+	[_loader startLoading];
 }
 
 @end

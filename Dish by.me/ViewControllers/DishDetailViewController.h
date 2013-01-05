@@ -7,28 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APILoader.h"
+#import "JLHTTPLoader.h"
 
 @class Dish;
 
-@interface DishDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, APILoaderDelegate>
+@interface DishDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
 {
-	Dish *dish;
-	APILoader *loader;
-	NSMutableArray *comments;
+	Dish *_dish;
+	JLHTTPLoader *_loader;
+	NSMutableArray *_comments;
 	
-	UITableView *tableView;
-	BOOL scrollEnabled;
+	UITableView *_tableView;
+	BOOL _scrollEnabled;
 	
-	CGFloat messageRowHeight;
-	UILabel *forkedFromLabel;
+	CGFloat _messageRowHeight;
+	UILabel *_forkedFromLabel;
 	
-	UIButton *recipeButton;
-	UIButton *likeButton;
-	UIView *commentBar;
-	UITextField *commentInput;
+	UIButton *_recipeButton;
+	UIButton *_likeButton;
+	UIView *_commentBar;
+	UITextField *_commentInput;
 	
-	UIImageView *dim;
+	UIImageView *_dim;
 }
 
 - (id)initWithDish:(Dish *)dish;

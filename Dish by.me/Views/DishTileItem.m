@@ -25,7 +25,7 @@
 - (void)setDish:(Dish *)_dish
 {
 	dish = _dish;
-	[self setImage:[UIImage imageNamed:dish.hasRecipe ? @"dish_tile_border_ribbon.png" : @"dish_tile_border.png"] forState:UIControlStateNormal];
+	[self setImage:[UIImage imageNamed:dish.recipe ? @"dish_tile_border_ribbon.png" : @"dish_tile_border.png"] forState:UIControlStateNormal];
 	
 	if( dish.photo )
 	{

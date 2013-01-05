@@ -11,25 +11,28 @@
 
 @implementation Dish
 
-@synthesize dishId, dishName, userId, userName, message, forkedFrom, forkedFromName, forkCount, time, hasRecipe, recipe, yumCount, commentCount, photo, thumbnail;
+@synthesize dishId, dishName, userId, userName, userPhotoURL, userPhoto, description, recipe, photoURL, photo, thumbnailURL, thumbnail, forkedFromId, forkedFromName, forkCount, bookmarkCount, commentCount, createdTime, updatedTime;
 
-- (id)initWithDictionary:(NSDictionary *)dictionary
++ (id)dishFromDictionary:(NSDictionary *)dictionary
 {
-	self = [[Dish alloc] init];
-	self.dishId = [[dictionary objectForKey:@"dish_id"] integerValue];
-	self.dishName = [dictionary objectForKey:@"dish_name"];
-	self.userId = [[dictionary objectForKey:@"user_id"] integerValue];
-	self.userName = [dictionary objectForKey:@"user_name"];
-	self.message = [dictionary objectForKey:@"message"];
-	self.forkedFrom = [[dictionary objectForKey:@"forked_from"] integerValue];
-//	self.time = [dictionary objectForKey:@"dish_id"];
-	self.hasRecipe = [[dictionary objectForKey:@"has_recipe"] boolValue];
-	if( self.hasRecipe )
-		self.recipe = [dictionary objectForKey:@"recipe"];
-	self.yumCount = [[dictionary objectForKey:@"yum_count"] integerValue];
-	self.commentCount = [[dictionary objectForKey:@"comment_count"] integerValue];
-	
-	return self;
+	Dish *dish = [[Dish alloc] init];
+	dish.dishId = [[dictionary objectForKey:@"id"] integerValue];
+	dish.dishName = [dictionary objectForKey:@"name"];
+	dish.userId = [[[dictionary objectForKey:@"user"] objectForKey:@"id"] integerValue];
+	dish.userName = [[dictionary objectForKey:@"user"] objectForKey:@"name"];
+	dish.userPhotoURL = [[dictionary objectForKey:@"user"] objectForKey:@"photo_url"];
+	dish.description = [dictionary objectForKey:@"description"];
+	dish.recipe = [dictionary objectForKey:@"recipe"];
+	dish.photoURL = [dictionary objectForKey:@"photo_url"];
+	dish.thumbnailURL = [dictionary objectForKey:@"thumbnail_url"];
+	dish.forkedFromId = [[[dictionary objectForKey:@"forked_from"] objectForKey:@"id"] integerValue];
+	dish.forkedFromName = [[dictionary objectForKey:@"forked_from"] objectForKey:@"name"];
+	dish.forkCount = [[dictionary objectForKey:@"forkCount"] integerValue];
+	dish.bookmarkCount = [[dictionary objectForKey:@"bookmarkCount"] integerValue];
+	dish.commentCount = [[dictionary objectForKey:@"commentCount"] integerValue];
+	dish.createdTime = [dictionary objectForKey:@"createdTime"];
+	dish.updatedTime = [dictionary objectForKey:@"updatedTime"];
+	return dish;
 }
 
 @end

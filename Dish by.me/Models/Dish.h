@@ -14,35 +14,43 @@
 	NSString *dishName;
 	NSInteger userId;
 	NSString *userName;
-	NSString *message;
-	NSInteger forkedFrom;
+	NSString *userPhotoURL;
+	UIImage *userPhoto;
+	NSString *description;
+	NSString *recipe;
+	NSString *photoURL;
+	UIImage *photo;
+	NSString *thumbnailURL;
+	UIImage *thumbnail;
+	NSInteger forkedFromId;
 	NSString *forkedFromName;
 	NSInteger forkCount;
-	NSDate *time;
-	BOOL hasRecipe;
-	NSString *recipe;
-	NSInteger yumCount;
+	NSInteger bookmarkCount;
 	NSInteger commentCount;
-	UIImage *thumbnail;
-	UIImage *photo;
+	NSString *createdTime;
+	NSString *updatedTime;
 }
 
 @property (nonatomic, assign) NSInteger dishId;
 @property (nonatomic, retain) NSString *dishName;
 @property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, retain) NSString *userName;
-@property (nonatomic, retain) NSString *message;
-@property (nonatomic, assign) NSInteger forkedFrom;
+@property (nonatomic, retain) NSString *userPhotoURL;
+@property (nonatomic, retain) UIImage *userPhoto;
+@property (nonatomic, retain) NSString *description;
+@property (nonatomic, retain) NSString *recipe;
+@property (nonatomic, retain) NSString *photoURL;
+@property (nonatomic, retain) UIImage *photo;
+@property (nonatomic, retain) NSString *thumbnailURL;
+@property (nonatomic, retain) UIImage *thumbnail;
+@property (nonatomic, assign) NSInteger forkedFromId;
 @property (nonatomic, retain) NSString *forkedFromName;
 @property (nonatomic, assign) NSInteger forkCount;
-@property (nonatomic, retain) NSDate *time;
-@property (nonatomic, assign) BOOL hasRecipe;
-@property (nonatomic, retain) NSString *recipe;
-@property (nonatomic, assign) NSInteger yumCount;
+@property (nonatomic, assign) NSInteger bookmarkCount;
 @property (nonatomic, assign) NSInteger commentCount;
-@property (nonatomic, retain) UIImage *thumbnail;
-@property (nonatomic, retain) UIImage *photo;
+@property (nonatomic, retain) NSString *createdTime;
+@property (nonatomic, retain) NSString *updatedTime;
 
-- (id)initWithDictionary:(NSDictionary *)dictionary;
++ (id)dishFromDictionary:(NSDictionary *)dictionary;
 
 @end

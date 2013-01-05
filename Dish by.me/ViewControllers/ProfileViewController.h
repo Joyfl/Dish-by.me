@@ -7,26 +7,26 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APILoader.h"
+#import "JLHTTPLoader.h"
 
 @class User;
 
-@interface ProfileViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, APILoaderDelegate>
+@interface ProfileViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
 {
-	User *user;
+	User *_user;
 	
-	UIButton *profileImage;
-	UIImageView *arrowView;
-	UITableView *tableView;
+	UIButton *_profileImage;
+	UIImageView *_arrowView;
+	UITableView *_tableView;
 	
-	NSMutableArray *dishes;
-	NSMutableArray *likes;
+	NSMutableArray *_dishes;
+	NSMutableArray *_likes;
 	
 	// 0 : dishes
 	// 1 : likes
-	NSInteger selectedTab;
+	NSInteger _selectedTab;
 	
-	APILoader *loader;
+	JLHTTPLoader *_loader;
 }
 
 - (void)activateWithUserId:(NSInteger)userId;

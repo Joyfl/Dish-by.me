@@ -21,43 +21,43 @@
     self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	
-	searchBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 45 )];
-	[self.view addSubview:searchBar];
+	_searchBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 45 )];
+	[self.view addSubview:_searchBar];
 	
 	UIImageView *searchBarBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_bar.png"]];
-	[searchBar addSubview:searchBarBg];
+	[_searchBar addSubview:searchBarBg];
 	[searchBarBg release];
 	
 	UIImageView *searchInputBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"textfield_bg.png"]];
 	searchInputBg.frame = CGRectMake( 5, 5, 235, 30 );
-	[searchBar addSubview:searchInputBg];
+	[_searchBar addSubview:searchInputBg];
 	[searchInputBg release];
 	
-	searchInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
-	searchInput.font = [UIFont systemFontOfSize:13];
-	searchInput.placeholder = NSLocalizedString( @"SEARCH_INPUT", @"" );
-	[searchBar addSubview:searchInput];
+	_searchInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
+	_searchInput.font = [UIFont systemFontOfSize:13];
+	_searchInput.placeholder = NSLocalizedString( @"SEARCH_INPUT", @"" );
+	[_searchBar addSubview:_searchInput];
 	
 	DishByMeButton *searchButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEARCH", @"" )];
 	searchButton.frame = CGRectMake( 250, 5, 60, 30 );
 	searchButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[searchButton addTarget:self action:@selector(searchButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[searchBar addSubview:searchButton];
+	[_searchBar addSubview:searchButton];
 	[searchButton release];
 	
-	[searchBar release];
+	[_searchBar release];
 	
-	tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 45, 320, 322 ) style:UITableViewStylePlain];
-	tableView.delegate = self;
-	tableView.dataSource = self;
-	tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
-	[self.view addSubview:tableView];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 45, 320, 322 ) style:UITableViewStylePlain];
+	_tableView.delegate = self;
+	_tableView.dataSource = self;
+	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	[self.view addSubview:_tableView];
 	
-	dishes = [[NSMutableArray alloc] init];
+	_dishes = [[NSMutableArray alloc] init];
 	
-	loader = [[APILoader alloc] init];
-	loader.delegate = self;
+	_loader = [[JLHTTPLoader alloc] init];
+	_loader.delegate = self;
 	
 	self.navigationItem.title = @"Dish by.me";
 	
@@ -83,30 +83,30 @@
 
 
 #pragma mark -
-#pragma mark APILoaderDelegate
+#pragma mark JLHTTPLoaderDelegate
 
-- (BOOL)shouldLoadWithToken:(APILoaderToken *)token
+- (BOOL)shouldLoadWithrequest:(JLHTTPRequest *)request
 {
 	return YES;
 }
 
-- (void)loadingDidFinish:(APILoaderToken *)token
+- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
 {
-//	NSLog( @"%@", token.data );
+	//	NSLog( @"%@", request.data );
 	
-	if( token.tokenId == 0 )
+	if( response.requestId == 0 )
 	{
-		NSDictionary *result = [Utils parseJSON:token.data];
+		NSDictionary *result = [Utils parseJSON:response.body];
 		NSArray *data = [result objectForKey:@"data"];
 		
 		for( NSDictionary *d in data )
 		{
 			Dish *dish = [[Dish alloc] initWithDictionary:d];
-			[dishes addObject:dish];
+			[_dishes addObject:dish];
 			[dish release];
 		}
 		
-		[tableView reloadData];
+		[_tableView reloadData];
 	}
 }
 
@@ -116,7 +116,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return ceil( dishes.count / 3.0 );
+	return ceil( _dishes.count / 3.0 );
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -124,10 +124,10 @@
 	return DISH_TILE_LEN + DISH_TILE_GAP;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)_tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellId = @"dishCell";
-	DishTileCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellId];
+	DishTileCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 	
 	if( !cell )
 	{
@@ -138,11 +138,11 @@
 	{
 		DishTileItem *dishItem = [cell dishItemAt:i];
 		
-		if( dishes.count > indexPath.row * 3 + i )
+		if( _dishes.count > indexPath.row * 3 + i )
 		{
 			dishItem.hidden = NO;
 			
-			Dish *dish = [dishes objectAtIndex:indexPath.row * 3 + i];
+			Dish *dish = [_dishes objectAtIndex:indexPath.row * 3 + i];
 			dishItem.dish = dish;
 		}
 		else
@@ -160,15 +160,15 @@
 
 - (void)searchButtonDidTouchUpInside
 {
-	[dishes removeAllObjects];
-	[tableView reloadData];
+	[_dishes removeAllObjects];
+	[_tableView reloadData];
 	
-	[searchInput resignFirstResponder];
+	[_searchInput resignFirstResponder];
 	
 	NSString *rootUrl = API_ROOT_URL;
-	NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:searchInput.text, @"query", nil];
-	[loader addTokenWithTokenId:0 url:[NSString stringWithFormat:@"%@/search", rootUrl] method:APILoaderMethodGET params:params];
-	[loader startLoading];
+//	NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:_searchInput.text, @"query", nil];
+//	[_loader addRequestWithRequestId:0 url:[NSString stringWithFormat:@"%@/search", rootUrl] method: params:params];
+	[_loader startLoading];
 }
 
 - (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem

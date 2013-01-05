@@ -7,18 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APILoader.h"
+#import "JLHTTPLoader.h"
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate, APILoaderDelegate>
+@interface LoginViewController : UIViewController <UITextFieldDelegate, JLHTTPLoaderDelegate>
 {
-	UIImageView *forkAndKnife;
-	UIImageView *loginBox;
-	UITextField *emailInput;
-	UITextField *passwordInput;
-	UIButton *loginButton;
-	UIButton *facebookLoginButton;
+	UIImageView *_forkAndKnife;
+	UIImageView *_loginBox;
+	UITextField *_emailInput;
+	UITextField *_passwordInput;
+	UIButton *_loginButton;
+	UIButton *_facebookLoginButton;
 	
-	APILoader *loader;
+	JLHTTPLoader *_loader;
 	
 	id target;
 	SEL action;

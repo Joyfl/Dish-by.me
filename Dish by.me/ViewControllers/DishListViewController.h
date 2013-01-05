@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "APILoader.h"
+#import "JLHTTPLoader.h"
 
-@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, APILoaderDelegate>
+@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
 {
-	UITableView *tableView;
-	NSMutableArray *dishes;
-	APILoader *loader;
+	UITableView *_tableView;
+	NSMutableArray *_dishes;
+	JLHTTPLoader *_loader;
 }
 
 @end
