@@ -85,7 +85,7 @@ enum {
 		_user.name = [result objectForKey:@"user_name"];
 		_user.bio =[result objectForKey:@"bio"];
 		_user.dishCount = [[result objectForKey:@"dish_count"] integerValue];
-		_user.yumCount = [[result objectForKey:@"yum_count"] integerValue];
+		_user.bookmarkCount = [[result objectForKey:@"yum_count"] integerValue];
 		
 		[[SettingsManager manager] setSetting:_user.name forKey:SETTING_KEY_USER_NAME];
 		
@@ -244,7 +244,7 @@ enum {
 			[likeButton release];
 			
 			UILabel *likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
-			likeCountLabel.text = [NSString stringWithFormat:@"%d", _user.yumCount];
+			likeCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
 			likeCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
 			likeCountLabel.textAlignment = NSTextAlignmentCenter;
 			likeCountLabel.font = [UIFont boldSystemFontOfSize:20];

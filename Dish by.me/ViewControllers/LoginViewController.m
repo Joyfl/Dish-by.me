@@ -12,10 +12,17 @@
 #import "Const.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SettingsManager.h"
+#import "UserManager.h"
+#import "User.h"
 
 @implementation LoginViewController
 
-- (id)initWithTarget:(id)_target action:(SEL)_action
+enum {
+	kReqIdLogin = 0,
+	kReqIdUser = 1,
+};
+
+- (id)initWithTarget:(id)target action:(SEL)action
 {
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
@@ -23,11 +30,6 @@
 	DishByMeBarButtonItem *cancelButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	[cancelButton release];
-	
-//	UITapGestureRecognizer *gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
-//	gestureRecognizer.cancelsTouchesInView = NO;
-//	[self.view addGestureRecognizer:gestureRecognizer];
-//	[gestureRecognizer release];
 	
 	UIButton *bgView = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 460 )];
 	bgView.adjustsImageWhenHighlighted = NO;
@@ -113,27 +115,15 @@
 	_loader = [[JLHTTPLoader alloc] init];
 	_loader.delegate = self;
 	
-	target = _target;
-	action = _action;
+	_target = target;
+	_action = action;
 	
 	return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidUnload
 {
-	self.navigationController.navigationBarHidden = YES;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewDidUnload];
 }
 
 
@@ -237,9 +227,13 @@
 		return;
 	}
 	
-	NSString *rootUrl = API_ROOT_URL;
-//	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:email, @"email", [Utils sha1:password], @"password", nil];
-//	[_loader addrequestWithrequestId:0 url:[NSString stringWithFormat:@"%@/auth", rootUrl] method:APILoaderMethodGET params:params];
+	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
+	req.requestId = kReqIdLogin;
+	req.url = [NSString stringWithFormat:@"%@auth/login", API_ROOT_URL];
+	[req setParam:email forKey:@"email"];
+//	[req setParam:[Utils sha1:password] forKey:@"password"];
+	[req setParam:password forKey:@"password"];
+	[_loader addRequest:req];
 	[_loader startLoading];
 	
 	[_emailInput resignFirstResponder];
@@ -249,38 +243,60 @@
 
 - (void)signUpButtonDidTouchUpInside
 {
-	//	SignUpViewController *signUpViewController = [[SignUpViewController alloc] init];
-	//	[self.navigationController pushViewController:signUpViewController animated:YES];
-	//	[signUpViewController release];
+//	SignUpViewController *signUpViewController = [[SignUpViewController alloc] init];
+//	[self.navigationController pushViewController:signUpViewController animated:YES];
+//	[signUpViewController release];
 }
 
 
 #pragma mark -
 #pragma mark APILoader
 
-- (BOOL)shouldLoadWithrequest:(JLHTTPRequest *)request
-{
-	return YES;
-}
-
-- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
+- (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response
 {
 	NSDictionary *data = [Utils parseJSON:response.body];
-	NSLog( @"%@", response.body );
-	if( [data objectForKey:@"error"] )
+	
+	if( response.requestId == kReqIdLogin )
 	{
-		[[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] autorelease] show];
-		return;
+		if( response.statusCode == 200 )
+		{
+			NSLog( @"Login succeed!" );
+			JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
+			req.requestId = kReqIdUser;
+			req.url = [NSString stringWithFormat:@"%@user", API_ROOT_URL];
+			[req setParam:[UserManager manager].accessToken = [data objectForKey:@"access_token"] forKey:@"access_token"];
+			[_loader addRequest:req];
+			[_loader startLoading];
+		}
+		
+		else if( response.statusCode == 404 )
+		{
+			[[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] autorelease] show];
+			return;
+		}
 	}
 	
-	[[SettingsManager manager] setSetting:[data objectForKey:@"access_request"] forKey:SETTING_KEY_ACCESS_TOKEN];
-	[[SettingsManager manager] setSetting:_emailInput.text forKey:SETTING_KEY_EMAIL];
-	[[SettingsManager manager] setSetting:_passwordInput.text forKey:SETTING_KEY_PASSWORD];
-	[[SettingsManager manager] setSetting:(NSNumber *)[data objectForKey:@"user_id"] forKey:SETTING_KEY_USER_ID];
-	[[SettingsManager manager] flush];
-	
-	[target performSelector:action];
-	[self dismissViewControllerAnimated:YES completion:nil];
+	else if( response.requestId == kReqIdUser )
+	{
+		if( response.statusCode == 200 )
+		{
+			NSLog( @"Get user succeed!" );
+			User *user = [User userFromDictionary:data];
+			
+			[JLHTTPLoader loadAsyncFromURL:user.photoURL completion:^(NSData *data)
+			{
+				NSLog( @"Get photo succeed!" );
+				user.photo = [UIImage imageWithData:data];
+				[UserManager manager].user = user;
+				[user release];
+				
+				[UserManager manager].loggedIn = YES;
+				
+				[_target performSelector:_action];
+				[self dismissViewControllerAnimated:YES completion:nil];
+			}];
+		}
+	}
 }
 
 @end

@@ -48,6 +48,11 @@ enum {
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[_tableView reloadData];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -86,8 +91,6 @@ enum {
 
 - (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response
 {
-	NSLog( @"body : %@", response.body );
-	
 	if( response.requestId == kRequestIdUpdateDishes )
 	{
 		if( response.statusCode == 200 )

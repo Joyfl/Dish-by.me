@@ -20,8 +20,8 @@
 	
 	JLHTTPLoader *_loader;
 	
-	id target;
-	SEL action;
+	id _target;
+	SEL _action;
 }
 
 - (id)initWithTarget:(id)target action:(SEL)action;

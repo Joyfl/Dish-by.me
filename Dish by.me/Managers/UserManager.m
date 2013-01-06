@@ -12,63 +12,28 @@
 
 @implementation UserManager
 
-+ (BOOL)loggedIn
+@synthesize loggedIn, user;
+
++ (UserManager *)manager
 {
-	NSString *key = SETTING_KEY_ACCESS_TOKEN;
-	return [[SettingsManager manager] getSettingForKey:key] != nil;
+	static UserManager *manager = nil;
+	if( !manager )
+		manager = [[UserManager alloc] init];
+	return manager;
 }
 
-+ (NSString *)accessToken
+
+#pragma mark -
+#pragma mark Getter/Setter
+
+- (NSString *)accessToken
 {
-	NSString *key = SETTING_KEY_ACCESS_TOKEN;
-	return [[SettingsManager manager] getSettingForKey:key];
+	return _accessToken;
 }
 
-+ (NSInteger)userId
+- (void)setAccessToken:(NSString *)accessToken
 {
-	NSString *key = SETTING_KEY_USER_ID;
-	return [[[SettingsManager manager] getSettingForKey:key] integerValue];
-}
-
-+ (NSNumber *)userIdNumber
-{
-	NSString *key = SETTING_KEY_USER_ID;
-	return [[SettingsManager manager] getSettingForKey:key];
-}
-
-+ (NSString *)userName
-{
-	NSString *key = SETTING_KEY_USER_NAME;
-	return [[SettingsManager manager] getSettingForKey:key];
-}
-
-+ (NSString *)email
-{
-	NSString *key = SETTING_KEY_EMAIL;
-	return [[SettingsManager manager] getSettingForKey:key];
-}
-
-// hashed password
-+ (NSString *)password
-{
-	NSString *key = SETTING_KEY_PASSWORD;
-	return [[SettingsManager manager] getSettingForKey:key];
-}
-
-+ (void)logout
-{
-	NSString *key = SETTING_KEY_USER_ID;
-	[[SettingsManager manager] clearSettingForKey:key];
-	
-	key = SETTING_KEY_USER_NAME;
-	[[SettingsManager manager] clearSettingForKey:key];
-	
-	key = SETTING_KEY_EMAIL;
-	[[SettingsManager manager] clearSettingForKey:key];
-	
-	key = SETTING_KEY_PASSWORD;
-	[[SettingsManager manager] clearSettingForKey:key];
-	
+	[[SettingsManager manager] setSetting:_accessToken = accessToken forKey:SETTING_KEY_ACCESS_TOKEN];
 	[[SettingsManager manager] flush];
 }
 

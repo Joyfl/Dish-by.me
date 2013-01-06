@@ -18,6 +18,7 @@
 #import "UserManager.h"
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
+#import "User.h"
 
 @implementation DishDetailViewController
 
@@ -47,7 +48,7 @@ enum {
 	self.navigationItem.leftBarButtonItem = backButton;
 	[backButton release];
 	
-	if( _dish.userId == [UserManager userId] )
+	if( _dish.userId == [UserManager manager].user.userId )
 	{
 		DishByMeBarButtonItem *editButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
 		self.navigationItem.rightBarButtonItem = editButton;
@@ -154,7 +155,7 @@ enum {
 	req.requestId = kRequestIdSendComment;
 	req.url = [NSString stringWithFormat:@"%@dish/%d/comment", API_ROOT_URL, _dish.dishId];
 	req.method = @"POST";
-	[req setParam:[UserManager accessToken] forKey:@"access_token"];
+	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[req setParam:_commentInput.text forKey:@"message"];
 	[_loader addRequest:req];
 	[_loader startLoading];
@@ -166,8 +167,7 @@ enum {
 	req.requestId = kRequestIdBookmark;
 	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
 	req.method = @"POST";
-	[req setParam:@"ceo" forKey:@"access_token"];
-//	[req setParam:[UserManager accessToken] forKey:@"access_token"];
+	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[_loader addRequest:req];
 	[_loader startLoading];
 }
@@ -203,8 +203,9 @@ enum {
 		{
 			Comment *comment = [[Comment alloc] init];
 			comment.commentId = [[result objectForKey:@"id"] integerValue];
-			comment.userId = [UserManager userId];
-			comment.userName = [UserManager userName];
+			comment.userId = [UserManager manager].user.userId;
+			comment.userName = [UserManager manager].user.name;
+			comment.userPhoto = [UserManager manager].user.photo;
 			comment.message = _commentInput.text;
 			comment.createdTime = [result objectForKey:@"created_time"];
 			[_comments addObject:comment];

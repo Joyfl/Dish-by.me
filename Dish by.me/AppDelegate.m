@@ -16,6 +16,7 @@
 #import "CameraOverlayViewController.h"
 #import "LoginViewController.h"
 #import "UserManager.h"
+#import "User.h"
 
 @implementation AppDelegate
 
@@ -127,7 +128,7 @@
 	if( [[(UINavigationController *)viewController viewControllers] objectAtIndex:0] == profileViewController )
 	{
 		// 로그인이 되어있지 않으면 LoginView를 띄움
-		if( ![UserManager loggedIn] )
+		if( ![UserManager manager].loggedIn )
 		{
 			[self presentLoginViewController];
 			return NO;
@@ -143,7 +144,7 @@
 
 - (void)cameraButtonDidTouchUpInside
 {
-	if( [UserManager loggedIn] )
+	if( [UserManager manager].loggedIn )
 		[self presentActionSheet];
 	else
 		[self presentLoginViewController];
@@ -221,6 +222,7 @@
 {
 	LoginViewController *loginViewController = [[LoginViewController alloc] initWithTarget:self action:@selector(loginDidFinish)];
 	DishByMeNavigationController *navController = [[DishByMeNavigationController alloc] initWithRootViewController:loginViewController];
+	navController.navigationBarHidden = YES;
 	[tabBarController presentViewController:navController animated:YES completion:nil];
 	
 	[loginViewController release];
@@ -229,7 +231,7 @@
 
 - (void)loginDidFinish
 {
-	[profileViewController activateWithUserId:[UserManager userId]];
+	[profileViewController activateWithUserId:[UserManager manager].user.userId];
 }
 
 @end
