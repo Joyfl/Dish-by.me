@@ -90,22 +90,4 @@
 	[_messageView sizeToFit];
 }
 
-- (void)loadProfileImage
-{
-	dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
-		NSString *rootURL = WEB_ROOT_URL;
-		NSLog( @"%d", _comment.userId );
-		NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/images/thumbnail/profile/%d.jpg", rootURL, _comment.userId]]];
-		if( data == nil )
-			return;
-		
-		dispatch_async( dispatch_get_main_queue(), ^{
-			_comment.userPhoto = [UIImage imageWithData:data];
-			[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];
-		} );
-		
-		[data release];
-	});
-}
-
 @end

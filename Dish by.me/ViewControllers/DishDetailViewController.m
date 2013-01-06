@@ -148,6 +148,18 @@ enum {
 	[_loader startLoading];
 }
 
+- (void)sendComment
+{
+	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
+	req.requestId = kRequestIdSendComment;
+	req.url = [NSString stringWithFormat:@"%@dish/%d/comment", API_ROOT_URL, _dish.dishId];
+	req.method = @"POST";
+	[req setParam:[UserManager accessToken] forKey:@"access_token"];
+	[req setParam:_commentInput.text forKey:@"message"];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
 
 #pragma mark -
 #pragma mark JLHTTPLoaderDelegate
@@ -186,7 +198,7 @@ enum {
 	
 	else if( response.requestId == kRequestIdSendComment )
 	{
-		if( response.statusCode == 200 )
+		if( response.statusCode == 201 )
 		{
 			Comment *comment = [[Comment alloc] init];
 			comment.commentId = [[result objectForKey:@"id"] integerValue];
@@ -628,11 +640,7 @@ enum {
 	
 	_commentInput.enabled = NO;
 	
-	NSString *rootURL = API_ROOT_URL;
-	NSString *url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, _dish.dishId];
-	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:_commentInput.text, @"message", nil];
-//	[_loader addRequestWithRequestId:kRequestIdSendComment url:url method:JLHTTPLoaderMethodPOST params:params];
-	[_loader startLoading];
+	[self sendComment];
 }
 
 @end
