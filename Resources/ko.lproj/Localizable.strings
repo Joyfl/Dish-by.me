@@ -1,19 +1,19 @@
 // Common
-BACK = "뒤로";
-OOPS = "어머나!";
-I_GOT_IT = "알겠어요";
-CANCEL = "취소";
+"BACK" = "뒤로";
+"OOPS" = "어머나!";
+"I_GOT_IT" = "알겠어요";
+"CANCEL" = "취소";
 
 // Messages
-MESSAGE_LOGIN_FAILED = "로그인에 실패했습니다.";
-MESSAGE_NO_SUPPORT_CAMERA = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
-MESSAGE_REALLY_CANCEL = "정말로 취소하시겠어요?";
+"MESSAGE_LOGIN_FAILED" = "로그인에 실패했습니다.";
+"MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
+"MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
 
 // Login
-EMAIL = "이메일";
-PASSWORD = "비밀번호";
-LOGIN = "로그인";
-LOGIN_WITH_FACEBOOK = "페이스북으로 로그인";
+"EMAIL" = "이메일";
+"PASSWORD" = "비밀번호";
+"LOGIN" = "로그인";
+"LOGIN_WITH_FACEBOOK" = "페이스북으로 로그인";
 
 // 
 "PULL_DOWN_TO_UPDATE" = "업데이트하시려면 아래로 당기세요.";
@@ -22,28 +22,28 @@ LOGIN_WITH_FACEBOOK = "페이스북으로 로그인";
 "LOADING" = "로딩중...";
 
 // DishDetailView
-EDIT = "수정";
-FORK = "포크";
-FORKED_FROM_S = "%@를 포크했습니다.";
-N_LIKE = "	%d명이 이 요리를 찜했습니다.";
-SHOW_RECIPE = "레시피 보기";
-LEAVE_A_COMMENT = "댓글 남기기";
-SEND = "전송";
+"EDIT" = "수정";
+"FORK" = "포크";
+"FORKED_FROM_S" = "%@를 포크했습니다.";
+"N_LIKE" = "%d명이 이 요리를 찜했습니다.";
+"SHOW_RECIPE" = "레시피 보기";
+"LEAVE_A_COMMENT" = "댓글 남기기";
+"SEND" = "전송";
 
 // SearchView
-SEARCH_INPUT = "요리 검색";
-SEARCH = "검색";
+"SEARCH_INPUT" = "요리 검색";
+"SEARCH" = "검색";
 
 // WritingView
-TAKE_A_PHOTO = "사진 찍기";
-FROM_LIBRARY = "라이브러리에서 선택";
-INPUT_DISH_NAME = "요리 이름";
-INPUT_MESSAGE = "내용";
-WRITE_RECIPE = "레시피 작성";
-UPLOAD = "업로드";
+"TAKE_A_PHOTO" = "사진 찍기";
+"FROM_LIBRARY" = "라이브러리에서 선택";
+"INPUT_DISH_NAME" = "요리 이름";
+"INPUT_MESSAGE" = "내용";
+"WRITE_RECIPE" = "레시피 작성";
+"UPLOAD" = "업로드";
 
 // ProfileView
-DISHES = "요리";
-LIKES = "찜";
+"DISHES" = "요리";
+"LIKES" = "찜";
 
 // SettingsView
