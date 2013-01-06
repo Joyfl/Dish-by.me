@@ -39,6 +39,7 @@ enum {
 - (id)initWithDish:(Dish *)dish
 {
 	self = [super init];
+	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	
 	_dish = [dish retain];
 	
@@ -65,7 +66,7 @@ enum {
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	_tableView.backgroundColor = [UIColor colorWithRed:0xF3 / 255.0 green:0xEE / 255.0 blue:0xEA / 255.0 alpha:1];
+	_tableView.backgroundColor = self.view.backgroundColor;
 	[self.view addSubview:_tableView];
 	
 	_comments = [[NSMutableArray alloc] init];
