@@ -14,8 +14,8 @@
 	NSString *dishName;
 	NSInteger userId;
 	NSString *userName;
-	NSString *userThumbnailURL;
-	UIImage *userThumbnail;
+	NSString *userPhotoURL;
+	UIImage *userPhoto;
 	NSString *description;
 	NSString *recipe;
 	NSString *photoURL;
@@ -35,8 +35,8 @@
 @property (nonatomic, retain) NSString *dishName;
 @property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, retain) NSString *userName;
-@property (nonatomic, retain) NSString *userThumbnailURL;
-@property (nonatomic, retain) UIImage *userThumbnail;
+@property (nonatomic, retain) NSString *userPhotoURL;
+@property (nonatomic, retain) UIImage *userPhoto;
 @property (nonatomic, retain) NSString *description;
 @property (nonatomic, retain) NSString *recipe;
 @property (nonatomic, retain) NSString *photoURL;

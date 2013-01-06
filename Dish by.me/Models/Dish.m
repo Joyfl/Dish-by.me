@@ -11,7 +11,7 @@
 
 @implementation Dish
 
-@synthesize dishId, dishName, userId, userName, userThumbnailURL, userThumbnail, description, recipe, photoURL, photo, thumbnailURL, thumbnail, forkedFromId, forkedFromName, forkCount, bookmarkCount, commentCount, createdTime, updatedTime;
+@synthesize dishId, dishName, userId, userName, userPhotoURL, userPhoto, description, recipe, photoURL, photo, thumbnailURL, thumbnail, forkedFromId, forkedFromName, forkCount, bookmarkCount, commentCount, createdTime, updatedTime;
 
 + (id)dishFromDictionary:(NSDictionary *)dictionary
 {
@@ -20,7 +20,7 @@
 	dish.dishName = [dictionary objectForKey:@"name"];
 	dish.userId = [[[dictionary objectForKey:@"user"] objectForKey:@"id"] integerValue];
 	dish.userName = [[dictionary objectForKey:@"user"] objectForKey:@"name"];
-	dish.userThumbnailURL = [[dictionary objectForKey:@"user"] objectForKey:@"thumbnail_url"];
+	dish.userPhotoURL = [[dictionary objectForKey:@"user"] objectForKey:@"photo_url"];
 	dish.description = [dictionary objectForKey:@"description"];
 	dish.recipe = [dictionary objectForKey:@"recipe"];
 	dish.photoURL = [dictionary objectForKey:@"photo_url"];

@@ -10,15 +10,25 @@
 
 @interface Comment : NSObject
 {
+	NSInteger commentId;
 	NSInteger userId;
-	NSString *name;
-	NSString *message;
+	NSString *userName;
+	NSString *userPhotoURL;
 	UIImage *userPhoto;
+	NSString *message;
+	NSString *createdTime;
+	NSString *updatedTime;
 }
 
+@property (nonatomic, assign) NSInteger commentId;
 @property (nonatomic, assign) NSInteger userId;
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *message;
+@property (nonatomic, retain) NSString *userName;
+@property (nonatomic, retain) NSString *userPhotoURL;
 @property (nonatomic, retain) UIImage *userPhoto;
+@property (nonatomic, retain) NSString *message;
+@property (nonatomic, retain) NSString *createdTime;
+@property (nonatomic, retain) NSString *updatedTime;
+
++ (Comment *)commentFromDictionary:(NSDictionary *)dictionary;
 
 @end

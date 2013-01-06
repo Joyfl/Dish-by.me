@@ -125,11 +125,6 @@ enum {
 	[_dim release]; _dim = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
 
 #pragma mark -
 #pragma mark Loading
@@ -163,23 +158,24 @@ enum {
 	
 	if( response.requestId == kRequestIdComments )
 	{
-		NSArray *data = [result objectForKey:@"data"];
-		
-		for( NSDictionary *d in data )
+		if( response.statusCode == 200 )
 		{
-			Comment *comment = [[Comment alloc] init];
-			comment.userId = [[d objectForKey:@"user_id"] integerValue];
-			comment.name = [d objectForKey:@"user_name"];
-			comment.message = [d objectForKey:@"message"];
-			[_comments addObject:comment];
+			NSArray *data = [result objectForKey:@"data"];
+			
+			for( NSDictionary *d in data )
+			{
+				Comment *comment = [Comment commentFromDictionary:d];
+				[_comments addObject:comment];
+				[comment release];
+			}
+			
+			[_tableView reloadData];
 		}
-		
-		[_tableView reloadData];
 	}
 	
 	else if( response.requestId == kRequestIdBookmark )
 	{
-		if( [[result objectForKey:@"status"] isEqualToString:@"ok"] )
+		if( response.statusCode == 200 )
 		{
 			_likeButton.enabled = NO;
 			[UIView animateWithDuration:0.25 animations:^{
@@ -190,14 +186,16 @@ enum {
 	
 	else if( response.requestId == kRequestIdSendComment )
 	{
-		if( [[result objectForKey:@"status"] isEqualToString:@"ok"] )
+		if( response.statusCode == 200 )
 		{
 			Comment *comment = [[Comment alloc] init];
-			
+			comment.commentId = [[result objectForKey:@"id"] integerValue];
 			comment.userId = [UserManager userId];
-			comment.name = [UserManager userName];
+			comment.userName = [UserManager userName];
 			comment.message = _commentInput.text;
+			comment.createdTime = [result objectForKey:@"created_time"];
 			[_comments addObject:comment];
+			[comment release];
 			
 			[_tableView reloadData];
 			_commentInput.text = @"";
@@ -323,9 +321,9 @@ enum {
 				[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 				[cell addSubview:profileImageButton];
 				
-				[JLHTTPLoader loadAsyncFromURL:_dish.userThumbnailURL completion:^(NSData *data)
+				[JLHTTPLoader loadAsyncFromURL:_dish.userPhotoURL completion:^(NSData *data)
 				{
-					[profileImageButton setBackgroundImage:_dish.userThumbnail = [UIImage imageWithData:data] forState:UIControlStateNormal];
+					[profileImageButton setBackgroundImage:_dish.userPhoto = [UIImage imageWithData:data] forState:UIControlStateNormal];
 				}];
 				
 				UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 9, 270, 30 )];
@@ -496,16 +494,15 @@ enum {
 		}
 		else if( indexPath.row % 2 == 1 )
 		{
-			Comment *comment = [_comments objectAtIndex:floor( indexPath.row / 2.0 )];
 			CommentCell *cell = [_tableView dequeueReusableCellWithIdentifier:commentCellId];
 			if( !cell )
 			{
 				cell = [[CommentCell alloc] initWithResueIdentifier:commentCellId];
-				cell.comment = comment;
-				[cell loadProfileImage];
 			}
 			
-			cell.comment = comment;
+			Comment *comment = [_comments objectAtIndex:floor( indexPath.row / 2 )];
+			[cell setComment:comment atIndexPath:indexPath];
+			[comment release];
 			
 			return cell;
 		}

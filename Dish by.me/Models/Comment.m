@@ -10,6 +10,19 @@
 
 @implementation Comment
 
-@synthesize userId, name, message, userPhoto;
+@synthesize commentId, userId, userName, userPhotoURL, userPhoto, message, createdTime, updatedTime;
+
++ (Comment *)commentFromDictionary:(NSDictionary *)dictionary
+{
+	Comment *comment = [[Comment alloc] init];
+	comment.commentId = [[dictionary objectForKey:@"commentId"] integerValue];
+	comment.userId = [[[dictionary objectForKey:@"user"] objectForKey:@"id"] integerValue];
+	comment.userName = [[dictionary objectForKey:@"user"] objectForKey:@"name"];
+	comment.userPhotoURL = [[dictionary objectForKey:@"user"] objectForKey:@"photo_url"];
+	comment.message = [dictionary objectForKey:@"message"];
+	comment.createdTime = [dictionary objectForKey:@"created_time"];
+	comment.updatedTime = [dictionary objectForKey:@"updated_time"];
+	return comment;
+}
 
 @end

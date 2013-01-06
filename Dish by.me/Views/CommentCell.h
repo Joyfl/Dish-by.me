@@ -12,17 +12,18 @@
 
 @interface CommentCell : UITableViewCell
 {
-	Comment *comment;
+	Comment *_comment;
+	NSIndexPath *_indexPath;
 	
-	UIButton *profileImageButton;
-	UILabel *nameLabel;
-	UILabel *timeLabel;
-	UITextView *messageView;
+	UIButton *_profileImageButton;
+	UILabel *_nameLabel;
+	UILabel *_timeLabel;
+	UITextView *_messageView;
 }
 
-@property (nonatomic, retain) Comment *comment;
+@property (nonatomic, readonly) Comment *comment;
 
 - (id)initWithResueIdentifier:(NSString *)resueIdentifier;
-- (void)loadProfileImage;
+- (void)setComment:(Comment *)comment atIndexPath:(NSIndexPath *)indexPath;
 
 @end
