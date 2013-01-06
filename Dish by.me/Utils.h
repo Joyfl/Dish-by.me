@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "SBJSON.h"
 
+#define UIScreenWidth	[UIScreen mainScreen].bounds.size.width
+#define UIScreenHeight	[UIScreen mainScreen].bounds.size.height
+
 @interface Utils : NSObject
 
 + (id)parseJSON:(NSString *)json;
