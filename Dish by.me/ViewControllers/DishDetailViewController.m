@@ -52,7 +52,7 @@ enum {
 	
 	self.navigationItem.title = _dish.dishName;
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 )];
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -61,7 +61,7 @@ enum {
 	
 	_comments = [[NSMutableArray alloc] init];
 	
-	_commentBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 367, 320, 40 )];
+	_commentBar = [[UIView alloc] initWithFrame:CGRectMake( 0, UIScreenHeight - 114, 320, 40 )];
 	
 	UIImageView *commentBarBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tool_bar.png"]];
 	[_commentBar addSubview:commentBarBg];
@@ -341,9 +341,23 @@ enum {
 				
 				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
 				
-				UIImageView *imageView = [[UIImageView alloc] initWithImage:_dish.photo];
-				imageView.frame = CGRectMake( 11, 11, 298, 298 );
+				UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, 298 )];
+				imageView.image = [UIImage imageNamed:@"placeholder.png"];
 				[bgView addSubview:imageView];
+				
+				// List에서 이미지 로딩이 덜 끝난 채로 Detail에 들어오는 경우가 있으므로
+				if( _dish.photo )
+				{
+					imageView.image = _dish.photo;
+				}
+				else
+				{
+					[JLHTTPLoader loadAsyncFromURL:_dish.photoURL completion:^(NSData *data)
+					{
+						imageView.image = _dish.photo = [UIImage imageWithData:data];
+					}];
+				}
+				
 				[imageView release];
 				
 				UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_border.png"]];
@@ -587,13 +601,13 @@ enum {
 {
 	if( !_scrollEnabled ) return;
 	
-	if( scrollView.contentSize.height - scrollView.contentOffset.y > 367 )
+	if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 114 )
 	{
 		_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
 	}
 	else
 	{
-		_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + 327, 320, 40 );
+		_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + UIScreenHeight - 154, 320, 40 );
 	}
 }
 

@@ -26,10 +26,12 @@
 	
 	_commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 30, 290, 30, 15 )];
 	_commentCountLabel.textColor = [UIColor whiteColor];
+	_commentCountLabel.backgroundColor = [UIColor clearColor];
 	[self.contentView addSubview:_commentCountLabel];
 	
 	_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 60, 290, 30, 15 )];
 	_bookmarkCountLabel.textColor = [UIColor whiteColor];
+	_bookmarkCountLabel.backgroundColor = [UIColor clearColor];
 	[self.contentView addSubview:_bookmarkCountLabel];
 	
 	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 310, 200, 20 )];
