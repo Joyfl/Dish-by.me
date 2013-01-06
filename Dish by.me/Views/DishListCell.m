@@ -16,13 +16,12 @@
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	_photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 14, 292, 292 )];
-#warning 임시 이미지
-	_photoView.image = [UIImage imageNamed:@"dish_tile_loading.png"];
+	_photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 12, 292, 292 )];
+	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
 	[self.contentView addSubview:_photoView];
 	
-	UIImageView *frameView = [[UIImageView alloc] initWithFrame:CGRectMake( 5, 5, 310, 345 )];
-	frameView.image = [UIImage imageNamed:@"dish_writing_border.png"];
+	UIImageView *frameView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, 350 )];
+	frameView.image = [UIImage imageNamed:@"dish_border_big.png"];
 	[self.contentView addSubview:frameView];
 	
 	_commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 30, 290, 30, 15 )];
@@ -60,6 +59,7 @@
 
 - (void)fillContents
 {
+	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
 	if( _dish.photo )
 	{
 		_photoView.image = _dish.photo;

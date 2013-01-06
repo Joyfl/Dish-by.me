@@ -182,14 +182,11 @@ enum {
 	}
 }
 
-
-#pragma mark -
-#pragma mark Selectors
-
-- (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:dishTileItem.dish];
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
+	[dishDetailViewController release];
 }
 
 @end
