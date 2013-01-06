@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "JLHTTPLoader.h"
+#import "DishByMeButton.h"
 
 @class Dish;
 
@@ -28,6 +29,7 @@
 	UIButton *_bookmarkButton;
 	UIView *_commentBar;
 	UITextField *_commentInput;
+	DishByMeButton *_sendButton;
 	
 	UIImageView *_dim;
 }

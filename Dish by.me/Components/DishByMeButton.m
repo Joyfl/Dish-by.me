@@ -10,15 +10,20 @@
 
 @implementation DishByMeButton
 
-- (id)initWithTitle:(NSString *)title
+- (id)init
 {
-	self = [super init];
+	self = [super init];	
 	self.titleLabel.font = [UIFont boldSystemFontOfSize:12];
 	self.titleLabel.shadowOffset = CGSizeMake( 0, -1 );
 	[self setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.3] forState:UIControlStateNormal];
-	[self setTitle:title forState:UIControlStateNormal];
 	[self setBackgroundImage:[UIImage imageNamed:@"button.png"] forState:UIControlStateNormal];
-	
+	return self;
+}
+
+- (id)initWithTitle:(NSString *)title
+{
+	self = [self init];
+	[self setTitle:title forState:UIControlStateNormal];
 	return self;
 }
 

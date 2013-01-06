@@ -19,6 +19,8 @@
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "User.h"
+#import "LoginViewController.h"
+#import "DishByMeNavigationController.h"
 
 @implementation DishDetailViewController
 
@@ -48,19 +50,6 @@ enum {
 	self.navigationItem.leftBarButtonItem = backButton;
 	[backButton release];
 	
-	if( _dish.userId == [UserManager manager].user.userId )
-	{
-		DishByMeBarButtonItem *editButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
-		self.navigationItem.rightBarButtonItem = editButton;
-		[editButton release];
-	}
-	else
-	{
-		DishByMeBarButtonItem *forkButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
-		self.navigationItem.rightBarButtonItem = forkButton;
-		[forkButton release];
-	}
-	
 	self.navigationItem.title = _dish.dishName;
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
@@ -85,17 +74,16 @@ enum {
 	
 	_commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
 	_commentInput.font = [UIFont systemFontOfSize:13];
-	_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
 	[_commentInput addTarget:self action:@selector(commentInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
 	[_commentBar addSubview:_commentInput];
 	[_commentInput release];
 	
-	DishByMeButton *sendButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEND", @"" )];
-	sendButton.frame = CGRectMake( 250, 5, 60, 30 );
-	sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
-	[sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[_commentBar addSubview:sendButton];
-	[sendButton release];
+	_sendButton = [[DishByMeButton alloc] init];
+	_sendButton.frame = CGRectMake( 250, 5, 60, 30 );
+	_sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+	[_sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[_commentBar addSubview:_sendButton];
+	[_sendButton release];
 	
 	[_tableView addSubview:_commentBar];
 	
@@ -111,6 +99,37 @@ enum {
 	[self loadComments];
 	
 	return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	if( [UserManager manager].loggedIn )
+	{
+		if( _dish.userId == [UserManager manager].user.userId )
+		{
+			DishByMeBarButtonItem *editButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
+			self.navigationItem.rightBarButtonItem = editButton;
+			[editButton release];
+		}
+		else
+		{
+			DishByMeBarButtonItem *forkButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
+			self.navigationItem.rightBarButtonItem = forkButton;
+			[forkButton release];
+		}
+		
+		_commentInput.enabled = YES;
+		_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
+		[_sendButton setTitle:NSLocalizedString( @"SEND", @"전송" ) forState:UIControlStateNormal];
+	}
+	else
+	{
+		self.navigationItem.rightBarButtonItem = nil;
+		
+		_commentInput.enabled = NO;
+		_commentInput.placeholder = NSLocalizedString( @"LOGIN_TO_COMMENT", @"댓글을 남기려면 로그인해주세요." );
+		[_sendButton setTitle:NSLocalizedString( @"LOGIN", @"로그인" ) forState:UIControlStateNormal];
+	}
 }
 
 - (void)viewDidUnload
@@ -648,16 +667,36 @@ enum {
 
 - (void)sendButtonDidTouchUpInside
 {
-	_scrollEnabled = YES;
-	
-	if( _commentInput.text.length == 0 )
+	if( [UserManager manager].loggedIn )
 	{
-		return;
+		_scrollEnabled = YES;
+		
+		if( _commentInput.text.length == 0 )
+			return;
+		
+		_commentInput.enabled = NO;
+		
+		[self sendComment];
 	}
+	else
+	{
+		LoginViewController *loginViewController = [[LoginViewController alloc] initWithTarget:self action:@selector(loginDidFinish)];
+		DishByMeNavigationController *navigationController = [[DishByMeNavigationController alloc] initWithRootViewController:loginViewController];
+		navigationController.navigationBarHidden = YES;
+		[loginViewController release];
+		
+		[self presentViewController:navigationController animated:YES completion:nil];
+		[navigationController release];
+	}
+}
+
+
+#pragma mark -
+#pragma mark LoginViewController
+
+- (void)loginDidFinish
+{
 	
-	_commentInput.enabled = NO;
-	
-	[self sendComment];
 }
 
 @end
