@@ -33,6 +33,11 @@ enum {
 	_tableView.backgroundColor = [UIColor colorWithRed:0xF3 / 255.0 green:0xEE / 255.0 blue:0xEA / 255.0 alpha:1];
 	[self.view addSubview:_tableView];
 	
+	_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake( 0, -_tableView.bounds.size.height, self.view.frame.size.width, _tableView.bounds.size.height )];
+	_refreshHeaderView.delegate = self;
+	_refreshHeaderView.backgroundColor = self.view.backgroundColor;
+	[_tableView addSubview:_refreshHeaderView];
+	
 	_dishes = [[NSMutableArray alloc] init];
 	
 	_loader = [[JLHTTPLoader alloc] init];
@@ -99,6 +104,7 @@ enum {
 			}
 			
 			[_tableView reloadData];
+			[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 		}
 	}
 	
@@ -122,6 +128,25 @@ enum {
 			[_tableView reloadData];
 		}
 	}
+}
+
+
+#pragma mark -
+#pragma mark EGORefreshTableHeaderDelegate
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)refreshHeaerView
+{
+	[self updateDishes];
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)refreshHeaerView
+{
+	return [_loader hasRequestId:kRequestIdUpdateDishes];
+}
+
+- (NSDate *)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)refreshHeaerView
+{
+	return [NSDate date];
 }
 
 
@@ -190,6 +215,16 @@ enum {
 	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
 	[dishDetailViewController release];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
 }
 
 @end

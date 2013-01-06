@@ -15,6 +15,12 @@ PASSWORD = "비밀번호";
 LOGIN = "로그인";
 LOGIN_WITH_FACEBOOK = "페이스북으로 로그인";
 
+// 
+"PULL_DOWN_TO_UPDATE" = "업데이트하시려면 아래로 당기세요.";
+"RELEASE_TO_UPDATE" = "업데이트하시려면 당겼다 놓으세요.";
+"LAST_UPDATED" = "최근 업데이트";
+"LOADING" = "로딩중...";
+
 // DishDetailView
 EDIT = "수정";
 FORK = "포크";

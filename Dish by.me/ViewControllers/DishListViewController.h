@@ -8,14 +8,17 @@
 
 #import <UIKit/UIKit.h>
 #import "JLHTTPLoader.h"
+#import "EGORefreshTableHeaderView.h"
 
-@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
+@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate, EGORefreshTableHeaderDelegate>
 {
 	UITableView *_tableView;
 	NSMutableArray *_dishes;
 	JLHTTPLoader *_loader;
 	NSInteger _offset;
 	BOOL _loadedLastDish;
+	
+	EGORefreshTableHeaderView *_refreshHeaderView;
 }
 
 @end
