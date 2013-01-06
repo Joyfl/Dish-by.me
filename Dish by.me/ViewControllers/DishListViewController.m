@@ -12,7 +12,6 @@
 #import "Utils.h"
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
-//#import "DishTileCell.h"
 #import "DishListCell.h"
 
 @implementation DishListViewController
