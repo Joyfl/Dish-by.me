@@ -20,7 +20,6 @@
 	NSInteger _offset;
 	
 	UITableView *_tableView;
-	BOOL _scrollEnabled;
 	
 	CGFloat _messageRowHeight;
 	UILabel *_forkedFromLabel;

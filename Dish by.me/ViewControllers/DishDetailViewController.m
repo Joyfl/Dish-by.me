@@ -57,6 +57,7 @@ enum {
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	_tableView.backgroundColor = self.view.backgroundColor;
+	_tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 0, 0, 40, 0 );
 	[self.view addSubview:_tableView];
 	
 	_comments = [[NSMutableArray alloc] init];
@@ -87,11 +88,13 @@ enum {
 	
 	[_tableView addSubview:_commentBar];
 	
+	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
+	[self.view addGestureRecognizer:tapRecognizer];
+	[tapRecognizer release];
+	
 	_dim = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
 	_dim.alpha = 0;
 	[self.view addSubview:_dim];
-	
-	_scrollEnabled = YES;
 	
 	_loader = [[JLHTTPLoader alloc] init];
 	_loader.delegate = self;
@@ -599,22 +602,20 @@ enum {
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-	if( !_scrollEnabled ) return;
-	
-	if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 114 )
+	if( !_commentInput.isFirstResponder )
 	{
-		_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
+		if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 114 )
+			_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
+		else
+			_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + UIScreenHeight - 154, 320, 40 );
 	}
 	else
 	{
-		_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + UIScreenHeight - 154, 320, 40 );
+		if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 279 )
+			_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
+		else
+			_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + UIScreenHeight - 319, 320, 40 );
 	}
-}
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-	_scrollEnabled = YES;
-	[_commentInput resignFirstResponder];
 }
 
 
@@ -636,6 +637,16 @@ enum {
 	AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 	appDelegate.currentWritingForkedFrom = _dish.dishId;
 	[appDelegate cameraButtonDidTouchUpInside];
+}
+
+- (void)backgroundDidTap
+{
+	[_commentInput resignFirstResponder];
+	
+	[UIView animateWithDuration:0.18 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^
+	{
+		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+	} completion:nil];
 }
 
 - (void)recipeButtonDidTouchUpInside
@@ -671,11 +682,15 @@ enum {
 
 - (void)commentInputDidBeginEditing
 {
-	_scrollEnabled = NO;
-	
-	[_tableView setContentOffset:CGPointMake( 0, _tableView.contentSize.height - 216 + 15 ) animated:YES];
-	[UIView animateWithDuration:0.25 animations:^{
+	[UIView animateWithDuration:0.2 animations:^
+	{
 		_commentBar.frame = CGRectMake( 0, _tableView.contentSize.height - 41, 320, 40 );
+	}
+	 
+	completion:^(BOOL finished)
+	{
+		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 279 );
+		[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 	}];
 }
 
@@ -683,8 +698,6 @@ enum {
 {
 	if( [UserManager manager].loggedIn )
 	{
-		_scrollEnabled = YES;
-		
 		if( _commentInput.text.length == 0 )
 			return;
 		
