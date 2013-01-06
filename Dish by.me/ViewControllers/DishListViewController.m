@@ -156,7 +156,10 @@ enum {
 		if( !cell )
 			cell = [[DishListCell alloc] initWithReuseIdentifier:cellId];
 		
-		cell.dish = [_dishes objectAtIndex:indexPath.row];
+		Dish *dish = [_dishes objectAtIndex:indexPath.row];
+		[cell setDish:dish atIndexPath:indexPath];
+		[dish release];
+		
 		return cell;
 	}
 	else

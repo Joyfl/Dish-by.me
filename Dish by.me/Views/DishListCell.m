@@ -50,9 +50,10 @@
 	return _dish;
 }
 
-- (void)setDish:(Dish *)dish
+- (void)setDish:(Dish *)dish atIndexPath:(NSIndexPath *)indexPath
 {
-	_dish = dish;
+	_dish = [dish retain];
+	_indexPath = [indexPath retain];
 	[self fillContents];
 }
 
@@ -66,10 +67,13 @@
 	}
 	else
 	{
-		[JLHTTPLoader loadAsyncFromURL:_dish.photoURL completion:^(NSData *data)
-		 {
-			 _photoView.image = _dish.photo = [UIImage imageWithData:data];
-		 }];
+		[JLHTTPLoader loadAsyncFromURL:_dish.photoURL withObject:_indexPath completion:^(id indexPath, NSData *data)
+		{
+			_dish.photo = [UIImage imageWithData:data];
+			
+			if( [_indexPath isEqual:indexPath] )
+				_photoView.image = _dish.photo;
+		}];
 	}
 	
 	_commentCountLabel.text = [NSString stringWithFormat:@"%d", _dish.commentCount];
@@ -77,10 +81,5 @@
 	_dishNameLabel.text = _dish.dishName;
 	_userNameLabel.text = [NSString stringWithFormat:@"by %@", _dish.userName];
 }
-
-//- (void)layoutContentView
-//{
-//	
-//}
 
 @end

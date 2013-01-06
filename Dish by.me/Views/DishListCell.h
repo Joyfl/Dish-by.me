@@ -12,6 +12,7 @@
 @interface DishListCell : UITableViewCell
 {
 	Dish *_dish;
+	NSIndexPath *_indexPath;
 	
 	UIImageView *_photoView;
 	UILabel *_commentCountLabel;
@@ -21,8 +22,9 @@
 	UIButton *_bookmarkButton;
 }
 
-@property (nonatomic, retain) Dish *dish;
+@property (nonatomic, readonly) Dish *dish;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+- (void)setDish:(Dish *)dish atIndexPath:(NSIndexPath *)indexPath;
 
 @end

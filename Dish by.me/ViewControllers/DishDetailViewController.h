@@ -16,6 +16,7 @@
 	Dish *_dish;
 	JLHTTPLoader *_loader;
 	NSMutableArray *_comments;
+	NSInteger _offset;
 	
 	UITableView *_tableView;
 	BOOL _scrollEnabled;

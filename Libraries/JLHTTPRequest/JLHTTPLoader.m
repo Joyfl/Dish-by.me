@@ -157,4 +157,25 @@
 	} );
 }
 
++ (void)loadAsyncFromURL:(NSString *)url withObject:(id)object completion:(void (^)(id object, NSData *data))completion
+{
+	dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 ), ^{
+		id cachedData = [[JLHTTPCacheManager manager] cachedObjectForKey:url];
+		if( cachedData )
+		{
+			dispatch_async( dispatch_get_main_queue(), ^{
+				completion( object, cachedData );
+			} );
+			return;
+		}
+		
+		NSData *data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:url]];
+		[[JLHTTPCacheManager manager] cacheObject:data forKey:url];
+		
+		dispatch_async( dispatch_get_main_queue(), ^{
+			completion( object, data );
+		} );
+	} );
+}
+
 @end

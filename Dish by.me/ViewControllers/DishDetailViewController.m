@@ -30,41 +30,17 @@ enum {
 };
 
 enum {
-	kRequestIdComment = 0,
-	kRequestIdLike = 1,
-	kRequestIdSendComment = 2,
-	kRequestIdForkedFrom = 3,
+	kRequestIdComments = 0,
+	kRequestIdMoreComments = 1,
+	kRequestIdBookmark = 2,
+	kRequestIdSendComment = 3,
 };
 
 - (id)initWithDish:(Dish *)dish
 {
 	self = [super init];
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
-	_tableView.delegate = self;
-	_tableView.dataSource = self;
-	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	_tableView.backgroundColor = [UIColor colorWithRed:0xF3 / 255.0 green:0xEE / 255.0 blue:0xEA / 255.0 alpha:1];
-	[self.view addSubview:_tableView];
-	
-	_dish = [_dish retain];
-	
-	_loader = [[JLHTTPLoader alloc] init];
-	_loader.delegate = self;
-	NSString *rootURL = API_ROOT_URL;
-	
-	NSString *url = nil;
-	if( _dish.forkedFromId )
-	{
-		url = [NSString stringWithFormat:@"%@/dish/%d", rootURL, _dish.forkedFromId];
-//		[_loader addRequestWithRequestId:kRequestIdForkedFrom url:url method:JLHTTPLoaderMethodGET params:nil];
-	}
-	
-	url = [NSString stringWithFormat:@"%@/dish/%d/comment", rootURL, _dish.dishId];
-//	[_loader addRequestWithRequestId:kRequestIdComment url:url method:JLHTTPLoaderMethodGET params:nil];
-	[_loader startLoading];
-	
-	_comments = [[NSMutableArray alloc] init];
+	_dish = [dish retain];
 	
 	DishByMeBarButtonItem *backButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = backButton;
@@ -84,6 +60,15 @@ enum {
 	}
 	
 	self.navigationItem.title = _dish.dishName;
+	
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
+	_tableView.delegate = self;
+	_tableView.dataSource = self;
+	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	_tableView.backgroundColor = [UIColor colorWithRed:0xF3 / 255.0 green:0xEE / 255.0 blue:0xEA / 255.0 alpha:1];
+	[self.view addSubview:_tableView];
+	
+	_comments = [[NSMutableArray alloc] init];
 	
 	_commentBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 367, 320, 40 )];
 	
@@ -118,26 +103,25 @@ enum {
 	
 	_scrollEnabled = YES;
 	
+	_loader = [[JLHTTPLoader alloc] init];
+	_loader.delegate = self;
+	
+	[self loadComments];
+	
 	return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-	[_dish release];
-	[_loader release];
-	[_comments release];
-	[_tableView release];
-	[_recipeButton release];
-	[_commentBar release];
-	[_commentInput release];
-	[_dim release];
+	[_dish release]; _dish = nil;
+	[_loader release]; _loader = nil;
+	[_comments release]; _comments = nil;
+	[_tableView release]; _tableView = nil;
+	[_recipeButton release]; _recipeButton = nil;
+	[_commentBar release]; _commentBar = nil;
+	[_commentInput release]; _commentInput = nil;
+	[_dim release]; _dim = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -147,13 +131,36 @@ enum {
 
 
 #pragma mark -
+#pragma mark Loading
+
+- (void)loadComments
+{
+	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
+	req.requestId = kRequestIdComments;
+	req.url = [NSString stringWithFormat:@"%@dish/%d/comments", API_ROOT_URL, _dish.dishId];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
+- (void)loadMoreComments
+{
+	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
+	req.requestId = kRequestIdMoreComments;
+	req.url = [NSString stringWithFormat:@"%@dish/%d/comments", API_ROOT_URL, _dish.dishId];
+	[req setParam:[NSString stringWithFormat:@"%d", _offset] forKey:@"offset"];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
+
+#pragma mark -
 #pragma mark JLHTTPLoaderDelegate
 
-- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
+- (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response
 {
 	NSDictionary *result = [Utils parseJSON:response.body];
 	
-	if( response.requestId == kRequestIdComment )
+	if( response.requestId == kRequestIdComments )
 	{
 		NSArray *data = [result objectForKey:@"data"];
 		
@@ -169,7 +176,7 @@ enum {
 		[_tableView reloadData];
 	}
 	
-	else if( response.requestId == kRequestIdLike )
+	else if( response.requestId == kRequestIdBookmark )
 	{
 		if( [[result objectForKey:@"status"] isEqualToString:@"ok"] )
 		{
@@ -195,12 +202,6 @@ enum {
 			_commentInput.text = @"";
 			_commentInput.enabled = YES;
 		}
-	}
-	
-	else if( response.requestId == kRequestIdForkedFrom )
-	{
-		_dish.forkedFromName = [result objectForKey:@"dish_name"];
-		_forkedFromLabel.text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), _dish.forkedFromName];
 	}
 }
 
@@ -321,18 +322,10 @@ enum {
 				[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 				[cell addSubview:profileImageButton];
 				
-				dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
-					NSString *rootURL = WEB_ROOT_URL;
-					NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/images/thumbnail/profile/%d.jpg", rootURL, _dish.userId]]];
-					if( data == nil )
-						return;
-					
-					dispatch_async( dispatch_get_main_queue(), ^{
-						[profileImageButton setBackgroundImage:[UIImage imageWithData:data] forState:UIControlStateNormal];
-					} );
-					
-					[data release];
-				});
+				[JLHTTPLoader loadAsyncFromURL:_dish.userThumbnailURL completion:^(NSData *data)
+				{
+					[profileImageButton setBackgroundImage:_dish.userThumbnail = [UIImage imageWithData:data] forState:UIControlStateNormal];
+				}];
 				
 				UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 9, 270, 30 )];
 				nameLabel.text = _dish.userName;
