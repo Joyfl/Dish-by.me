@@ -11,7 +11,7 @@
 
 @implementation Dish
 
-@synthesize dishId, dishName, userId, userName, userPhotoURL, userPhoto, description, recipe, photoURL, photo, thumbnailURL, thumbnail, forkedFromId, forkedFromName, forkCount, bookmarkCount, commentCount, createdTime, updatedTime;
+@synthesize dishId, dishName, userId, userName, userPhotoURL, userPhoto, description, recipe, photoURL, photo, thumbnailURL, thumbnail, forkedFromId, forkedFromName, forkCount, bookmarkCount, commentCount, bookmarked, createdTime, updatedTime;
 
 + (id)dishFromDictionary:(NSDictionary *)dictionary
 {
@@ -27,9 +27,10 @@
 	dish.thumbnailURL = [dictionary objectForKey:@"thumbnail_url"];
 	dish.forkedFromId = [[[dictionary objectForKey:@"forked_from"] objectForKey:@"id"] integerValue];
 	dish.forkedFromName = [[dictionary objectForKey:@"forked_from"] objectForKey:@"name"];
-	dish.forkCount = [[dictionary objectForKey:@"forkCount"] integerValue];
-	dish.bookmarkCount = [[dictionary objectForKey:@"bookmarkCount"] integerValue];
-	dish.commentCount = [[dictionary objectForKey:@"commentCount"] integerValue];
+	dish.forkCount = [[dictionary objectForKey:@"fork_count"] integerValue];
+	dish.bookmarkCount = [[dictionary objectForKey:@"bookmark_count"] integerValue];
+	dish.commentCount = [[dictionary objectForKey:@"comment_count"] integerValue];
+	dish.bookmarked = [[dictionary objectForKey:@"bookmarked"] boolValue];
 	dish.createdTime = [dictionary objectForKey:@"createdTime"];
 	dish.updatedTime = [dictionary objectForKey:@"updatedTime"];
 	return dish;

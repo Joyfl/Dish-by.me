@@ -32,8 +32,8 @@ enum {
 enum {
 	kRequestIdComments = 0,
 	kRequestIdMoreComments = 1,
-	kRequestIdBookmark = 2,
-	kRequestIdSendComment = 3,
+	kRequestIdSendComment = 2,
+	kRequestIdBookmark = 3,
 };
 
 - (id)initWithDish:(Dish *)dish
@@ -41,7 +41,7 @@ enum {
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	
-	_dish = [dish retain];
+	_dish = dish;
 	
 	DishByMeBarButtonItem *backButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = backButton;
@@ -160,6 +160,18 @@ enum {
 	[_loader startLoading];
 }
 
+- (void)bookmark
+{
+	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
+	req.requestId = kRequestIdBookmark;
+	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
+	req.method = @"POST";
+	[req setParam:@"ceo" forKey:@"access_token"];
+//	[req setParam:[UserManager accessToken] forKey:@"access_token"];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
 
 #pragma mark -
 #pragma mark JLHTTPLoaderDelegate
@@ -185,17 +197,6 @@ enum {
 		}
 	}
 	
-	else if( response.requestId == kRequestIdBookmark )
-	{
-		if( response.statusCode == 200 )
-		{
-			_likeButton.enabled = NO;
-			[UIView animateWithDuration:0.25 animations:^{
-				_likeButton.frame = CGRectMake( 320, 14, 100, 25 );
-			}];
-		}
-	}
-	
 	else if( response.requestId == kRequestIdSendComment )
 	{
 		if( response.statusCode == 201 )
@@ -212,6 +213,23 @@ enum {
 			[_tableView reloadData];
 			_commentInput.text = @"";
 			_commentInput.enabled = YES;
+		}
+	}
+	
+	else if( response.requestId == kRequestIdBookmark )
+	{
+		if( response.statusCode == 201 )
+		{
+			_dish.updatedTime = [result objectForKey:@"updated_time"];
+			_dish.bookmarkCount = [[result objectForKey:@"bookmark_count"] integerValue];
+			_dish.bookmarked = YES;
+			
+			_bookmarkButton.enabled = NO;
+			[UIView animateWithDuration:0.25 animations:^{
+				_bookmarkButton.frame = CGRectMake( 320, 14, 100, 25 );
+			}];
+			
+			[_tableView reloadData];
 		}
 	}
 }
@@ -473,17 +491,18 @@ enum {
 			{
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:yumCellId];
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-				cell.textLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_LIKE", @"" ), _dish.bookmarkCount];
 				cell.textLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
 				cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 				cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
 				cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 				
-				_likeButton = [[UIButton alloc] initWithFrame:CGRectMake( 220, 14, 100, 25 )];
-				[_likeButton setBackgroundImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
-				[_likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-				[cell addSubview:_likeButton];
+				_bookmarkButton = [[UIButton alloc] initWithFrame:CGRectMake( 220, 14, 100, 25 )];
+				[_bookmarkButton setBackgroundImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
+				[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+				[cell addSubview:_bookmarkButton];
 			}
+			
+			cell.textLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount];
 			
 			return cell;
 		}
@@ -611,11 +630,9 @@ enum {
 	[recipeView release];
 }
 
-- (void)likeButtonDidTouchUpInside
+- (void)bookmarkButtonDidTouchUpInside
 {
-#warning Const에서 가져오기
-//	[_loader addRequestWithRequestId:kRequestIdLike url:[NSString stringWithFormat:@"http://api.dishby.me/dish/%d/yum", _dish.dishId] method:JLHTTPLoaderMethodPOST params:nil];
-	[_loader startLoading];
+	[self bookmark];
 }
 
 - (void)commentInputDidBeginEditing
@@ -631,7 +648,6 @@ enum {
 - (void)sendButtonDidTouchUpInside
 {
 	_scrollEnabled = YES;
-	
 	
 	if( _commentInput.text.length == 0 )
 	{

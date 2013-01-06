@@ -27,6 +27,7 @@
 	NSInteger forkCount;
 	NSInteger bookmarkCount;
 	NSInteger commentCount;
+	BOOL bookmarked;
 	NSString *createdTime;
 	NSString *updatedTime;
 }
@@ -48,6 +49,7 @@
 @property (nonatomic, assign) NSInteger forkCount;
 @property (nonatomic, assign) NSInteger bookmarkCount;
 @property (nonatomic, assign) NSInteger commentCount;
+@property (nonatomic, assign) BOOL bookmarked;
 @property (nonatomic, retain) NSString *createdTime;
 @property (nonatomic, retain) NSString *updatedTime;
 

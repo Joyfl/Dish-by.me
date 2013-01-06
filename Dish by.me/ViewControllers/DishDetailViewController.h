@@ -25,7 +25,7 @@
 	UILabel *_forkedFromLabel;
 	
 	UIButton *_recipeButton;
-	UIButton *_likeButton;
+	UIButton *_bookmarkButton;
 	UIView *_commentBar;
 	UITextField *_commentInput;
 	
