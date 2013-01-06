@@ -14,6 +14,8 @@
 	UITableView *_tableView;
 	NSMutableArray *_dishes;
 	JLHTTPLoader *_loader;
+	NSInteger _offset;
+	BOOL *_loadedLastDish;
 }
 
 @end

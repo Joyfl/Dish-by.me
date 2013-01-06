@@ -120,7 +120,7 @@
 	responseHeader = nil;
 	[responseHeader release];
 	
-	[delegate loaderDidFinishLoading:response];
+	[delegate loader:self didFinishLoading:response];
 	
 	if( queue.count > 0 )
 		[self startLoading];

@@ -47,6 +47,6 @@
 //- (BOOL)shouldLoadWithToken:(JLHTTPRequest *)token;
 
 @required
-- (void)loaderDidFinishLoading:(JLHTTPResponse *)response;
+- (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response;
 
 @end

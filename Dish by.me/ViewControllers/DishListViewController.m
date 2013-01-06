@@ -18,7 +18,8 @@
 @implementation DishListViewController
 
 enum {
-	kRequestIdDishes = 0
+	kRequestIdUpdateDishes = 0,
+	kRequestIdLoadMoreDishes = 1,
 };
 
 - (id)init
@@ -37,20 +38,9 @@ enum {
 	_loader = [[JLHTTPLoader alloc] init];
 	_loader.delegate = self;
 	
-	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
-	[_loader addRequest:req];
-	[_loader startLoading];
-	
 	self.navigationItem.title = @"Dish by.me";
 	
     return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
 }
 
 - (void)viewDidUnload
@@ -61,24 +51,64 @@ enum {
 	[_loader release];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+
+#pragma mark -
+#pragma mark Loading
+
+- (void)updateDishes
 {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
+	req.requestId = kRequestIdUpdateDishes;
+	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
+- (void)loadMoreDishes
+{
+	NSLog( @"[DishListViewController] loadMoreDishes" );
+	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
+	req.requestId = kRequestIdLoadMoreDishes;
+	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
+	[req setParam:[NSString stringWithFormat:@"%d", _offset] forKey:@"offset"];
+	[_loader addRequest:req];
+	[_loader startLoading];
 }
 
 
 #pragma mark -
 #pragma mark JLHTTPLoaderDelegate
 
-- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
+- (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response
 {
-	NSLog( @"%@", response.body );
-	if( response.requestId == kRequestIdDishes )
+	NSLog( @"body : %@", response.body );
+	
+	if( response.requestId == kRequestIdUpdateDishes )
+	{
+		if( response.statusCode == 200 )
+		{
+			[_dishes removeAllObjects];
+			
+			NSDictionary *result = [Utils parseJSON:response.body];
+			NSArray *data = [result objectForKey:@"data"];
+			
+			for( NSDictionary *d in data )
+			{
+				Dish *dish = [Dish dishFromDictionary:d];
+				[_dishes addObject:dish];
+			}
+			
+			[_tableView reloadData];
+		}
+	}
+	
+	else if( response.requestId == kRequestIdLoadMoreDishes )
 	{
 		if( response.statusCode == 200 )
 		{
 			NSDictionary *result = [Utils parseJSON:response.body];
 			NSArray *data = [result objectForKey:@"data"];
+			_offset += data.count;
 			
 			for( NSDictionary *d in data )
 			{
@@ -95,13 +125,20 @@ enum {
 #pragma mark -
 #pragma mark UITableView
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+	return 1 + !_loadedLastDish;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+	if( section == 1 ) return 1;
 	return _dishes.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if( indexPath.section == 1 ) return 45;
 	return 350;
 }
 
@@ -109,12 +146,36 @@ enum {
 {
 	static NSString *cellId = @"dishCell";
 	
-	DishListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-	if( !cell )
-		cell = [[DishListCell alloc] initWithReuseIdentifier:cellId];
-	
-	cell.dish = [_dishes objectAtIndex:indexPath.row];
-	return cell;
+	if( indexPath.section == 0 )
+	{
+		DishListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+		if( !cell )
+			cell = [[DishListCell alloc] initWithReuseIdentifier:cellId];
+		
+		cell.dish = [_dishes objectAtIndex:indexPath.row];
+		return cell;
+	}
+	else
+	{
+		static NSString *activityIndicatorCellId = @"activityIndicatorCellId";
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:activityIndicatorCellId];
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:activityIndicatorCellId];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
+		
+		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		indicator.frame = CGRectMake( 141, 0, 37, 37 );
+		[indicator startAnimating];
+		[cell.contentView addSubview:indicator];
+		[indicator release];
+		
+		if( ![_loader hasRequestId:kRequestIdLoadMoreDishes] )
+			[self loadMoreDishes];
+		
+		return cell;
+	}
 }
 
 
