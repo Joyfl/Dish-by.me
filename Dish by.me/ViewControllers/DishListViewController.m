@@ -116,6 +116,9 @@ enum {
 				[_dishes addObject:dish];
 			}
 			
+			if( data.count == 0 )
+				_loadedLastDish = YES;
+			
 			[_tableView reloadData];
 		}
 	}
@@ -139,7 +142,8 @@ enum {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if( indexPath.section == 1 ) return 45;
-	return 350;
+	if( indexPath.row == _dishes.count - 1 ) return 355;
+	return 345;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

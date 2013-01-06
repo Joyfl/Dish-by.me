@@ -15,7 +15,7 @@
 	NSMutableArray *_dishes;
 	JLHTTPLoader *_loader;
 	NSInteger _offset;
-	BOOL *_loadedLastDish;
+	BOOL _loadedLastDish;
 }
 
 @end

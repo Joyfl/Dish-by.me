@@ -14,15 +14,16 @@
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	_photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 10, 10, 300, 300 )];
+	_photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 14, 292, 292 )];
 #warning 임시 이미지
 	_photoView.image = [UIImage imageNamed:@"dish_tile_loading.png"];
 	[self.contentView addSubview:_photoView];
 	
-//	UIImageView *frameView = [[UIImageView alloc] initWithFrame:CGRectMake()];
-//	frameView.image = [UIImage imageNamed:@".png"];
-//	[self.contentView addSubview:frameView];
+	UIImageView *frameView = [[UIImageView alloc] initWithFrame:CGRectMake( 5, 5, 310, 345 )];
+	frameView.image = [UIImage imageNamed:@"dish_writing_border.png"];
+	[self.contentView addSubview:frameView];
 	
 	_commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 30, 290, 30, 15 )];
 	_commentCountLabel.textColor = [UIColor whiteColor];
@@ -32,10 +33,10 @@
 	_bookmarkCountLabel.textColor = [UIColor whiteColor];
 	[self.contentView addSubview:_bookmarkCountLabel];
 	
-	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 330, 200, 20 )];
+	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 310, 200, 20 )];
 	[self.contentView addSubview:_dishNameLabel];
 	
-	_userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 200, 330, 200, 20 )];
+	_userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 200, 310, 200, 20 )];
 	[self.contentView addSubview:_userNameLabel];
 	
 	return self;
