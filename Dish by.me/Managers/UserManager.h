@@ -8,18 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@class User;
-
 @interface UserManager : NSObject
-{
-	BOOL loggedIn;
-	NSString *_accessToken;
-	User *user;
-}
 
 @property (nonatomic, assign) BOOL loggedIn;
 @property (nonatomic, retain) NSString *accessToken;
-@property (nonatomic, retain) User *user;
+@property (nonatomic, assign) NSInteger userId;
+@property (nonatomic, retain) NSString *userName;
+@property (nonatomic, retain) UIImage *userPhoto;
 
 + (UserManager *)manager;
 

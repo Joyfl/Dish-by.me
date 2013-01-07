@@ -254,17 +254,16 @@ enum {
 
 - (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response
 {
-	NSDictionary *data = [Utils parseJSON:response.body];
+	NSDictionary *body = [Utils parseJSON:response.body];
 	
 	if( response.requestId == kReqIdLogin )
 	{
 		if( response.statusCode == 200 )
 		{
-			NSLog( @"Login succeed!" );
 			JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
 			req.requestId = kReqIdUser;
 			req.url = [NSString stringWithFormat:@"%@user", API_ROOT_URL];
-			[req setParam:[UserManager manager].accessToken = [data objectForKey:@"access_token"] forKey:@"access_token"];
+			[req setParam:[UserManager manager].accessToken = [body objectForKey:@"access_token"] forKey:@"access_token"];
 			[_loader addRequest:req];
 			[_loader startLoading];
 		}
@@ -280,16 +279,11 @@ enum {
 	{
 		if( response.statusCode == 200 )
 		{
-			NSLog( @"Get user succeed!" );
-			User *user = [User userFromDictionary:data];
-			
-			[JLHTTPLoader loadAsyncFromURL:user.photoURL completion:^(NSData *data)
+			[JLHTTPLoader loadAsyncFromURL:[body objectForKey:@"photo_url"]  completion:^(NSData *data)
 			{
-				NSLog( @"Get photo succeed!" );
-				user.photo = [UIImage imageWithData:data];
-				[UserManager manager].user = user;
-				[user release];
-				
+				[UserManager manager].userId = [[body objectForKey:@"user_id"] integerValue];
+				[UserManager manager].userName = [body objectForKey:@"name"];
+				[UserManager manager].userPhoto = [UIImage imageWithData:data];
 				[UserManager manager].loggedIn = YES;
 				
 				[_target performSelector:_action];

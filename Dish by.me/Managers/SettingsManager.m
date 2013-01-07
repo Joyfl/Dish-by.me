@@ -26,7 +26,7 @@
 {
 	_settings = [[NSMutableDictionary alloc] initWithDictionary:[NSDictionary dictionaryWithContentsOfFile:[(NSString *)[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"Settings.plist"]]];
 	
-//	if( _settings == nil )
+	if( _settings == nil )
 	{
 		_settings = [[NSMutableDictionary alloc] init];
 		[self flush];

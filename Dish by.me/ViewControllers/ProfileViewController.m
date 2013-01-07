@@ -87,8 +87,6 @@ enum {
 		_user.dishCount = [[result objectForKey:@"dish_count"] integerValue];
 		_user.bookmarkCount = [[result objectForKey:@"yum_count"] integerValue];
 		
-		[[SettingsManager manager] setSetting:_user.name forKey:SETTING_KEY_USER_NAME];
-		
 		self.navigationItem.title = _user.name;
 		
 		dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{

@@ -231,7 +231,7 @@
 
 - (void)loginDidFinish
 {
-	[profileViewController activateWithUserId:[UserManager manager].user.userId];
+	[profileViewController activateWithUserId:[UserManager manager].userId];
 }
 
 @end

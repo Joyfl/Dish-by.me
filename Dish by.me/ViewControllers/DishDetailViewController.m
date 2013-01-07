@@ -108,7 +108,7 @@ enum {
 {
 	if( [UserManager manager].loggedIn )
 	{
-		if( _dish.userId == [UserManager manager].user.userId )
+		if( _dish.userId == [UserManager manager].userId )
 		{
 			DishByMeBarButtonItem *editButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
 			self.navigationItem.rightBarButtonItem = editButton;
@@ -225,9 +225,9 @@ enum {
 		{
 			Comment *comment = [[Comment alloc] init];
 			comment.commentId = [[result objectForKey:@"id"] integerValue];
-			comment.userId = [UserManager manager].user.userId;
-			comment.userName = [UserManager manager].user.name;
-			comment.userPhoto = [UserManager manager].user.photo;
+			comment.userId = [UserManager manager].userId;
+			comment.userName = [UserManager manager].userName;
+			comment.userPhoto = [UserManager manager].userPhoto;
 			comment.message = _commentInput.text;
 			comment.createdTime = [result objectForKey:@"created_time"];
 			[_comments addObject:comment];
