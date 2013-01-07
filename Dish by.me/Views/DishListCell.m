@@ -80,8 +80,8 @@
 	[_bookmarkButton setImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside];
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragOutside];
-	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUp:) forControlEvents:UIControlEventTouchUpInside];
-	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
+	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUp) forControlEvents:UIControlEventTouchUpOutside];
 	[_bookmarkButtonContainer addSubview:_bookmarkButton];
 	
 	CALayer *maskLayer = [CALayer layer];
@@ -190,14 +190,13 @@
 	}
 }
 
-- (void)bookmarkButtonTouchUp:(UIButton *)button
+- (void)bookmarkButtonTouchUpInside
 {
-	NSLog( @"%f", button.frame.origin.x );
 	// Just touch when not bookmarked
-	if( button.frame.origin.x == 75 )
+	if( _bookmarkButton.frame.origin.x == 75 )
 	{
 		[UIView animateWithDuration:0.12 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-			_bookmarkButton.frame = CGRectMake( 60, 0, 100, 25 );
+			_bookmarkButton.frame = CGRectMake( 65, 0, 100, 25 );
 		} completion:^(BOOL finished) {
 			[UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
 				_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
@@ -214,19 +213,26 @@
 	}
 	
 	// Just touch when bookmarked
-	else if( button.frame.origin.x == 10 )
+	else if( _bookmarkButton.frame.origin.x == 10 )
 	{
 		[self setBookmarked:NO animated:YES];
 	}
-	
+	else
+	{
+		[self bookmarkButtonTouchUp];
+	}
+}
+
+- (void)bookmarkButtonTouchUp
+{
 	// Swipe to bookmark
-	else if( button.frame.origin.x < 30 )
+	if( _bookmarkButton.frame.origin.x < 30 )
 	{
 		[self setBookmarked:YES animated:YES];
 	}
 	
 	// Swipe to unbookmark
-	else if( button.frame.origin.x >= 30 )
+	else if( _bookmarkButton.frame.origin.x >= 30 )
 	{
 		[self setBookmarked:NO animated:YES];
 	}
