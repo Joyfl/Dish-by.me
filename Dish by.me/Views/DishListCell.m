@@ -133,9 +133,21 @@
 	}
 	
 	_commentCountLabel.text = [NSString stringWithFormat:@"%d", _dish.commentCount];
-	_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _dish.bookmarkCount];
 	_dishNameLabel.text = _dish.dishName;
 	_userNameLabel.text = [NSString stringWithFormat:@"by %@", _dish.userName];
+	
+	[self updateBookmarkUI];
+	
+	
+	if( _dish.bookmarked )
+		_bookmarkButton.frame = CGRectMake( 10, 0, 100, 25 );
+	else
+		_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+}
+
+- (void)updateBookmarkUI
+{
+	_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _dish.bookmarkCount];
 	
 	if( !_dish.bookmarked )
 	{
@@ -147,11 +159,6 @@
 		_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark_selected.png"];
 		_bookmarkCountLabel.textColor = [Utils colorWithHex:0x0DCFEC alpha:1];
 	}
-	
-	if( _dish.bookmarked )
-		_bookmarkButton.frame = CGRectMake( 10, 0, 100, 25 );
-	else
-		_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
 }
 
 - (void)layoutContentView
@@ -245,9 +252,8 @@
 		if( !_dish.bookmarked )
 		{
 			_dish.bookmarked = YES;
-			
-			_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark_selected.png"];
-			_bookmarkCountLabel.textColor = [Utils colorWithHex:0x0DCFEC alpha:1];
+			_dish.bookmarkCount++;
+			[self updateBookmarkUI];
 			
 			[UIView animateWithDuration:0.18 animations:^{
 				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
@@ -295,9 +301,8 @@
 		if( _dish.bookmarked )
 		{
 			_dish.bookmarked = NO;
-			
-			_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark.png"];
-			_bookmarkCountLabel.textColor = [UIColor whiteColor];
+			_dish.bookmarkCount--;
+			[self updateBookmarkUI];
 		}
 		
 		if( animated )
