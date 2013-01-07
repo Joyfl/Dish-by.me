@@ -701,6 +701,7 @@ enum {
 		if( _commentInput.text.length == 0 )
 			return;
 		
+		[self backgroundDidTap];
 		_commentInput.enabled = NO;
 		
 		[self sendComment];
