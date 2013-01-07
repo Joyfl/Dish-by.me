@@ -21,6 +21,9 @@
 "LAST_UPDATED" = "최근 업데이트";
 "LOADING" = "로딩중...";
 
+// DishListView
+"BOOKMARK" = "북마크";
+
 // DishDetailView
 "EDIT" = "수정";
 "FORK" = "포크";

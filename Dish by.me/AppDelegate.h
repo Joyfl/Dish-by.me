@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class DishListViewController;
 @class ProfileViewController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
 	UITabBarController *tabBarController;
 	
+	DishListViewController *dishListViewController;
 	ProfileViewController *profileViewController;
 	
 	NSInteger currentWritingForkedFrom;

@@ -13,6 +13,7 @@
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
 #import "DishListCell.h"
+#import "UserManager.h"
 
 @implementation DishListViewController
 
@@ -67,9 +68,12 @@ enum {
 
 - (void)updateDishes
 {
+	NSLog( @"[DishListViewController] updateDishes" );
 	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
 	req.requestId = kRequestIdUpdateDishes;
 	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
+	if( [UserManager manager].loggedIn )
+		[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[_loader addRequest:req];
 	[_loader startLoading];
 }
@@ -81,6 +85,8 @@ enum {
 	req.requestId = kRequestIdLoadMoreDishes;
 	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
 	[req setParam:[NSString stringWithFormat:@"%d", _offset] forKey:@"offset"];
+	if( [UserManager manager].loggedIn )
+		[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[_loader addRequest:req];
 	[_loader startLoading];
 }

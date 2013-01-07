@@ -8,6 +8,8 @@
 
 #import "DishListCell.h"
 #import "JLHTTPLoader.h"
+#import "Utils.h"
+#import <QuartzCore/CALayer.h>
 
 @implementation DishListCell
 
@@ -24,21 +26,72 @@
 	frameView.image = [UIImage imageNamed:@"dish_border_big.png"];
 	[self.contentView addSubview:frameView];
 	
-	_commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 30, 290, 30, 15 )];
+	_commentIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 22, 280, 13, 17 )];
+	_commentIconView.image = [UIImage imageNamed:@"icon_comment.png"];
+	[self.contentView addSubview:_commentIconView];
+	
+	_commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 38, 281, 18, 13 )];
 	_commentCountLabel.textColor = [UIColor whiteColor];
 	_commentCountLabel.backgroundColor = [UIColor clearColor];
+	_commentCountLabel.font = [UIFont boldSystemFontOfSize:13];
+	_commentCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+	_commentCountLabel.shadowOffset = CGSizeMake( 0, 1 );
+	_commentCountLabel.textAlignment = NSTextAlignmentCenter;
 	[self.contentView addSubview:_commentCountLabel];
 	
-	_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 60, 290, 30, 15 )];
+	_bookmarkIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 59, 280, 13, 17 )];
+	[self.contentView addSubview:_bookmarkIconView];
+	
+	_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 74, 281, 18, 13 )];
 	_bookmarkCountLabel.textColor = [UIColor whiteColor];
 	_bookmarkCountLabel.backgroundColor = [UIColor clearColor];
+	_bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:13];
+	_bookmarkCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+	_bookmarkCountLabel.shadowOffset = CGSizeMake( 0, 1 );
+	_bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
 	[self.contentView addSubview:_bookmarkCountLabel];
 	
-	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 310, 200, 20 )];
+	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 16, 312, 280, 20 )];
+	_dishNameLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	_dishNameLabel.font = [UIFont boldSystemFontOfSize:16];
+	_dishNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+	_dishNameLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[self.contentView addSubview:_dishNameLabel];
 	
-	_userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 200, 310, 200, 20 )];
+	_userNameLabel = [[UILabel alloc] init];
+	_userNameLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	_userNameLabel.font = [UIFont systemFontOfSize:11];
+	_userNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+	_userNameLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[self.contentView addSubview:_userNameLabel];
+	
+	_bookmarkLabel = [[UILabel alloc] init];
+	_bookmarkLabel.text = NSLocalizedString( @"BOOKMARK", @"북마크" );
+	_bookmarkLabel.textColor = [UIColor colorWithWhite:0 alpha:0.3];
+	_bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
+	[_bookmarkLabel sizeToFit];
+	_bookmarkLabel.frame = CGRectMake( 282 - _bookmarkLabel.frame.size.width, 316, _bookmarkLabel.frame.size.width, 15 );
+	[self.contentView addSubview:_bookmarkLabel];
+	
+	_bookmarkButtonContainer = [[UIView alloc] initWithFrame:CGRectMake( 210, 312, 100, 25 )];
+	[self.contentView addSubview:_bookmarkButtonContainer];
+	
+	_bookmarkButton = [[UIButton alloc] init];
+	[_bookmarkButton setImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
+	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside];
+	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragOutside];
+	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUp:) forControlEvents:UIControlEventTouchUpInside];
+	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUp:) forControlEvents:UIControlEventTouchUpOutside];
+	[_bookmarkButtonContainer addSubview:_bookmarkButton];
+	
+	CALayer *maskLayer = [CALayer layer];
+	maskLayer.contents = (id)[UIImage imageNamed:@"search_bar.png"].CGImage;
+	maskLayer.bounds = CGRectMake( 0, 0, 200, 50 );
+	_bookmarkButtonContainer.layer.mask = maskLayer;
+	
+	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 306, 313, 4, 20 )];
+	ribbonGradientView.image = [UIImage imageNamed:@"ribbon_gradient.png"];
+	[self.contentView addSubview:ribbonGradientView];
 	
 	return self;
 }
@@ -57,6 +110,7 @@
 	_dish = [dish retain];
 	_indexPath = [indexPath retain];
 	[self fillContents];
+	[self layoutContentView];
 }
 
 
@@ -82,6 +136,172 @@
 	_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _dish.bookmarkCount];
 	_dishNameLabel.text = _dish.dishName;
 	_userNameLabel.text = [NSString stringWithFormat:@"by %@", _dish.userName];
+	
+	if( !_dish.bookmarked )
+	{
+		_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark.png"];
+		_bookmarkCountLabel.textColor = [UIColor whiteColor];
+	}
+	else
+	{
+		_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark_selected.png"];
+		_bookmarkCountLabel.textColor = [Utils colorWithHex:0x0DCFEC alpha:1];
+	}
+	
+	if( _dish.bookmarked )
+		_bookmarkButton.frame = CGRectMake( 10, 0, 100, 25 );
+	else
+		_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+}
+
+- (void)layoutContentView
+{
+	[_dishNameLabel sizeToFit];
+	
+	_userNameLabel.frame = CGRectMake( _dishNameLabel.frame.origin.x + _dishNameLabel.frame.size.width + 10, 317, 100, 15 );
+	[_userNameLabel sizeToFit];
+}
+
+#pragma mark -
+#pragma mark Bookmark Button
+
+- (void)bookmarkButtonDrag:(UIButton *)button withEvent:(UIEvent *)event
+{
+	UITouch *touch = [[event touchesForView:button] anyObject];
+	CGPoint prevLocation = [touch previousLocationInView:_bookmarkButtonContainer];
+	CGPoint location = [touch locationInView:_bookmarkButtonContainer];
+	
+	CGFloat deltaX = location.x - prevLocation.x;
+	
+	CGRect frame = button.frame;
+	CGFloat buttonX = frame.origin.x + deltaX;
+	
+	if( 0 < buttonX && buttonX < 85 )
+	{
+		frame.origin = CGPointMake( buttonX, frame.origin.y );
+		button.frame = frame;
+		
+		_bookmarkLabel.alpha = ( buttonX - 30 ) / 45;
+		
+		if( button.frame.origin.x < 30 )
+			[self setBookmarked:YES animated:NO];
+		else
+			[self setBookmarked:NO animated:NO];
+	}
+}
+
+- (void)bookmarkButtonTouchUp:(UIButton *)button
+{
+	NSLog( @"%f", button.frame.origin.x );
+	// Just touch when not bookmarked
+	if( button.frame.origin.x == 75 )
+	{
+		[UIView animateWithDuration:0.12 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+			_bookmarkButton.frame = CGRectMake( 60, 0, 100, 25 );
+		} completion:^(BOOL finished) {
+			[UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+				_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+			} completion:^(BOOL finished) {
+				[UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+					_bookmarkButton.frame = CGRectMake( 70, 0, 100, 25 );
+				} completion:^(BOOL finished) {
+					[UIView animateWithDuration:0.08 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+						_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+					} completion:nil];
+				}];
+			}];
+		}];
+	}
+	
+	// Just touch when bookmarked
+	else if( button.frame.origin.x == 10 )
+	{
+		[self setBookmarked:NO animated:YES];
+	}
+	
+	// Swipe to bookmark
+	else if( button.frame.origin.x < 30 )
+	{
+		[self setBookmarked:YES animated:YES];
+	}
+	
+	// Swipe to unbookmark
+	else if( button.frame.origin.x >= 30 )
+	{
+		[self setBookmarked:NO animated:YES];
+	}
+}
+
+- (void)setBookmarked:(BOOL)bookmarked animated:(BOOL)animated
+{
+	if( bookmarked )
+	{
+		if( !_dish.bookmarked )
+		{
+			_dish.bookmarked = YES;
+			
+			_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark_selected.png"];
+			_bookmarkCountLabel.textColor = [Utils colorWithHex:0x0DCFEC alpha:1];
+			
+			[UIView animateWithDuration:0.18 animations:^{
+				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+			} completion:^(BOOL finished) {
+				[UIView animateWithDuration:0.14 animations:^{
+					_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
+				} completion:^(BOOL finished) {
+					[UIView animateWithDuration:0.12 animations:^{
+						_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
+					} completion:^(BOOL finished) {
+						[UIView animateWithDuration:0.1 animations:^{
+							_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+						}];
+					}];
+				}];
+			}];
+			
+			[UIView animateWithDuration:0.2 delay:0.14 options:0 animations:^{
+				_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.4, 1.4);
+			} completion:^(BOOL finished) {
+				[UIView animateWithDuration:0.15 animations:^{
+					_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
+				} completion:^(BOOL finished) {
+					[UIView animateWithDuration:0.12 animations:^{
+						_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+					} completion:^(BOOL finished) {
+						[UIView animateWithDuration:0.1 animations:^{
+							_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+						}];
+					}];
+				}];
+			}];
+		}
+		
+		if( animated )
+		{
+			[UIView animateWithDuration:0.25 animations:^{
+				_bookmarkLabel.alpha = 0;
+				_bookmarkButton.frame = CGRectMake( 10, 0, 100, 25 );
+			}];
+		}
+	}
+	else if( !bookmarked )
+	{
+		if( _dish.bookmarked )
+		{
+			_dish.bookmarked = NO;
+			
+			_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark.png"];
+			_bookmarkCountLabel.textColor = [UIColor whiteColor];
+		}
+		
+		if( animated )
+		{
+			[UIView animateWithDuration:0.25 animations:^{
+				_bookmarkLabel.alpha = 1;
+				_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+			}];
+		}
+	}
 }
 
 @end

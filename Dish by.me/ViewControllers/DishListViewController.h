@@ -21,4 +21,6 @@
 	EGORefreshTableHeaderView *_refreshHeaderView;
 }
 
+- (void)updateDishes;
+
 @end

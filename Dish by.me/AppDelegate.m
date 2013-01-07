@@ -39,7 +39,7 @@
 	tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar_bg.png"];
 	tabBarController.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tab_bar_bg_selected.png"];
 	
-	DishListViewController *dishListViewController = [[DishListViewController alloc] init];
+	dishListViewController = [[DishListViewController alloc] init];
 	DishByMeNavigationController *dishNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:dishListViewController];
 //	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
 	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_dish.png"];
@@ -231,6 +231,8 @@
 
 - (void)loginDidFinish
 {
+	NSLog( @"[AppDelegate] loginDidFinish" );
+	[dishListViewController updateDishes];
 	[profileViewController activateWithUserId:[UserManager manager].userId];
 }
 

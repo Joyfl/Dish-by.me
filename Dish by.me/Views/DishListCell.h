@@ -15,11 +15,15 @@
 	NSIndexPath *_indexPath;
 	
 	UIImageView *_photoView;
+	UIImageView *_commentIconView;
 	UILabel *_commentCountLabel;
+	UIImageView *_bookmarkIconView;
 	UILabel *_bookmarkCountLabel;
 	UILabel *_dishNameLabel;
 	UILabel *_userNameLabel;
+	UILabel *_bookmarkLabel;
 	UIButton *_bookmarkButton;
+	UIView *_bookmarkButtonContainer;
 }
 
 @property (nonatomic, readonly) Dish *dish;
