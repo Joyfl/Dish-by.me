@@ -8,18 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "Dish.h"
+#import "BookmarkButton.h"
 
 @class DishListCell;
-@protocol DishListCellDelegate
+@protocol DishListCellDelegate;
 
-- (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath;
-- (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath;
-- (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath;
-
-@end
-
-
-@interface DishListCell : UITableViewCell
+@interface DishListCell : UITableViewCell <BookmarkButtonDelegate>
 {
 	id<DishListCellDelegate> delegate;
 	Dish *_dish;
@@ -32,9 +26,7 @@
 	UILabel *_bookmarkCountLabel;
 	UILabel *_dishNameLabel;
 	UILabel *_userNameLabel;
-	UILabel *_bookmarkLabel;
-	UIButton *_bookmarkButton;
-	UIView *_bookmarkButtonContainer;
+	BookmarkButton *_bookmarkButton;
 }
 
 @property (nonatomic, retain) id<DishListCellDelegate> delegate;
@@ -42,5 +34,15 @@
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setDish:(Dish *)dish atIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+
+
+@protocol DishListCellDelegate
+
+- (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath;
+- (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath;
+- (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
