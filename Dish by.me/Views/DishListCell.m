@@ -12,6 +12,24 @@
 #import <QuartzCore/CALayer.h>
 #import "UserManager.h"
 
+@interface LargeTouchAreaButton : UIButton
+@end
+
+@implementation LargeTouchAreaButton
+
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
+	CGRect bounds = self.bounds;
+	bounds = CGRectMake( bounds.origin.x - 20,
+						bounds.origin.y - 50,
+						bounds.size.width + 40,
+						bounds.size.height + 100 );
+	return CGRectContainsPoint( bounds, point );
+}
+
+@end
+
+
 @implementation DishListCell
 
 @synthesize delegate;
@@ -78,10 +96,10 @@
 	_bookmarkLabel.frame = CGRectMake( 282 - _bookmarkLabel.frame.size.width, 316, _bookmarkLabel.frame.size.width, 15 );
 	[self.contentView addSubview:_bookmarkLabel];
 	
-	_bookmarkButtonContainer = [[UIView alloc] initWithFrame:CGRectMake( 210, 312, 100, 25 )];
+	_bookmarkButtonContainer = [[UIView alloc] initWithFrame:CGRectMake( 210, 290, 100, 60 )];
 	[self.contentView addSubview:_bookmarkButtonContainer];
 	
-	_bookmarkButton = [[UIButton alloc] init];
+	_bookmarkButton = [[LargeTouchAreaButton alloc] init];
 	[_bookmarkButton setImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside];
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragOutside];
@@ -91,10 +109,10 @@
 	
 	CALayer *maskLayer = [CALayer layer];
 	maskLayer.contents = (id)[UIImage imageNamed:@"search_bar.png"].CGImage;
-	maskLayer.bounds = CGRectMake( 0, 0, 200, 50 );
+	maskLayer.bounds = CGRectMake( 0, 0, 200, 400 );
 	_bookmarkButtonContainer.layer.mask = maskLayer;
 	
-	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 96, 1, 4, 20 )];
+	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 96, 22, 4, 20 )];
 	ribbonGradientView.image = [UIImage imageNamed:@"ribbon_gradient.png"];
 	[_bookmarkButtonContainer addSubview:ribbonGradientView];
 	
@@ -146,9 +164,9 @@
 	_bookmarkButtonContainer.hidden = ![UserManager manager].loggedIn;
 		 
 	if( _dish.bookmarked )
-		_bookmarkButton.frame = CGRectMake( 10, 0, 100, 25 );
+		[self setBookmarkButtonX:10];
 	else
-		_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+		[self setBookmarkButtonX:75];
 }
 
 - (void)updateBookmarkUI
@@ -220,16 +238,16 @@
 	if( _bookmarkButton.frame.origin.x == 75 )
 	{
 		[UIView animateWithDuration:0.12 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-			_bookmarkButton.frame = CGRectMake( 65, 0, 100, 25 );
+			[self setBookmarkButtonX:65];
 		} completion:^(BOOL finished) {
 			[UIView animateWithDuration:0.1 delay:0.1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-				_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+				[self setBookmarkButtonX:75];
 			} completion:^(BOOL finished) {
 				[UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-					_bookmarkButton.frame = CGRectMake( 70, 0, 100, 25 );
+					[self setBookmarkButtonX:70];
 				} completion:^(BOOL finished) {
 					[UIView animateWithDuration:0.08 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-						_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+						[self setBookmarkButtonX:75];
 					} completion:nil];
 				}];
 			}];
@@ -311,7 +329,7 @@
 		{
 			[UIView animateWithDuration:0.25 animations:^{
 				_bookmarkLabel.alpha = 0;
-				_bookmarkButton.frame = CGRectMake( 10, 0, 100, 25 );
+				[self setBookmarkButtonX:10];
 			}];
 		}
 	}
@@ -330,10 +348,15 @@
 		{
 			[UIView animateWithDuration:0.25 animations:^{
 				_bookmarkLabel.alpha = 1;
-				_bookmarkButton.frame = CGRectMake( 75, 0, 100, 25 );
+				[self setBookmarkButtonX:75];
 			}];
 		}
 	}
+}
+
+- (void)setBookmarkButtonX:(CGFloat)x
+{
+	_bookmarkButton.frame = CGRectMake( x, 21, 100, 25 );
 }
 
 @end
