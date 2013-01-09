@@ -184,24 +184,24 @@ enum {
 	[_loader startLoading];
 }
 
-- (void)bookmarkDish:(Dish *)dish
+- (void)bookmark
 {
-	NSLog( @"[DishListViewController] bookmarkDish:" );
+	NSLog( @"[DishDetailViewController] bookmarkDish:" );
 	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
 	req.requestId = kRequestIdBookmark;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, dish.dishId];
+	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
 	req.method = @"POST";
 	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[_loader addRequest:req];
 	[_loader startLoading];
 }
 
-- (void)unbookmarkDish:(Dish *)dish
+- (void)unbookmar
 {
-	NSLog( @"[DishListViewController] unbookmarkDish:" );
+	NSLog( @"[DishDetailViewController] unbookmarkDish:" );
 	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
 	req.requestId = kRequestIdUnbookmark;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, dish.dishId];
+	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
 	req.method = @"DELETE";
 	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[_loader addRequest:req];
@@ -757,6 +757,7 @@ enum {
 	{
 		if( !_dish.bookmarked )
 		{
+			[self bookmark];
 			_dish.bookmarked = YES;
 			_dish.bookmarkCount++;
 			[self updateBookmarkUI];
@@ -782,6 +783,7 @@ enum {
 	{
 		if( _dish.bookmarked )
 		{
+			[self unbookmark];
 			_dish.bookmarked = NO;
 			_dish.bookmarkCount--;
 			[self updateBookmarkUI];
