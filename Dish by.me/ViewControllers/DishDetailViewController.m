@@ -29,7 +29,7 @@ enum {
 	kRowProfile = 1,
 	kRowMessage = 2,
 	kRowRecipe = 3,
-	kRowYum = 4,
+	kRowBookmark = 4,
 };
 
 enum {
@@ -38,6 +38,7 @@ enum {
 	kRequestIdSendComment = 2,
 	kRequestIdBookmark = 3,
 	kRequestIdUnbookmark = 4,
+	kRequestIdReloadDish = 5,
 };
 
 - (id)initWithDish:(Dish *)dish
@@ -186,7 +187,7 @@ enum {
 
 - (void)bookmark
 {
-	NSLog( @"[DishDetailViewController] bookmarkDish:" );
+	NSLog( @"[DishDetailViewController] bookmarkDish" );
 	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
 	req.requestId = kRequestIdBookmark;
 	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
@@ -198,11 +199,22 @@ enum {
 
 - (void)unbookmark
 {
-	NSLog( @"[DishDetailViewController] unbookmarkDish:" );
+	NSLog( @"[DishDetailViewController] unbookmarkDish" );
 	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
 	req.requestId = kRequestIdUnbookmark;
 	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
 	req.method = @"DELETE";
+	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
+- (void)reloadDish
+{
+	NSLog( @"[DishDetailViewController] reloadDish" );
+	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
+	req.requestId = kRequestIdReloadDish;
+	req.url = [NSString stringWithFormat:@"%@dish/%d", API_ROOT_URL, _dish.dishId];
 	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[_loader addRequest:req];
 	[_loader startLoading];
@@ -273,6 +285,15 @@ enum {
 			NSLog( @"[DishDetailViewController] Unbookmark failed." );
 		}
 	}
+	
+	else if( response.requestId == kRequestIdReloadDish )
+	{
+		if( response.statusCode == 200 )
+		{
+			_dish.bookmarked = [[result objectForKey:@"bookmarked"] boolValue];
+			[_tableView reloadData];
+		}
+	}
 }
 
 
@@ -322,7 +343,7 @@ enum {
 					return 60;
 				return 0;
 				
-			case kRowYum:
+			case kRowBookmark:
 				return 50;
 		}
 			break;
@@ -539,7 +560,7 @@ enum {
 			
 			return cell;
 		}
-		else if( indexPath.row == kRowYum )
+		else if( indexPath.row == kRowBookmark )
 		{
 			UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:yumCellId];
 			if( !cell )
@@ -560,12 +581,14 @@ enum {
 				_bookmarkButton.delegate = self;
 				_bookmarkButton.parentView = cell.contentView;
 				_bookmarkButton.position = CGPointMake( 320, 14 );
-				
-				if( _dish.bookmarked )
-					_bookmarkButton.buttonX = 10;
-				else
-					_bookmarkButton.buttonX = 75;
 			}
+			
+			if( _dish.bookmarked )
+				_bookmarkButton.buttonX = 10;
+			else
+				_bookmarkButton.buttonX = 75;
+			
+			_bookmarkButton.hidden = ![UserManager manager].loggedIn;
 			
 			[self updateBookmarkUI];
 			
@@ -797,7 +820,7 @@ enum {
 
 - (void)loginDidFinish
 {
-	
+	[self reloadDish];
 }
 
 @end
