@@ -10,8 +10,11 @@
 #import "JLHTTPLoader.h"
 #import "Utils.h"
 #import <QuartzCore/CALayer.h>
+#import "UserManager.h"
 
 @implementation DishListCell
+
+@synthesize delegate;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -89,9 +92,9 @@
 	maskLayer.bounds = CGRectMake( 0, 0, 200, 50 );
 	_bookmarkButtonContainer.layer.mask = maskLayer;
 	
-	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 306, 313, 4, 20 )];
+	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 96, 1, 4, 20 )];
 	ribbonGradientView.image = [UIImage imageNamed:@"ribbon_gradient.png"];
-	[self.contentView addSubview:ribbonGradientView];
+	[_bookmarkButtonContainer addSubview:ribbonGradientView];
 	
 	return self;
 }
@@ -138,7 +141,8 @@
 	
 	[self updateBookmarkUI];
 	
-	
+	_bookmarkButtonContainer.hidden = ![UserManager manager].loggedIn;
+		 
 	if( _dish.bookmarked )
 		_bookmarkButton.frame = CGRectMake( 10, 0, 100, 25 );
 	else
@@ -251,6 +255,8 @@
 	{
 		if( !_dish.bookmarked )
 		{
+			[delegate dishListCell:self didBookmarkAtIndexPath:_indexPath];
+			
 			_dish.bookmarked = YES;
 			_dish.bookmarkCount++;
 			[self updateBookmarkUI];
@@ -300,6 +306,8 @@
 	{
 		if( _dish.bookmarked )
 		{
+			[delegate dishListCell:self didUnbookmarkAtIndexPath:_indexPath];
+			
 			_dish.bookmarked = NO;
 			_dish.bookmarkCount--;
 			[self updateBookmarkUI];

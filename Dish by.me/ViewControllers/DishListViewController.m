@@ -12,7 +12,6 @@
 #import "Utils.h"
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
-#import "DishListCell.h"
 #import "UserManager.h"
 
 @implementation DishListViewController
@@ -20,6 +19,8 @@
 enum {
 	kRequestIdUpdateDishes = 0,
 	kRequestIdLoadMoreDishes = 1,
+	kRequestIdBookmark = 2,
+	kRequestIdUnbookmark = 3,
 };
 
 - (id)init
@@ -91,6 +92,30 @@ enum {
 	[_loader startLoading];
 }
 
+- (void)bookmarkDish:(Dish *)dish
+{
+	NSLog( @"[DishListViewController] bookmarkDish:" );
+	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
+	req.requestId = kRequestIdBookmark;
+	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, dish.dishId];
+	req.method = @"POST";
+	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
+- (void)unbookmarkDish:(Dish *)dish
+{
+	NSLog( @"[DishListViewController] unbookmarkDish:" );
+	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
+	req.requestId = kRequestIdUnbookmark;
+	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, dish.dishId];
+	req.method = @"DELETE";
+	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
 
 #pragma mark -
 #pragma mark JLHTTPLoaderDelegate
@@ -135,6 +160,22 @@ enum {
 				_loadedLastDish = YES;
 			
 			[_tableView reloadData];
+		}
+	}
+	
+	else if( response.requestId == kRequestIdBookmark )
+	{
+		if( response.statusCode != 201 )
+		{
+			NSLog( @"[DishListViewController] Bookmark failed." );
+		}
+	}
+	
+	else if( response.requestId == kRequestIdUnbookmark )
+	{
+		if( response.statusCode != 200 )
+		{
+			NSLog( @"[DishListViewController] UnBookmark failed." );
 		}
 	}
 }
@@ -188,7 +229,10 @@ enum {
 	{
 		DishListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 		if( !cell )
+		{
 			cell = [[DishListCell alloc] initWithReuseIdentifier:cellId];
+			cell.delegate = self;
+		}
 		
 		Dish *dish = [_dishes objectAtIndex:indexPath.row];
 		[cell setDish:dish atIndexPath:indexPath];
@@ -219,13 +263,6 @@ enum {
 	}
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
-	[self.navigationController pushViewController:dishDetailViewController animated:YES];
-	[dishDetailViewController release];
-}
-
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
@@ -234,6 +271,27 @@ enum {
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
 	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+}
+
+
+#pragma mark -
+#pragma mark DishListCellDelegate
+
+- (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath
+{
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
+	[self.navigationController pushViewController:dishDetailViewController animated:YES];
+	[dishDetailViewController release];
+}
+
+- (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath
+{
+	[self bookmarkDish:[_dishes objectAtIndex:indexPath.row]];
+}
+
+- (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath
+{
+	[self unbookmarkDish:[_dishes objectAtIndex:indexPath.row]];
 }
 
 @end

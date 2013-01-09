@@ -9,8 +9,19 @@
 #import <UIKit/UIKit.h>
 #import "Dish.h"
 
+@class DishListCell;
+@protocol DishListCellDelegate
+
+- (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath;
+- (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath;
+- (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+
 @interface DishListCell : UITableViewCell
 {
+	id<DishListCellDelegate> delegate;
 	Dish *_dish;
 	NSIndexPath *_indexPath;
 	
@@ -26,6 +37,7 @@
 	UIView *_bookmarkButtonContainer;
 }
 
+@property (nonatomic, retain) id<DishListCellDelegate> delegate;
 @property (nonatomic, readonly) Dish *dish;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;

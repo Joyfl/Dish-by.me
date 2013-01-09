@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "JLHTTPLoader.h"
 #import "EGORefreshTableHeaderView.h"
+#import "DishListCell.h"
 
-@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate, EGORefreshTableHeaderDelegate>
+@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate, EGORefreshTableHeaderDelegate, DishListCellDelegate>
 {
 	UITableView *_tableView;
 	NSMutableArray *_dishes;
