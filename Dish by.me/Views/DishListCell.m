@@ -112,7 +112,7 @@
 	maskLayer.bounds = CGRectMake( 0, 0, 200, 400 );
 	_bookmarkButtonContainer.layer.mask = maskLayer;
 	
-	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 96, 22, 4, 20 )];
+	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 96, 23, 4, 20 )];
 	ribbonGradientView.image = [UIImage imageNamed:@"ribbon_gradient.png"];
 	[_bookmarkButtonContainer addSubview:ribbonGradientView];
 	
@@ -161,7 +161,7 @@
 	
 	[self updateBookmarkUI];
 	
-	_bookmarkButtonContainer.hidden = ![UserManager manager].loggedIn;
+	_bookmarkLabel.hidden = _bookmarkButtonContainer.hidden = ![UserManager manager].loggedIn;
 		 
 	if( _dish.bookmarked )
 		[self setBookmarkButtonX:10];
@@ -356,7 +356,7 @@
 
 - (void)setBookmarkButtonX:(CGFloat)x
 {
-	_bookmarkButton.frame = CGRectMake( x, 21, 100, 25 );
+	_bookmarkButton.frame = CGRectMake( x, 22, 100, 25 );
 }
 
 @end
