@@ -23,6 +23,8 @@
 	
 	_photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 12, 292, 292 )];
 	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
+	_photoView.userInteractionEnabled = YES;
+	[_photoView addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoViewDidTap)] autorelease]];
 	[self.contentView addSubview:_photoView];
 	
 	UIImageView *frameView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, 350 )];
@@ -172,6 +174,17 @@
 	_userNameLabel.frame = CGRectMake( _dishNameLabel.frame.origin.x + _dishNameLabel.frame.size.width + 10, 317, 100, 15 );
 	[_userNameLabel sizeToFit];
 }
+
+
+#pragma mark -
+#pragma mark Photo View
+
+- (void)photoViewDidTap
+{
+	NSLog( @"tap" );
+	[delegate dishListCell:self didTouchPhotoViewAtIndexPath:_indexPath];
+}
+
 
 #pragma mark -
 #pragma mark Bookmark Button
