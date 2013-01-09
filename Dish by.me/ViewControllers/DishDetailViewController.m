@@ -37,6 +37,7 @@ enum {
 	kRequestIdMoreComments = 1,
 	kRequestIdSendComment = 2,
 	kRequestIdBookmark = 3,
+	kRequestIdUnbookmark = 4,
 };
 
 - (id)initWithDish:(Dish *)dish
@@ -183,12 +184,25 @@ enum {
 	[_loader startLoading];
 }
 
-- (void)bookmark
+- (void)bookmarkDish:(Dish *)dish
 {
+	NSLog( @"[DishListViewController] bookmarkDish:" );
 	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
 	req.requestId = kRequestIdBookmark;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
+	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, dish.dishId];
 	req.method = @"POST";
+	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
+- (void)unbookmarkDish:(Dish *)dish
+{
+	NSLog( @"[DishListViewController] unbookmarkDish:" );
+	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
+	req.requestId = kRequestIdUnbookmark;
+	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, dish.dishId];
+	req.method = @"DELETE";
 	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[_loader addRequest:req];
 	[_loader startLoading];
@@ -245,14 +259,18 @@ enum {
 		{
 			_dish.updatedTime = [result objectForKey:@"updated_time"];
 			_dish.bookmarkCount = [[result objectForKey:@"bookmark_count"] integerValue];
-			_dish.bookmarked = YES;
-			
-//			_bookmarkButton.enabled = NO;
-			[UIView animateWithDuration:0.25 animations:^{
-//				_bookmarkButton.frame = CGRectMake( 320, 14, 100, 25 );
-			}];
-			
-			[_tableView reloadData];
+		}
+		else
+		{
+			NSLog( @"[DishDetailViewController] Bookmark failed." );
+		}
+	}
+	
+	else if( response.requestId == kRequestIdUnbookmark )
+	{
+		if( response.statusCode != 200 )
+		{
+			NSLog( @"[DishDetailViewController] Unbookmark failed." );
 		}
 	}
 }
@@ -529,6 +547,7 @@ enum {
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:yumCellId];
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
 				
+				_bookmarkLabel = cell.textLabel;
 				cell.textLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
 				cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 				cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
@@ -541,10 +560,14 @@ enum {
 				_bookmarkButton.delegate = self;
 				_bookmarkButton.parentView = cell.contentView;
 				_bookmarkButton.position = CGPointMake( 320, 14 );
+				
+				if( _dish.bookmarked )
+					_bookmarkButton.buttonX = 10;
+				else
+					_bookmarkButton.buttonX = 75;
 			}
 			
-			_bookmarkIconView.image = !_dish.bookmarked ? [UIImage imageNamed:@"icon_bookmark.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
-			cell.textLabel.text = [NSString stringWithFormat:@"     %@", [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount]];
+			[self updateBookmarkUI];
 			
 			return cell;
 		}
@@ -623,6 +646,12 @@ enum {
 	}
 }
 
+- (void)updateBookmarkUI
+{
+	_bookmarkIconView.image = !_dish.bookmarked ? [UIImage imageNamed:@"icon_bookmark.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
+	_bookmarkLabel.text = [NSString stringWithFormat:@"     %@", [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount]];
+}
+
 
 #pragma mark -
 #pragma mark Selectors
@@ -680,11 +709,6 @@ enum {
 	[recipeView release];
 }
 
-- (void)bookmarkButtonDidTouchUpInside
-{
-	[self bookmark];
-}
-
 - (void)commentInputDidBeginEditing
 {
 	[UIView animateWithDuration:0.2 animations:^
@@ -735,7 +759,7 @@ enum {
 		{
 			_dish.bookmarked = YES;
 			_dish.bookmarkCount++;
-			[_tableView reloadData];
+			[self updateBookmarkUI];
 			
 			[UIView animateWithDuration:0.18 animations:^{
 				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
@@ -760,7 +784,7 @@ enum {
 		{
 			_dish.bookmarked = NO;
 			_dish.bookmarkCount--;
-			[_tableView reloadData];
+			[self updateBookmarkUI];
 		}
 	}
 }

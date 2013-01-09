@@ -27,6 +27,7 @@
 	
 	UIButton *_recipeButton;
 	UIImageView *_bookmarkIconView;
+	UILabel *_bookmarkLabel;
 	BookmarkButton *_bookmarkButton;
 	UIView *_commentBar;
 	UITextField *_commentInput;
