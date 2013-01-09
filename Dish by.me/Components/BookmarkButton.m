@@ -41,11 +41,11 @@
 	_bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
 	_bookmarkLabel.backgroundColor = [UIColor clearColor];
 	[_bookmarkLabel sizeToFit];
-	_bookmarkLabel.frame = CGRectMake( 72 - _bookmarkLabel.frame.size.width, 26, _bookmarkLabel.frame.size.width, 15 );
+	_bookmarkLabel.frame = CGRectMake( 72 - _bookmarkLabel.frame.size.width, 4, _bookmarkLabel.frame.size.width, 15 );
 	
 	_bookmarkButtonContainer = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 100, 60 )];
 	
-	_bookmarkButton = [[LargeTouchAreaButton alloc] init];
+	_bookmarkButton = [[LargeTouchAreaButton alloc] initWithFrame:CGRectMake( 75, 0, 100, 25 )];
 	[_bookmarkButton setImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside];
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragOutside];
@@ -55,10 +55,10 @@
 	
 	CALayer *maskLayer = [CALayer layer];
 	maskLayer.contents = (id)[UIImage imageNamed:@"search_bar.png"].CGImage;
-	maskLayer.bounds = CGRectMake( 0, 0, 200, 400 );
+	maskLayer.bounds = CGRectMake( 0, -44, 200, 400 );
 	_bookmarkButtonContainer.layer.mask = maskLayer;
 	
-	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 96, 23, 4, 20 )];
+	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 96, 1, 4, 20 )];
 	ribbonGradientView.image = [UIImage imageNamed:@"ribbon_gradient.png"];
 	[_bookmarkButtonContainer addSubview:ribbonGradientView];
 	[ribbonGradientView release];
@@ -191,7 +191,7 @@
 - (void)setPosition:(CGPoint)position
 {
 	CGRect frame = _bookmarkLabel.frame;
-	frame.origin = CGPointMake( position.x - 28 - _bookmarkLabel.frame.size.width, position.y + 26 );
+	frame.origin = CGPointMake( position.x - 28 - _bookmarkLabel.frame.size.width, position.y + 4 );
 	_bookmarkLabel.frame = frame;
 	
 	frame = _bookmarkButtonContainer.frame;
@@ -207,7 +207,7 @@
 
 - (void)setButtonX:(CGFloat)buttonX
 {
-	_bookmarkButton.frame = CGRectMake( buttonX, 22, 100, 25 );
+	_bookmarkButton.frame = CGRectMake( buttonX, 0, 100, 25 );
 }
 
 

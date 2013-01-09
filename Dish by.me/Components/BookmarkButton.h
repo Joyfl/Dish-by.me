@@ -26,8 +26,6 @@
 @property (nonatomic, assign) CGFloat buttonX;
 @property (nonatomic, assign) BOOL hidden;
 
-- (void)addToParentView:(UIView *)parentView atPosition:(CGPoint)position;
-
 @end
 
 

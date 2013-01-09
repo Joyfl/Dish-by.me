@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "JLHTTPLoader.h"
 #import "DishByMeButton.h"
+#import "BookmarkButton.h"
 
 @class Dish;
 
-@interface DishDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
+@interface DishDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate, BookmarkButtonDelegate>
 {
 	Dish *_dish;
 	JLHTTPLoader *_loader;
@@ -25,7 +26,8 @@
 	UILabel *_forkedFromLabel;
 	
 	UIButton *_recipeButton;
-	UIButton *_bookmarkButton;
+	UIImageView *_bookmarkIconView;
+	BookmarkButton *_bookmarkButton;
 	UIView *_commentBar;
 	UITextField *_commentInput;
 	DishByMeButton *_sendButton;

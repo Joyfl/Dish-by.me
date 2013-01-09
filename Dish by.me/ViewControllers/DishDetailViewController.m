@@ -247,9 +247,9 @@ enum {
 			_dish.bookmarkCount = [[result objectForKey:@"bookmark_count"] integerValue];
 			_dish.bookmarked = YES;
 			
-			_bookmarkButton.enabled = NO;
+//			_bookmarkButton.enabled = NO;
 			[UIView animateWithDuration:0.25 animations:^{
-				_bookmarkButton.frame = CGRectMake( 320, 14, 100, 25 );
+//				_bookmarkButton.frame = CGRectMake( 320, 14, 100, 25 );
 			}];
 			
 			[_tableView reloadData];
@@ -512,7 +512,7 @@ enum {
 				[bgView addSubview:_recipeButton];
 				
 				UIImageView *bottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
-				bottomLine.frame = CGRectMake( 0, 54, 320, 10 );
+				bottomLine.frame = CGRectMake( 0, 54, 320, 8 );
 				[bgView addSubview:bottomLine];
 				
 				[cell addSubview:bgView];
@@ -528,18 +528,23 @@ enum {
 			{
 				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:yumCellId];
 				cell.selectionStyle = UITableViewCellSelectionStyleNone;
+				
 				cell.textLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
 				cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
 				cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
 				cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 				
-				_bookmarkButton = [[UIButton alloc] initWithFrame:CGRectMake( 220, 14, 100, 25 )];
-				[_bookmarkButton setBackgroundImage:[UIImage imageNamed:@"ribbon.png"] forState:UIControlStateNormal];
-				[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-				[cell addSubview:_bookmarkButton];
+				_bookmarkIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 10, 18, 13, 17 )];
+				[cell.contentView addSubview:_bookmarkIconView];
+				
+				_bookmarkButton = [[BookmarkButton alloc] init];
+				_bookmarkButton.delegate = self;
+				_bookmarkButton.parentView = cell.contentView;
+				_bookmarkButton.position = CGPointMake( 320, 14 );
 			}
 			
-			cell.textLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount];
+			_bookmarkIconView.image = !_dish.bookmarked ? [UIImage imageNamed:@"icon_bookmark.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
+			cell.textLabel.text = [NSString stringWithFormat:@"     %@", [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount]];
 			
 			return cell;
 		}
@@ -715,6 +720,48 @@ enum {
 		
 		[self presentViewController:navigationController animated:YES completion:nil];
 		[navigationController release];
+	}
+}
+
+
+#pragma mark -
+#pragma mark BookmarkButtonDelegate
+
+- (void)bookmarkButton:(BookmarkButton *)button didChangeBookmarked:(BOOL)bookmarked
+{
+	if( bookmarked )
+	{
+		if( !_dish.bookmarked )
+		{
+			_dish.bookmarked = YES;
+			_dish.bookmarkCount++;
+			[_tableView reloadData];
+			
+			[UIView animateWithDuration:0.18 animations:^{
+				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+			} completion:^(BOOL finished) {
+				[UIView animateWithDuration:0.14 animations:^{
+					_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
+				} completion:^(BOOL finished) {
+					[UIView animateWithDuration:0.12 animations:^{
+						_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
+					} completion:^(BOOL finished) {
+						[UIView animateWithDuration:0.1 animations:^{
+							_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+						}];
+					}];
+				}];
+			}];
+		}
+	}
+	else if( !bookmarked )
+	{
+		if( _dish.bookmarked )
+		{
+			_dish.bookmarked = NO;
+			_dish.bookmarkCount--;
+			[_tableView reloadData];
+		}
 	}
 }
 

@@ -73,7 +73,7 @@
 	_bookmarkButton = [[BookmarkButton alloc] init];
 	_bookmarkButton.delegate = self;
 	_bookmarkButton.parentView = self.contentView;
-	_bookmarkButton.position = CGPointMake( 310, 290 );
+	_bookmarkButton.position = CGPointMake( 310, 311 );
 	
 	return self;
 }
