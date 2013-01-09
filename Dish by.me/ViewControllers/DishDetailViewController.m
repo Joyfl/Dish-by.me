@@ -196,7 +196,7 @@ enum {
 	[_loader startLoading];
 }
 
-- (void)unbookmar
+- (void)unbookmark
 {
 	NSLog( @"[DishDetailViewController] unbookmarkDish:" );
 	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
