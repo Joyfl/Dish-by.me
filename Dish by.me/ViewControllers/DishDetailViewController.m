@@ -257,7 +257,7 @@ enum {
 			comment.userName = [UserManager manager].userName;
 			comment.userPhoto = [UserManager manager].userPhoto;
 			comment.message = _commentInput.text;
-			comment.createdTime = [result objectForKey:@"created_time"];
+			comment.createdTime = [Utils dateFromString:[result objectForKey:@"created_time"]];
 			comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
 			[comment calculateMessageHeight];
 			[_comments addObject:comment];
