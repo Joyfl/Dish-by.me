@@ -28,8 +28,10 @@
 	NSInteger bookmarkCount;
 	NSInteger commentCount;
 	BOOL bookmarked;
-	NSString *createdTime;
-	NSString *updatedTime;
+	NSDate *createdTime;
+	NSString *relativeCreatedTime;
+	NSDate *updatedTime;
+	NSString *relativeUpdatedTime;
 }
 
 @property (nonatomic, assign) NSInteger dishId;
@@ -50,9 +52,12 @@
 @property (nonatomic, assign) NSInteger bookmarkCount;
 @property (nonatomic, assign) NSInteger commentCount;
 @property (nonatomic, assign) BOOL bookmarked;
-@property (nonatomic, retain) NSString *createdTime;
-@property (nonatomic, retain) NSString *updatedTime;
+@property (nonatomic, retain) NSDate *createdTime;
+@property (nonatomic, retain) NSString *relativeCreatedTime;
+@property (nonatomic, retain) NSDate *updatedTime;
+@property (nonatomic, retain) NSString *relativeUpdatedTime;
 
 + (id)dishFromDictionary:(NSDictionary *)dictionary;
+- (void)updateRelativeTime;
 
 @end

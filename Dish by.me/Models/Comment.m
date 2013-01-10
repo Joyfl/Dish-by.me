@@ -7,6 +7,7 @@
 //
 
 #import "Comment.h"
+#import "Utils.h"
 
 @implementation Comment
 
@@ -22,7 +23,14 @@
 	comment.message = [dictionary objectForKey:@"message"];
 	comment.createdTime = [dictionary objectForKey:@"created_time"];
 	comment.updatedTime = [dictionary objectForKey:@"updated_time"];
+	[comment updateRelativeTime];
 	return comment;
+}
+
+- (void)updateRelativeTime
+{
+	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
+	self.relativeUpdatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
 }
 
 @end

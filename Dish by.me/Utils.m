@@ -45,4 +45,132 @@
 	return output;
 }
 
++ (NSDate *)dateFromString:(NSString *)string
+{
+	NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+	formatter.dateFormat = @"eee, dd MMM yyyy HH:mm:ss ZZZZ";
+	formatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+	formatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+	return [formatter dateFromString:string];
+}
+
++ (NSDate *)dateToLocalTimeZone:(NSDate *)date
+{
+	NSTimeZone *timeZone = [NSTimeZone localTimeZone];
+    NSInteger seconds = [timeZone secondsFromGMTForDate:date];
+    return [NSDate dateWithTimeInterval:seconds sinceDate:date];
+}
+
++ (NSDate *)dateToGlobalTimeZone:(NSDate *)date
+{
+	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+    NSInteger seconds = [timeZone secondsFromGMTForDate:date];
+    return [NSDate dateWithTimeInterval:seconds sinceDate:date];
+}
+
+// date : Local timezone date
++ (NSString *)relativeDateString:(NSDate *)date withTime:(BOOL)withTime
+{
+//	NSDate *now = [Utils dateToLocalTimeZone:[NSDate date]];
+	NSDate *now = [NSDate date];
+	NSInteger interval = abs( [date timeIntervalSinceDate:now] );
+	
+	// n < 10초 : 몇 초 전
+	if( interval < 10 )
+	{
+		return NSLocalizedString( @"A_FEW_SECONDS_AGO", @"몇 초 전" );
+	}
+	
+	// 10초 <= n < 60초 : n초 전
+	else if( interval < 60 )
+	{
+		return [NSString stringWithFormat:NSLocalizedString( @"N_SECONDS_AGO", @"%d초 전" ), interval];
+	}
+	
+	// 1분
+	else if( interval == 60 )
+	{
+		return NSLocalizedString( @"A_MINUTE_AGO", @"1분 전" );
+	}
+	
+	// 1분 < n < 60분 : n분 전
+	else if( interval < 60 * 60 )
+	{
+		return [NSString stringWithFormat:NSLocalizedString( @"N_MINUTES_AGO", @"%d분 전" ), interval / 60];
+	}
+	
+	else if( interval == 60 )
+	{
+		return NSLocalizedString( @"AN_HOUR_AGO", @"1시간 전" );
+	}
+	
+	// 1시간 < n < 24시간 : n시간 전
+	else if( interval < 24 * 60 * 60 )
+	{
+		return [NSString stringWithFormat:NSLocalizedString( @"N_HOURS_AGO", @"%d시간 전" ), interval / ( 60 * 60 )];
+	}
+	
+	
+	// From here, return date with time if withTime is YES
+	NSString *string = nil;
+	
+	NSCalendar *calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+	
+	NSDateComponents *components = [calendar components:NSUIntegerMax fromDate:date];
+	NSInteger day = components.day;
+	NSInteger year = components.year;
+	
+	components = [calendar components:NSUIntegerMax fromDate:now];
+	NSInteger today = components.day;
+	NSInteger thisYear = components.year;
+	
+	NSInteger dayInterval = today - day;
+	
+	// 올해
+	if( year == thisYear )
+	{
+		// 1일 : 어제
+		if( dayInterval == 1 )
+		{
+			string = NSLocalizedString( @"YESTERDAY", @"어제" );
+		}
+		
+		// 1일 <= n < 7일 : n일 전
+		else if( dayInterval < 7 )
+		{
+			string = [NSString stringWithFormat:NSLocalizedString( @"N_DAYS_AGO", @"%d일 전" ), dayInterval];
+		}
+		
+		// 7일 : 일주일 전
+		else if( dayInterval == 7 )
+		{
+			string = NSLocalizedString( @"A_WEEK_AGO", @"일주일 전" );
+		}
+		
+		// 올해 8일 <= n : M월 d일
+		else if( year == thisYear )
+		{
+			NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+			formatter.dateFormat = NSLocalizedString( @"DATE_FORMAT_WITH_MONTH_DAY", @"M월 d일" );
+			string = [formatter stringFromDate:date];
+		}
+	}
+	
+	// 나머지 : YYYY년 M월 d일
+	else
+	{
+		NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+		formatter.dateFormat = NSLocalizedString( @"DATE_FORMAT_WITH_YEAR_MONTH_DAY", @"yyyy년 M월 d일" );
+		string = [formatter stringFromDate:date];
+	}
+	
+	if( withTime )
+	{
+		NSString *timeString = [NSDateFormatter localizedStringFromDate:date dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+		string = [NSString stringWithFormat:@"%@ %@", string, timeString];
+	}
+	
+	return string;
+}
+
 @end

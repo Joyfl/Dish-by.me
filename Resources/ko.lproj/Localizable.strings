@@ -51,3 +51,17 @@
 "LIKES" = "찜";
 
 // SettingsView
+
+
+// Date
+"A_FEW_SECONDS_AGO" = "몇 초 전";
+"N_SECONDS_AGO" = "%d초 전";
+"A_MINUTE_AGO" = "1분 전";
+"N_MINUTES_AGO" = "%d분 전";
+"AN_HOUR_AGO" = "1시간 전";
+"N_HOURS_AGO" = "%d시간 전";
+"YESTERDAY" = "어제";
+"N_DAYS_AGO" = "%d일 전";
+"A_WEEK_AGO" = "일주일 전";
+"DATE_FORMAT_WITH_MONTH_DAY" = "M월 d일";
+"DATE_FORMAT_WITH_YEAR_MONTH_DAY" = "yyyy년 M월 d일";

@@ -8,10 +8,11 @@
 
 #import "Dish.h"
 #import "Const.h"
+#import "Utils.h"
 
 @implementation Dish
 
-@synthesize dishId, dishName, userId, userName, userPhotoURL, userPhoto, description, recipe, photoURL, photo, thumbnailURL, thumbnail, forkedFromId, forkedFromName, forkCount, bookmarkCount, commentCount, bookmarked, createdTime, updatedTime;
+@synthesize dishId, dishName, userId, userName, userPhotoURL, userPhoto, description, recipe, photoURL, photo, thumbnailURL, thumbnail, forkedFromId, forkedFromName, forkCount, bookmarkCount, commentCount, bookmarked, createdTime, relativeCreatedTime, updatedTime, relativeUpdatedTime;
 
 + (id)dishFromDictionary:(NSDictionary *)dictionary
 {
@@ -31,9 +32,17 @@
 	dish.bookmarkCount = [[dictionary objectForKey:@"bookmark_count"] integerValue];
 	dish.commentCount = [[dictionary objectForKey:@"comment_count"] integerValue];
 	dish.bookmarked = [[dictionary objectForKey:@"bookmarked"] boolValue];
-	dish.createdTime = [dictionary objectForKey:@"createdTime"];
-	dish.updatedTime = [dictionary objectForKey:@"updatedTime"];
+	dish.createdTime = [Utils dateFromString:[dictionary objectForKey:@"created_time"]];
+	dish.updatedTime = [Utils dateFromString:[dictionary objectForKey:@"updated_time"]];
+	[dish updateRelativeTime];
+	
 	return dish;
+}
+
+- (void)updateRelativeTime
+{
+	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
+	self.relativeUpdatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
 }
 
 @end

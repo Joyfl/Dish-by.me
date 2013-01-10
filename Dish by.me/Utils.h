@@ -21,4 +21,9 @@
 
 + (NSString *)sha1:(NSString *)input;
 
++ (NSDate *)dateFromString:(NSString *)string;
++ (NSDate *)dateToLocalTimeZone:(NSDate *)date;
++ (NSDate *)dateToGlobalTimeZone:(NSDate *)date;
++ (NSString *)relativeDateString:(NSDate *)date withTime:(BOOL)withTime;
+
 @end
