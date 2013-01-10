@@ -713,7 +713,7 @@ enum {
 {
 	if( [UserManager manager].loggedIn )
 	{
-		if( _commentInput.text.length == 0 )
+		if( _commentInput.text.length == 0 || [_commentInput.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0 )
 			return;
 		
 		[self backgroundDidTap];
