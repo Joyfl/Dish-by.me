@@ -26,7 +26,6 @@
 	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_ACCESS_TOKEN];
 	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_USER_ID];
 	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_USER_NAME];
-	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_USER_PHOTO];
 	[[SettingsManager manager] flush];
 }
 
@@ -83,15 +82,14 @@
 
 - (UIImage *)userPhoto
 {
-	static UIImage *userPhoto = nil;
-	if( !userPhoto )
-		userPhoto = [UIImage imageWithContentsOfFile:[(NSString *)[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"]];
-	return userPhoto;
+	if( !_userPhoto )
+		_userPhoto = [[UIImage imageWithContentsOfFile:[(NSString *)[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"]] retain];
+	return _userPhoto;
 }
 
 - (void)setUserPhoto:(UIImage *)userPhoto
 {
-	[UIImagePNGRepresentation( userPhoto ) writeToFile:[[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"] atomically:YES];
+	[UIImagePNGRepresentation( _userPhoto = [userPhoto retain] ) writeToFile:[[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"] atomically:YES];
 }
 
 @end

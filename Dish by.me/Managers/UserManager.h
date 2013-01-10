@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface UserManager : NSObject
+{
+	UIImage *_userPhoto;
+}
 
 @property (nonatomic, assign) BOOL loggedIn;
 @property (nonatomic, retain) NSString *accessToken;
