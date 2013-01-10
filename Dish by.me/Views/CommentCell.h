@@ -15,6 +15,7 @@
 	Comment *_comment;
 	NSIndexPath *_indexPath;
 	
+	UIImageView *_lineView;
 	UIButton *_profileImageButton;
 	UILabel *_nameLabel;
 	UILabel *_timeLabel;

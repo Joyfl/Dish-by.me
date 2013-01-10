@@ -25,11 +25,10 @@
 @implementation DishDetailViewController
 
 enum {
-	kRowPhoto = 0,
-	kRowProfile = 1,
-	kRowMessage = 2,
-	kRowRecipe = 3,
-	kRowBookmark = 4,
+	kSectionContent = 0,
+	kSectionMoreComments = 1,
+	kSectionComment = 2,
+	kSectionCommentInput = 3,
 };
 
 enum {
@@ -302,20 +301,23 @@ enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 3;
+	return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	switch( section )
 	{
-		case 0:
-			return 5;
+		case kSectionContent:
+			return 1;
 			
-		case 1:
-			return _comments.count * 2;
+		case kSectionMoreComments:
+			return 0;
 			
-		case 2:
+		case kSectionComment:
+			return _comments.count;
+			
+		case kSectionCommentInput:
 			return 1;
 	}
 	
@@ -326,36 +328,16 @@ enum {
 {
 	switch( indexPath.section )
 	{
-		case 0:
-			switch( indexPath.row )
-		{
-			case kRowPhoto:
-				return 310;
-				
-			case kRowProfile:
-				return 45;
-				
-			case kRowMessage:
-				return _messageRowHeight;
-				
-			case kRowRecipe:
-				if( _dish.recipe )
-					return 60;
-				return 0;
-				
-			case kRowBookmark:
-				return 50;
-		}
-			break;
+		case kSectionContent:
+			return _contentRowHeight;
 			
-			// Comment
-		case 1:
-			if( indexPath.row % 2 == 0 )
-				return 2;
+		case kSectionMoreComments:
 			return 50;
 			
-			// Leave a comment
-		case 2:
+		case kSectionComment:
+			return 50;
+			
+		case kSectionCommentInput:
 			return 40;
 	}
 	
@@ -364,181 +346,140 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *photoCellId = @"photoCellId";
-	static NSString *messageCellId = @"messageCellId";
-	static NSString *recipeCellId = @"recipeCellId";
-	static NSString *yumCellId = @"yumCellId";
+	static NSString *contentCellId = @"contentCellId";
 	static NSString *commentCellId = @"commentCellId";
-	static NSString *writeCommentCellId = @"writeCommentCellId";
+	static NSString *commentInputCellId = @"commentInputCellId";
 	
-	if( indexPath.section == 0 )
+	if( indexPath.section == kSectionContent )
 	{
-		if( indexPath.row == kRowPhoto )
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:contentCellId];
+		if( !cell )
 		{
-			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:photoCellId];
-			if( !cell )
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contentCellId];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			
+			//
+			// Photo
+			//
+			UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, 298 )];
+			imageView.image = [UIImage imageNamed:@"placeholder.png"];
+			[cell.contentView addSubview:imageView];
+			
+			// List에서 이미지 로딩이 덜 끝난 채로 Detail에 들어오는 경우가 있으므로
+			if( _dish.photo )
 			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:photoCellId];
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-				
-				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 320 )];
-				
-				UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, 298 )];
-				imageView.image = [UIImage imageNamed:@"placeholder.png"];
-				[bgView addSubview:imageView];
-				
-				// List에서 이미지 로딩이 덜 끝난 채로 Detail에 들어오는 경우가 있으므로
-				if( _dish.photo )
+				imageView.image = _dish.photo;
+			}
+			else
+			{
+				[JLHTTPLoader loadAsyncFromURL:_dish.photoURL completion:^(NSData *data)
 				{
-					imageView.image = _dish.photo;
-				}
-				else
-				{
-					[JLHTTPLoader loadAsyncFromURL:_dish.photoURL completion:^(NSData *data)
-					{
-						imageView.image = _dish.photo = [UIImage imageWithData:data];
-					}];
-				}
-				
-				[imageView release];
-				
-				UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_border.png"]];
-				borderView.frame = CGRectMake( 5, 5, 310, 310 );
-				[bgView addSubview:borderView];
-				[borderView release];
-				
-				cell.backgroundView = bgView;
-				[bgView release];
+					imageView.image = _dish.photo = [UIImage imageWithData:data];
+				}];
 			}
 			
-			return cell;
-		}
-		
-		else if( indexPath.row == kRowProfile )
-		{
-			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:messageCellId];
-			if( !cell )
+			[imageView release];
+			
+			UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_border.png"]];
+			borderView.frame = CGRectMake( 5, 5, 310, 310 );
+			[cell.contentView addSubview:borderView];
+			[borderView release];
+			
+			UIButton *profileImageButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+			profileImageButton.frame = CGRectMake( 13, 320, 25, 25 );
+			[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
+			[cell.contentView addSubview:profileImageButton];
+			
+			[JLHTTPLoader loadAsyncFromURL:_dish.userPhotoURL completion:^(NSData *data)
 			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:messageCellId];
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-				
-				UIButton *profileImageButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
-				profileImageButton.frame = CGRectMake( 12, 10, 30, 30 );
-				[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
-				[cell addSubview:profileImageButton];
-				
-				[JLHTTPLoader loadAsyncFromURL:_dish.userPhotoURL completion:^(NSData *data)
-				{
-					[profileImageButton setBackgroundImage:_dish.userPhoto = [UIImage imageWithData:data] forState:UIControlStateNormal];
-				}];
-				
-				UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 9, 270, 30 )];
-				nameLabel.text = _dish.userName;
-				nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
-				nameLabel.font = [UIFont boldSystemFontOfSize:14];
-				nameLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
-				nameLabel.shadowOffset = CGSizeMake( 0, 1 );
-				nameLabel.backgroundColor = [UIColor clearColor];
-				[cell addSubview:nameLabel];
-				
-				UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 258, 9, 50, 30 )];
-				timeLabel.text = _dish.relativeCreatedTime;
-				timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
-				timeLabel.textAlignment = NSTextAlignmentRight;
-				timeLabel.font = [UIFont systemFontOfSize:10];
-				timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
-				timeLabel.shadowOffset = CGSizeMake( 0, 1 );
-				//				timeLabel.backgroundColor = [UIColor colorWithWhite:0.5 alpha:1];
-				timeLabel.backgroundColor = [UIColor clearColor];
-				[cell addSubview:timeLabel];
-			}
-			return cell;
-		}
-		
-		else if( indexPath.row == kRowMessage )
-		{
-			UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:messageCellId];
-			if( !cell )
+				[profileImageButton setBackgroundImage:_dish.userPhoto = [UIImage imageWithData:data] forState:UIControlStateNormal];
+			}];
+			
+			//
+			// User, Date
+			//
+			UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 45, 325, 270, 14 )];
+			nameLabel.text = _dish.userName;
+			nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
+			nameLabel.font = [UIFont boldSystemFontOfSize:14];
+			nameLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
+			nameLabel.shadowOffset = CGSizeMake( 0, 1 );
+			nameLabel.backgroundColor = [UIColor clearColor];
+			[cell.contentView addSubview:nameLabel];
+			[nameLabel release];
+			
+			UILabel *timeLabel = [[UILabel alloc] init];
+			timeLabel.text = _dish.relativeCreatedTime;
+			timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
+			timeLabel.textAlignment = NSTextAlignmentRight;
+			timeLabel.font = [UIFont systemFontOfSize:10];
+			timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
+			timeLabel.shadowOffset = CGSizeMake( 0, 1 );
+			timeLabel.backgroundColor = [UIColor clearColor];
+			[cell.contentView addSubview:timeLabel];
+			[timeLabel sizeToFit];
+			timeLabel.frame = CGRectMake( 310 - timeLabel.frame.size.width * 2, 327, 50, 10 );
+			
+			//
+			// Message
+			//
+			UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
+			[cell.contentView addSubview:messageBoxView];
+			[messageBoxView release];
+			
+			UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 12, 15, 280, 20 )];
+			messageLabel.text = _dish.description;
+			messageLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+			messageLabel.font = [UIFont boldSystemFontOfSize:14];
+			messageLabel.shadowOffset = CGSizeMake( 0, 1 );
+			messageLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+			messageLabel.backgroundColor = [UIColor clearColor];
+			messageLabel.numberOfLines = 0;
+			[messageLabel sizeToFit];
+			[messageBoxView addSubview:messageLabel];
+			[messageLabel release];
+			
+			messageBoxView.frame = CGRectMake( 8, 350, 304, 66 + messageLabel.frame.size.height );
+			
+			UIImageView *messageBoxDotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_dot_line.png"]];
+			messageBoxDotLineView.frame = CGRectMake( 9, 24 + messageLabel.frame.size.height, 285, 2 );
+			[messageBoxView addSubview:messageBoxDotLineView];
+			[messageBoxDotLineView release];
+			
+			UIButton *forkedFromLabelButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, messageBoxDotLineView.frame.origin.y + 8, 280, 20 )];
+			[forkedFromLabelButton setTitle:[NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"%@를 포크했습니다." ), _dish.forkedFromName ] forState:UIControlStateNormal];
+			[forkedFromLabelButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+			[forkedFromLabelButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
+			forkedFromLabelButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			forkedFromLabelButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+			forkedFromLabelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+			[messageBoxView addSubview:forkedFromLabelButton];
+			
+			UIButton *forkedButton = [[UIButton alloc] initWithFrame:CGRectMake( 262, messageBoxDotLineView.frame.origin.y + 8, 40, 20 )];
+			forkedButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+			forkedButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			forkedButton.titleLabel.textAlignment = NSTextAlignmentRight;
+			[forkedButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
+			[forkedButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+			[forkedButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
+			[forkedButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
+			forkedButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 0, 0, 15 );
+			[messageBoxView addSubview:forkedButton];
+			
+			NSInteger messageBoxBottomY = messageBoxView.frame.origin.y + messageBoxView.frame.size.height;
+			NSInteger recipeButtonBottomY = messageBoxBottomY + 8;
+			
+			//
+			// Recipe
+			//
+			if( _dish.recipe.length > 0 )
 			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:messageCellId];
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-				
-				UIImageView *topView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_top.png"]];
-				topView.frame = CGRectMake( 8, 0, 304, 15 );
-				[cell addSubview:topView];
-				[topView release];
-				
-				UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 15, 280, 20 )];
-				messageLabel.text = _dish.description;
-				messageLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
-				messageLabel.font = [UIFont boldSystemFontOfSize:14];
-				messageLabel.shadowOffset = CGSizeMake( 0, 1 );
-				messageLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
-				messageLabel.backgroundColor = [UIColor clearColor];
-				messageLabel.numberOfLines = 0;
-				[messageLabel sizeToFit];
-				
-				UIImageView *centerView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_center.png"]];
-				centerView.frame = CGRectMake( 8, 15, 304, messageLabel.frame.size.height + 38 );
-				[cell addSubview:centerView];
-				
-				UIImageView *messageBoxDotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_dot_line.png"]];
-				messageBoxDotLineView.frame = CGRectMake( 17, 22 + messageLabel.frame.size.height, 285, 2 );
-				[cell addSubview:messageBoxDotLineView];
-				[messageBoxDotLineView release];
-				
-				_forkedFromLabel = [[UILabel alloc] initWithFrame:CGRectMake( 20, 32 + messageLabel.frame.size.height, 280, 20 )];
-				_forkedFromLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
-				_forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
-				_forkedFromLabel.shadowOffset = CGSizeMake( 0, 1 );
-				_forkedFromLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
-				_forkedFromLabel.backgroundColor = [UIColor clearColor];
-				
-				UIButton *forkedButton = [[UIButton alloc] initWithFrame:CGRectMake( 265, 32 + messageLabel.frame.size.height, 40, 20 )];
-				forkedButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
-				forkedButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-				forkedButton.titleLabel.textAlignment = NSTextAlignmentRight;
-				[forkedButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
-				[forkedButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
-				[forkedButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
-				[forkedButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
-				forkedButton.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 30 );
-				
-				UIImageView *bottomView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_bottom.png"]];
-				bottomView.frame = CGRectMake( 8, 15 + centerView.frame.size.height, 304, 15 );
-				[cell addSubview:bottomView];
-				[bottomView release];
-				[centerView release];
-				
 				UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
-				dotLineView.frame = CGRectMake( 8, bottomView.frame.origin.y + 25, 304, 2 );
-				[cell addSubview:dotLineView];
+				dotLineView.frame = CGRectMake( 8, messageBoxBottomY + 18, 304, 2 );
+				[cell.contentView addSubview:dotLineView];
 				[dotLineView release];
 				
-				[cell addSubview:messageLabel];
-				[cell addSubview:_forkedFromLabel];
-				[cell addSubview:forkedButton];
-				
-				_messageRowHeight = 75 + messageLabel.frame.size.height;
-				[_tableView reloadData];
-			}
-			
-			return cell;
-		}
-		else if( indexPath.row == kRowRecipe )
-		{
-			UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:recipeCellId];
-			if( !cell )
-			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:recipeCellId];
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-				
-				if( !_dish.recipe )
-					return cell;
-				
-				UIView *bgView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 70 )];
-				
-				_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 10, 320, 50 )];
+				_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, messageBoxBottomY + 36, 320, 50 )];
 				[_recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 				[_recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
 				[_recipeButton setTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) forState:UIControlStateNormal];
@@ -547,98 +488,67 @@ enum {
 				_recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 				_recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
 				_recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
-				[bgView addSubview:_recipeButton];
+				[cell.contentView addSubview:_recipeButton];
 				
-				UIImageView *bottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
-				bottomLine.frame = CGRectMake( 0, 54, 320, 8 );
-				[bgView addSubview:bottomLine];
-				
-				[cell addSubview:bgView];
-				[bgView release];
+				recipeButtonBottomY = messageBoxBottomY + 74;
 			}
 			
-			return cell;
+			UIImageView *recipeBottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
+			recipeBottomLine.frame = CGRectMake( 0, recipeButtonBottomY, 320, 15 );
+			[cell.contentView addSubview:recipeBottomLine];
+			
+			//
+			// Bookmark
+			//
+			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 30, recipeButtonBottomY + 35, 180, 12 )];
+			_bookmarkLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+			_bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
+			_bookmarkLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
+			_bookmarkLabel.shadowOffset = CGSizeMake( 0, 1 );
+			_bookmarkLabel.backgroundColor= [UIColor clearColor];
+			[cell.contentView addSubview:_bookmarkLabel];
+			
+			_bookmarkIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 10, recipeButtonBottomY + 33, 13, 17 )];
+			[cell.contentView addSubview:_bookmarkIconView];
+			
+			_bookmarkButton = [[BookmarkButton alloc] init];
+			_bookmarkButton.delegate = self;
+			_bookmarkButton.parentView = cell.contentView;
+			_bookmarkButton.position = CGPointMake( 320, recipeButtonBottomY + 30 );
+			
+			_contentRowHeight = recipeButtonBottomY + 65;
+			[_tableView reloadData];
 		}
-		else if( indexPath.row == kRowBookmark )
-		{
-			UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:yumCellId];
-			if( !cell )
-			{
-				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:yumCellId];
-				cell.selectionStyle = UITableViewCellSelectionStyleNone;
-				
-				_bookmarkLabel = cell.textLabel;
-				cell.textLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
-				cell.textLabel.font = [UIFont boldSystemFontOfSize:12];
-				cell.textLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
-				cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
-				
-				_bookmarkIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 10, 18, 13, 17 )];
-				[cell.contentView addSubview:_bookmarkIconView];
-				
-				_bookmarkButton = [[BookmarkButton alloc] init];
-				_bookmarkButton.delegate = self;
-				_bookmarkButton.parentView = cell.contentView;
-				_bookmarkButton.position = CGPointMake( 320, 14 );
-			}
-			
-			if( _dish.bookmarked )
-				_bookmarkButton.buttonX = 10;
-			else
-				_bookmarkButton.buttonX = 75;
-			
-			_bookmarkButton.hidden = ![UserManager manager].loggedIn;
-			
-			[self updateBookmarkUI];
-			
-			return cell;
-		}
+		
+		if( _dish.bookmarked )
+			_bookmarkButton.buttonX = 10;
+		else
+			_bookmarkButton.buttonX = 75;
+
+		_bookmarkButton.hidden = ![UserManager manager].loggedIn;
+		[self updateBookmarkUI];
+		
+		return cell;
 	}
 	
 	// Comments
-	else if( indexPath.section == 1 )
+	else if( indexPath.section == kSectionComment )
 	{
-		if( indexPath.row == 0 )
-		{
-			UITableViewCell *cell = [[UITableViewCell alloc] init];
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-			
-			UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
-			dotLineView.frame = CGRectMake( 8, 0, 304, 2 );
-			[cell addSubview:dotLineView];
-			[dotLineView release];
-			
-			return cell;
-		}
-		else if( indexPath.row % 2 == 1 )
-		{
-			CommentCell *cell = [_tableView dequeueReusableCellWithIdentifier:commentCellId];
-			if( !cell )
-			{
-				cell = [[CommentCell alloc] initWithResueIdentifier:commentCellId];
-			}
-			
-			Comment *comment = [_comments objectAtIndex:floor( indexPath.row / 2 )];
-			[cell setComment:comment atIndexPath:indexPath];
-			[comment release];
-			
-			return cell;
-		}
-		else
-		{
-			UITableViewCell *cell = [[UITableViewCell alloc] init];
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-			
-			UIImageView *lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line.png"]];
-			cell.backgroundView = lineView;
-			[lineView release];
-			
-			return cell;
-		}
+		CommentCell *cell = [_tableView dequeueReusableCellWithIdentifier:commentCellId];
+		if( !cell )
+			cell = [[CommentCell alloc] initWithResueIdentifier:commentCellId];
+		
+		Comment *comment = [_comments objectAtIndex:indexPath.row];
+		[cell setComment:comment atIndexPath:indexPath];
+		[comment release];
+		
+		return cell;
 	}
-	else if( indexPath.section == 2 )
+	
+	// Comment Input (Empty cell just for height)
+	else if( indexPath.section == kSectionCommentInput )
 	{
-		UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:writeCommentCellId];
+		UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:commentInputCellId];
 		if( !cell )
 		{
 			cell = [[UITableViewCell alloc] init];
@@ -671,7 +581,7 @@ enum {
 - (void)updateBookmarkUI
 {
 	_bookmarkIconView.image = !_dish.bookmarked ? [UIImage imageNamed:@"icon_bookmark.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
-	_bookmarkLabel.text = [NSString stringWithFormat:@"     %@", [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount]];
+	_bookmarkLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount];
 }
 
 

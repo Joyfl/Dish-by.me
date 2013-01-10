@@ -19,6 +19,9 @@
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueIdentifier];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
+	_lineView = [[UIImageView alloc] init];
+	[self addSubview:_lineView];
+	
 	_profileImageButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
 	_profileImageButton.frame = CGRectMake( 10, 10, 30, 30 );
 	[_profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
@@ -56,12 +59,18 @@
 	_comment = [comment retain];
 	_indexPath = [indexPath retain];
 	[self fillContents];
+	[self layoutContentView];
 	
 	[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];
 }
 
 - (void)fillContents
 {
+	if( _indexPath.row == 0 )
+		_lineView.image = [UIImage imageNamed:@"line_dotted.png"];
+	else
+		_lineView.image = [UIImage imageNamed:@"line.png"];
+	
 	if( _comment.userPhoto )
 	{
 		[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];
@@ -86,6 +95,10 @@
 
 - (void)layoutContentView
 {
+	if( _indexPath.row == 0 )
+		_lineView.frame = CGRectMake( 8, 0, 304, 2 );
+	else
+		_lineView.frame = CGRectMake( 0, 0, 320, 2 );
 	[_messageView sizeToFit];
 }
 

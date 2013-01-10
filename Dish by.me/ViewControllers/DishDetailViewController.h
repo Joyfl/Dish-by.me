@@ -21,9 +21,7 @@
 	NSInteger _offset;
 	
 	UITableView *_tableView;
-	
-	CGFloat _messageRowHeight;
-	UILabel *_forkedFromLabel;
+	CGFloat _contentRowHeight;
 	
 	UIButton *_recipeButton;
 	UIImageView *_bookmarkIconView;
