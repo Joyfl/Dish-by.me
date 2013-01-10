@@ -443,14 +443,17 @@ enum {
 			[messageBoxView addSubview:messageBoxDotLineView];
 			[messageBoxDotLineView release];
 			
-			UIButton *forkedFromLabelButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, messageBoxDotLineView.frame.origin.y + 8, 280, 20 )];
-			[forkedFromLabelButton setTitle:[NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"%@를 포크했습니다." ), _dish.forkedFromName ] forState:UIControlStateNormal];
-			[forkedFromLabelButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
-			[forkedFromLabelButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
-			forkedFromLabelButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-			forkedFromLabelButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
-			forkedFromLabelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-			[messageBoxView addSubview:forkedFromLabelButton];
+			if( _dish.forkedFromId )
+			{
+				UIButton *forkedFromLabelButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, messageBoxDotLineView.frame.origin.y + 8, 280, 20 )];
+				[forkedFromLabelButton setTitle:[NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"%@를 포크했습니다." ), _dish.forkedFromName ] forState:UIControlStateNormal];
+				[forkedFromLabelButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+				[forkedFromLabelButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
+				forkedFromLabelButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+				forkedFromLabelButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+				forkedFromLabelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+				[messageBoxView addSubview:forkedFromLabelButton];
+			}
 			
 			UIButton *forkedButton = [[UIButton alloc] initWithFrame:CGRectMake( 262, messageBoxDotLineView.frame.origin.y + 8, 40, 20 )];
 			forkedButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
