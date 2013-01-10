@@ -79,8 +79,7 @@
 	}
 	
 	_nameLabel.text = _comment.userName;
-#warning 임시 날짜
-	_timeLabel.text = @"10분 전에";
+	_timeLabel.text = _comment.relativeCreatedTime;
 #warning message가 길어질 경우 예외처리 필요
 	_messageView.text = _comment.message;
 }

@@ -442,8 +442,7 @@ enum {
 				[cell addSubview:nameLabel];
 				
 				UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 258, 9, 50, 30 )];
-#warning 임시 date
-				timeLabel.text = @"10분 전";
+				timeLabel.text = _dish.relativeCreatedTime;
 				timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
 				timeLabel.textAlignment = NSTextAlignmentRight;
 				timeLabel.font = [UIFont systemFontOfSize:10];

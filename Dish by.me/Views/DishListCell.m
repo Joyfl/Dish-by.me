@@ -158,7 +158,7 @@
 
 - (void)photoViewDidTap
 {
-	NSLog( @"tap" );
+	NSLog( @"tap : %d", _dish.dishId );
 	[delegate dishListCell:self didTouchPhotoViewAtIndexPath:_indexPath];
 }
 

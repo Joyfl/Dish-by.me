@@ -11,7 +11,7 @@
 
 @implementation Comment
 
-@synthesize commentId, userId, userName, userPhotoURL, userPhoto, message, createdTime, updatedTime;
+@synthesize commentId, userId, userName, userPhotoURL, userPhoto, message, createdTime, relativeCreatedTime, updatedTime, relativeUpdatedTime;
 
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary
 {
@@ -21,8 +21,8 @@
 	comment.userName = [[dictionary objectForKey:@"user"] objectForKey:@"name"];
 	comment.userPhotoURL = [[dictionary objectForKey:@"user"] objectForKey:@"photo_url"];
 	comment.message = [dictionary objectForKey:@"message"];
-	comment.createdTime = [dictionary objectForKey:@"created_time"];
-	comment.updatedTime = [dictionary objectForKey:@"updated_time"];
+	comment.createdTime = [Utils dateFromString:[dictionary objectForKey:@"created_time"]];
+	comment.updatedTime = [Utils dateFromString:[dictionary objectForKey:@"updated_time"]];
 	[comment updateRelativeTime];
 	return comment;
 }
@@ -30,7 +30,7 @@
 - (void)updateRelativeTime
 {
 	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
-	self.relativeUpdatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
+	self.relativeUpdatedTime = [Utils relativeDateString:self.updatedTime withTime:NO];
 }
 
 @end

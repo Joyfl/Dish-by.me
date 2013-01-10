@@ -42,7 +42,7 @@
 - (void)updateRelativeTime
 {
 	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
-	self.relativeUpdatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
+	self.relativeUpdatedTime = [Utils relativeDateString:self.updatedTime withTime:NO];
 }
 
 @end

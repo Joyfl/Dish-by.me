@@ -73,6 +73,7 @@
 {
 //	NSDate *now = [Utils dateToLocalTimeZone:[NSDate date]];
 	NSDate *now = [NSDate date];
+	NSLog( @"%@", date );
 	NSInteger interval = abs( [date timeIntervalSinceDate:now] );
 	
 	// n < 10초 : 몇 초 전
