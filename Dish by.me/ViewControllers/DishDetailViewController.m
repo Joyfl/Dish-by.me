@@ -260,6 +260,8 @@ enum {
 			[_comments addObject:comment];
 			[comment release];
 			
+			_dish.commentCount ++;
+			
 			[_tableView reloadData];
 			_commentInput.text = @"";
 			_commentInput.enabled = YES;
