@@ -248,6 +248,9 @@ enum {
 	{
 		if( response.statusCode == 201 )
 		{
+			for( Comment *comment in _comments )
+				[comment updateRelativeTime];
+			
 			Comment *comment = [[Comment alloc] init];
 			comment.commentId = [[result objectForKey:@"id"] integerValue];
 			comment.userId = [UserManager manager].userId;
