@@ -20,6 +20,8 @@
 	NSString *relativeCreatedTime;
 	NSDate *updatedTime;
 	NSString *relativeUpdatedTime;
+	
+	CGFloat cellHeight;
 }
 
 @property (nonatomic, assign) NSInteger commentId;
@@ -32,6 +34,7 @@
 @property (nonatomic, retain) NSString *relativeCreatedTime;
 @property (nonatomic, retain) NSDate *updatedTime;
 @property (nonatomic, retain) NSString *relativeUpdatedTime;
+@property (nonatomic, assign) CGFloat cellHeight;
 
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary;
 - (void)updateRelativeTime;

@@ -335,8 +335,8 @@ enum {
 			return 50;
 			
 		case kSectionComment:
-			return 50;
-			
+			return [[_comments objectAtIndex:indexPath.row] cellHeight];
+		
 		case kSectionCommentInput:
 			return 40;
 	}
@@ -408,17 +408,14 @@ enum {
 			[cell.contentView addSubview:nameLabel];
 			[nameLabel release];
 			
-			UILabel *timeLabel = [[UILabel alloc] init];
-			timeLabel.text = _dish.relativeCreatedTime;
-			timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
-			timeLabel.textAlignment = NSTextAlignmentRight;
-			timeLabel.font = [UIFont systemFontOfSize:10];
-			timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
-			timeLabel.shadowOffset = CGSizeMake( 0, 1 );
-			timeLabel.backgroundColor = [UIColor clearColor];
-			[cell.contentView addSubview:timeLabel];
-			[timeLabel sizeToFit];
-			timeLabel.frame = CGRectMake( 310 - timeLabel.frame.size.width * 2, 327, 50, 10 );
+			_timeLabel = [[UILabel alloc] init];
+			_timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
+			_timeLabel.textAlignment = NSTextAlignmentRight;
+			_timeLabel.font = [UIFont systemFontOfSize:10];
+			_timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
+			_timeLabel.shadowOffset = CGSizeMake( 0, 1 );
+			_timeLabel.backgroundColor = [UIColor clearColor];
+			[cell.contentView addSubview:_timeLabel];
 			
 			//
 			// Message
@@ -500,7 +497,7 @@ enum {
 			//
 			// Bookmark
 			//
-			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 30, recipeButtonBottomY + 35, 180, 12 )];
+			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 28, recipeButtonBottomY + 35, 180, 12 )];
 			_bookmarkLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
 			_bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
 			_bookmarkLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
@@ -519,6 +516,10 @@ enum {
 			_contentRowHeight = recipeButtonBottomY + 65;
 			[_tableView reloadData];
 		}
+		
+		_timeLabel.text = _dish.relativeCreatedTime;
+		[_timeLabel sizeToFit];
+		_timeLabel.frame = CGRectMake( 306 - _timeLabel.frame.size.width, 327, _timeLabel.frame.size.width, 10 );
 		
 		if( _dish.bookmarked )
 			_bookmarkButton.buttonX = 10;
@@ -580,7 +581,7 @@ enum {
 
 - (void)updateBookmarkUI
 {
-	_bookmarkIconView.image = !_dish.bookmarked ? [UIImage imageNamed:@"icon_bookmark.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
+	_bookmarkIconView.image = !_dish.bookmarked ? [UIImage imageNamed:@"icon_bookmark_gray.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
 	_bookmarkLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount];
 }
 
@@ -651,7 +652,7 @@ enum {
 	completion:^(BOOL finished)
 	{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 279 );
-		[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+		[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 	}];
 }
 

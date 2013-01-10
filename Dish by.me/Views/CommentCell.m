@@ -27,7 +27,7 @@
 	[_profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 	[self addSubview:_profileImageButton];
 	
-	_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 2, 270, 30 )];
+	_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 47, 2, 150, 30 )];
 	_nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
 	_nameLabel.font = [UIFont boldSystemFontOfSize:14];
 	_nameLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
@@ -35,7 +35,7 @@
 	_nameLabel.backgroundColor = [UIColor clearColor];
 	[self addSubview:_nameLabel];
 	
-	_timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 260, 0, 50, 30 )];
+	_timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 260, 8, 50, 30 )];
 	_timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
 	_timeLabel.font = [UIFont systemFontOfSize:10];
 	_timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
@@ -43,13 +43,12 @@
 	_timeLabel.backgroundColor = [UIColor clearColor];
 	[self addSubview:_timeLabel];
 	
-	_messageView = [[UITextView alloc] initWithFrame:CGRectMake( 43, 16, 270, 30 )];
-	_messageView.textColor = [Utils colorWithHex:0x6B6663 alpha:1.0];
-	_messageView.backgroundColor = [UIColor clearColor];
-	_messageView.font = [UIFont systemFontOfSize:13];
-	_messageView.editable = NO;
-	_messageView.scrollEnabled = NO;
-	[self addSubview:_messageView];
+	_messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 47, 25, 263, 30 )];
+	_messageLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1.0];
+	_messageLabel.backgroundColor = [UIColor clearColor];
+	_messageLabel.font = [UIFont systemFontOfSize:13];
+	_messageLabel.numberOfLines = 0;
+	[self addSubview:_messageLabel];
 	
 	return self;
 }
@@ -60,7 +59,6 @@
 	_indexPath = [indexPath retain];
 	[self fillContents];
 	[self layoutContentView];
-	
 	[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];
 }
 
@@ -90,7 +88,7 @@
 	_nameLabel.text = _comment.userName;
 	_timeLabel.text = _comment.relativeCreatedTime;
 #warning message가 길어질 경우 예외처리 필요
-	_messageView.text = _comment.message;
+	_messageLabel.text = _comment.message;
 }
 
 - (void)layoutContentView
@@ -99,7 +97,13 @@
 		_lineView.frame = CGRectMake( 8, 0, 304, 2 );
 	else
 		_lineView.frame = CGRectMake( 0, 0, 320, 2 );
-	[_messageView sizeToFit];
+	
+	[_timeLabel sizeToFit];
+	CGRect frame = _timeLabel.frame;
+	frame.origin.x = 310 - _timeLabel.frame.size.width;
+	_timeLabel.frame = frame;
+	
+	[_messageLabel sizeToFit];
 }
 
 @end

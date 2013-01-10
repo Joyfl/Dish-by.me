@@ -19,12 +19,14 @@
 	UIButton *_profileImageButton;
 	UILabel *_nameLabel;
 	UILabel *_timeLabel;
-	UITextView *_messageView;
+	UILabel *_messageLabel;
 }
 
 @property (nonatomic, readonly) Comment *comment;
 
 - (id)initWithResueIdentifier:(NSString *)resueIdentifier;
 - (void)setComment:(Comment *)comment atIndexPath:(NSIndexPath *)indexPath;
+
++ (CGFloat)calculateCellHeight:(Comment *)comment;
 
 @end

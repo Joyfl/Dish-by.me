@@ -23,6 +23,7 @@
 	UITableView *_tableView;
 	CGFloat _contentRowHeight;
 	
+	UILabel *_timeLabel;
 	UIButton *_recipeButton;
 	UIImageView *_bookmarkIconView;
 	UILabel *_bookmarkLabel;
