@@ -256,12 +256,15 @@ enum {
 			comment.message = _commentInput.text;
 			comment.createdTime = [result objectForKey:@"created_time"];
 			comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
+			[comment calculateMessageHeight];
 			[_comments addObject:comment];
 			[comment release];
 			
 			[_tableView reloadData];
 			_commentInput.text = @"";
 			_commentInput.enabled = YES;
+			
+			[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 		}
 	}
 	
@@ -318,6 +321,7 @@ enum {
 		case kSectionComment:
 			if( [_loader hasRequestId:kRequestIdComments] )
 				return 1; // Loading UI
+			NSLog( @"%d Comments.", _comments.count );
 			return _comments.count;
 			
 		case kSectionCommentInput:
@@ -340,7 +344,7 @@ enum {
 		case kSectionComment:
 			if( [_loader hasRequestId:kRequestIdComments] )
 				return 50;
-			return [[_comments objectAtIndex:indexPath.row] cellHeight];
+			return [[_comments objectAtIndex:indexPath.row] messageHeight] + 32;
 		
 		case kSectionCommentInput:
 			return 40;

@@ -12,7 +12,7 @@
 @implementation Comment
 
 @synthesize commentId, userId, userName, userPhotoURL, userPhoto, message, createdTime, relativeCreatedTime, updatedTime, relativeUpdatedTime;
-@synthesize cellHeight;
+@synthesize messageHeight;
 
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary
 {
@@ -25,7 +25,7 @@
 	comment.createdTime = [Utils dateFromString:[dictionary objectForKey:@"created_time"]];
 	comment.updatedTime = [Utils dateFromString:[dictionary objectForKey:@"updated_time"]];
 	[comment updateRelativeTime];
-	comment.cellHeight = 32 + [comment.message sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:CGSizeMake( 263, NSIntegerMax ) lineBreakMode:NSLineBreakByWordWrapping].height;
+	[comment calculateMessageHeight];
 	
 	return comment;
 }
@@ -34,6 +34,11 @@
 {
 	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
 	self.relativeUpdatedTime = [Utils relativeDateString:self.updatedTime withTime:NO];
+}
+
+- (void)calculateMessageHeight
+{
+	self.messageHeight = [self.message sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:CGSizeMake( 263, NSIntegerMax ) lineBreakMode:NSLineBreakByWordWrapping].height;
 }
 
 @end

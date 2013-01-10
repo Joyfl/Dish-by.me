@@ -43,7 +43,7 @@
 	_timeLabel.backgroundColor = [UIColor clearColor];
 	[self addSubview:_timeLabel];
 	
-	_messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 47, 25, 263, 30 )];
+	_messageLabel = [[UILabel alloc] init];
 	_messageLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1.0];
 	_messageLabel.backgroundColor = [UIColor clearColor];
 	_messageLabel.font = [UIFont systemFontOfSize:13];
@@ -87,7 +87,6 @@
 	
 	_nameLabel.text = _comment.userName;
 	_timeLabel.text = _comment.relativeCreatedTime;
-#warning message가 길어질 경우 예외처리 필요
 	_messageLabel.text = _comment.message;
 }
 
@@ -103,7 +102,7 @@
 	frame.origin.x = 310 - _timeLabel.frame.size.width;
 	_timeLabel.frame = frame;
 	
-	[_messageLabel sizeToFit];
+	_messageLabel.frame = CGRectMake( 47, 25, 263, _comment.messageHeight );
 }
 
 @end
