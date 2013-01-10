@@ -47,10 +47,6 @@ enum {
 	
 	self.navigationItem.title = @"Dish by.me";
 	
-	
-	
-	NSLog( @"relative date : %@", [Utils relativeDateString:[Utils dateToLocalTimeZone:[NSDate date]] withTime:YES] );
-	
     return self;
 }
 

@@ -132,7 +132,7 @@
 {
 	_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _dish.bookmarkCount];
 	
-	if( !_dish.bookmarked )
+	if( !_dish.bookmarked || ![UserManager manager].loggedIn )
 	{
 		_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark.png"];
 		_bookmarkCountLabel.textColor = [UIColor whiteColor];
