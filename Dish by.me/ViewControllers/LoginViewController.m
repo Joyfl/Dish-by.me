@@ -31,9 +31,12 @@ enum {
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	[cancelButton release];
 	
-	UIButton *bgView = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 460 )];
+	UIButton *bgView = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 20 )];
 	bgView.adjustsImageWhenHighlighted = NO;
-	[bgView setBackgroundImage:[UIImage imageNamed:@"login_bg.png"] forState:UIControlStateNormal];
+	if( UIScreenHeight < 568 )
+		[bgView setBackgroundImage:[UIImage imageNamed:@"login_bg.png"] forState:UIControlStateNormal];
+	else
+		[bgView setBackgroundImage:[UIImage imageNamed:@"login_bg-568h.png"] forState:UIControlStateNormal];
 	[bgView addTarget:self action:@selector(bgViewDidTouchDown) forControlEvents:UIControlEventTouchDown];
 	[self.view addSubview:bgView];
 	[bgView release];
