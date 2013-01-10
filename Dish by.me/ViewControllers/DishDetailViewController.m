@@ -100,6 +100,8 @@ enum {
 	_loader = [[JLHTTPLoader alloc] init];
 	_loader.delegate = self;
 	
+	lastLoggedIn = [UserManager manager].loggedIn;
+	
 	[self loadComments];
 	
 	return self;
@@ -125,7 +127,12 @@ enum {
 		_commentInput.enabled = YES;
 		_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
 		[_sendButton setTitle:NSLocalizedString( @"SEND", @"전송" ) forState:UIControlStateNormal];
+		
+		// 로그아웃상태에서 로그인상태로
+		if( !lastLoggedIn )
+			[self reloadDish];
 	}
+	
 	else
 	{
 		self.navigationItem.rightBarButtonItem = nil;
@@ -134,6 +141,11 @@ enum {
 		_commentInput.placeholder = NSLocalizedString( @"LOGIN_TO_COMMENT", @"댓글을 남기려면 로그인해주세요." );
 		[_sendButton setTitle:NSLocalizedString( @"LOGIN", @"로그인" ) forState:UIControlStateNormal];
 	}
+	
+	[self updateAllCommentsRelativeTime];
+	[_tableView reloadData];
+	
+	lastLoggedIn = [UserManager manager].loggedIn;
 }
 
 - (void)viewDidUnload
@@ -248,8 +260,7 @@ enum {
 	{
 		if( response.statusCode == 201 )
 		{
-			for( Comment *comment in _comments )
-				[comment updateRelativeTime];
+			[self updateAllCommentsRelativeTime];
 			
 			Comment *comment = [[Comment alloc] init];
 			comment.commentId = [[result objectForKey:@"id"] integerValue];
@@ -617,8 +628,14 @@ enum {
 
 - (void)updateBookmarkUI
 {
-	_bookmarkIconView.image = !_dish.bookmarked ? [UIImage imageNamed:@"icon_bookmark_gray.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
+	_bookmarkIconView.image = !_dish.bookmarked || ![UserManager manager].loggedIn ? [UIImage imageNamed:@"icon_bookmark_gray.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
 	_bookmarkLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount];
+}
+
+- (void)updateAllCommentsRelativeTime
+{
+	for( Comment *comment in _comments )
+		[comment updateRelativeTime];
 }
 
 
@@ -766,7 +783,7 @@ enum {
 
 - (void)loginDidFinish
 {
-	[self reloadDish];
+	
 }
 
 @end

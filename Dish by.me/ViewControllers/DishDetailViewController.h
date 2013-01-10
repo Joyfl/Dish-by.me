@@ -20,6 +20,8 @@
 	NSMutableArray *_comments;
 	NSInteger _offset;
 	
+	BOOL lastLoggedIn;
+	
 	UITableView *_tableView;
 	CGFloat _contentRowHeight;
 	
