@@ -255,6 +255,7 @@ enum {
 			comment.userPhoto = [UserManager manager].userPhoto;
 			comment.message = _commentInput.text;
 			comment.createdTime = [result objectForKey:@"created_time"];
+			comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
 			[_comments addObject:comment];
 			[comment release];
 			
@@ -315,6 +316,8 @@ enum {
 			return 0;
 			
 		case kSectionComment:
+			if( [_loader hasRequestId:kRequestIdComments] )
+				return 1; // Loading UI
 			return _comments.count;
 			
 		case kSectionCommentInput:
@@ -335,6 +338,8 @@ enum {
 			return 50;
 			
 		case kSectionComment:
+			if( [_loader hasRequestId:kRequestIdComments] )
+				return 50;
 			return [[_comments objectAtIndex:indexPath.row] cellHeight];
 		
 		case kSectionCommentInput:
@@ -349,6 +354,7 @@ enum {
 	static NSString *contentCellId = @"contentCellId";
 	static NSString *commentCellId = @"commentCellId";
 	static NSString *commentInputCellId = @"commentInputCellId";
+	static NSString *loadingCellId = @"loadingCellId";
 	
 	if( indexPath.section == kSectionContent )
 	{
@@ -538,6 +544,24 @@ enum {
 	// Comments
 	else if( indexPath.section == kSectionComment )
 	{
+		if( [_loader hasRequestId:kRequestIdComments] )
+		{
+			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:loadingCellId];
+			if( !cell )
+			{
+				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:loadingCellId];
+				cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			}
+			
+			UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+			indicator.frame = CGRectMake( 141, 0, 37, 37 );
+			[indicator startAnimating];
+			[cell.contentView addSubview:indicator];
+			[indicator release];
+			
+			return cell;
+		}
+		
 		CommentCell *cell = [_tableView dequeueReusableCellWithIdentifier:commentCellId];
 		if( !cell )
 			cell = [[CommentCell alloc] initWithResueIdentifier:commentCellId];

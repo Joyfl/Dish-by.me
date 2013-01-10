@@ -54,6 +54,7 @@
 
 
 // Date
+"JUST_NOW" = "방금";
 "A_FEW_SECONDS_AGO" = "몇 초 전";
 "N_SECONDS_AGO" = "%d초 전";
 "A_MINUTE_AGO" = "1분 전";
