@@ -51,7 +51,7 @@
 "LIKES" = "찜";
 
 // SettingsView
-
+"LOGOUT_SUCCEED" = "로그아웃되었습니다.";
 
 // Date
 "JUST_NOW" = "방금";

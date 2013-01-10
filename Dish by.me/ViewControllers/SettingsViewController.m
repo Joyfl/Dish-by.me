@@ -7,6 +7,7 @@
 //
 
 #import "SettingsViewController.h"
+#import "UserManager.h"
 
 @implementation SettingsViewController
 
@@ -19,21 +20,18 @@
     return self;
 }
 
-- (void)viewDidLoad
+#warning 임시 로그아웃 코드
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	if( [UserManager manager].loggedIn )
+	{
+		[[UserManager manager] logout];
+		[[[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString( @"LOGOUT_SUCCEED", @"로그아웃되었습니다." ) delegate:nil cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"알겠어요" ) otherButtonTitles:nil] autorelease] show];
+	}
+	else
+	{
+		[[[[UIAlertView alloc] initWithTitle:@"" message:@"로그인되어있지 않습니다." delegate:nil cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"알겠어요" ) otherButtonTitles:nil] autorelease] show];
+	}
 }
 
 @end

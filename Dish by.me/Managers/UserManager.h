@@ -17,5 +17,6 @@
 @property (nonatomic, retain) UIImage *userPhoto;
 
 + (UserManager *)manager;
+- (void)logout;
 
 @end

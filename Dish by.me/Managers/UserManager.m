@@ -20,16 +20,22 @@
 	return manager;
 }
 
+- (void)logout
+{
+	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_LOGGED_IN];
+	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_ACCESS_TOKEN];
+	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_USER_ID];
+	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_USER_NAME];
+	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_USER_PHOTO];
+	[[SettingsManager manager] flush];
+}
 
 #pragma mark -
 #pragma mark Getter/Setter
 
 - (BOOL)loggedIn
 {
-	static NSNumber *loggedIn = nil;
-	if( !loggedIn )
-		loggedIn = [[SettingsManager manager] getSettingForKey:SETTING_KEY_LOGGED_IN];
-	return [loggedIn boolValue];
+	return [[[SettingsManager manager] getSettingForKey:SETTING_KEY_LOGGED_IN] boolValue];
 }
 
 - (void)setLoggedIn:(BOOL)loggedIn
@@ -41,10 +47,7 @@
 
 - (NSString *)accessToken
 {
-	static NSString *accessToken = nil;
-	if( !accessToken )
-		accessToken = [[SettingsManager manager] getSettingForKey:SETTING_KEY_ACCESS_TOKEN];
-	return accessToken;
+	return [[SettingsManager manager] getSettingForKey:SETTING_KEY_ACCESS_TOKEN];
 }
 
 - (void)setAccessToken:(NSString *)accessToken
@@ -56,10 +59,7 @@
 
 - (NSInteger)userId
 {
-	static NSNumber *userId = nil;
-	if( !userId )
-		userId = [[SettingsManager manager] getSettingForKey:SETTING_KEY_USER_ID];
-	return [userId integerValue];
+	return [[[SettingsManager manager] getSettingForKey:SETTING_KEY_USER_ID] integerValue];
 }
 
 - (void)setUserId:(NSInteger)userId
@@ -71,10 +71,7 @@
 
 - (NSString *)userName
 {
-	static NSString *userName = nil;
-	if( !userName )
-		userName = [[SettingsManager manager] getSettingForKey:SETTING_KEY_USER_NAME];
-	return userName;
+	return [[SettingsManager manager] getSettingForKey:SETTING_KEY_USER_NAME];
 }
 
 - (void)setUserName:(NSString *)userName

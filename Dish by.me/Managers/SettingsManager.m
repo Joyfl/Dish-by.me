@@ -42,6 +42,12 @@
 
 - (void)setSetting:(id)data forKey:(id)key
 {
+	if( data == nil )
+	{
+		[self clearSettingForKey:key];
+		[self flush];
+		return;
+	}
 	[_settings setObject:data forKey:key];
 }
 
