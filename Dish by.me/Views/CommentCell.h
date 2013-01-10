@@ -27,6 +27,4 @@
 - (id)initWithResueIdentifier:(NSString *)resueIdentifier;
 - (void)setComment:(Comment *)comment atIndexPath:(NSIndexPath *)indexPath;
 
-+ (CGFloat)calculateCellHeight:(Comment *)comment;
-
 @end
