@@ -5,7 +5,7 @@
 "CANCEL" = "취소";
 
 // Messages
-"MESSAGE_LOGIN_FAILED" = "로그인에 실패했습니다.";
+"MESSAGE_LOGIN_FAILED" = "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
 "MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
 "MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
 
