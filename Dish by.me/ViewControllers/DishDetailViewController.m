@@ -21,6 +21,7 @@
 #import "User.h"
 #import "LoginViewController.h"
 #import "DishByMeNavigationController.h"
+#import "JLLabelButton.h"
 
 @implementation DishDetailViewController
 
@@ -447,6 +448,7 @@ enum {
 			// Message
 			//
 			UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
+			messageBoxView.userInteractionEnabled = YES;
 			[cell.contentView addSubview:messageBoxView];
 			[messageBoxView release];
 			
@@ -469,27 +471,33 @@ enum {
 			[messageBoxView addSubview:messageBoxDotLineView];
 			[messageBoxDotLineView release];
 			
+#warning 조금 더 획기적인 UI 필요
 			if( _dish.forkedFromId )
 			{
-				UIButton *forkedFromLabelButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, messageBoxDotLineView.frame.origin.y + 8, 280, 20 )];
-				[forkedFromLabelButton setTitle:[NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"%@를 포크했습니다." ), _dish.forkedFromName ] forState:UIControlStateNormal];
+				JLLabelButton *forkedFromLabelButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 12, messageBoxDotLineView.frame.origin.y + 9, 280, 20 )];
+				[forkedFromLabelButton setTitle:_dish.forkedFromName forState:UIControlStateNormal];
 				[forkedFromLabelButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
 				[forkedFromLabelButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
 				forkedFromLabelButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 				forkedFromLabelButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
 				forkedFromLabelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+				[forkedFromLabelButton sizeToFit];
 				[messageBoxView addSubview:forkedFromLabelButton];
 			}
 			
-			UIButton *forkedButton = [[UIButton alloc] initWithFrame:CGRectMake( 262, messageBoxDotLineView.frame.origin.y + 8, 40, 20 )];
-			forkedButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+			// (NSInteger)log10f : 자리수
+			CGFloat forkedButtonWidth = _dish.forkCount == 0 ? 35 : 30 + ((NSInteger)log10f( _dish.forkCount ) + 1) * 5;
+			JLLabelButton *forkedButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 297 - forkedButtonWidth, messageBoxDotLineView.frame.origin.y + 9, forkedButtonWidth, 20 )];
+			forkedButton.titleLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:14];
 			forkedButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 			forkedButton.titleLabel.textAlignment = NSTextAlignmentRight;
 			[forkedButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
 			[forkedButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
 			[forkedButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
 			[forkedButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
-			forkedButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 0, 0, 15 );
+			forkedButton.titleEdgeInsets = UIEdgeInsetsMake( -2, 0, 0, -8 );
+			forkedButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 0, 0, 5 );
+			[forkedButton addTarget:self action:@selector(forkedButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[messageBoxView addSubview:forkedButton];
 			
 			NSInteger messageBoxBottomY = messageBoxView.frame.origin.y + messageBoxView.frame.size.height;
@@ -784,6 +792,13 @@ enum {
 - (void)loginDidFinish
 {
 	
+}
+
+
+
+- (void)forkedButtonDidTouchUpInside
+{
+	NSLog( @"asd" );
 }
 
 @end

@@ -163,6 +163,13 @@
 		037EF62916887BBA00FA765D /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF61B16887BBA00FA765D /* SBJsonUTF8Stream.m */; };
 		037EF62A16887BBA00FA765D /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF61D16887BBA00FA765D /* SBJsonWriter.m */; };
 		038A529A1698863A001FDF75 /* DishListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 038A52991698863A001FDF75 /* DishListCell.m */; };
+		03A5E94116B4DBE800C79F8D /* SEGOEUI.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */; };
+		03A5E94216B4DBE800C79F8D /* SEGOEUIB.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */; };
+		03A5E94316B4DBE800C79F8D /* SEGOEUII.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */; };
+		03A5E94416B4DBE800C79F8D /* segoeuil.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93E16B4DBE800C79F8D /* segoeuil.ttf */; };
+		03A5E94516B4DBE800C79F8D /* SEGOEUIZ.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93F16B4DBE800C79F8D /* SEGOEUIZ.TTF */; };
+		03A5E94616B4DBE800C79F8D /* seguisb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E94016B4DBE800C79F8D /* seguisb.ttf */; };
+		03A5E94E16B4E48100C79F8D /* JLLabelButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A5E94D16B4E48100C79F8D /* JLLabelButton.m */; };
 		03B597FC1602FDC0007BD6AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FB1602FDC0007BD6AF /* UIKit.framework */; };
 		03B597FE1602FDC0007BD6AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FD1602FDC0007BD6AF /* Foundation.framework */; };
 		03B598001602FDC0007BD6AF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FF1602FDC0007BD6AF /* CoreGraphics.framework */; };
@@ -385,6 +392,14 @@
 		037EF61D16887BBA00FA765D /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		038A52981698863A001FDF75 /* DishListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishListCell.h; path = Views/DishListCell.h; sourceTree = "<group>"; };
 		038A52991698863A001FDF75 /* DishListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishListCell.m; path = Views/DishListCell.m; sourceTree = "<group>"; };
+		03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUI.TTF; sourceTree = "<group>"; };
+		03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUIB.TTF; sourceTree = "<group>"; };
+		03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUII.TTF; sourceTree = "<group>"; };
+		03A5E93E16B4DBE800C79F8D /* segoeuil.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = segoeuil.ttf; sourceTree = "<group>"; };
+		03A5E93F16B4DBE800C79F8D /* SEGOEUIZ.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUIZ.TTF; sourceTree = "<group>"; };
+		03A5E94016B4DBE800C79F8D /* seguisb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = seguisb.ttf; sourceTree = "<group>"; };
+		03A5E94C16B4E48100C79F8D /* JLLabelButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLLabelButton.h; sourceTree = "<group>"; };
+		03A5E94D16B4E48100C79F8D /* JLLabelButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLLabelButton.m; sourceTree = "<group>"; };
 		03B597F71602FDC0007BD6AF /* Dish by.me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dish by.me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03B597FB1602FDC0007BD6AF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		03B597FD1602FDC0007BD6AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -733,6 +748,20 @@
 			path = SBJSON;
 			sourceTree = "<group>";
 		};
+		03A5E93A16B4DBE800C79F8D /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */,
+				03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */,
+				03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */,
+				03A5E93E16B4DBE800C79F8D /* segoeuil.ttf */,
+				03A5E93F16B4DBE800C79F8D /* SEGOEUIZ.TTF */,
+				03A5E94016B4DBE800C79F8D /* seguisb.ttf */,
+			);
+			name = Fonts;
+			path = Resources/Fonts;
+			sourceTree = "<group>";
+		};
 		03B597EC1602FDC0007BD6AF = {
 			isa = PBXGroup;
 			children = (
@@ -795,6 +824,7 @@
 		03B59819160303E1007BD6AF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				03A5E93A16B4DBE800C79F8D /* Fonts */,
 				0370ED36169F050E00EBE2D9 /* Images */,
 				03E7B38D1699AA92003729F4 /* EGOTableViewPullRefreshResources */,
 				03B598231603046E007BD6AF /* Localizable.strings */,
@@ -826,6 +856,8 @@
 				031AAB0A160DE2CD007B42B3 /* DishByMeButton.m */,
 				03677997169DE68700F26BBA /* BookmarkButton.h */,
 				03677998169DE68700F26BBA /* BookmarkButton.m */,
+				03A5E94C16B4E48100C79F8D /* JLLabelButton.h */,
+				03A5E94D16B4E48100C79F8D /* JLLabelButton.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1031,6 +1063,12 @@
 				0370EE22169F050E00EBE2D9 /* tool_bar@2x.png in Resources */,
 				0370EE25169F1DF500EBE2D9 /* icon_bookmark_gray.png in Resources */,
 				0370EE26169F1DF500EBE2D9 /* icon_bookmark_gray@2x.png in Resources */,
+				03A5E94116B4DBE800C79F8D /* SEGOEUI.TTF in Resources */,
+				03A5E94216B4DBE800C79F8D /* SEGOEUIB.TTF in Resources */,
+				03A5E94316B4DBE800C79F8D /* SEGOEUII.TTF in Resources */,
+				03A5E94416B4DBE800C79F8D /* segoeuil.ttf in Resources */,
+				03A5E94516B4DBE800C79F8D /* SEGOEUIZ.TTF in Resources */,
+				03A5E94616B4DBE800C79F8D /* seguisb.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1086,6 +1124,7 @@
 				037EF62A16887BBA00FA765D /* SBJsonWriter.m in Sources */,
 				038A529A1698863A001FDF75 /* DishListCell.m in Sources */,
 				03677999169DE68700F26BBA /* BookmarkButton.m in Sources */,
+				03A5E94E16B4E48100C79F8D /* JLLabelButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

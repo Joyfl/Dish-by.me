@@ -35,10 +35,10 @@
 	_commentIconView.image = [UIImage imageNamed:@"icon_comment.png"];
 	[self.contentView addSubview:_commentIconView];
 	
-	_commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 38, 281, 18, 13 )];
+	_commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 35, 280, 25, 13 )];
 	_commentCountLabel.textColor = [UIColor whiteColor];
 	_commentCountLabel.backgroundColor = [UIColor clearColor];
-	_commentCountLabel.font = [UIFont boldSystemFontOfSize:13];
+	_commentCountLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:13];
 	_commentCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	_commentCountLabel.shadowOffset = CGSizeMake( 0, 1 );
 	_commentCountLabel.textAlignment = NSTextAlignmentCenter;
@@ -47,10 +47,10 @@
 	_bookmarkIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 59, 280, 13, 17 )];
 	[self.contentView addSubview:_bookmarkIconView];
 	
-	_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 74, 281, 18, 13 )];
+	_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 71, 280, 25, 13 )];
 	_bookmarkCountLabel.textColor = [UIColor whiteColor];
 	_bookmarkCountLabel.backgroundColor = [UIColor clearColor];
-	_bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:13];
+	_bookmarkCountLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:13];
 	_bookmarkCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	_bookmarkCountLabel.shadowOffset = CGSizeMake( 0, 1 );
 	_bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
