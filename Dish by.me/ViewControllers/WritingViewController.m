@@ -7,7 +7,7 @@
 //
 
 #import "WritingViewController.h"
-#import "DishByMeBarButtonItem.h"
+#import "DMBarButtonItem.h"
 #import "RecipeView.h"
 #import "Utils.h"
 #import "AppDelegate.h"
@@ -20,11 +20,11 @@
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	
-	DishByMeBarButtonItem *cancelButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
+	DMBarButtonItem *cancelButton = [[DMBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	[cancelButton release];
 	
-	DishByMeBarButtonItem *uploadButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"UPLOAD", @"" ) target:self action:@selector(uploadButtonDidTouchUpInside)];
+	DMBarButtonItem *uploadButton = [[DMBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"UPLOAD", @"" ) target:self action:@selector(uploadButtonDidTouchUpInside)];
 	self.navigationItem.rightBarButtonItem = uploadButton;
 	[uploadButton release];
 	

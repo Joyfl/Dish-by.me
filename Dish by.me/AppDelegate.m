@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "DishByMeNavigationController.h"
+#import "DMNavigationController.h"
 #import "DishListViewController.h"
 #import "SearchViewController.h"
 #import "ProfileViewController.h"
@@ -40,7 +40,7 @@
 	tabBarController.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tab_bar_bg_selected.png"];
 	
 	dishListViewController = [[DishListViewController alloc] init];
-	DishByMeNavigationController *dishNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:dishListViewController];
+	DMNavigationController *dishNavigationController = [[DMNavigationController alloc] initWithRootViewController:dishListViewController];
 //	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
 	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_dish.png"];
 	dishNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
@@ -56,14 +56,14 @@
 	[searchViewController release];
 	
 	profileViewController = [[ProfileViewController alloc] init];
-	DishByMeNavigationController *profileNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:profileViewController];
+	DMNavigationController *profileNavigationController = [[DMNavigationController alloc] initWithRootViewController:profileViewController];
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
 	profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
 	profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	[profileViewController release];
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
-	DishByMeNavigationController *settingsNavigationController = [[DishByMeNavigationController alloc] initWithRootViewController:settingsViewController];
+	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:settingsViewController];
 //	settingsNavigationController.title = NSLocalizedString( @"SETTINGS", @"" );
 	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_settings.png"];
 	settingsNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
@@ -211,7 +211,7 @@
 	[tabBarController dismissViewControllerAnimated:NO completion:nil];
 	
 	WritingViewController *writingViewController = [[WritingViewController alloc] initWithPhoto:image];
-	DishByMeNavigationController *navController = [[DishByMeNavigationController alloc] initWithRootViewController:writingViewController];
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
 	[tabBarController presentViewController:navController animated:NO completion:nil];
 	
 	[writingViewController release];
@@ -221,7 +221,7 @@
 - (void)presentLoginViewController
 {
 	LoginViewController *loginViewController = [[LoginViewController alloc] initWithTarget:self action:@selector(loginDidFinish)];
-	DishByMeNavigationController *navController = [[DishByMeNavigationController alloc] initWithRootViewController:loginViewController];
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
 	navController.navigationBarHidden = YES;
 	[tabBarController presentViewController:navController animated:YES completion:nil];
 	

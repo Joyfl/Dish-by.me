@@ -6,9 +6,9 @@
 //  Copyright (c) 2012년 Joyfl. All rights reserved.
 //
 
-#import "DishByMeBarButtonItem.h"
+#import "DMBarButtonItem.h"
 
-@implementation DishByMeBarButtonItem
+@implementation DMBarButtonItem
 
 - (id)initWithType:(NSInteger)type title:(NSString *)title target:(id)target action:(SEL)action
 {
@@ -21,12 +21,12 @@
 	UIImage *bg;
 	switch( type )
 	{
-		case DishByMeBarButtonItemTypeNormal:
+		case DMBarButtonItemTypeNormal:
 			bg = [UIImage imageNamed:@"button.png"];
 			button.frame = CGRectMake( 0, 0, 60, 30 );
 			break;
 			
-		case DishByMeBarButtonItemTypeBack:
+		case DMBarButtonItemTypeBack:
 			bg = [UIImage imageNamed:@"navigation_bar_button_back.png"];
 			button.frame = CGRectMake( 0, 0, 60, 30 );
 			button.titleEdgeInsets = UIEdgeInsetsMake( -1, 8, 0, 0 );

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DishByMeNavigationController : UINavigationController
+@interface DMNavigationController : UINavigationController
 
 @end

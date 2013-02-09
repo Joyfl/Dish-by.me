@@ -11,16 +11,16 @@
 #import "Comment.h"
 #import "Const.h"
 #import "Utils.h"
-#import "DishByMeBarButtonItem.h"
+#import "DMBarButtonItem.h"
 #import "CommentCell.h"
-#import "DishByMeButton.h"
+#import "DMButton.h"
 #import "RecipeView.h"
 #import "UserManager.h"
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "User.h"
 #import "LoginViewController.h"
-#import "DishByMeNavigationController.h"
+#import "DMNavigationController.h"
 #import "JLLabelButton.h"
 
 @implementation DishDetailViewController
@@ -48,7 +48,7 @@ enum {
 	
 	_dish = dish;
 	
-	DishByMeBarButtonItem *backButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
+	DMBarButtonItem *backButton = [[DMBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = backButton;
 	[backButton release];
 	
@@ -81,7 +81,7 @@ enum {
 	[_commentBar addSubview:_commentInput];
 	[_commentInput release];
 	
-	_sendButton = [[DishByMeButton alloc] init];
+	_sendButton = [[DMButton alloc] init];
 	_sendButton.frame = CGRectMake( 250, 5, 60, 30 );
 	_sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[_sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -114,13 +114,13 @@ enum {
 	{
 		if( _dish.userId == [UserManager manager].userId )
 		{
-			DishByMeBarButtonItem *editButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
+			DMBarButtonItem *editButton = [[DMBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
 			self.navigationItem.rightBarButtonItem = editButton;
 			[editButton release];
 		}
 		else
 		{
-			DishByMeBarButtonItem *forkButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
+			DMBarButtonItem *forkButton = [[DMBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 			self.navigationItem.rightBarButtonItem = forkButton;
 			[forkButton release];
 		}
@@ -732,7 +732,7 @@ enum {
 	else
 	{
 		LoginViewController *loginViewController = [[LoginViewController alloc] initWithTarget:self action:@selector(loginDidFinish)];
-		DishByMeNavigationController *navigationController = [[DishByMeNavigationController alloc] initWithRootViewController:loginViewController];
+		DMNavigationController *navigationController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
 		navigationController.navigationBarHidden = YES;
 		[loginViewController release];
 		

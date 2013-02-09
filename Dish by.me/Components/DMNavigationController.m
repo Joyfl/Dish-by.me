@@ -6,10 +6,10 @@
 //  Copyright (c) 2012년 Joyfl. All rights reserved.
 //
 
-#import "DishByMeNavigationController.h"
+#import "DMNavigationController.h"
 
 
-@implementation DishByMeNavigationController
+@implementation DMNavigationController
 
 - (id)initWithRootViewController:rootViewController
 {

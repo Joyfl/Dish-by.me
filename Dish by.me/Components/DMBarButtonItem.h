@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DishByMeBarButtonItem : UIBarButtonItem
+@interface DMBarButtonItem : UIBarButtonItem
 
 enum {
-	DishByMeBarButtonItemTypeNormal = 0,
-	DishByMeBarButtonItemTypeBack = 1
+	DMBarButtonItemTypeNormal = 0,
+	DMBarButtonItemTypeBack = 1
 };
 
 - (id)initWithType:(NSInteger)type title:(NSString *)title target:(id)target action:(SEL)action;

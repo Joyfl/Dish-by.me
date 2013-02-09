@@ -11,7 +11,7 @@
 #import "Dish.h"
 #import "DishTileItem.h"
 #import "DishTileCell.h"
-#import "DishByMeButton.h"
+#import "DMButton.h"
 #import "DishDetailViewController.h"
 
 @implementation SearchViewController
@@ -38,7 +38,7 @@
 	_searchInput.placeholder = NSLocalizedString( @"SEARCH_INPUT", @"" );
 	[_searchBar addSubview:_searchInput];
 	
-	DishByMeButton *searchButton = [[DishByMeButton alloc] initWithTitle:NSLocalizedString( @"SEARCH", @"" )];
+	DMButton *searchButton = [[DMButton alloc] initWithTitle:NSLocalizedString( @"SEARCH", @"" )];
 	searchButton.frame = CGRectMake( 250, 5, 60, 30 );
 	searchButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[searchButton addTarget:self action:@selector(searchButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];

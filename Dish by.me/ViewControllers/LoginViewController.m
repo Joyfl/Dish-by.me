@@ -7,7 +7,7 @@
 //
 
 #import "LoginViewController.h"
-#import "DishByMeBarButtonItem.h"
+#import "DMBarButtonItem.h"
 #import "Utils.h"
 #import "Const.h"
 #import <QuartzCore/QuartzCore.h>
@@ -27,7 +27,7 @@ enum {
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	
-	DishByMeBarButtonItem *cancelButton = [[DishByMeBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
+	DMBarButtonItem *cancelButton = [[DMBarButtonItem alloc] initWithType:DishByMeBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	[cancelButton release];
 	

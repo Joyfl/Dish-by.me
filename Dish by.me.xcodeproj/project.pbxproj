@@ -14,7 +14,7 @@
 		0317884E160C76DB0041DAD7 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178848160C76DB0041DAD7 /* SearchViewController.m */; };
 		0317884F160C76DB0041DAD7 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0317884A160C76DB0041DAD7 /* SettingsViewController.m */; };
 		031AAAF4160DAB8B007B42B3 /* CommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAAF3160DAB8B007B42B3 /* CommentCell.m */; };
-		031AAB0B160DE2CD007B42B3 /* DishByMeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB0A160DE2CD007B42B3 /* DishByMeButton.m */; };
+		031AAB0B160DE2CD007B42B3 /* DMButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB0A160DE2CD007B42B3 /* DMButton.m */; };
 		031AAB12160EFD33007B42B3 /* RecipeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB11160EFD33007B42B3 /* RecipeView.m */; };
 		031AAB15160EFFB9007B42B3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 031AAB13160EFF9B007B42B3 /* QuartzCore.framework */; };
 		031AAB37160F23A1007B42B3 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB36160F23A1007B42B3 /* User.m */; };
@@ -180,8 +180,8 @@
 		03C8998C160B126E001E488B /* Dish.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C8998B160B126E001E488B /* Dish.m */; };
 		03C899BA160B1693001E488B /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03C899B9160B1693001E488B /* Utils.m */; };
 		03CB7409160C937700A5C6A3 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB7408160C937700A5C6A3 /* Comment.m */; };
-		03CB74A4160CC42700A5C6A3 /* DishByMeBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A1160CC42700A5C6A3 /* DishByMeBarButtonItem.m */; };
-		03CB74A5160CC42700A5C6A3 /* DishByMeNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A3160CC42700A5C6A3 /* DishByMeNavigationController.m */; };
+		03CB74A4160CC42700A5C6A3 /* DMBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */; };
+		03CB74A5160CC42700A5C6A3 /* DMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */; };
 		03E7B3991699AA92003729F4 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B38E1699AA92003729F4 /* blackArrow.png */; };
 		03E7B39A1699AA92003729F4 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B38F1699AA92003729F4 /* blackArrow@2x.png */; };
 		03E7B39B1699AA92003729F4 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3901699AA92003729F4 /* blueArrow.png */; };
@@ -210,8 +210,8 @@
 		0317884A160C76DB0041DAD7 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		031AAAF2160DAB8B007B42B3 /* CommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommentCell.h; path = Views/CommentCell.h; sourceTree = "<group>"; };
 		031AAAF3160DAB8B007B42B3 /* CommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommentCell.m; path = Views/CommentCell.m; sourceTree = "<group>"; };
-		031AAB09160DE2CD007B42B3 /* DishByMeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DishByMeButton.h; sourceTree = "<group>"; };
-		031AAB0A160DE2CD007B42B3 /* DishByMeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DishByMeButton.m; sourceTree = "<group>"; };
+		031AAB09160DE2CD007B42B3 /* DMButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMButton.h; sourceTree = "<group>"; };
+		031AAB0A160DE2CD007B42B3 /* DMButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMButton.m; sourceTree = "<group>"; };
 		031AAB10160EFD33007B42B3 /* RecipeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecipeView.h; path = Views/RecipeView.h; sourceTree = "<group>"; };
 		031AAB11160EFD33007B42B3 /* RecipeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecipeView.m; path = Views/RecipeView.m; sourceTree = "<group>"; };
 		031AAB13160EFF9B007B42B3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -419,10 +419,10 @@
 		03C899B9160B1693001E488B /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		03CB7407160C937700A5C6A3 /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Comment.h; path = Models/Comment.h; sourceTree = "<group>"; };
 		03CB7408160C937700A5C6A3 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Comment.m; path = Models/Comment.m; sourceTree = "<group>"; };
-		03CB74A0160CC42700A5C6A3 /* DishByMeBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DishByMeBarButtonItem.h; sourceTree = "<group>"; };
-		03CB74A1160CC42700A5C6A3 /* DishByMeBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DishByMeBarButtonItem.m; sourceTree = "<group>"; };
-		03CB74A2160CC42700A5C6A3 /* DishByMeNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DishByMeNavigationController.h; sourceTree = "<group>"; };
-		03CB74A3160CC42700A5C6A3 /* DishByMeNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DishByMeNavigationController.m; sourceTree = "<group>"; };
+		03CB74A0160CC42700A5C6A3 /* DMBarButtonItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMBarButtonItem.h; sourceTree = "<group>"; };
+		03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMBarButtonItem.m; sourceTree = "<group>"; };
+		03CB74A2160CC42700A5C6A3 /* DMNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMNavigationController.h; sourceTree = "<group>"; };
+		03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMNavigationController.m; sourceTree = "<group>"; };
 		03E7B38E1699AA92003729F4 /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
 		03E7B38F1699AA92003729F4 /* blackArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackArrow@2x.png"; sourceTree = "<group>"; };
 		03E7B3901699AA92003729F4 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
@@ -848,12 +848,12 @@
 		03CB749F160CC42700A5C6A3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				03CB74A2160CC42700A5C6A3 /* DishByMeNavigationController.h */,
-				03CB74A3160CC42700A5C6A3 /* DishByMeNavigationController.m */,
-				03CB74A0160CC42700A5C6A3 /* DishByMeBarButtonItem.h */,
-				03CB74A1160CC42700A5C6A3 /* DishByMeBarButtonItem.m */,
-				031AAB09160DE2CD007B42B3 /* DishByMeButton.h */,
-				031AAB0A160DE2CD007B42B3 /* DishByMeButton.m */,
+				03CB74A2160CC42700A5C6A3 /* DMNavigationController.h */,
+				03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */,
+				03CB74A0160CC42700A5C6A3 /* DMBarButtonItem.h */,
+				03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */,
+				031AAB09160DE2CD007B42B3 /* DMButton.h */,
+				031AAB0A160DE2CD007B42B3 /* DMButton.m */,
 				03677997169DE68700F26BBA /* BookmarkButton.h */,
 				03677998169DE68700F26BBA /* BookmarkButton.m */,
 				03A5E94C16B4E48100C79F8D /* JLLabelButton.h */,
@@ -1090,10 +1090,10 @@
 				0317884E160C76DB0041DAD7 /* SearchViewController.m in Sources */,
 				0317884F160C76DB0041DAD7 /* SettingsViewController.m in Sources */,
 				03CB7409160C937700A5C6A3 /* Comment.m in Sources */,
-				03CB74A4160CC42700A5C6A3 /* DishByMeBarButtonItem.m in Sources */,
-				03CB74A5160CC42700A5C6A3 /* DishByMeNavigationController.m in Sources */,
+				03CB74A4160CC42700A5C6A3 /* DMBarButtonItem.m in Sources */,
+				03CB74A5160CC42700A5C6A3 /* DMNavigationController.m in Sources */,
 				031AAAF4160DAB8B007B42B3 /* CommentCell.m in Sources */,
-				031AAB0B160DE2CD007B42B3 /* DishByMeButton.m in Sources */,
+				031AAB0B160DE2CD007B42B3 /* DMButton.m in Sources */,
 				031AAB12160EFD33007B42B3 /* RecipeView.m in Sources */,
 				031AAB37160F23A1007B42B3 /* User.m in Sources */,
 				031AAB3D160F3B4F007B42B3 /* WritingViewController.m in Sources */,

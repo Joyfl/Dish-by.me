@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DishByMeButton : UIButton
+@interface DMButton : UIButton
 
 - (id)initWithTitle:(NSString *)title;
 

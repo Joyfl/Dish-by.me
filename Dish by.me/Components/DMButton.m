@@ -6,9 +6,9 @@
 //  Copyright (c) 2012년 Joyfl. All rights reserved.
 //
 
-#import "DishByMeButton.h"
+#import "DMButton.h"
 
-@implementation DishByMeButton
+@implementation DMButton
 
 - (id)init
 {
