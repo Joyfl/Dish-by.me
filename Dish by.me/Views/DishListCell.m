@@ -101,7 +101,9 @@
 	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
 	if( _dish.photo )
 	{
-		_photoView.image = _dish.photo;
+		[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+			_photoView.image = _dish.photo;
+		} completion:nil];
 	}
 	else
 	{
@@ -110,7 +112,9 @@
 			_dish.photo = [UIImage imageWithData:data];
 			
 			if( [_indexPath isEqual:indexPath] )
-				_photoView.image = _dish.photo;
+				[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+					_photoView.image = _dish.photo;
+				} completion:nil];
 		}];
 	}
 	
