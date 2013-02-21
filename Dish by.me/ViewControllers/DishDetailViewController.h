@@ -19,6 +19,7 @@
 	JLHTTPLoader *_loader;
 	NSMutableArray *_comments;
 	NSInteger _commentOffset;
+	BOOL _loadedAllComments;
 	
 	BOOL lastLoggedIn;
 	

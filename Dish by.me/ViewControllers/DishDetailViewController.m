@@ -237,8 +237,18 @@ enum {
 		if( response.statusCode == 200 )
 		{
 			NSArray *data = [result objectForKey:@"data"];
-			if( data.count == 0 ) return;
 			
+			_commentOffset += data.count;
+			
+			// 로드된 댓글이 없을 경우
+			if( data.count == 0 )
+			{
+				_loadedAllComments = _commentOffset == _dish.commentCount;
+				[_tableView reloadData];
+				return;
+			}
+			
+			// 로드된 댓글이 추가될 indexPath들
 			NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
 			
 			for( NSInteger i = 0; i < data.count; i++ )
@@ -250,92 +260,95 @@ enum {
 				[comment release];
 			}
 			
-			_commentOffset += data.count;
-			
 			// 처음 로드
 			if( _commentOffset == data.count )
 			{
+				_loadedAllComments = _commentOffset == _dish.commentCount;
 				[_tableView reloadData];
 				return;
 			}
 			
+			// fold 애니메이션이 진행되는동안 제거
 			[_tableView removeFromSuperview];
 			
+			// 그냥 screenshot을 가져오면 _tableView.frame에 보이는 것만 가져와지기 때문에 contentSize만큼 frame을 늘려줌.
 			CGPoint originalContentOffset = _tableView.contentOffset;
 			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
 			_tableView.contentOffset = originalContentOffset;
 			UIImage *screenshot = [_tableView screenshot];
 			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
-			NSLog( @"screenshot : %@", NSStringFromCGSize( screenshot.size ) );
 			
-			UITableViewCell *c = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]];
-			CGRect rect = CGRectMake( 0, _tableView.contentOffset.y, 320, c.frame.origin.y + c.frame.size.height - _tableView.contentOffset.y );
-			NSLog( @"rect : %@", NSStringFromCGRect( rect ) );
+			// 더보기 cell 아래쪽에 새 댓글들이 추가됨.
+			UITableViewCell *moreCommentCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]];
+			CGRect rect = CGRectMake( 0, _tableView.contentOffset.y, 320, moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height - _tableView.contentOffset.y );
 			
+			// topImage : [테이블뷰 상단 ~ 더보기 버튼]까지의 스크린샷
 			UIImage *topImage = [Utils cropImage:screenshot toRect:rect];
-			NSLog( @"topImage : %@", NSStringFromCGSize( topImage.size ) );
-			
 			_topView = [[UIImageView alloc] initWithImage:topImage];
 			_topView.frame = (CGRect){CGPointZero, _topView.frame.size};
 			[self.view addSubview:_topView];
 			
-			UIImage *botImage = [Utils cropImage:screenshot toRect:CGRectMake( 0, c.frame.origin.y + c.frame.size.height, 320, _tableView.contentSize.height - c.frame.origin.y - c.frame.size.height )];
-			NSLog( @"botImage : %@", NSStringFromCGSize( botImage.size ) );
-			
+			// botImage : [더보기 버튼 아래쪽 ~ 테이블뷰 하단]까지의 스크린샷
+			UIImage *botImage = [Utils cropImage:screenshot toRect:CGRectMake( 0, moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height, 320, _tableView.contentSize.height - moreCommentCell.frame.origin.y - moreCommentCell.frame.size.height )];			
 			_botView = [[UIImageView alloc] initWithImage:botImage];
 			_botView.frame = (CGRect){{0, _topView.frame.origin.y + _topView.frame.size.height}, _botView.frame.size};
 			[self.view addSubview:_botView];
 			
+			// 안보이는동안 새 댓글들을 추가시켜놓음
 			[_tableView beginUpdates];
 			[_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
 			[_tableView endUpdates];
 			
-//#warning _tableView에서 언제 업데이트가 끝나는지를 알 수 없음!!
-//			dispatch_after( dispatch_time( DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC ), dispatch_get_current_queue(), ^{
-				CGFloat height = 0;
-				for( NSInteger i = 0; i < data.count; i++ )
-					height += [[_comments objectAtIndex:i] messageHeight] + 32;
+			// 새 댓글들의 총 높이
+			CGFloat height = 0;
+			for( NSInteger i = 0; i < data.count; i++ )
+				height += [[_comments objectAtIndex:i] messageHeight] + 32;
+			
+			// 댓글이 추가된 _tableView의 스크린샷을 찍음
+			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
+			_tableView.contentOffset = originalContentOffset;
+			UIImage *screenshotAfterReload = [_tableView screenshot];
+			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+			
+			// midImage : 추가된 새 댓글부분의 스크린샷
+			UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height, 320, height )];
+			_midView = [[UIImageView alloc] initWithImage:midImage];
+			_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height );
+			
+			JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
+			foldableView.contentView = _midView;
+			foldableView.foldCount = data.count;
+			foldableView.fraction = 0;
+			[self.view addSubview:foldableView];
+			
+			[UIView animateWithDuration:0.5 animations:^{
+				foldableView.fraction = 0.9999;
+				foldableView.frame = _midView.frame;
+				_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
+			} completion:^(BOOL finished) {
+				[_topView removeFromSuperview];
+				[_topView release]; _topView = nil;
 				
-				NSLog( @"height : %f", height );
+				[_midView removeFromSuperview];
+				[_midView release]; _midView = nil;
 				
-				_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
-				_tableView.contentOffset = originalContentOffset;
-				UIImage *screenshotAfterReload = [_tableView screenshot];
-				_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
-				NSLog( @"screenshot2 : %@", NSStringFromCGSize( screenshotAfterReload.size ) );
+				[_botView removeFromSuperview];
+				[_botView release]; _botView = nil;
 				
-				UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, c.frame.origin.y + c.frame.size.height, 320, height )];
-				NSLog( @"midImage : %f, %@", _topView.frame.origin.y + _topView.frame.size.height, NSStringFromCGSize( midImage.size ) );
+				[foldableView removeFromSuperview];
+				[foldableView release];
 				
-				_midView = [[UIImageView alloc] initWithImage:midImage];
-				_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height );
+				[self.view addSubview:_tableView];
 				
-				JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
-				foldableView.contentView = _midView;
-				foldableView.foldCount = data.count;
-				foldableView.fraction = 0;
-				[self.view addSubview:foldableView];
-				
-				[UIView animateWithDuration:0.5 animations:^{
-					foldableView.fraction = 0.9999;
-					foldableView.frame = _midView.frame;
-					_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
-				} completion:^(BOOL finished) {
-					[_topView removeFromSuperview];
-					[_topView release]; _topView = nil;
-					
-					[_midView removeFromSuperview];
-					[_midView release]; _midView = nil;
-					
-					[_botView removeFromSuperview];
-					[_botView release]; _botView = nil;
-					
-					[foldableView removeFromSuperview];
-					[foldableView release];
-					
-					[self.view addSubview:_tableView];
-				}];
-//			} );
+				// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
+				_loadedAllComments = _commentOffset == _dish.commentCount;
+				if( _loadedAllComments )
+				{
+					[_tableView beginUpdates];
+					[_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]] withRowAnimation:UITableViewRowAnimationNone];
+					[_tableView endUpdates];
+				}
+			}];
 		}
 	}
 	
@@ -415,7 +428,7 @@ enum {
 			return 1;
 			
 		case kSectionMoreComments:
-			return 1;
+			return !_loadedAllComments;
 			
 		case kSectionComment:
 			if( [_loader hasRequestId:kRequestIdComments] )
@@ -810,7 +823,6 @@ enum {
 - (void)moreButtonDidTouchUpInside
 {
 	[self loadComments];
-	NSLog( @"더 보기" );
 }
 
 - (void)commentInputDidBeginEditing
