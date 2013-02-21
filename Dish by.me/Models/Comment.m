@@ -30,6 +30,12 @@
 	return comment;
 }
 
+- (void)setMessage:(NSString *)msg
+{
+	message = [msg retain];
+	[self calculateMessageHeight];
+}
+
 - (void)updateRelativeTime
 {
 	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:NO];

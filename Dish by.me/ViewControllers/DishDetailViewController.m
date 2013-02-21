@@ -724,7 +724,7 @@ enum {
 	[recipeView release];
 }
 
-#define INESRT_INDEX 1
+#define INESRT_INDEX 0
 #define NEW_ROW_COUNT 5
 
 - (void)moreButtonDidTouchUpInside
@@ -735,11 +735,14 @@ enum {
 	
 	for( NSInteger i = INESRT_INDEX; i < INESRT_INDEX + NEW_ROW_COUNT; i++ )
 	{
-		[_comments addObject:[[Comment alloc] init]];
+		Comment *comment = [[Comment alloc] init];
+		comment.userName = @"UserName";
+		comment.message = @"Message";
+		[_comments insertObject:comment atIndex:i];
 		[indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:kSectionComment]];
 	}
 	
-	UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:INESRT_INDEX - 1 inSection:0]];
+	UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:INESRT_INDEX inSection:0]];
 	CGRect cellFrame = [self.view convertRect:cell.frame toView:self.view];
 	if( CGRectIsEmpty( cellFrame ) || !CGRectIntersectsRect( cellFrame, [UIScreen mainScreen].bounds ) )
 	{
@@ -763,12 +766,10 @@ enum {
 	CGRect rect = CGRectMake( 0, _tableView.contentOffset.y, 320, c.frame.origin.y + c.frame.size.height - _tableView.contentOffset.y );
 	NSLog( @"rect : %@", NSStringFromCGRect( rect ) );
 	
-	UIImage *topImage = [Utils cropImage:screenshot toRect:rect]; //CGRectMake( 0, 0, 320, INESRT_INDEX * 44 )
+	UIImage *topImage = [Utils cropImage:screenshot toRect:rect];
 	NSLog( @"topImage : %@", NSStringFromCGSize( topImage.size ) );
-//	UIImageWriteToSavedPhotosAlbum( topImage, nil, nil, nil );
 	
 	_topView = [[UIImageView alloc] initWithImage:[self colorizeImage:topImage withColor:[UIColor redColor]]];
-//	_topView.frame = (CGRect){{0, _tableView.contentOffset.y}, _topView.frame.size};
 	_topView.frame = (CGRect){CGPointZero, _topView.frame.size};
 	[self.view addSubview:_topView];
 	
@@ -776,19 +777,66 @@ enum {
 	NSLog( @"botImage : %@", NSStringFromCGSize( botImage.size ) );
 	
 	_botView = [[UIImageView alloc] initWithImage:[self colorizeImage:botImage withColor:[UIColor blueColor]]];
-//	_botView.frame = (CGRect){{0, _topView.frame.size.height - _tableView.contentOffset.y}, _botView.frame.size};
 	_botView.frame = (CGRect){{0, _topView.frame.origin.y + _topView.frame.size.height}, _botView.frame.size};
 	[self.view addSubview:_botView];
 	
-//	_topView.alpha = _botView.alpha = 0.4;
-	return;
+	_topView.alpha = _botView.alpha = 0.4;
 	
 	[_tableView beginUpdates];
 	[_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
 	[_tableView endUpdates];
 	
-#warning _tableView에서 언제 업데이트가 끝나는지를 알 수 없음!!
-	[self performSelector:@selector(animate) withObject:nil afterDelay:0.5];
+#warning _tableView에서 언제 업데이트가 끝나는지를 알 수 없음!!	
+	dispatch_after( dispatch_time( DISPATCH_TIME_NOW, NSEC_PER_SEC ), dispatch_get_current_queue(), ^{
+		CGFloat height = 0;
+		for( NSInteger i = INESRT_INDEX; i < NEW_ROW_COUNT; i++ )
+		{
+			height += [[_comments objectAtIndex:i] messageHeight] + 32;
+		}
+		
+		NSLog( @"height : %f", height );
+		
+		_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
+		_tableView.contentOffset = originalContentOffset;
+		UIImage *screenshot2 = [_tableView screenshot];
+		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+		NSLog( @"screenshot2 : %@", NSStringFromCGSize( screenshot2.size ) );
+		
+		UIImage *midImage = [Utils cropImage:screenshot2 toRect:CGRectMake( 0, c.frame.origin.y + c.frame.size.height, 320, height )];
+		NSLog( @"midImage : %f, %@", _topView.frame.origin.y + _topView.frame.size.height, NSStringFromCGSize( midImage.size ) );
+		
+		_midView = [[UIImageView alloc] initWithImage:[self colorizeImage:midImage withColor:[UIColor greenColor]]];
+		_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height );
+		[self.view addSubview:_midView];
+		return;
+		
+		JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, INESRT_INDEX * 44 - _tableView.contentOffset.y, 320, NEW_ROW_COUNT * 44 )];
+		foldableView.contentView = _midView;
+		foldableView.foldCount = NEW_ROW_COUNT;
+		foldableView.fraction = 0;
+		[self.view addSubview:foldableView];
+		
+		[UIView animateWithDuration:0.5 animations:^{
+			foldableView.fraction = 0.9999;
+			foldableView.frame = _midView.frame;
+			_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
+		} completion:^(BOOL finished) {
+			return;
+			[_topView removeFromSuperview];
+			[_topView release]; _topView = nil;
+			
+			[_midView removeFromSuperview];
+			[_midView release]; _midView = nil;
+			
+			[_botView removeFromSuperview];
+			[_botView release]; _botView = nil;
+			
+			[foldableView removeFromSuperview];
+			[foldableView release];
+			
+			[self.view addSubview:_tableView];
+		}];
+	} );
 }
 
 - (UIImage *)colorizeImage:(UIImage *)image withColor:(UIColor *)color {
@@ -819,38 +867,6 @@ enum {
     UIGraphicsEndImageContext();
 	
     return colorizedImage;
-}
-
-- (void)animate
-{
-	_midView = [[UIImageView alloc] initWithImage:[Utils cropImage:[_tableView screenshot] toRect:CGRectMake( 0, INESRT_INDEX * 44, 320, NEW_ROW_COUNT * 44 )]];
-	_midView.frame = CGRectMake( 0, INESRT_INDEX * 44 - _tableView.contentOffset.y, 320, NEW_ROW_COUNT * 44 );
-	
-	JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, INESRT_INDEX * 44 - _tableView.contentOffset.y, 320, NEW_ROW_COUNT * 44 )];
-	foldableView.contentView = _midView;
-	foldableView.foldCount = NEW_ROW_COUNT;
-	foldableView.fraction = 0;
-	[self.view addSubview:foldableView];
-	
-	[UIView animateWithDuration:0.5 animations:^{
-		foldableView.fraction = 0.9999;
-		foldableView.frame = _midView.frame;
-		_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
-	} completion:^(BOOL finished) {
-		[_topView removeFromSuperview];
-		[_topView release]; _topView = nil;
-		
-		[_midView removeFromSuperview];
-		[_midView release]; _midView = nil;
-		
-		[_botView removeFromSuperview];
-		[_botView release]; _botView = nil;
-		
-		[foldableView removeFromSuperview];
-		[foldableView release];
-		
-		[self.view addSubview:_tableView];
-	}];
 }
 
 - (void)commentInputDidBeginEditing
