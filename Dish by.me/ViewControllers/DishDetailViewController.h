@@ -18,7 +18,7 @@
 	Dish *_dish;
 	JLHTTPLoader *_loader;
 	NSMutableArray *_comments;
-	NSInteger _offset;
+	NSInteger _commentOffset;
 	
 	BOOL lastLoggedIn;
 	

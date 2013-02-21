@@ -36,7 +36,6 @@ enum {
 
 enum {
 	kRequestIdComments = 0,
-	kRequestIdMoreComments = 1,
 	kRequestIdSendComment = 2,
 	kRequestIdBookmark = 3,
 	kRequestIdUnbookmark = 4,
@@ -173,16 +172,7 @@ enum {
 	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
 	req.requestId = kRequestIdComments;
 	req.url = [NSString stringWithFormat:@"%@dish/%d/comments", API_ROOT_URL, _dish.dishId];
-	[_loader addRequest:req];
-	[_loader startLoading];
-}
-
-- (void)loadMoreComments
-{
-	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-	req.requestId = kRequestIdMoreComments;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/comments", API_ROOT_URL, _dish.dishId];
-	[req setParam:[NSString stringWithFormat:@"%d", _offset] forKey:@"offset"];
+	[req setParam:[NSString stringWithFormat:@"%d", _commentOffset] forKey:@"offset"];
 	[_loader addRequest:req];
 	[_loader startLoading];
 }
@@ -247,15 +237,105 @@ enum {
 		if( response.statusCode == 200 )
 		{
 			NSArray *data = [result objectForKey:@"data"];
+			if( data.count == 0 ) return;
 			
-			for( NSDictionary *d in data )
+			NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+			
+			for( NSInteger i = 0; i < data.count; i++ )
 			{
-				Comment *comment = [Comment commentFromDictionary:d];
-				[_comments addObject:comment];
+				NSDictionary *dict = [data objectAtIndex:i];
+				Comment *comment = [Comment commentFromDictionary:dict];
+				[_comments insertObject:comment atIndex:i];
+				[indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:kSectionComment]];
 				[comment release];
 			}
 			
-			[_tableView reloadData];
+			_commentOffset += data.count;
+			
+			// 처음 로드
+			if( _commentOffset == data.count )
+			{
+				[_tableView reloadData];
+				return;
+			}
+			
+			[_tableView removeFromSuperview];
+			
+			CGPoint originalContentOffset = _tableView.contentOffset;
+			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
+			_tableView.contentOffset = originalContentOffset;
+			UIImage *screenshot = [_tableView screenshot];
+			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+			NSLog( @"screenshot : %@", NSStringFromCGSize( screenshot.size ) );
+			
+			UITableViewCell *c = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]];
+			CGRect rect = CGRectMake( 0, _tableView.contentOffset.y, 320, c.frame.origin.y + c.frame.size.height - _tableView.contentOffset.y );
+			NSLog( @"rect : %@", NSStringFromCGRect( rect ) );
+			
+			UIImage *topImage = [Utils cropImage:screenshot toRect:rect];
+			NSLog( @"topImage : %@", NSStringFromCGSize( topImage.size ) );
+			
+			_topView = [[UIImageView alloc] initWithImage:topImage];
+			_topView.frame = (CGRect){CGPointZero, _topView.frame.size};
+			[self.view addSubview:_topView];
+			
+			UIImage *botImage = [Utils cropImage:screenshot toRect:CGRectMake( 0, c.frame.origin.y + c.frame.size.height, 320, _tableView.contentSize.height - c.frame.origin.y - c.frame.size.height )];
+			NSLog( @"botImage : %@", NSStringFromCGSize( botImage.size ) );
+			
+			_botView = [[UIImageView alloc] initWithImage:botImage];
+			_botView.frame = (CGRect){{0, _topView.frame.origin.y + _topView.frame.size.height}, _botView.frame.size};
+			[self.view addSubview:_botView];
+			
+			[_tableView beginUpdates];
+			[_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+			[_tableView endUpdates];
+			
+//#warning _tableView에서 언제 업데이트가 끝나는지를 알 수 없음!!
+//			dispatch_after( dispatch_time( DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC ), dispatch_get_current_queue(), ^{
+				CGFloat height = 0;
+				for( NSInteger i = 0; i < data.count; i++ )
+					height += [[_comments objectAtIndex:i] messageHeight] + 32;
+				
+				NSLog( @"height : %f", height );
+				
+				_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
+				_tableView.contentOffset = originalContentOffset;
+				UIImage *screenshotAfterReload = [_tableView screenshot];
+				_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+				NSLog( @"screenshot2 : %@", NSStringFromCGSize( screenshotAfterReload.size ) );
+				
+				UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, c.frame.origin.y + c.frame.size.height, 320, height )];
+				NSLog( @"midImage : %f, %@", _topView.frame.origin.y + _topView.frame.size.height, NSStringFromCGSize( midImage.size ) );
+				
+				_midView = [[UIImageView alloc] initWithImage:midImage];
+				_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height );
+				
+				JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
+				foldableView.contentView = _midView;
+				foldableView.foldCount = data.count;
+				foldableView.fraction = 0;
+				[self.view addSubview:foldableView];
+				
+				[UIView animateWithDuration:0.5 animations:^{
+					foldableView.fraction = 0.9999;
+					foldableView.frame = _midView.frame;
+					_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
+				} completion:^(BOOL finished) {
+					[_topView removeFromSuperview];
+					[_topView release]; _topView = nil;
+					
+					[_midView removeFromSuperview];
+					[_midView release]; _midView = nil;
+					
+					[_botView removeFromSuperview];
+					[_botView release]; _botView = nil;
+					
+					[foldableView removeFromSuperview];
+					[foldableView release];
+					
+					[self.view addSubview:_tableView];
+				}];
+//			} );
 		}
 	}
 	
@@ -729,139 +809,8 @@ enum {
 
 - (void)moreButtonDidTouchUpInside
 {
+	[self loadComments];
 	NSLog( @"더 보기" );
-	
-	NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-	
-	for( NSInteger i = INESRT_INDEX; i < INESRT_INDEX + NEW_ROW_COUNT; i++ )
-	{
-		Comment *comment = [[Comment alloc] init];
-		comment.userName = @"UserName";
-		comment.message = @"Message";
-		[_comments insertObject:comment atIndex:i];
-		[indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:kSectionComment]];
-	}
-	
-	UITableViewCell *cell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:INESRT_INDEX inSection:0]];
-	CGRect cellFrame = [self.view convertRect:cell.frame toView:self.view];
-	if( CGRectIsEmpty( cellFrame ) || !CGRectIntersectsRect( cellFrame, [UIScreen mainScreen].bounds ) )
-	{
-		NSLog( @"View is not in screen!" );
-		[_tableView beginUpdates];
-		[_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-		[_tableView endUpdates];
-		return;
-	}
-	
-	[_tableView removeFromSuperview];
-	
-	CGPoint originalContentOffset = _tableView.contentOffset;
-	_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
-	_tableView.contentOffset = originalContentOffset;
-	UIImage *screenshot = [_tableView screenshot];
-	_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
-	NSLog( @"screenshot : %@", NSStringFromCGSize( screenshot.size ) );
-	
-	UITableViewCell *c = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]];
-	CGRect rect = CGRectMake( 0, _tableView.contentOffset.y, 320, c.frame.origin.y + c.frame.size.height - _tableView.contentOffset.y );
-	NSLog( @"rect : %@", NSStringFromCGRect( rect ) );
-	
-	UIImage *topImage = [Utils cropImage:screenshot toRect:rect];
-	NSLog( @"topImage : %@", NSStringFromCGSize( topImage.size ) );
-	
-	_topView = [[UIImageView alloc] initWithImage:[self colorizeImage:topImage withColor:[UIColor redColor]]];
-	_topView.frame = (CGRect){CGPointZero, _topView.frame.size};
-	[self.view addSubview:_topView];
-	
-	UIImage *botImage = [Utils cropImage:screenshot toRect:CGRectMake( 0, c.frame.origin.y + c.frame.size.height, 320, _tableView.contentSize.height - c.frame.origin.y - c.frame.size.height )];
-	NSLog( @"botImage : %@", NSStringFromCGSize( botImage.size ) );
-	
-	_botView = [[UIImageView alloc] initWithImage:[self colorizeImage:botImage withColor:[UIColor blueColor]]];
-	_botView.frame = (CGRect){{0, _topView.frame.origin.y + _topView.frame.size.height}, _botView.frame.size};
-	[self.view addSubview:_botView];
-	
-//	_topView.alpha = _botView.alpha = 0.4;
-	
-	[_tableView beginUpdates];
-	[_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-	[_tableView endUpdates];
-	
-#warning _tableView에서 언제 업데이트가 끝나는지를 알 수 없음!!	
-	dispatch_after( dispatch_time( DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC ), dispatch_get_current_queue(), ^{
-		CGFloat height = 0;
-		for( NSInteger i = INESRT_INDEX; i < NEW_ROW_COUNT; i++ )
-			height += [[_comments objectAtIndex:i] messageHeight] + 32;
-		
-		NSLog( @"height : %f", height );
-		
-		_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
-		_tableView.contentOffset = originalContentOffset;
-		UIImage *screenshot2 = [_tableView screenshot];
-		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
-		NSLog( @"screenshot2 : %@", NSStringFromCGSize( screenshot2.size ) );
-		
-		UIImage *midImage = [Utils cropImage:screenshot2 toRect:CGRectMake( 0, c.frame.origin.y + c.frame.size.height, 320, height )];
-		NSLog( @"midImage : %f, %@", _topView.frame.origin.y + _topView.frame.size.height, NSStringFromCGSize( midImage.size ) );
-		
-		_midView = [[UIImageView alloc] initWithImage:[self colorizeImage:midImage withColor:[UIColor greenColor]]];
-		_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height );
-		
-		JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
-		foldableView.contentView = _midView;
-		foldableView.foldCount = NEW_ROW_COUNT;
-		foldableView.fraction = 0;
-		[self.view addSubview:foldableView];
-		
-		[UIView animateWithDuration:0.5 animations:^{
-			foldableView.fraction = 0.9999;
-			foldableView.frame = _midView.frame;
-			_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
-		} completion:^(BOOL finished) {
-			[_topView removeFromSuperview];
-			[_topView release]; _topView = nil;
-			
-			[_midView removeFromSuperview];
-			[_midView release]; _midView = nil;
-			
-			[_botView removeFromSuperview];
-			[_botView release]; _botView = nil;
-			
-			[foldableView removeFromSuperview];
-			[foldableView release];
-			
-			[self.view addSubview:_tableView];
-		}];
-	} );
-}
-
-- (UIImage *)colorizeImage:(UIImage *)image withColor:(UIColor *)color {
-	return image;
-	
-    UIGraphicsBeginImageContext(image.size);
-	
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGRect area = CGRectMake(0, 0, image.size.width, image.size.height);
-	
-    CGContextScaleCTM(context, 1, -1);
-    CGContextTranslateCTM(context, 0, -area.size.height);
-	
-    CGContextSaveGState(context);
-    CGContextClipToMask(context, area, image.CGImage);
-	
-    [color set];
-    CGContextFillRect(context, area);
-	
-    CGContextRestoreGState(context);
-	
-    CGContextSetBlendMode(context, kCGBlendModeMultiply);
-	
-    CGContextDrawImage(context, area, image.CGImage);
-	
-    UIImage *colorizedImage = UIGraphicsGetImageFromCurrentImageContext();
-	
-    UIGraphicsEndImageContext();
-	
-    return colorizedImage;
 }
 
 - (void)commentInputDidBeginEditing
