@@ -35,6 +35,8 @@
 	UIImageView *_bookmarkIconView;
 	UILabel *_bookmarkLabel;
 	BookmarkButton *_bookmarkButton;
+	UIButton *_moreCommentsButton;
+	UIActivityIndicatorView *_moreCommentsIndicatorView;
 	UIView *_commentBar;
 	UITextField *_commentInput;
 	DMButton *_sendButton;

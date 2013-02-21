@@ -273,7 +273,7 @@ enum {
 			
 			// 그냥 screenshot을 가져오면 _tableView.frame에 보이는 것만 가져와지기 때문에 contentSize만큼 frame을 늘려줌.
 			CGPoint originalContentOffset = _tableView.contentOffset;
-			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
+			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
 			_tableView.contentOffset = originalContentOffset;
 			UIImage *screenshot = [_tableView screenshot];
 			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
@@ -305,7 +305,7 @@ enum {
 				height += [[_comments objectAtIndex:i] messageHeight] + 32;
 			
 			// 댓글이 추가된 _tableView의 스크린샷을 찍음
-			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
+			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
 			_tableView.contentOffset = originalContentOffset;
 			UIImage *screenshotAfterReload = [_tableView screenshot];
 			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
@@ -339,6 +339,7 @@ enum {
 				[foldableView release];
 				
 				[self.view addSubview:_tableView];
+				[_moreCommentsIndicatorView removeFromSuperview];
 				
 				// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
 				_loadedAllComments = _commentOffset == _dish.commentCount;
@@ -679,19 +680,22 @@ enum {
 			UIImageView *lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line.png"]];
 			[cell.contentView addSubview:lineView];
 			
-			UIButton *moreCommentsButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 2, 320, 43 )];
-			[moreCommentsButton setImage:[UIImage imageNamed:@"icon_comment_gray.png"] forState:UIControlStateNormal];
-			[moreCommentsButton setTitle:NSLocalizedString( @"MORE_COMMENTS", @"" ) forState:UIControlStateNormal];
-			[moreCommentsButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
-			[moreCommentsButton setTitleColor:[Utils colorWithHex:0x343535 alpha:1] forState:UIControlStateHighlighted];
-			[moreCommentsButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:1] forState:UIControlStateNormal];
-			moreCommentsButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-			moreCommentsButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-			moreCommentsButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 12, 0, 0 );
-			moreCommentsButton.titleEdgeInsets = UIEdgeInsetsMake( 0, 18, 0, 0 );
-			moreCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-			[moreCommentsButton addTarget:self action:@selector(moreCommentsButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-			[cell.contentView addSubview:moreCommentsButton];
+			if( !_moreCommentsButton )
+			{
+				_moreCommentsButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 2, 320, 43 )];
+				[_moreCommentsButton setImage:[UIImage imageNamed:@"icon_comment_gray.png"] forState:UIControlStateNormal];
+				[_moreCommentsButton setTitle:NSLocalizedString( @"MORE_COMMENTS", @"" ) forState:UIControlStateNormal];
+				[_moreCommentsButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+				[_moreCommentsButton setTitleColor:[Utils colorWithHex:0x343535 alpha:1] forState:UIControlStateHighlighted];
+				[_moreCommentsButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:1] forState:UIControlStateNormal];
+				_moreCommentsButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+				_moreCommentsButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+				_moreCommentsButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 12, 0, 0 );
+				_moreCommentsButton.titleEdgeInsets = UIEdgeInsetsMake( 0, 18, 0, 0 );
+				_moreCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+				[_moreCommentsButton addTarget:self action:@selector(moreCommentsButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+				[cell.contentView addSubview:_moreCommentsButton];
+			}
 		}
 		
 		return cell;
@@ -833,6 +837,16 @@ enum {
 
 - (void)moreCommentsButtonDidTouchUpInside
 {
+	if( !_moreCommentsIndicatorView )
+	{
+		_moreCommentsIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		_moreCommentsIndicatorView.frame = CGRectMake( -1, [_moreCommentsButton convertPoint:_moreCommentsButton.frame.origin toView:self.view].y, 37, 37 );
+		[_moreCommentsIndicatorView startAnimating];
+	}
+	
+	[self.view addSubview:_moreCommentsIndicatorView];
+//	[_moreCommentsIndicatorView release];
+	
 	[self loadComments];
 }
 
