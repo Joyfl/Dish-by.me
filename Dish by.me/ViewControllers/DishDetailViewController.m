@@ -45,7 +45,7 @@ enum {
 - (id)initWithDish:(Dish *)dish
 {
 	self = [super init];
-	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.view.backgroundColor = [Utils colorWithHex:0x333333 alpha:1];
 	
 	_dish = dish;
 	
@@ -59,7 +59,7 @@ enum {
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	_tableView.backgroundColor = self.view.backgroundColor;
+	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	_tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 0, 0, 40, 0 );
 	[self.view addSubview:_tableView];
 	
@@ -271,6 +271,8 @@ enum {
 			// fold 애니메이션이 진행되는동안 제거
 			[_tableView removeFromSuperview];
 			
+			CGFloat scale = [[UIScreen mainScreen] scale];
+			
 			// 그냥 screenshot을 가져오면 _tableView.frame에 보이는 것만 가져와지기 때문에 contentSize만큼 frame을 늘려줌.
 			CGPoint originalContentOffset = _tableView.contentOffset;
 			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
@@ -280,18 +282,18 @@ enum {
 			
 			// 더보기 cell 아래쪽에 새 댓글들이 추가됨.
 			UITableViewCell *moreCommentCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]];
-			CGRect rect = CGRectMake( 0, _tableView.contentOffset.y, 320, moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height - _tableView.contentOffset.y );
+			CGRect rect = CGRectMake( 0, _tableView.contentOffset.y * scale, 320 * scale, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height - _tableView.contentOffset.y) * scale );
 			
 			// topImage : [테이블뷰 상단 ~ 더보기 버튼]까지의 스크린샷
 			UIImage *topImage = [Utils cropImage:screenshot toRect:rect];
 			_topView = [[UIImageView alloc] initWithImage:topImage];
-			_topView.frame = (CGRect){CGPointZero, _topView.frame.size};
+			_topView.frame = CGRectMake( 0, 0, _topView.frame.size.width / scale, _topView.frame.size.height / scale );
 			[self.view addSubview:_topView];
 			
 			// botImage : [더보기 버튼 아래쪽 ~ 테이블뷰 하단]까지의 스크린샷
-			UIImage *botImage = [Utils cropImage:screenshot toRect:CGRectMake( 0, moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height, 320, _tableView.contentSize.height - moreCommentCell.frame.origin.y - moreCommentCell.frame.size.height )];			
+			UIImage *botImage = [Utils cropImage:screenshot toRect:CGRectMake( 0, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height) * scale, 320 * scale, _tableView.contentSize.height - (moreCommentCell.frame.origin.y - moreCommentCell.frame.size.height) * scale )];
 			_botView = [[UIImageView alloc] initWithImage:botImage];
-			_botView.frame = (CGRect){{0, _topView.frame.origin.y + _topView.frame.size.height}, _botView.frame.size};
+			_botView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _botView.frame.size.width / scale, _botView.frame.size.height / scale );
 			[self.view addSubview:_botView];
 			
 			// 안보이는동안 새 댓글들을 추가시켜놓음
@@ -311,13 +313,18 @@ enum {
 			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
 			
 			// midImage : 추가된 새 댓글부분의 스크린샷
-			UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height, 320, height )];
+			UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height) * scale, 320 * scale, height * scale )];
 			_midView = [[UIImageView alloc] initWithImage:midImage];
-			_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height );
+			_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _midView.frame.size.width / scale, _midView.frame.size.height / scale );
 			
 			JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
 			foldableView.contentView = _midView;
-			foldableView.foldCount = data.count;
+			
+			NSInteger foldCount = data.count / 4;
+			if( data.count == 1 ) foldCount = 1;
+			else if( foldCount < 2 ) foldCount = 2;
+			
+			foldableView.foldCount = foldCount;
 			foldableView.fraction = 0;
 			[self.view addSubview:foldableView];
 			

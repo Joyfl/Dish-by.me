@@ -184,8 +184,8 @@
 		03CB7409160C937700A5C6A3 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB7408160C937700A5C6A3 /* Comment.m */; };
 		03CB74A4160CC42700A5C6A3 /* DMBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */; };
 		03CB74A5160CC42700A5C6A3 /* DMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */; };
-		03D70F8316CA3032008B76F8 /* JLFoldableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D70F8016CA3032008B76F8 /* JLFoldableView.m */; };
-		03D70F8416CA3032008B76F8 /* UIView+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D70F8216CA3032008B76F8 /* UIView+Screenshot.m */; };
+		03E7603116D6BA7B004916B0 /* JLFoldableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E7602E16D6BA7B004916B0 /* JLFoldableView.m */; };
+		03E7603216D6BA7B004916B0 /* UIView+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E7603016D6BA7B004916B0 /* UIView+Screenshot.m */; };
 		03E7B3991699AA92003729F4 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B38E1699AA92003729F4 /* blackArrow.png */; };
 		03E7B39A1699AA92003729F4 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B38F1699AA92003729F4 /* blackArrow@2x.png */; };
 		03E7B39B1699AA92003729F4 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3901699AA92003729F4 /* blueArrow.png */; };
@@ -429,10 +429,10 @@
 		03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMBarButtonItem.m; sourceTree = "<group>"; };
 		03CB74A2160CC42700A5C6A3 /* DMNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMNavigationController.h; sourceTree = "<group>"; };
 		03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMNavigationController.m; sourceTree = "<group>"; };
-		03D70F7F16CA3032008B76F8 /* JLFoldableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLFoldableView.h; sourceTree = "<group>"; };
-		03D70F8016CA3032008B76F8 /* JLFoldableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLFoldableView.m; sourceTree = "<group>"; };
-		03D70F8116CA3032008B76F8 /* UIView+Screenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Screenshot.h"; sourceTree = "<group>"; };
-		03D70F8216CA3032008B76F8 /* UIView+Screenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Screenshot.m"; sourceTree = "<group>"; };
+		03E7602D16D6BA7B004916B0 /* JLFoldableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLFoldableView.h; sourceTree = "<group>"; };
+		03E7602E16D6BA7B004916B0 /* JLFoldableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLFoldableView.m; sourceTree = "<group>"; };
+		03E7602F16D6BA7B004916B0 /* UIView+Screenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Screenshot.h"; sourceTree = "<group>"; };
+		03E7603016D6BA7B004916B0 /* UIView+Screenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Screenshot.m"; sourceTree = "<group>"; };
 		03E7B38E1699AA92003729F4 /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
 		03E7B38F1699AA92003729F4 /* blackArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackArrow@2x.png"; sourceTree = "<group>"; };
 		03E7B3901699AA92003729F4 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
@@ -690,7 +690,7 @@
 		037EF5E916887B9200FA765D /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				03D70F7E16CA3032008B76F8 /* JLFoldableView */,
+				03E7602C16D6BA7B004916B0 /* JLFoldableView */,
 				037EF60016887BBA00FA765D /* EGOTableViewPullRefresh */,
 				037EF60316887BBA00FA765D /* SBJSON */,
 				037EF5EA16887B9200FA765D /* JLHTTPRequest */,
@@ -875,16 +875,15 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
-		03D70F7E16CA3032008B76F8 /* JLFoldableView */ = {
+		03E7602C16D6BA7B004916B0 /* JLFoldableView */ = {
 			isa = PBXGroup;
 			children = (
-				03D70F7F16CA3032008B76F8 /* JLFoldableView.h */,
-				03D70F8016CA3032008B76F8 /* JLFoldableView.m */,
-				03D70F8116CA3032008B76F8 /* UIView+Screenshot.h */,
-				03D70F8216CA3032008B76F8 /* UIView+Screenshot.m */,
+				03E7602D16D6BA7B004916B0 /* JLFoldableView.h */,
+				03E7602E16D6BA7B004916B0 /* JLFoldableView.m */,
+				03E7602F16D6BA7B004916B0 /* UIView+Screenshot.h */,
+				03E7603016D6BA7B004916B0 /* UIView+Screenshot.m */,
 			);
-			name = JLFoldableView;
-			path = ../../../SleepIfUCan/Libraries/JLFoldableView;
+			path = JLFoldableView;
 			sourceTree = "<group>";
 		};
 		03E7B38D1699AA92003729F4 /* EGOTableViewPullRefreshResources */ = {
@@ -1152,8 +1151,8 @@
 				038A529A1698863A001FDF75 /* DishListCell.m in Sources */,
 				03677999169DE68700F26BBA /* BookmarkButton.m in Sources */,
 				03A5E94E16B4E48100C79F8D /* JLLabelButton.m in Sources */,
-				03D70F8316CA3032008B76F8 /* JLFoldableView.m in Sources */,
-				03D70F8416CA3032008B76F8 /* UIView+Screenshot.m in Sources */,
+				03E7603116D6BA7B004916B0 /* JLFoldableView.m in Sources */,
+				03E7603216D6BA7B004916B0 /* UIView+Screenshot.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
