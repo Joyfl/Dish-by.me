@@ -15,7 +15,6 @@
 #import "DishTileCell.h"
 #import "DishDetailViewController.h"
 #import "UserManager.h"
-#import "SettingsManager.h"
 
 #define ARROW_LEFT_X	142
 #define ARROW_RIGHT_X	248

@@ -21,7 +21,6 @@
 		031AAB3D160F3B4F007B42B3 /* WritingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB3C160F3B4F007B42B3 /* WritingViewController.m */; };
 		031AAB4C160F42CB007B42B3 /* CameraOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */; };
 		033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52DE1610782900F0B5E5 /* LoginViewController.m */; };
-		033C52E3161078AC00F0B5E5 /* SettingsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52E2161078AC00F0B5E5 /* SettingsManager.m */; };
 		033C52E61610797400F0B5E5 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52E51610797400F0B5E5 /* UserManager.m */; };
 		034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 034A0A0E1656779700C7DA93 /* DishTileCell.m */; };
 		03677999169DE68700F26BBA /* BookmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 03677998169DE68700F26BBA /* BookmarkButton.m */; };
@@ -227,8 +226,6 @@
 		031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraOverlayViewController.m; sourceTree = "<group>"; };
 		033C52DD1610782900F0B5E5 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		033C52DE1610782900F0B5E5 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		033C52E1161078AC00F0B5E5 /* SettingsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsManager.h; path = Managers/SettingsManager.h; sourceTree = "<group>"; };
-		033C52E2161078AC00F0B5E5 /* SettingsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsManager.m; path = Managers/SettingsManager.m; sourceTree = "<group>"; };
 		033C52E41610797400F0B5E5 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserManager.h; path = Managers/UserManager.h; sourceTree = "<group>"; };
 		033C52E51610797400F0B5E5 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserManager.m; path = Managers/UserManager.m; sourceTree = "<group>"; };
 		034A0A0D1656779700C7DA93 /* DishTileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishTileCell.h; path = Views/DishTileCell.h; sourceTree = "<group>"; };
@@ -506,8 +503,6 @@
 			children = (
 				033C52E41610797400F0B5E5 /* UserManager.h */,
 				033C52E51610797400F0B5E5 /* UserManager.m */,
-				033C52E1161078AC00F0B5E5 /* SettingsManager.h */,
-				033C52E2161078AC00F0B5E5 /* SettingsManager.m */,
 			);
 			name = Managers;
 			sourceTree = "<group>";
@@ -1125,7 +1120,6 @@
 				031AAB3D160F3B4F007B42B3 /* WritingViewController.m in Sources */,
 				031AAB4C160F42CB007B42B3 /* CameraOverlayViewController.m in Sources */,
 				033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */,
-				033C52E3161078AC00F0B5E5 /* SettingsManager.m in Sources */,
 				033C52E61610797400F0B5E5 /* UserManager.m in Sources */,
 				034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */,
 				037EF5F916887B9200FA765D /* JLHTTPCacheManager.m in Sources */,

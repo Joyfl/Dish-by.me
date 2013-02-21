@@ -11,6 +11,7 @@
 @interface UserManager : NSObject
 {
 	UIImage *_userPhoto;
+	NSUserDefaults *_userDefaults;
 }
 
 @property (nonatomic, assign) BOOL loggedIn;

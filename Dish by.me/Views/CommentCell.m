@@ -78,6 +78,7 @@
 		[_profileImageButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 		[JLHTTPLoader loadAsyncFromURL:_comment.userPhotoURL withObject:_indexPath completion:^(id indexPath, NSData *data)
 		{
+			if( !_comment ) return;
 			_comment.userPhoto = [UIImage imageWithData:data];
 			
 			if( [_indexPath isEqual:indexPath] )

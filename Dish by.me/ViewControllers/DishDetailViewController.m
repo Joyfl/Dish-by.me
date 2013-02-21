@@ -405,6 +405,7 @@ enum {
 		if( response.statusCode == 200 )
 		{
 			NSLog( @"Removed." );
+			[_tableView reloadData];
 		}
 	}
 	
@@ -795,7 +796,7 @@ enum {
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return indexPath.section == kSectionComment;
+	return indexPath.section == kSectionComment && _comments.count > 0 && [[_comments objectAtIndex:indexPath.row] userId] == [[UserManager manager] userId];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -809,6 +810,10 @@ enum {
 {
 	Comment *comment = [_comments objectAtIndex:indexPath.row];
 	[self deleteComment:comment.commentId];
+	
+	[UIView animateWithDuration:0.3 animations:^{
+		_commentBar.frame = CGRectMake( 0, _tableView.contentSize.height - comment.messageHeight - 72, 320, 40 );
+	}];
 	
 	[_comments removeObjectAtIndex:indexPath.row];
 	[_tableView beginUpdates];
@@ -895,7 +900,6 @@ enum {
 	}
 	
 	[self.view addSubview:_moreCommentsIndicatorView];
-//	[_moreCommentsIndicatorView release];
 	
 	[self loadComments];
 }

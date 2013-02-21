@@ -11,7 +11,6 @@
 #import "Utils.h"
 #import "Const.h"
 #import <QuartzCore/QuartzCore.h>
-#import "SettingsManager.h"
 #import "UserManager.h"
 #import "User.h"
 
@@ -284,7 +283,7 @@ enum {
 		{
 			[JLHTTPLoader loadAsyncFromURL:[body objectForKey:@"photo_url"]  completion:^(NSData *data)
 			{
-				[UserManager manager].userId = [[body objectForKey:@"user_id"] integerValue];
+				[UserManager manager].userId = [[body objectForKey:@"id"] integerValue];
 				[UserManager manager].userName = [body objectForKey:@"name"];
 				[UserManager manager].userPhoto = [UIImage imageWithData:data];
 				[UserManager manager].loggedIn = YES;

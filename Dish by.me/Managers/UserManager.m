@@ -7,7 +7,6 @@
 //
 
 #import "UserManager.h"
-#import "SettingsManager.h"
 #import "Const.h"
 
 @implementation UserManager
@@ -20,13 +19,20 @@
 	return manager;
 }
 
+- (id)init
+{
+	self = [super init];
+	_userDefaults = [NSUserDefaults standardUserDefaults];
+	return self;
+}
+
 - (void)logout
 {
-	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_LOGGED_IN];
-	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_ACCESS_TOKEN];
-	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_USER_ID];
-	[[SettingsManager manager] clearSettingForKey:SETTING_KEY_USER_NAME];
-	[[SettingsManager manager] flush];
+	[_userDefaults removeObjectForKey:SETTING_KEY_LOGGED_IN];
+	[_userDefaults removeObjectForKey:SETTING_KEY_ACCESS_TOKEN];
+	[_userDefaults removeObjectForKey:SETTING_KEY_USER_ID];
+	[_userDefaults removeObjectForKey:SETTING_KEY_USER_NAME];
+	[_userDefaults synchronize];
 }
 
 #pragma mark -
@@ -34,49 +40,49 @@
 
 - (BOOL)loggedIn
 {
-	return [[[SettingsManager manager] getSettingForKey:SETTING_KEY_LOGGED_IN] boolValue];
+	return [_userDefaults boolForKey:SETTING_KEY_LOGGED_IN];
 }
 
 - (void)setLoggedIn:(BOOL)loggedIn
 {
-	[[SettingsManager manager] setSetting:[NSNumber numberWithBool:loggedIn] forKey:SETTING_KEY_LOGGED_IN];
-	[[SettingsManager manager] flush];
+	[_userDefaults setBool:loggedIn forKey:SETTING_KEY_LOGGED_IN];
+	[_userDefaults synchronize];
 }
 
 
 - (NSString *)accessToken
 {
-	return [[SettingsManager manager] getSettingForKey:SETTING_KEY_ACCESS_TOKEN];
+	return [_userDefaults stringForKey:SETTING_KEY_ACCESS_TOKEN];
 }
 
 - (void)setAccessToken:(NSString *)accessToken
 {
-	[[SettingsManager manager] setSetting:accessToken forKey:SETTING_KEY_ACCESS_TOKEN];
-	[[SettingsManager manager] flush];
+	[_userDefaults setObject:accessToken forKey:SETTING_KEY_ACCESS_TOKEN];
+	[_userDefaults synchronize];
 }
 
 
 - (NSInteger)userId
 {
-	return [[[SettingsManager manager] getSettingForKey:SETTING_KEY_USER_ID] integerValue];
+	return [_userDefaults integerForKey:SETTING_KEY_USER_ID];
 }
 
 - (void)setUserId:(NSInteger)userId
 {
-	[[SettingsManager manager] setSetting:[NSNumber numberWithInteger:userId] forKey:SETTING_KEY_USER_ID];
-	[[SettingsManager manager] flush];
+	[_userDefaults setInteger:userId forKey:SETTING_KEY_USER_ID];
+	[_userDefaults synchronize];
 }
 
 
 - (NSString *)userName
 {
-	return [[SettingsManager manager] getSettingForKey:SETTING_KEY_USER_NAME];
+	return [_userDefaults stringForKey:SETTING_KEY_USER_NAME];
 }
 
 - (void)setUserName:(NSString *)userName
 {
-	[[SettingsManager manager] setSetting:userName forKey:SETTING_KEY_USER_NAME];
-	[[SettingsManager manager] flush];
+	[_userDefaults setObject:userName forKey:SETTING_KEY_USER_NAME];
+	[_userDefaults synchronize];
 }
 
 
