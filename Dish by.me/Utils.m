@@ -172,4 +172,13 @@
 	return string;
 }
 
++ (UIImage *)cropImage:(UIImage *)imageToCrop toRect:(CGRect)rect
+{
+	CGImageRef imageRef = CGImageCreateWithImageInRect([imageToCrop CGImage], rect);
+	UIImage *croppedImage = [UIImage imageWithCGImage:imageRef];
+	CGImageRelease(imageRef);
+	
+	return croppedImage;
+}
+
 @end

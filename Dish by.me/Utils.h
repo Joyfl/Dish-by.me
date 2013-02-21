@@ -26,4 +26,6 @@
 + (NSDate *)dateToGlobalTimeZone:(NSDate *)date;
 + (NSString *)relativeDateString:(NSDate *)date withTime:(BOOL)withTime;
 
++ (UIImage *)cropImage:(UIImage *)imageToCrop toRect:(CGRect)rect;
+
 @end

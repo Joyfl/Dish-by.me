@@ -23,6 +23,10 @@
 	BOOL lastLoggedIn;
 	
 	UITableView *_tableView;
+	UIImageView *_topView;
+	UIImageView *_midView;
+	UIImageView *_botView;
+	
 	CGFloat _contentRowHeight;
 	
 	UILabel *_timeLabel;
