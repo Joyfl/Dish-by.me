@@ -451,7 +451,7 @@ enum {
 			return _contentRowHeight;
 			
 		case kSectionMoreComments:
-			return 50;
+			return 45;
 			
 		case kSectionComment:
 			if( [_loader hasRequestId:kRequestIdComments] )
@@ -665,6 +665,9 @@ enum {
 		return cell;
 	}
 	
+	//
+	// More Comments
+	//
 	else if( indexPath.section == kSectionMoreComments )
 	{
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:moreCommentCellId];
@@ -673,11 +676,22 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:moreCommentCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			UIButton *moreButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-			moreButton.frame = CGRectMake( 0, 0, 320, 44 );
-			[moreButton setTitle:@"더 보기" forState:UIControlStateNormal];
-			[moreButton addTarget:self action:@selector(moreButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-			[cell.contentView addSubview:moreButton];
+			UIImageView *lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line.png"]];
+			[cell.contentView addSubview:lineView];
+			
+			UIButton *moreCommentsButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 2, 320, 43 )];
+			[moreCommentsButton setImage:[UIImage imageNamed:@"icon_comment_gray.png"] forState:UIControlStateNormal];
+			[moreCommentsButton setTitle:NSLocalizedString( @"MORE_COMMENTS", @"" ) forState:UIControlStateNormal];
+			[moreCommentsButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+			[moreCommentsButton setTitleColor:[Utils colorWithHex:0x343535 alpha:1] forState:UIControlStateHighlighted];
+			[moreCommentsButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:1] forState:UIControlStateNormal];
+			moreCommentsButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			moreCommentsButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+			moreCommentsButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 12, 0, 0 );
+			moreCommentsButton.titleEdgeInsets = UIEdgeInsetsMake( 0, 18, 0, 0 );
+			moreCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+			[moreCommentsButton addTarget:self action:@selector(moreCommentsButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[cell.contentView addSubview:moreCommentsButton];
 		}
 		
 		return cell;
@@ -817,10 +831,7 @@ enum {
 	[recipeView release];
 }
 
-#define INESRT_INDEX 0
-#define NEW_ROW_COUNT 5
-
-- (void)moreButtonDidTouchUpInside
+- (void)moreCommentsButtonDidTouchUpInside
 {
 	[self loadComments];
 }
