@@ -753,7 +753,7 @@ enum {
 		return;
 	}
 	
-//	[_tableView removeFromSuperview];
+	[_tableView removeFromSuperview];
 	
 	CGPoint originalContentOffset = _tableView.contentOffset;
 	_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentSize.height );
@@ -780,19 +780,17 @@ enum {
 	_botView.frame = (CGRect){{0, _topView.frame.origin.y + _topView.frame.size.height}, _botView.frame.size};
 	[self.view addSubview:_botView];
 	
-	_topView.alpha = _botView.alpha = 0.4;
+//	_topView.alpha = _botView.alpha = 0.4;
 	
 	[_tableView beginUpdates];
 	[_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
 	[_tableView endUpdates];
 	
 #warning _tableView에서 언제 업데이트가 끝나는지를 알 수 없음!!	
-	dispatch_after( dispatch_time( DISPATCH_TIME_NOW, NSEC_PER_SEC ), dispatch_get_current_queue(), ^{
+	dispatch_after( dispatch_time( DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC ), dispatch_get_current_queue(), ^{
 		CGFloat height = 0;
 		for( NSInteger i = INESRT_INDEX; i < NEW_ROW_COUNT; i++ )
-		{
 			height += [[_comments objectAtIndex:i] messageHeight] + 32;
-		}
 		
 		NSLog( @"height : %f", height );
 		
@@ -807,10 +805,8 @@ enum {
 		
 		_midView = [[UIImageView alloc] initWithImage:[self colorizeImage:midImage withColor:[UIColor greenColor]]];
 		_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height );
-		[self.view addSubview:_midView];
-		return;
 		
-		JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, INESRT_INDEX * 44 - _tableView.contentOffset.y, 320, NEW_ROW_COUNT * 44 )];
+		JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
 		foldableView.contentView = _midView;
 		foldableView.foldCount = NEW_ROW_COUNT;
 		foldableView.fraction = 0;
@@ -821,7 +817,6 @@ enum {
 			foldableView.frame = _midView.frame;
 			_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
 		} completion:^(BOOL finished) {
-			return;
 			[_topView removeFromSuperview];
 			[_topView release]; _topView = nil;
 			
@@ -840,7 +835,7 @@ enum {
 }
 
 - (UIImage *)colorizeImage:(UIImage *)image withColor:(UIColor *)color {
-//	return image;
+	return image;
 	
     UIGraphicsBeginImageContext(image.size);
 	
