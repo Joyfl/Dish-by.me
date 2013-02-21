@@ -17,7 +17,7 @@
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary
 {
 	Comment *comment = [[Comment alloc] init];
-	comment.commentId = [[dictionary objectForKey:@"commentId"] integerValue];
+	comment.commentId = [[dictionary objectForKey:@"id"] integerValue];
 	comment.userId = [[[dictionary objectForKey:@"user"] objectForKey:@"id"] integerValue];
 	comment.userName = [[dictionary objectForKey:@"user"] objectForKey:@"name"];
 	comment.userPhotoURL = [[dictionary objectForKey:@"user"] objectForKey:@"photo_url"];

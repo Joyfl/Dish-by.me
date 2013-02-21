@@ -36,7 +36,8 @@ enum {
 
 enum {
 	kRequestIdComments = 0,
-	kRequestIdSendComment = 2,
+	kRequestIdSendComment = 1,
+	kRequestIdDeleteComment = 2,
 	kRequestIdBookmark = 3,
 	kRequestIdUnbookmark = 4,
 	kRequestIdReloadDish = 5,
@@ -185,6 +186,17 @@ enum {
 	req.method = @"POST";
 	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[req setParam:_commentInput.text forKey:@"message"];
+	[_loader addRequest:req];
+	[_loader startLoading];
+}
+
+- (void)deleteComment:(NSInteger)commentId
+{
+	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
+	req.requestId = kRequestIdDeleteComment;
+	req.url = [NSString stringWithFormat:@"%@/comment/%d", API_ROOT_URL, commentId];
+	req.method = @"DELETE";
+	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
 	[_loader addRequest:req];
 	[_loader startLoading];
 }
@@ -385,6 +397,14 @@ enum {
 			_commentInput.enabled = YES;
 			
 			[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+		}
+	}
+	
+	else if( response.requestId == kRequestIdDeleteComment )
+	{
+		if( response.statusCode == 200 )
+		{
+			NSLog( @"Removed." );
 		}
 	}
 	
@@ -771,6 +791,29 @@ enum {
 		else
 			_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + UIScreenHeight - 319, 320, 40 );
 	}
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return indexPath.section == kSectionComment;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if( indexPath.section == kSectionComment )
+		return UITableViewCellEditingStyleDelete;
+	return UITableViewCellEditingStyleNone;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	Comment *comment = [_comments objectAtIndex:indexPath.row];
+	[self deleteComment:comment.commentId];
+	
+	[_comments removeObjectAtIndex:indexPath.row];
+	[_tableView beginUpdates];
+	[_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:kSectionComment]] withRowAnimation:UITableViewRowAnimationLeft];
+	[_tableView endUpdates];
 }
 
 - (void)updateBookmarkUI
