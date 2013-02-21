@@ -777,7 +777,7 @@ enum {
 	
 	_botView = [[UIImageView alloc] initWithImage:[self colorizeImage:botImage withColor:[UIColor blueColor]]];
 //	_botView.frame = (CGRect){{0, _topView.frame.size.height - _tableView.contentOffset.y}, _botView.frame.size};
-	_botView.frame = (CGRect){{0, c.frame.origin.y + c.frame.size.height}, _botView.frame.size};
+	_botView.frame = (CGRect){{0, _topView.frame.origin.y + _topView.frame.size.height}, _botView.frame.size};
 	[self.view addSubview:_botView];
 	
 //	_topView.alpha = _botView.alpha = 0.4;
