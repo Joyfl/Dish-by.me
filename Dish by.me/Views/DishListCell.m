@@ -78,7 +78,6 @@
 	return self;
 }
 
-
 #pragma mark -
 #pragma mark Getter/Setter
 
@@ -95,28 +94,34 @@
 	[self layoutContentView];
 }
 
-
 - (void)fillContents
 {
 	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
+	
 	if( _dish.photo )
 	{
-		[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+		if( !_dish.photoHasBeenShown )
+		{
+			_dish.photoHasBeenShown = YES;
+			[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+				_photoView.image = _dish.photo;
+			} completion:nil];
+		}
+		else
 			_photoView.image = _dish.photo;
-		} completion:nil];
 	}
 	else
 	{
-		[JLHTTPLoader loadAsyncFromURL:_dish.photoURL withObject:_indexPath completion:^(id indexPath, NSData *data)
-		{
+		[JLHTTPLoader loadAsyncFromURL:_dish.photoURL withObject:_indexPath completion:^(id indexPath, NSData *data){
 			_dish.photo = [UIImage imageWithData:data];
-			
-			if( [_indexPath isEqual:indexPath] )
-				[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-					_photoView.image = _dish.photo;
-				} completion:nil];
-		}];
+			 
+			 if( [_indexPath isEqual:indexPath] )
+				 [UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+					 _photoView.image = _dish.photo;
+				 } completion:nil];
+		 }];
 	}
+	
 	
 	_commentCountLabel.text = [NSString stringWithFormat:@"%d", _dish.commentCount];
 	_dishNameLabel.text = _dish.dishName;

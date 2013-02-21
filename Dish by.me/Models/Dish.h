@@ -9,30 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface Dish : NSObject
-{
-	NSInteger dishId;
-	NSString *dishName;
-	NSInteger userId;
-	NSString *userName;
-	NSString *userPhotoURL;
-	UIImage *userPhoto;
-	NSString *description;
-	NSString *recipe;
-	NSString *photoURL;
-	UIImage *photo;
-	NSString *thumbnailURL;
-	UIImage *thumbnail;
-	NSInteger forkedFromId;
-	NSString *forkedFromName;
-	NSInteger forkCount;
-	NSInteger bookmarkCount;
-	NSInteger commentCount;
-	BOOL bookmarked;
-	NSDate *createdTime;
-	NSString *relativeCreatedTime;
-	NSDate *updatedTime;
-	NSString *relativeUpdatedTime;
-}
 
 @property (nonatomic, assign) NSInteger dishId;
 @property (nonatomic, retain) NSString *dishName;
@@ -56,6 +32,8 @@
 @property (nonatomic, retain) NSString *relativeCreatedTime;
 @property (nonatomic, retain) NSDate *updatedTime;
 @property (nonatomic, retain) NSString *relativeUpdatedTime;
+
+@property (nonatomic, assign) BOOL photoHasBeenShown;
 
 + (id)dishFromDictionary:(NSDictionary *)dictionary;
 - (void)updateRelativeTime;

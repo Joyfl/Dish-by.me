@@ -31,6 +31,7 @@
 
 @property (nonatomic, retain) id<DishListCellDelegate> delegate;
 @property (nonatomic, readonly) Dish *dish;
+@property (nonatomic, retain) UIImageView *photoView;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setDish:(Dish *)dish atIndexPath:(NSIndexPath *)indexPath;
