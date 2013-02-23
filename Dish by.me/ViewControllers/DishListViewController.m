@@ -7,13 +7,10 @@
 //
 
 #import "DishListViewController.h"
-#import "Const.h"
 #import "Dish.h"
-#import "Utils.h"
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
 #import "UserManager.h"
-#import "AFNetworking.h"
 
 @implementation DishListViewController
 
@@ -43,9 +40,6 @@ enum {
 	
 	_dishes = [[NSMutableArray alloc] init];
 	
-	_loader = [[JLHTTPLoader alloc] init];
-	_loader.delegate = self;
-	
 	self.navigationItem.title = @"Dish by.me";
 	
     return self;
@@ -62,143 +56,97 @@ enum {
 
 - (void)updateDishes
 {
-//	NSLog( @"[DishListViewController] updateDishes" );
-//	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-//	req.requestId = kRequestIdUpdateDishes;
-//	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
-//	if( [UserManager manager].loggedIn )
-//		[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-//	[_loader addRequest:req];
-//	[_loader startLoading];
+	_updating = YES;
 	
-	AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:API_ROOT_URL]];
-	[client registerHTTPOperationClass:[AFJSONRequestOperation class]];
-	[client getPath:@"/dishes" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-		NSLog( @"response : %@", responseObject );
-//		[_dishes removeAllObjects];
-//		
-//		NSDictionary *result = [Utils parseJSON:response.body];
-//		NSArray *data = [result objectForKey:@"data"];
-//		
-//		for( NSDictionary *d in data )
-//		{
-//			Dish *dish = [Dish dishFromDictionary:d];
-//			[_dishes addObject:dish];
-//		}
-//		
-//		[_tableView reloadData];
-//		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
-	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:nil success:^(id response) {
+		[_dishes removeAllObjects];
 		
+		NSArray *data = [response objectForKey:@"data"];
+		
+		for( NSDictionary *d in data )
+		{
+			Dish *dish = [Dish dishFromDictionary:d];
+			[_dishes addObject:dish];
+		}
+		
+		[_tableView reloadData];
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
+		_updating = NO;
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+		
+		_updating = NO;
 	}];
-	
-//	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@dishes", API_ROOT_URL]];
-//	NSURLRequest *request = [NSURLRequest requestWithURL:url];
-//	AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
-//		NSLog(@"App.net Global Stream: %@", JSON);
-//	} failure:nil];
-//	[operation start];
 }
 
 - (void)loadMoreDishes
 {
-	NSLog( @"[DishListViewController] loadMoreDishes" );
-	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-	req.requestId = kRequestIdLoadMoreDishes;
-	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
-	[req setParam:[NSString stringWithFormat:@"%d", _offset] forKey:@"offset"];
-	if( [UserManager manager].loggedIn )
-		[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+	_loading = YES;
+	
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _offset] };
+	
+	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:params success:^(id response) {
+		NSArray *data = [response objectForKey:@"data"];
+		_offset += data.count;
+		
+		for( NSDictionary *d in data )
+		{
+			Dish *dish = [Dish dishFromDictionary:d];
+			[_dishes addObject:dish];
+		}
+		
+		if( data.count == 0 )
+			_loadedLastDish = YES;
+		
+		[_tableView reloadData];
+		
+		_loading = NO;
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+		
+		_loading = NO;
+	}];
 }
 
 - (void)bookmarkDish:(Dish *)dish
 {
-	NSLog( @"[DishListViewController] bookmarkDish:" );
-	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
-	req.requestId = kRequestIdBookmark;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, dish.dishId];
-	req.method = @"POST";
-	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+	JLLog( @"bookmarkDish" );
+	
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
+	NSDictionary *params = @{@"access_token": [UserManager manager].accessToken};
+	
+	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
+		JLLog( @"bookmark succeed." );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 - (void)unbookmarkDish:(Dish *)dish
 {
-	NSLog( @"[DishListViewController] unbookmarkDish:" );
-	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
-	req.requestId = kRequestIdUnbookmark;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, dish.dishId];
-	req.method = @"DELETE";
-	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[_loader addRequest:req];
-	[_loader startLoading];
-}
-
-
-#pragma mark -
-#pragma mark JLHTTPLoaderDelegate
-
-- (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response
-{
-	if( response.requestId == kRequestIdUpdateDishes )
-	{
-		if( response.statusCode == 200 )
-		{
-			[_dishes removeAllObjects];
-			
-			NSDictionary *result = [Utils parseJSON:response.body];
-			NSArray *data = [result objectForKey:@"data"];
-			
-			for( NSDictionary *d in data )
-			{
-				Dish *dish = [Dish dishFromDictionary:d];
-				[_dishes addObject:dish];
-			}
-			
-			[_tableView reloadData];
-			[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
-		}
-	}
+	JLLog( @"unbookmarkDish" );
 	
-	else if( response.requestId == kRequestIdLoadMoreDishes )
-	{
-		if( response.statusCode == 200 )
-		{
-			NSDictionary *result = [Utils parseJSON:response.body];
-			NSArray *data = [result objectForKey:@"data"];
-			_offset += data.count;
-			
-			for( NSDictionary *d in data )
-			{
-				Dish *dish = [Dish dishFromDictionary:d];
-				[_dishes addObject:dish];
-			}
-			
-			if( data.count == 0 )
-				_loadedLastDish = YES;
-			
-			[_tableView reloadData];
-		}
-	}
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
+	NSDictionary *params = @{@"access_token": [UserManager manager].accessToken};
 	
-	else if( response.requestId == kRequestIdBookmark )
-	{
-		if( response.statusCode != 201 )
-		{
-			NSLog( @"[DishListViewController] Bookmark failed." );
-		}
-	}
-	
-	else if( response.requestId == kRequestIdUnbookmark )
-	{
-		if( response.statusCode != 200 )
-		{
-			NSLog( @"[DishListViewController] UnBookmark failed." );
-		}
-	}
+	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:params success:^(id response) {
+		JLLog( @"bookmark succeed." );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 
@@ -212,7 +160,8 @@ enum {
 
 - (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)refreshHeaerView
 {
-	return [_loader hasRequestId:kRequestIdUpdateDishes];
+	return _updating;
+//	return [_loader hasRequestId:kRequestIdUpdateDishes];
 }
 
 - (NSDate *)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)refreshHeaerView
@@ -275,7 +224,7 @@ enum {
 		[indicator startAnimating];
 		[cell.contentView addSubview:indicator];
 		
-		if( ![_loader hasRequestId:kRequestIdLoadMoreDishes] )
+		if( !_loading )
 			[self loadMoreDishes];
 		
 		return cell;

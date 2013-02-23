@@ -10,7 +10,7 @@
 #define DISH_TILE_LEN	88
 
 #define WEB_ROOT_URL	@"http://www.dishby.me"
-#define API_ROOT_URL	@"http://dev.dishby.me/api/"
+#define API_ROOT_URL	@"http://dev.dishby.me/api"
 
 #define SETTING_KEY_LOGGED_IN		@"loggedIn"
 #define SETTING_KEY_ACCESS_TOKEN	@"accessToken"

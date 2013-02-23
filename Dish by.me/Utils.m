@@ -11,15 +11,26 @@
 
 @implementation Utils
 
+#warning deprecated.
 + (id)parseJSON:(NSString *)jsonString
 {
+	return [self parseJSONString:jsonString];
+}
+
++ (id)parseJSONString:(NSString *)jsonString
+{
 	NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-	return [NSJSONSerialization JSONObjectWithData:jsonData options:nil error:nil];
+	return [self parseJSONData:jsonData];
+}
+
++ (id)parseJSONData:(NSData *)jsonData
+{
+	return [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:nil];
 }
 
 + (NSString *)writeJSON:(id)object
 {
-	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object options:nil error:nil];
+	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object options:0 error:nil];
 	return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 

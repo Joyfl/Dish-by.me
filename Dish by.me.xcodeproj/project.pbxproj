@@ -22,6 +22,8 @@
 		031AAB4C160F42CB007B42B3 /* CameraOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */; };
 		033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52DE1610782900F0B5E5 /* LoginViewController.m */; };
 		033C52E61610797400F0B5E5 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52E51610797400F0B5E5 /* UserManager.m */; };
+		0349EA5116D8F0350057BD12 /* DishByMeAPILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */; };
+		0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5416D8F6E90057BD12 /* JLLogger.m */; };
 		034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 034A0A0E1656779700C7DA93 /* DishTileCell.m */; };
 		03677999169DE68700F26BBA /* BookmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 03677998169DE68700F26BBA /* BookmarkButton.m */; };
 		0370EDB0169F050E00EBE2D9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0370ED37169F050E00EBE2D9 /* .gitignore */; };
@@ -225,6 +227,10 @@
 		033C52DE1610782900F0B5E5 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		033C52E41610797400F0B5E5 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserManager.h; path = Managers/UserManager.h; sourceTree = "<group>"; };
 		033C52E51610797400F0B5E5 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserManager.m; path = Managers/UserManager.m; sourceTree = "<group>"; };
+		0349EA4F16D8F0350057BD12 /* DishByMeAPILoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishByMeAPILoader.h; path = "Dish by.me/DishByMeAPILoader.h"; sourceTree = SOURCE_ROOT; };
+		0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishByMeAPILoader.m; path = "Dish by.me/DishByMeAPILoader.m"; sourceTree = SOURCE_ROOT; };
+		0349EA5316D8F6E90057BD12 /* JLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLLogger.h; sourceTree = "<group>"; };
+		0349EA5416D8F6E90057BD12 /* JLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLLogger.m; sourceTree = "<group>"; };
 		034A0A0D1656779700C7DA93 /* DishTileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishTileCell.h; path = Views/DishTileCell.h; sourceTree = "<group>"; };
 		034A0A0E1656779700C7DA93 /* DishTileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishTileCell.m; path = Views/DishTileCell.m; sourceTree = "<group>"; };
 		03677997169DE68700F26BBA /* BookmarkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarkButton.h; sourceTree = "<group>"; };
@@ -497,6 +503,15 @@
 			name = Managers;
 			sourceTree = "<group>";
 		};
+		0349EA5216D8F6E90057BD12 /* JLLogger */ = {
+			isa = PBXGroup;
+			children = (
+				0349EA5316D8F6E90057BD12 /* JLLogger.h */,
+				0349EA5416D8F6E90057BD12 /* JLLogger.m */,
+			);
+			path = JLLogger;
+			sourceTree = "<group>";
+		};
 		0370ED36169F050E00EBE2D9 /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -675,6 +690,7 @@
 		037EF5E916887B9200FA765D /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0349EA5216D8F6E90057BD12 /* JLLogger */,
 				03F67F3D16D8E33200AB0600 /* AFNetworking */,
 				03E7602C16D6BA7B004916B0 /* JLFoldableView */,
 				037EF60016887BBA00FA765D /* EGOTableViewPullRefresh */,
@@ -764,6 +780,8 @@
 				03B5980B1602FDC0007BD6AF /* AppDelegate.m */,
 				03C899B8160B1693001E488B /* Utils.h */,
 				03C899B9160B1693001E488B /* Utils.m */,
+				0349EA4F16D8F0350057BD12 /* DishByMeAPILoader.h */,
+				0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */,
 				03CB749F160CC42700A5C6A3 /* Components */,
 				03178840160C76DB0041DAD7 /* ViewControllers */,
 				03C89989160B1253001E488B /* Models */,
@@ -1127,6 +1145,8 @@
 				03F67F5716D8E33200AB0600 /* AFURLConnectionOperation.m in Sources */,
 				03F67F5816D8E33200AB0600 /* AFXMLRequestOperation.m in Sources */,
 				03F67F5916D8E33200AB0600 /* UIImageView+AFNetworking.m in Sources */,
+				0349EA5116D8F0350057BD12 /* DishByMeAPILoader.m in Sources */,
+				0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

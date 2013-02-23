@@ -8,18 +8,12 @@
 
 #import "LoginViewController.h"
 #import "DMBarButtonItem.h"
-#import "Utils.h"
-#import "Const.h"
 #import <QuartzCore/QuartzCore.h>
 #import "UserManager.h"
 #import "User.h"
+#import "JLHTTPLoader.h"
 
 @implementation LoginViewController
-
-enum {
-	kReqIdLogin = 0,
-	kReqIdUser = 1,
-};
 
 - (id)initWithTarget:(id)target action:(SEL)action
 {
@@ -104,9 +98,6 @@ enum {
 	[_facebookLoginButton setBackgroundImage:[UIImage imageNamed:@"login_facebook_button.png"] forState:UIControlStateNormal];
 	[_facebookLoginButton addTarget:self action:@selector(facebookLoginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_facebookLoginButton];
-	
-	_loader = [[JLHTTPLoader alloc] init];
-	_loader.delegate = self;
 	
 	_target = target;
 	_action = action;
@@ -220,14 +211,15 @@ enum {
 		return;
 	}
 	
-	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-	req.requestId = kReqIdLogin;
-	req.url = [NSString stringWithFormat:@"%@auth/login", API_ROOT_URL];
-	[req setParam:email forKey:@"email"];
-//	[req setParam:[Utils sha1:password] forKey:@"password"];
-	[req setParam:password forKey:@"password"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+	NSDictionary *params = @{ @"email": email, @"password": password };
+	[[DishByMeAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"login success" );
+		[self getUser:[UserManager manager].accessToken = [response objectForKey:@"access_token"]];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"login failed : %@", message );
+		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
+	}];
 	
 	[_emailInput resignFirstResponder];
 	[_passwordInput resignFirstResponder];
@@ -242,49 +234,30 @@ enum {
 }
 
 
-#pragma mark -
-#pragma mark APILoader
-
-- (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response
+- (void)getUser:(NSString *)accessToken
 {
-	NSDictionary *body = [Utils parseJSON:response.body];
-	
-	if( response.requestId == kReqIdLogin )
-	{
-		if( response.statusCode == 200 )
-		{
-			JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-			req.requestId = kReqIdUser;
-			req.url = [NSString stringWithFormat:@"%@user", API_ROOT_URL];
-			[req setParam:[UserManager manager].accessToken = [body objectForKey:@"access_token"] forKey:@"access_token"];
-			[_loader addRequest:req];
-			[_loader startLoading];
-		}
+	NSDictionary *params = @{ @"access_token": accessToken };
+	[[DishByMeAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"get user success" );
 		
-		else if( response.statusCode == 404 )
-		{
-			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
-			return;
-		}
-	}
-	
-	else if( response.requestId == kReqIdUser )
-	{
-		if( response.statusCode == 200 )
-		{
-			[JLHTTPLoader loadAsyncFromURL:[body objectForKey:@"photo_url"]  completion:^(NSData *data)
-			{
-				[UserManager manager].userId = [[body objectForKey:@"id"] integerValue];
-				[UserManager manager].userName = [body objectForKey:@"name"];
-				[UserManager manager].userPhoto = [UIImage imageWithData:data];
-				[UserManager manager].loggedIn = YES;
-				
-				if( [_target respondsToSelector:_action] )
-					[_target performSelector:_action];
-				[self dismissViewControllerAnimated:YES completion:nil];
-			}];
-		}
-	}
+		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] success:^(UIImage *image) {
+			JLLog( @"image loading success" );
+			
+			[UserManager manager].loggedIn = YES;
+			[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
+			[UserManager manager].userName = [response objectForKey:@"name"];
+			[UserManager manager].userPhoto = image;
+			
+#warning delegate 패턴으로 바꾸기
+			if( [_target respondsToSelector:_action] )
+				[_target performSelector:_action];
+			
+			[self dismissViewControllerAnimated:YES completion:nil];
+		}];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"get user failed : %@", message );
+	}];
 }
 
 @end

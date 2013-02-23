@@ -11,13 +11,15 @@
 #import "EGORefreshTableHeaderView.h"
 #import "DishListCell.h"
 
-@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate, EGORefreshTableHeaderDelegate, DishListCellDelegate>
+@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishListCellDelegate>
 {
 	UITableView *_tableView;
 	NSMutableArray *_dishes;
-	JLHTTPLoader *_loader;
 	NSInteger _offset;
 	BOOL _loadedLastDish;
+	
+	BOOL _loading;
+	BOOL _updating;
 	
 	EGORefreshTableHeaderView *_refreshHeaderView;
 }

@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JLHTTPLoader.h"
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate, JLHTTPLoaderDelegate>
+@interface LoginViewController : UIViewController <UITextFieldDelegate>
 {
 	UIImageView *_forkAndKnife;
 	UIImageView *_loginBox;
@@ -17,8 +16,6 @@
 	UITextField *_passwordInput;
 	UIButton *_loginButton;
 	UIButton *_facebookLoginButton;
-	
-	JLHTTPLoader *_loader;
 	
 	id _target;
 	SEL _action;

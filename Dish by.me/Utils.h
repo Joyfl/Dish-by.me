@@ -14,6 +14,8 @@
 @interface Utils : NSObject
 
 + (id)parseJSON:(NSString *)jsonString;
++ (id)parseJSONString:(NSString *)jsonString;
++ (id)parseJSONData:(NSData *)jsonData;
 + (NSString *)writeJSON:(id)object;
 
 + (UIColor *)colorWithHex:(NSInteger)color alpha:(CGFloat)alpha;
