@@ -213,11 +213,11 @@
 	
 	NSDictionary *params = @{ @"email": email, @"password": password };
 	[[DishByMeAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
-		JLLog( @"login success" );
+		JLLog( @"Login succeeded" );
 		[self getUser:[UserManager manager].accessToken = [response objectForKey:@"access_token"]];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		JLLog( @"login failed : %@", message );
+		JLLog( @"Login failed : %@", message );
 		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
 	}];
 	
@@ -238,10 +238,10 @@
 {
 	NSDictionary *params = @{ @"access_token": accessToken };
 	[[DishByMeAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:params success:^(id response) {
-		JLLog( @"get user success" );
+		JLLog( @"getUser success" );
 		
 		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] success:^(UIImage *image) {
-			JLLog( @"image loading success" );
+			JLLog( @"Image loading succeeded" );
 			
 			[UserManager manager].loggedIn = YES;
 			[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
@@ -256,7 +256,7 @@
 		}];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		JLLog( @"get user failed : %@", message );
+		JLLog( @"getUser failed : %@", message );
 	}];
 }
 
