@@ -7,16 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JLHTTPLoader.h"
 #import "DMButton.h"
 #import "BookmarkButton.h"
 
 @class Dish;
 
-@interface DishDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate, BookmarkButtonDelegate>
+@interface DishDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, BookmarkButtonDelegate>
 {
 	Dish *_dish;
-	JLHTTPLoader *_loader;
 	NSMutableArray *_comments;
 	NSInteger _commentOffset;
 	BOOL _loadedAllComments;

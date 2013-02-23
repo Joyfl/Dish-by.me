@@ -8,6 +8,7 @@
 
 #import "DishByMeAPILoader.h"
 #import "Utils.h"
+#import "UserManager.h"
 
 @implementation DishByMeAPILoader
 
@@ -39,11 +40,19 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
+	if( [[UserManager manager] loggedIn] )
+	{
+		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:parameters];
+		[params setObject:[[UserManager manager] accessToken] forKey:@"access_token"];
+		parameters = params;
+	}
+	
 	NSURLRequest *request = [_client requestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:parameters];
 	AFHTTPRequestOperation *operation = [_client HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
 		success( responseObject );
 		
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		NSLog( @"URL : %@", operation.request.URL );
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		failure( operation.response.statusCode, [[errorInfo objectForKey:@"code"] integerValue], [errorInfo objectForKey:@"message"] );
 	}];

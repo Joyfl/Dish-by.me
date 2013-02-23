@@ -12,14 +12,14 @@
 
 @property (nonatomic, assign) NSInteger commentId;
 @property (nonatomic, assign) NSInteger userId;
-@property (nonatomic, weak) NSString *userName;
-@property (nonatomic, weak) NSString *userPhotoURL;
-@property (nonatomic, weak) UIImage *userPhoto;
-@property (nonatomic, weak) NSString *message;
-@property (nonatomic, weak) NSDate *createdTime;
-@property (nonatomic, weak) NSString *relativeCreatedTime;
-@property (nonatomic, weak) NSDate *updatedTime;
-@property (nonatomic, weak) NSString *relativeUpdatedTime;
+@property (nonatomic, strong) NSString *userName;
+@property (nonatomic, strong) NSString *userPhotoURL;
+@property (nonatomic, strong) UIImage *userPhoto;
+@property (nonatomic, strong) NSString *message;
+@property (nonatomic, strong) NSDate *createdTime;
+@property (nonatomic, strong) NSString *relativeCreatedTime;
+@property (nonatomic, strong) NSDate *updatedTime;
+@property (nonatomic, strong) NSString *relativeUpdatedTime;
 @property (nonatomic, assign) CGFloat messageHeight;
 
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary;

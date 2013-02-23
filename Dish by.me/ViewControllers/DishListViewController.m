@@ -60,11 +60,7 @@ enum {
 	
 	_updating = YES;
 	
-	NSDictionary *params = nil;
-	if( [UserManager manager].loggedIn )
-		params = @{ @"access_token": [UserManager manager].accessToken };
-	
-	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:params success:^(id response) {
+	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 		[_dishes removeAllObjects];
@@ -97,10 +93,7 @@ enum {
 	
 	_loading = YES;
 	
-	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSString stringWithFormat:@"%d", _offset] forKey:@"offset"];
-	if( [UserManager manager].loggedIn )
-		[params setObject:[UserManager manager].accessToken forKey:@"access_token"];
-	
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _offset] };
 	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		
@@ -133,10 +126,8 @@ enum {
 {
 	JLLog( @"bookmarkDish" );
 	
-	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
-	NSDictionary *params = @{ @"access_token": [UserManager manager].accessToken };
-	
-	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];	
+	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -150,10 +141,8 @@ enum {
 {
 	JLLog( @"unbookmarkDish" );
 	
-	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
-	NSDictionary *params = @{ @"access_token": [UserManager manager].accessToken };
-	
-	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:params success:^(id response) {
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];	
+	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {

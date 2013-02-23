@@ -25,6 +25,8 @@
 #import "UIView+Screenshot.h"
 #import "JLFoldableView.h"
 
+#define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
+
 @implementation DishDetailViewController
 
 enum {
@@ -94,9 +96,6 @@ enum {
 	_dim.alpha = 0;
 	[self.view addSubview:_dim];
 	
-	_loader = [[JLHTTPLoader alloc] init];
-	_loader.delegate = self;
-	
 	lastLoggedIn = [UserManager manager].loggedIn;
 	
 	[self loadComments];
@@ -154,265 +153,223 @@ enum {
 
 - (void)loadComments
 {
-	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-	req.requestId = kRequestIdComments;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/comments", API_ROOT_URL, _dish.dishId];
-	[req setParam:[NSString stringWithFormat:@"%d", _commentOffset] forKey:@"offset"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/comments", _dish.dishId];
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _commentOffset] };
+	[[DishByMeAPILoader sharedLoader] api:api method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"Success" );
+		
+		NSArray *data = [response objectForKey:@"data"];
+		
+		_commentOffset += data.count;
+		
+		// 로드된 댓글이 없을 경우
+		if( data.count == 0 )
+		{
+			_loadedAllComments = _commentOffset == _dish.commentCount;
+			[_tableView reloadData];
+			return;
+		}
+		
+		// 로드된 댓글이 추가될 indexPath들
+		NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+		
+		for( NSInteger i = 0; i < data.count; i++ )
+		{
+			NSDictionary *dict = [data objectAtIndex:i];
+			Comment *comment = [Comment commentFromDictionary:dict];
+			[_comments insertObject:comment atIndex:i];
+			[indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:kSectionComment]];
+		}
+		
+		// 처음 로드
+		if( _commentOffset == data.count )
+		{
+			_loadedAllComments = _commentOffset == _dish.commentCount;
+			[_tableView reloadData];
+			return;
+		}
+		
+		// fold 애니메이션이 진행되는동안 제거
+		[_tableView removeFromSuperview];
+		
+		CGFloat scale = [[UIScreen mainScreen] scale];
+		
+		// 그냥 screenshot을 가져오면 _tableView.frame에 보이는 것만 가져와지기 때문에 contentSize만큼 frame을 늘려줌.
+		CGPoint originalContentOffset = _tableView.contentOffset;
+		_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
+		_tableView.contentOffset = originalContentOffset;
+		UIImage *screenshot = [_tableView screenshot];
+		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+		
+		// 더보기 cell 아래쪽에 새 댓글들이 추가됨.
+		UITableViewCell *moreCommentCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]];
+		CGRect rect = CGRectMake( 0, _tableView.contentOffset.y * scale, 320 * scale, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height - _tableView.contentOffset.y) * scale );
+		
+		// topImage : [테이블뷰 상단 ~ 더보기 버튼]까지의 스크린샷
+		UIImage *topImage = [Utils cropImage:screenshot toRect:rect];
+		_topView = [[UIImageView alloc] initWithImage:topImage];
+		_topView.frame = CGRectMake( 0, 0, _topView.frame.size.width / scale, _topView.frame.size.height / scale );
+		[self.view addSubview:_topView];
+		
+		// botImage : [더보기 버튼 아래쪽 ~ 테이블뷰 하단]까지의 스크린샷
+		UIImage *botImage = [Utils cropImage:screenshot toRect:CGRectMake( 0, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height) * scale, 320 * scale, _tableView.contentSize.height - (moreCommentCell.frame.origin.y - moreCommentCell.frame.size.height) * scale )];
+		_botView = [[UIImageView alloc] initWithImage:botImage];
+		_botView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _botView.frame.size.width / scale, _botView.frame.size.height / scale );
+		[self.view addSubview:_botView];
+		
+		// 안보이는동안 새 댓글들을 추가시켜놓음
+		[_tableView beginUpdates];
+		[_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+		[_tableView endUpdates];
+		
+		// 새 댓글들의 총 높이
+		CGFloat height = 0;
+		for( NSInteger i = 0; i < data.count; i++ )
+			height += [[_comments objectAtIndex:i] messageHeight] + 32;
+		
+		// 댓글이 추가된 _tableView의 스크린샷을 찍음
+		_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
+		_tableView.contentOffset = originalContentOffset;
+		UIImage *screenshotAfterReload = [_tableView screenshot];
+		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+		
+		// midImage : 추가된 새 댓글부분의 스크린샷
+		UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height) * scale, 320 * scale, height * scale )];
+		_midView = [[UIImageView alloc] initWithImage:midImage];
+		_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _midView.frame.size.width / scale, _midView.frame.size.height / scale );
+		
+		JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
+		foldableView.contentView = _midView;
+		
+		NSInteger foldCount = data.count / 4;
+		if( data.count == 1 ) foldCount = 1;
+		else if( foldCount < 2 ) foldCount = 2;
+		
+		foldableView.foldCount = foldCount;
+		foldableView.fraction = 0;
+		[self.view addSubview:foldableView];
+		
+		[UIView animateWithDuration:0.5 animations:^{
+			foldableView.fraction = 0.9999;
+			foldableView.frame = _midView.frame;
+			_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
+		} completion:^(BOOL finished) {
+			[_topView removeFromSuperview];
+			[_midView removeFromSuperview];
+			[_botView removeFromSuperview];
+			[foldableView removeFromSuperview];
+			
+			[self.view addSubview:_tableView];
+			[_moreCommentsIndicatorView removeFromSuperview];
+			
+			// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
+			_loadedAllComments = _commentOffset == _dish.commentCount;
+			if( _loadedAllComments )
+			{
+				[_tableView beginUpdates];
+				[_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]] withRowAnimation:UITableViewRowAnimationNone];
+				[_tableView endUpdates];
+			}
+		}];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 - (void)sendComment
 {
-	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
-	req.requestId = kRequestIdSendComment;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/comment", API_ROOT_URL, _dish.dishId];
-	req.method = @"POST";
-	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[req setParam:_commentInput.text forKey:@"message"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/comment", _dish.dishId];
+	NSDictionary *params = @{ @"message": _commentInput.text };
+	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
+		JLLog( @"Success" );
+		
+		[self updateAllCommentsRelativeTime];
+		
+		Comment *comment = [[Comment alloc] init];
+		comment.commentId = [[response objectForKey:@"id"] integerValue];
+		comment.userId = [UserManager manager].userId;
+		comment.userName = [UserManager manager].userName;
+		comment.userPhoto = [UserManager manager].userPhoto;
+		comment.message = _commentInput.text;
+		comment.createdTime = [Utils dateFromString:[response objectForKey:@"created_time"]];
+		comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
+		[comment calculateMessageHeight];
+		[_comments addObject:comment];
+		
+		_dish.commentCount ++;
+		
+		[_tableView reloadData];
+		_commentInput.text = @"";
+		_commentInput.enabled = YES;
+		
+		[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 - (void)deleteComment:(NSInteger)commentId
 {
-	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
-	req.requestId = kRequestIdDeleteComment;
-	req.url = [NSString stringWithFormat:@"%@/comment/%d", API_ROOT_URL, commentId];
-	req.method = @"DELETE";
-	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", _dish.dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		[_tableView reloadData];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 - (void)bookmark
 {
-	NSLog( @"[DishDetailViewController] bookmarkDish" );
-	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
-	req.requestId = kRequestIdBookmark;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
-	req.method = @"POST";
-	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", _dish.dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		
+		_dish.updatedTime = [response objectForKey:@"updated_time"];
+		_dish.bookmarkCount = [[response objectForKey:@"bookmark_count"] integerValue];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 - (void)unbookmark
 {
-	NSLog( @"[DishDetailViewController] unbookmarkDish" );
-	JLHTTPFormEncodedRequest *req = [[JLHTTPFormEncodedRequest alloc] init];
-	req.requestId = kRequestIdUnbookmark;
-	req.url = [NSString stringWithFormat:@"%@dish/%d/bookmark", API_ROOT_URL, _dish.dishId];
-	req.method = @"DELETE";
-	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", _dish.dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 - (void)reloadDish
 {
-	NSLog( @"[DishDetailViewController] reloadDish" );
-	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-	req.requestId = kRequestIdReloadDish;
-	req.url = [NSString stringWithFormat:@"%@dish/%d", API_ROOT_URL, _dish.dishId];
-	[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[_loader addRequest:req];
-	[_loader startLoading];
-}
-
-
-#pragma mark -
-#pragma mark JLHTTPLoaderDelegate
-
-- (void)loader:(JLHTTPLoader *)loader didFinishLoading:(JLHTTPResponse *)response
-{
-	NSDictionary *result = [Utils parseJSON:response.body];
-	
-	if( response.requestId == kRequestIdComments )
-	{
-		if( response.statusCode == 200 )
-		{
-			NSArray *data = [result objectForKey:@"data"];
-			
-			_commentOffset += data.count;
-			
-			// 로드된 댓글이 없을 경우
-			if( data.count == 0 )
-			{
-				_loadedAllComments = _commentOffset == _dish.commentCount;
-				[_tableView reloadData];
-				return;
-			}
-			
-			// 로드된 댓글이 추가될 indexPath들
-			NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
-			
-			for( NSInteger i = 0; i < data.count; i++ )
-			{
-				NSDictionary *dict = [data objectAtIndex:i];
-				Comment *comment = [Comment commentFromDictionary:dict];
-				[_comments insertObject:comment atIndex:i];
-				[indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:kSectionComment]];
-			}
-			
-			// 처음 로드
-			if( _commentOffset == data.count )
-			{
-				_loadedAllComments = _commentOffset == _dish.commentCount;
-				[_tableView reloadData];
-				return;
-			}
-			
-			// fold 애니메이션이 진행되는동안 제거
-			[_tableView removeFromSuperview];
-			
-			CGFloat scale = [[UIScreen mainScreen] scale];
-			
-			// 그냥 screenshot을 가져오면 _tableView.frame에 보이는 것만 가져와지기 때문에 contentSize만큼 frame을 늘려줌.
-			CGPoint originalContentOffset = _tableView.contentOffset;
-			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
-			_tableView.contentOffset = originalContentOffset;
-			UIImage *screenshot = [_tableView screenshot];
-			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
-			
-			// 더보기 cell 아래쪽에 새 댓글들이 추가됨.
-			UITableViewCell *moreCommentCell = [_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]];
-			CGRect rect = CGRectMake( 0, _tableView.contentOffset.y * scale, 320 * scale, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height - _tableView.contentOffset.y) * scale );
-			
-			// topImage : [테이블뷰 상단 ~ 더보기 버튼]까지의 스크린샷
-			UIImage *topImage = [Utils cropImage:screenshot toRect:rect];
-			_topView = [[UIImageView alloc] initWithImage:topImage];
-			_topView.frame = CGRectMake( 0, 0, _topView.frame.size.width / scale, _topView.frame.size.height / scale );
-			[self.view addSubview:_topView];
-			
-			// botImage : [더보기 버튼 아래쪽 ~ 테이블뷰 하단]까지의 스크린샷
-			UIImage *botImage = [Utils cropImage:screenshot toRect:CGRectMake( 0, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height) * scale, 320 * scale, _tableView.contentSize.height - (moreCommentCell.frame.origin.y - moreCommentCell.frame.size.height) * scale )];
-			_botView = [[UIImageView alloc] initWithImage:botImage];
-			_botView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _botView.frame.size.width / scale, _botView.frame.size.height / scale );
-			[self.view addSubview:_botView];
-			
-			// 안보이는동안 새 댓글들을 추가시켜놓음
-			[_tableView beginUpdates];
-			[_tableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-			[_tableView endUpdates];
-			
-			// 새 댓글들의 총 높이
-			CGFloat height = 0;
-			for( NSInteger i = 0; i < data.count; i++ )
-				height += [[_comments objectAtIndex:i] messageHeight] + 32;
-			
-			// 댓글이 추가된 _tableView의 스크린샷을 찍음
-			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
-			_tableView.contentOffset = originalContentOffset;
-			UIImage *screenshotAfterReload = [_tableView screenshot];
-			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
-			
-			// midImage : 추가된 새 댓글부분의 스크린샷
-			UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height) * scale, 320 * scale, height * scale )];
-			_midView = [[UIImageView alloc] initWithImage:midImage];
-			_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _midView.frame.size.width / scale, _midView.frame.size.height / scale );
-			
-			JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
-			foldableView.contentView = _midView;
-			
-			NSInteger foldCount = data.count / 4;
-			if( data.count == 1 ) foldCount = 1;
-			else if( foldCount < 2 ) foldCount = 2;
-			
-			foldableView.foldCount = foldCount;
-			foldableView.fraction = 0;
-			[self.view addSubview:foldableView];
-			
-			[UIView animateWithDuration:0.5 animations:^{
-				foldableView.fraction = 0.9999;
-				foldableView.frame = _midView.frame;
-				_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
-			} completion:^(BOOL finished) {
-				[_topView removeFromSuperview];
-				[_midView removeFromSuperview];
-				[_botView removeFromSuperview];
-				[foldableView removeFromSuperview];
-				
-				[self.view addSubview:_tableView];
-				[_moreCommentsIndicatorView removeFromSuperview];
-				
-				// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
-				_loadedAllComments = _commentOffset == _dish.commentCount;
-				if( _loadedAllComments )
-				{
-					[_tableView beginUpdates];
-					[_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]] withRowAnimation:UITableViewRowAnimationNone];
-					[_tableView endUpdates];
-				}
-			}];
-		}
-	}
-	
-	else if( response.requestId == kRequestIdSendComment )
-	{
-		if( response.statusCode == 201 )
-		{
-			[self updateAllCommentsRelativeTime];
-			
-			Comment *comment = [[Comment alloc] init];
-			comment.commentId = [[result objectForKey:@"id"] integerValue];
-			comment.userId = [UserManager manager].userId;
-			comment.userName = [UserManager manager].userName;
-			comment.userPhoto = [UserManager manager].userPhoto;
-			comment.message = _commentInput.text;
-			comment.createdTime = [Utils dateFromString:[result objectForKey:@"created_time"]];
-			comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
-			[comment calculateMessageHeight];
-			[_comments addObject:comment];
-			
-			_dish.commentCount ++;
-			
-			[_tableView reloadData];
-			_commentInput.text = @"";
-			_commentInput.enabled = YES;
-			
-			[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
-		}
-	}
-	
-	else if( response.requestId == kRequestIdDeleteComment )
-	{
-		if( response.statusCode == 200 )
-		{
-			NSLog( @"Removed." );
-			[_tableView reloadData];
-		}
-	}
-	
-	else if( response.requestId == kRequestIdBookmark )
-	{
-		if( response.statusCode == 201 )
-		{
-			_dish.updatedTime = [result objectForKey:@"updated_time"];
-			_dish.bookmarkCount = [[result objectForKey:@"bookmark_count"] integerValue];
-		}
-		else
-		{
-			NSLog( @"[DishDetailViewController] Bookmark failed." );
-		}
-	}
-	
-	else if( response.requestId == kRequestIdUnbookmark )
-	{
-		if( response.statusCode != 200 )
-		{
-			NSLog( @"[DishDetailViewController] Unbookmark failed." );
-		}
-	}
-	
-	else if( response.requestId == kRequestIdReloadDish )
-	{
-		if( response.statusCode == 200 )
-		{
-			_dish.bookmarked = [[result objectForKey:@"bookmarked"] boolValue];
-			[_tableView reloadData];
-		}
-	}
+	NSString *api = [NSString stringWithFormat:@"/dish/%d", _dish.dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		_dish.bookmarked = [[response objectForKey:@"bookmarked"] boolValue];
+		[_tableView reloadData];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 
@@ -435,9 +392,9 @@ enum {
 			return !_loadedAllComments;
 			
 		case kSectionComment:
-			if( [_loader hasRequestId:kRequestIdComments] )
+			if( isFirstCommentLoaded )
 				return 1; // Loading UI
-			NSLog( @"%d Comments.", _comments.count );
+			JLLog( @"%d Comments.", _comments.count );
 			return _comments.count;
 			
 		case kSectionCommentInput:
@@ -458,7 +415,7 @@ enum {
 			return 45;
 			
 		case kSectionComment:
-			if( [_loader hasRequestId:kRequestIdComments] )
+			if( isFirstCommentLoaded )
 				return 50;
 			return [[_comments objectAtIndex:indexPath.row] messageHeight] + 32;
 		
@@ -489,21 +446,8 @@ enum {
 			// Photo
 			//
 			UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, 298 )];
-			imageView.image = [UIImage imageNamed:@"placeholder.png"];
+			[imageView setImageWithURL:[NSURL URLWithString:_dish.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
 			[cell.contentView addSubview:imageView];
-			
-			// List에서 이미지 로딩이 덜 끝난 채로 Detail에 들어오는 경우가 있으므로
-			if( _dish.photo )
-			{
-				imageView.image = _dish.photo;
-			}
-			else
-			{
-				[JLHTTPLoader loadAsyncFromURL:_dish.photoURL completion:^(NSData *data)
-				{
-					imageView.image = _dish.photo = [UIImage imageWithData:data];
-				}];
-			}
 			
 			UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_border.png"]];
 			borderView.frame = CGRectMake( 5, 5, 310, 310 );
@@ -514,9 +458,8 @@ enum {
 			[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 			[cell.contentView addSubview:profileImageButton];
 			
-			[JLHTTPLoader loadAsyncFromURL:_dish.userPhotoURL completion:^(NSData *data)
-			{
-				[profileImageButton setBackgroundImage:_dish.userPhoto = [UIImage imageWithData:data] forState:UIControlStateNormal];
+			[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.userPhotoURL] success:^(UIImage *image) {
+				[profileImageButton setBackgroundImage:_dish.userPhoto = image forState:UIControlStateNormal];
 			}];
 			
 			//
@@ -699,7 +642,7 @@ enum {
 	// Comments
 	else if( indexPath.section == kSectionComment )
 	{
-		if( [_loader hasRequestId:kRequestIdComments] )
+		if( isFirstCommentLoaded )
 		{
 			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:loadingCellId];
 			if( !cell )

@@ -29,7 +29,7 @@
 
 - (void)setMessage:(NSString *)msg
 {
-	self.message = msg;
+	_message = msg;
 	[self calculateMessageHeight];
 }
 
