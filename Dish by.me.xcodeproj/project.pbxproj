@@ -175,6 +175,7 @@
 		03CB7409160C937700A5C6A3 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB7408160C937700A5C6A3 /* Comment.m */; };
 		03CB74A4160CC42700A5C6A3 /* DMBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */; };
 		03CB74A5160CC42700A5C6A3 /* DMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */; };
+		03CE40AE16D93B7F0084AF5A /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CE40AD16D9378B0084AF5A /* UIButton+AFNetworking.m */; };
 		03E7603116D6BA7B004916B0 /* JLFoldableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E7602E16D6BA7B004916B0 /* JLFoldableView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		03E7603216D6BA7B004916B0 /* UIView+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E7603016D6BA7B004916B0 /* UIView+Screenshot.m */; };
 		03E7B3991699AA92003729F4 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B38E1699AA92003729F4 /* blackArrow.png */; };
@@ -407,6 +408,8 @@
 		03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMBarButtonItem.m; sourceTree = "<group>"; };
 		03CB74A2160CC42700A5C6A3 /* DMNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMNavigationController.h; sourceTree = "<group>"; };
 		03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMNavigationController.m; sourceTree = "<group>"; };
+		03CE40AC16D9378B0084AF5A /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+AFNetworking.h"; sourceTree = "<group>"; };
+		03CE40AD16D9378B0084AF5A /* UIButton+AFNetworking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AFNetworking.m"; sourceTree = "<group>"; };
 		03E7602D16D6BA7B004916B0 /* JLFoldableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLFoldableView.h; sourceTree = "<group>"; };
 		03E7602E16D6BA7B004916B0 /* JLFoldableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLFoldableView.m; sourceTree = "<group>"; };
 		03E7602F16D6BA7B004916B0 /* UIView+Screenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Screenshot.h"; sourceTree = "<group>"; };
@@ -903,6 +906,8 @@
 				03F67F4C16D8E33200AB0600 /* AFURLConnectionOperation.m */,
 				03F67F4D16D8E33200AB0600 /* AFXMLRequestOperation.h */,
 				03F67F4E16D8E33200AB0600 /* AFXMLRequestOperation.m */,
+				03CE40AC16D9378B0084AF5A /* UIButton+AFNetworking.h */,
+				03CE40AD16D9378B0084AF5A /* UIButton+AFNetworking.m */,
 				03F67F4F16D8E33200AB0600 /* UIImageView+AFNetworking.h */,
 				03F67F5016D8E33200AB0600 /* UIImageView+AFNetworking.m */,
 			);
@@ -1109,6 +1114,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03CE40AE16D93B7F0084AF5A /* UIButton+AFNetworking.m in Sources */,
 				03B598081602FDC0007BD6AF /* main.m in Sources */,
 				03B5980C1602FDC0007BD6AF /* AppDelegate.m in Sources */,
 				03C8998C160B126E001E488B /* Dish.m in Sources */,

@@ -456,11 +456,8 @@ enum {
 			UIButton *profileImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
 			profileImageButton.frame = CGRectMake( 13, 320, 25, 25 );
 			[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
+			[profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_dish.userPhotoURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 			[cell.contentView addSubview:profileImageButton];
-			
-			[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.userPhotoURL] success:^(UIImage *image) {
-				[profileImageButton setBackgroundImage:_dish.userPhoto = image forState:UIControlStateNormal];
-			}];
 			
 			//
 			// User, Date
