@@ -798,10 +798,10 @@ enum {
 	if( !_moreCommentsIndicatorView )
 	{
 		_moreCommentsIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-		_moreCommentsIndicatorView.frame = CGRectMake( -1, [_moreCommentsButton convertPoint:_moreCommentsButton.frame.origin toView:self.view].y, 37, 37 );
 		[_moreCommentsIndicatorView startAnimating];
 	}
 	
+	_moreCommentsIndicatorView.frame = CGRectMake( -1, [_moreCommentsButton convertPoint:_moreCommentsButton.frame.origin toView:self.view].y, 37, 37 );
 	[self.view addSubview:_moreCommentsIndicatorView];
 	
 	[self loadComments];
