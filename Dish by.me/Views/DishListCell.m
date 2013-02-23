@@ -24,7 +24,7 @@
 	_photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 12, 292, 292 )];
 	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
 	_photoView.userInteractionEnabled = YES;
-	[_photoView addGestureRecognizer:[[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoViewDidTap)] autorelease]];
+	[_photoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoViewDidTap)]];
 	[self.contentView addSubview:_photoView];
 	
 	UIImageView *frameView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, 350 )];
@@ -88,8 +88,8 @@
 
 - (void)setDish:(Dish *)dish atIndexPath:(NSIndexPath *)indexPath
 {
-	_dish = [dish retain];
-	_indexPath = [indexPath retain];
+	_dish = dish;
+	_indexPath = indexPath;
 	[self fillContents];
 	[self layoutContentView];
 }

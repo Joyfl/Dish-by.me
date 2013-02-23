@@ -98,8 +98,6 @@ enum {
 			dispatch_async( dispatch_get_main_queue(), ^{
 				_user.photo = [UIImage imageWithData:data];
 			} );
-			
-			[data release];
 		});
 	}
 	
@@ -109,9 +107,8 @@ enum {
 		
 		for( NSDictionary *d in data )
 		{
-			Dish *dish = [[Dish alloc] initWithDictionary:d];
+			Dish *dish = [Dish dishFromDictionary:d];
 			[_dishes addObject:dish];
-			[dish release];
 		}
 		
 		_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
@@ -182,7 +179,6 @@ enum {
 			UIImageView *profileBorder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"profile_border.png"]];
 			profileBorder.frame = CGRectMake( 10, 10, 93, 94 );
 			[cell addSubview:profileBorder];
-			[profileBorder release];
 			
 			UIButton *bioButton = [[UIButton alloc] initWithFrame:CGRectMake( 103, 10, 211, 47 )];
 			bioButton.titleLabel.font = [UIFont systemFontOfSize:13];
@@ -190,7 +186,7 @@ enum {
 			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top.png"] forState:UIControlStateNormal];
 			
 			// My profile
-			if( _user.userId == [UserManager userId] )
+			if( _user.userId == [[UserManager manager] userId] )
 			{
 				bioButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[bioButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
@@ -210,13 +206,11 @@ enum {
 			[bioButton addSubview:bioLabel];
 			
 			[cell addSubview:bioButton];
-			[bioButton release];
 			
 			UIButton *dishButton = [[UIButton alloc] initWithFrame:CGRectMake( 103, 57, 104, 47 )];
 			[dishButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_left.png"] forState:UIControlStateNormal];
 			[dishButton addTarget:self action:@selector(dishButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell addSubview:dishButton];
-			[dishButton release];
 			
 			UILabel *dishCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 94, 20 )];
 			dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
@@ -238,7 +232,6 @@ enum {
 			[likeButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_right.png"] forState:UIControlStateNormal];
 			[likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell addSubview:likeButton];
-			[likeButton release];
 			
 			UILabel *likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
 			likeCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];

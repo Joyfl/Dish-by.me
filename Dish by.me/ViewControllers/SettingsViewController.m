@@ -26,11 +26,11 @@
 	if( [UserManager manager].loggedIn )
 	{
 		[[UserManager manager] logout];
-		[[[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString( @"LOGOUT_SUCCEED", @"로그아웃되었습니다." ) delegate:nil cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"알겠어요" ) otherButtonTitles:nil] autorelease] show];
+		[[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString( @"LOGOUT_SUCCEED", @"로그아웃되었습니다." ) delegate:nil cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"알겠어요" ) otherButtonTitles:nil] show];
 	}
 	else
 	{
-		[[[[UIAlertView alloc] initWithTitle:@"" message:@"로그인되어있지 않습니다." delegate:nil cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"알겠어요" ) otherButtonTitles:nil] autorelease] show];
+		[[[UIAlertView alloc] initWithTitle:@"" message:@"로그인되어있지 않습니다." delegate:nil cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"알겠어요" ) otherButtonTitles:nil] show];
 	}
 }
 

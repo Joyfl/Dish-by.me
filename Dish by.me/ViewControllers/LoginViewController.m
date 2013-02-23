@@ -28,7 +28,6 @@ enum {
 	
 	DMBarButtonItem *cancelButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
-	[cancelButton release];
 	
 	UIButton *bgView = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 20 )];
 	bgView.adjustsImageWhenHighlighted = NO;
@@ -38,23 +37,19 @@ enum {
 		[bgView setBackgroundImage:[UIImage imageNamed:@"login_bg-568h.png"] forState:UIControlStateNormal];
 	[bgView addTarget:self action:@selector(bgViewDidTouchDown) forControlEvents:UIControlEventTouchDown];
 	[self.view addSubview:bgView];
-	[bgView release];
 	
 	UIButton *closeButton = [[UIButton alloc] initWithFrame:CGRectMake( 280, 15, 26, 26 )];
 	[closeButton setBackgroundImage:[UIImage imageNamed:@"login_close_button.png"] forState:UIControlStateNormal];
 	[closeButton addTarget:self action:@selector(closeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:closeButton];
-	[closeButton release];
 	
 	_forkAndKnife = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fork_knife.png"]];
 	_forkAndKnife.frame = CGRectMake( 140, 55, 80, 90 );
 	[self.view addSubview:_forkAndKnife];
-	[_forkAndKnife release];
 	
 	_loginBox = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"login_box.png"]];
 	_loginBox.frame = CGRectMake( 65, 193, 230, 75 );
 	[self.view addSubview:_loginBox];
-	[_loginBox release];
 	
 	_emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 203, 245, 31 )];
 	_emailInput.delegate = self;
@@ -73,7 +68,6 @@ enum {
 	[_emailInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
 	[_emailInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:_emailInput];
-	[_emailInput release];
 	
 	_passwordInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 240, 245, 31 )];
 	_passwordInput.delegate = self;
@@ -90,7 +84,6 @@ enum {
 	[_passwordInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
 	[_passwordInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:_passwordInput];
-	[_passwordInput release];
 	
 	_loginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 290, 230, 40 )];
 	_loginButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
@@ -101,7 +94,6 @@ enum {
 	[_loginButton setBackgroundImage:[UIImage imageNamed:@"login_button.png"] forState:UIControlStateNormal];
 	[_loginButton addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_loginButton];
-	[_loginButton release];
 	
 	_facebookLoginButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 340, 230, 40 )];
 	_facebookLoginButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
@@ -112,7 +104,6 @@ enum {
 	[_facebookLoginButton setBackgroundImage:[UIImage imageNamed:@"login_facebook_button.png"] forState:UIControlStateNormal];
 	[_facebookLoginButton addTarget:self action:@selector(facebookLoginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_facebookLoginButton];
-	[_facebookLoginButton release];
 	
 	_loader = [[JLHTTPLoader alloc] init];
 	_loader.delegate = self;
@@ -272,7 +263,7 @@ enum {
 		
 		else if( response.statusCode == 404 )
 		{
-			[[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] autorelease] show];
+			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
 			return;
 		}
 	}
@@ -288,7 +279,8 @@ enum {
 				[UserManager manager].userPhoto = [UIImage imageWithData:data];
 				[UserManager manager].loggedIn = YES;
 				
-				[_target performSelector:_action];
+				if( [_target respondsToSelector:_action] )
+					[_target performSelector:_action];
 				[self dismissViewControllerAnimated:YES completion:nil];
 			}];
 		}

@@ -26,12 +26,10 @@
 	
 	UIImageView *searchBarBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_bar.png"]];
 	[_searchBar addSubview:searchBarBg];
-	[searchBarBg release];
 	
 	UIImageView *searchInputBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"textfield_bg.png"]];
 	searchInputBg.frame = CGRectMake( 5, 5, 235, 30 );
 	[_searchBar addSubview:searchInputBg];
-	[searchInputBg release];
 	
 	_searchInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
 	_searchInput.font = [UIFont systemFontOfSize:13];
@@ -43,9 +41,6 @@
 	searchButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[searchButton addTarget:self action:@selector(searchButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[_searchBar addSubview:searchButton];
-	[searchButton release];
-	
-	[_searchBar release];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 45, 320, 322 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;
@@ -62,23 +57,6 @@
 	self.navigationItem.title = @"Dish by.me";
 	
     return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 
@@ -101,9 +79,8 @@
 		
 		for( NSDictionary *d in data )
 		{
-			Dish *dish = [[Dish alloc] initWithDictionary:d];
+			Dish *dish = [Dish dishFromDictionary:d];
 			[_dishes addObject:dish];
-			[dish release];
 		}
 		
 		[_tableView reloadData];

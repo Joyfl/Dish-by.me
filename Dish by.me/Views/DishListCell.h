@@ -15,7 +15,6 @@
 
 @interface DishListCell : UITableViewCell <BookmarkButtonDelegate>
 {
-	id<DishListCellDelegate> delegate;
 	Dish *_dish;
 	NSIndexPath *_indexPath;
 	
@@ -29,9 +28,8 @@
 	BookmarkButton *_bookmarkButton;
 }
 
-@property (nonatomic, retain) id<DishListCellDelegate> delegate;
+@property (nonatomic, weak) id<DishListCellDelegate> delegate;
 @property (nonatomic, readonly) Dish *dish;
-@property (nonatomic, retain) UIImageView *photoView;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setDish:(Dish *)dish atIndexPath:(NSIndexPath *)indexPath;

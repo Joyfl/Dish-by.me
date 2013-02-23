@@ -52,7 +52,6 @@ enum {
 	
 	DMBarButtonItem *backButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = backButton;
-	[backButton release];
 	
 	self.navigationItem.title = _dish.dishName;
 	
@@ -70,31 +69,26 @@ enum {
 	
 	UIImageView *commentBarBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tool_bar.png"]];
 	[_commentBar addSubview:commentBarBg];
-	[commentBarBg release];
 	
 	UIImageView *commentInputBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"textfield_bg.png"]];
 	commentInputBg.frame = CGRectMake( 5, 5, 235, 30 );
 	[_commentBar addSubview:commentInputBg];
-	[commentInputBg release];
 	
 	_commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
 	_commentInput.font = [UIFont systemFontOfSize:13];
 	[_commentInput addTarget:self action:@selector(commentInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
 	[_commentBar addSubview:_commentInput];
-	[_commentInput release];
 	
 	_sendButton = [[DMButton alloc] init];
 	_sendButton.frame = CGRectMake( 250, 5, 60, 30 );
 	_sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[_sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[_commentBar addSubview:_sendButton];
-	[_sendButton release];
 	
 	[_tableView addSubview:_commentBar];
 	
 	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
 	[self.view addGestureRecognizer:tapRecognizer];
-	[tapRecognizer release];
 	
 	_dim = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
 	_dim.alpha = 0;
@@ -118,13 +112,11 @@ enum {
 		{
 			DMBarButtonItem *editButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
 			self.navigationItem.rightBarButtonItem = editButton;
-			[editButton release];
 		}
 		else
 		{
 			DMBarButtonItem *forkButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 			self.navigationItem.rightBarButtonItem = forkButton;
-			[forkButton release];
 		}
 		
 		_commentInput.enabled = YES;
@@ -154,14 +146,6 @@ enum {
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-	[_dish release]; _dish = nil;
-	[_loader release]; _loader = nil;
-	[_comments release]; _comments = nil;
-	[_tableView release]; _tableView = nil;
-	[_recipeButton release]; _recipeButton = nil;
-	[_commentBar release]; _commentBar = nil;
-	[_commentInput release]; _commentInput = nil;
-	[_dim release]; _dim = nil;
 }
 
 
@@ -269,7 +253,6 @@ enum {
 				Comment *comment = [Comment commentFromDictionary:dict];
 				[_comments insertObject:comment atIndex:i];
 				[indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:kSectionComment]];
-				[comment release];
 			}
 			
 			// 처음 로드
@@ -346,16 +329,9 @@ enum {
 				_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
 			} completion:^(BOOL finished) {
 				[_topView removeFromSuperview];
-				[_topView release]; _topView = nil;
-				
 				[_midView removeFromSuperview];
-				[_midView release]; _midView = nil;
-				
 				[_botView removeFromSuperview];
-				[_botView release]; _botView = nil;
-				
 				[foldableView removeFromSuperview];
-				[foldableView release];
 				
 				[self.view addSubview:_tableView];
 				[_moreCommentsIndicatorView removeFromSuperview];
@@ -388,7 +364,6 @@ enum {
 			comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
 			[comment calculateMessageHeight];
 			[_comments addObject:comment];
-			[comment release];
 			
 			_dish.commentCount ++;
 			
@@ -530,14 +505,11 @@ enum {
 				}];
 			}
 			
-			[imageView release];
-			
 			UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_border.png"]];
 			borderView.frame = CGRectMake( 5, 5, 310, 310 );
 			[cell.contentView addSubview:borderView];
-			[borderView release];
 			
-			UIButton *profileImageButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+			UIButton *profileImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
 			profileImageButton.frame = CGRectMake( 13, 320, 25, 25 );
 			[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 			[cell.contentView addSubview:profileImageButton];
@@ -558,7 +530,6 @@ enum {
 			nameLabel.shadowOffset = CGSizeMake( 0, 1 );
 			nameLabel.backgroundColor = [UIColor clearColor];
 			[cell.contentView addSubview:nameLabel];
-			[nameLabel release];
 			
 			_timeLabel = [[UILabel alloc] init];
 			_timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
@@ -575,7 +546,6 @@ enum {
 			UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
 			messageBoxView.userInteractionEnabled = YES;
 			[cell.contentView addSubview:messageBoxView];
-			[messageBoxView release];
 			
 			UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 12, 15, 280, 20 )];
 			messageLabel.text = _dish.description;
@@ -587,14 +557,12 @@ enum {
 			messageLabel.numberOfLines = 0;
 			[messageLabel sizeToFit];
 			[messageBoxView addSubview:messageLabel];
-			[messageLabel release];
 			
 			messageBoxView.frame = CGRectMake( 8, 350, 304, 66 + messageLabel.frame.size.height );
 			
 			UIImageView *messageBoxDotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_dot_line.png"]];
 			messageBoxDotLineView.frame = CGRectMake( 9, 24 + messageLabel.frame.size.height, 285, 2 );
 			[messageBoxView addSubview:messageBoxDotLineView];
-			[messageBoxDotLineView release];
 			
 #warning 조금 더 획기적인 UI 필요
 			if( _dish.forkedFromId )
@@ -636,7 +604,6 @@ enum {
 				UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
 				dotLineView.frame = CGRectMake( 8, messageBoxBottomY + 18, 304, 2 );
 				[cell.contentView addSubview:dotLineView];
-				[dotLineView release];
 				
 				_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, messageBoxBottomY + 36, 320, 50 )];
 				[_recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -745,7 +712,6 @@ enum {
 			indicator.frame = CGRectMake( 141, 0, 37, 37 );
 			[indicator startAnimating];
 			[cell.contentView addSubview:indicator];
-			[indicator release];
 			
 			return cell;
 		}
@@ -756,7 +722,6 @@ enum {
 		
 		Comment *comment = [_comments objectAtIndex:indexPath.row];
 		[cell setComment:comment atIndexPath:indexPath];
-		[comment release];
 		
 		return cell;
 	}
@@ -886,8 +851,6 @@ enum {
 		_dim.alpha = 0;
 		recipeView.frame = CGRectMake( 7, -recipeView.frame.size.height, recipeView.frame.size.width, recipeView.frame.size.height );
 	}];
-	
-	[recipeView release];
 }
 
 - (void)moreCommentsButtonDidTouchUpInside
@@ -935,10 +898,8 @@ enum {
 		LoginViewController *loginViewController = [[LoginViewController alloc] initWithTarget:self action:@selector(loginDidFinish)];
 		DMNavigationController *navigationController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
 		navigationController.navigationBarHidden = YES;
-		[loginViewController release];
 		
 		[self presentViewController:navigationController animated:YES completion:nil];
-		[navigationController release];
 	}
 }
 

@@ -9,31 +9,17 @@
 #import <Foundation/Foundation.h>
 
 @interface Comment : NSObject
-{
-	NSInteger commentId;
-	NSInteger userId;
-	NSString *userName;
-	NSString *userPhotoURL;
-	UIImage *userPhoto;
-	NSString *message;
-	NSDate *createdTime;
-	NSString *relativeCreatedTime;
-	NSDate *updatedTime;
-	NSString *relativeUpdatedTime;
-	
-	CGFloat messageHeight;
-}
 
 @property (nonatomic, assign) NSInteger commentId;
 @property (nonatomic, assign) NSInteger userId;
-@property (nonatomic, retain) NSString *userName;
-@property (nonatomic, retain) NSString *userPhotoURL;
-@property (nonatomic, retain) UIImage *userPhoto;
-@property (nonatomic, retain) NSString *message;
-@property (nonatomic, retain) NSDate *createdTime;
-@property (nonatomic, retain) NSString *relativeCreatedTime;
-@property (nonatomic, retain) NSDate *updatedTime;
-@property (nonatomic, retain) NSString *relativeUpdatedTime;
+@property (nonatomic, weak) NSString *userName;
+@property (nonatomic, weak) NSString *userPhotoURL;
+@property (nonatomic, weak) UIImage *userPhoto;
+@property (nonatomic, weak) NSString *message;
+@property (nonatomic, weak) NSDate *createdTime;
+@property (nonatomic, weak) NSString *relativeCreatedTime;
+@property (nonatomic, weak) NSDate *updatedTime;
+@property (nonatomic, weak) NSString *relativeUpdatedTime;
 @property (nonatomic, assign) CGFloat messageHeight;
 
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary;

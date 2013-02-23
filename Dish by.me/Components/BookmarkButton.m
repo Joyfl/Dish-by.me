@@ -61,7 +61,6 @@
 	UIImageView *ribbonGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 96, 1, 4, 20 )];
 	ribbonGradientView.image = [UIImage imageNamed:@"ribbon_gradient.png"];
 	[_bookmarkButtonContainer addSubview:ribbonGradientView];
-	[ribbonGradientView release];
 	
     return self;
 }
@@ -176,9 +175,6 @@
 	
 	[_parentView addSubview:_bookmarkLabel];
 	[_parentView addSubview:_bookmarkButtonContainer];
-	
-	[_bookmarkLabel release];
-	[_bookmarkButtonContainer release];
 }
 
 

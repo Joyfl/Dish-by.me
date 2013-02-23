@@ -66,14 +66,6 @@
 	NSInteger height = bottomShadow.frame.origin.y + bottomShadow.frame.size.height;
 	self.frame = CGRectMake( 7, ( 367 - height ) / 2, 306, height );
 	
-	[topShadow release];
-	[centerShadow release];
-	[bottomShadow release];
-	[topView release];
-	[bottomView release];
-	[titleLabel release];
-	[closeButton release];
-	
 	return self;
 }
 

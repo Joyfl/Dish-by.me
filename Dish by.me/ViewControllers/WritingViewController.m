@@ -22,17 +22,14 @@
 	
 	DMBarButtonItem *cancelButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
-	[cancelButton release];
 	
 	DMBarButtonItem *uploadButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"UPLOAD", @"" ) target:self action:@selector(uploadButtonDidTouchUpInside)];
 	self.navigationItem.rightBarButtonItem = uploadButton;
-	[uploadButton release];
 	
-	_photo = [photo retain];
+	_photo = photo;
 	
 	UIGestureRecognizer *recognizer = [[UIGestureRecognizer alloc] initWithTarget:self action:@selector(gestureDidRecognize)];
 	self.view.gestureRecognizers = [NSArray arrayWithObject:recognizer];
-	[recognizer release];
 	
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 0, 0, 320, 416 )];
 	_scrollView.delegate = self;
@@ -60,7 +57,6 @@
 	UIImageView *messageBoxTopView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_top.png"]];
 	messageBoxTopView.frame = CGRectMake( 8, 350, 304, 15 );
 	[_scrollView addSubview:messageBoxTopView];
-	[messageBoxTopView release];
 	
 	UIImageView *messageBoxCenterView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_center.png"]];
 	messageBoxCenterView.frame = CGRectMake( 8, 365, 304, 70 );

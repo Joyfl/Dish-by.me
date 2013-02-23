@@ -48,8 +48,6 @@
 		dispatch_async( dispatch_get_main_queue(), ^{
 			dish.photo = [UIImage imageWithData: data];
 		} );
-		
-		[data release];
 	});
 }
 
@@ -66,8 +64,6 @@
 			dish.photo = [UIImage imageWithData:data];
 			[self setBackgroundImage:dish.photo forState:UIControlStateNormal];
 		} );
-		
-		[data release];
 	});
 }
 

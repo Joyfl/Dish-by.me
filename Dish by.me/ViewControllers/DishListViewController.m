@@ -13,6 +13,7 @@
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
 #import "UserManager.h"
+#import "AFNetworking.h"
 
 @implementation DishListViewController
 
@@ -55,28 +56,48 @@ enum {
 	[_tableView reloadData];
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-	[_tableView release];
-	[_dishes release];
-	[_loader release];
-}
-
 
 #pragma mark -
 #pragma mark Loading
 
 - (void)updateDishes
 {
-	NSLog( @"[DishListViewController] updateDishes" );
-	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
-	req.requestId = kRequestIdUpdateDishes;
-	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
-	if( [UserManager manager].loggedIn )
-		[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
-	[_loader addRequest:req];
-	[_loader startLoading];
+//	NSLog( @"[DishListViewController] updateDishes" );
+//	JLHTTPGETRequest *req = [[JLHTTPGETRequest alloc] init];
+//	req.requestId = kRequestIdUpdateDishes;
+//	req.url = [NSString stringWithFormat:@"%@dishes", API_ROOT_URL];
+//	if( [UserManager manager].loggedIn )
+//		[req setParam:[UserManager manager].accessToken forKey:@"access_token"];
+//	[_loader addRequest:req];
+//	[_loader startLoading];
+	
+	AFHTTPClient *client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:API_ROOT_URL]];
+	[client registerHTTPOperationClass:[AFJSONRequestOperation class]];
+	[client getPath:@"/dishes" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+		NSLog( @"response : %@", responseObject );
+//		[_dishes removeAllObjects];
+//		
+//		NSDictionary *result = [Utils parseJSON:response.body];
+//		NSArray *data = [result objectForKey:@"data"];
+//		
+//		for( NSDictionary *d in data )
+//		{
+//			Dish *dish = [Dish dishFromDictionary:d];
+//			[_dishes addObject:dish];
+//		}
+//		
+//		[_tableView reloadData];
+//		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		
+	}];
+	
+//	NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@dishes", API_ROOT_URL]];
+//	NSURLRequest *request = [NSURLRequest requestWithURL:url];
+//	AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+//		NSLog(@"App.net Global Stream: %@", JSON);
+//	} failure:nil];
+//	[operation start];
 }
 
 - (void)loadMoreDishes
@@ -236,7 +257,6 @@ enum {
 		
 		Dish *dish = [_dishes objectAtIndex:indexPath.row];
 		[cell setDish:dish atIndexPath:indexPath];
-		[dish release];
 		
 		return cell;
 	}
@@ -254,7 +274,6 @@ enum {
 		indicator.frame = CGRectMake( 141, 0, 37, 37 );
 		[indicator startAnimating];
 		[cell.contentView addSubview:indicator];
-		[indicator release];
 		
 		if( ![_loader hasRequestId:kRequestIdLoadMoreDishes] )
 			[self loadMoreDishes];
@@ -281,7 +300,6 @@ enum {
 {
 	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
-	[dishDetailViewController release];
 }
 
 - (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath

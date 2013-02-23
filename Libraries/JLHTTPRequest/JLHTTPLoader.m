@@ -35,8 +35,7 @@
 	if( loading || queue.count == 0 ) return;
 
 	JLHTTPRequest *request = [queue objectAtIndex:0];
-	[[[NSURLConnection alloc] initWithRequest:request.URLRequest delegate:self] autorelease];
-	[request release];
+	[[NSURLConnection alloc] initWithRequest:request.URLRequest delegate:self];
 	loading = YES;
 }
 
@@ -87,7 +86,7 @@
 {
 	NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 	statusCode = httpResponse.statusCode;
-	responseHeader = [httpResponse.allHeaderFields retain];
+	responseHeader = httpResponse.allHeaderFields;
 	responseData.length = 0;
 }
 
@@ -106,7 +105,7 @@
 	
 	loading = NO;
 	
-	JLHTTPRequest *request = [[queue objectAtIndex:0] retain];
+	JLHTTPRequest *request = [queue objectAtIndex:0];
 	[queue removeObjectAtIndex:0];
 	
 	JLHTTPResponse *response = [[JLHTTPResponse alloc] init];
@@ -114,11 +113,9 @@
 	response.statusCode = statusCode;
 	response.headers = responseHeader;
 	response.body = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-	[request release];
 	
 	statusCode = 0;
 	responseHeader = nil;
-	[responseHeader release];
 	
 	[delegate loader:self didFinishLoading:response];
 	

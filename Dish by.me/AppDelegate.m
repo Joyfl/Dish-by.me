@@ -22,15 +22,9 @@
 
 @synthesize window = _window, currentWritingForkedFrom;
 
-- (void)dealloc
-{
-	[_window release];
-    [super dealloc];
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 	
@@ -44,43 +38,35 @@
 //	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
 	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_dish.png"];
 	dishNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
-	[dishListViewController release];
 	
 	SearchViewController *searchViewController = [[SearchViewController alloc] init];
 	DMNavigationController *searchNavigationController = [[DMNavigationController alloc] initWithRootViewController:searchViewController];
-	searchNavigationController.navigationBar.shadowImage = [[[UIImage alloc] init] autorelease];
+	searchNavigationController.navigationBar.shadowImage = [[UIImage alloc] init];
 	[searchNavigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigation_bar_no_border.png"] forBarMetrics:UIBarMetricsDefault];
 //	searchNavigationController.title = NSLocalizedString( @"SEARCH", @"" );
 	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_search.png"];
 	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
-	[searchViewController release];
 	
 	profileViewController = [[ProfileViewController alloc] init];
 	DMNavigationController *profileNavigationController = [[DMNavigationController alloc] initWithRootViewController:profileViewController];
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
 	profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
 	profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
-	[profileViewController release];
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
 	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:settingsViewController];
 //	settingsNavigationController.title = NSLocalizedString( @"SETTINGS", @"" );
 	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_settings.png"];
 	settingsNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
-	[settingsViewController release];
 	
 	tabBarController.viewControllers = [NSArray arrayWithObjects:
 										dishNavigationController,
 										searchNavigationController,
-										[[[UIViewController alloc] init] autorelease],
+										[[UIViewController alloc] init],
 										profileNavigationController,
 										settingsNavigationController,
 										nil];
 	self.window.rootViewController = tabBarController;
-	[dishNavigationController release];
-	[searchNavigationController release];
-	[profileNavigationController release];
-	[settingsNavigationController release];
 	
 	UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	cameraButton.frame = CGRectMake( 128, -1, 64, 50 );
@@ -157,7 +143,6 @@
 {
 	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString( @"CANCEL", @"" ) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString( @"TAKE_A_PHOTO", @"" ), NSLocalizedString( @"FROM_LIBRARY", @"" ), nil];
 	[actionSheet showInView:self.window];
-	[actionSheet release];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -172,7 +157,7 @@
 		}
 		@catch( NSException *exception )
 		{
-			[[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_NO_SUPPORT_CAMERA", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] autorelease] show];
+			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_NO_SUPPORT_CAMERA", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
 			return;
 		}
 		
@@ -212,10 +197,7 @@
 	
 	WritingViewController *writingViewController = [[WritingViewController alloc] initWithPhoto:image];
 	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
-	[tabBarController presentViewController:navController animated:NO completion:nil];
-	
-	[writingViewController release];
-	[navController release];
+	[tabBarController presentViewController:navController animated:NO completion:nil];;
 }
 
 - (void)presentLoginViewController
@@ -224,9 +206,6 @@
 	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
 	navController.navigationBarHidden = YES;
 	[tabBarController presentViewController:navController animated:YES completion:nil];
-	
-	[loginViewController release];
-	[navController release];
 }
 
 - (void)loginDidFinish

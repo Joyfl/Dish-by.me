@@ -11,9 +11,6 @@
 
 @implementation Comment
 
-@synthesize commentId, userId, userName, userPhotoURL, userPhoto, message, createdTime, relativeCreatedTime, updatedTime, relativeUpdatedTime;
-@synthesize messageHeight;
-
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary
 {
 	Comment *comment = [[Comment alloc] init];
@@ -32,7 +29,7 @@
 
 - (void)setMessage:(NSString *)msg
 {
-	message = [msg retain];
+	self.message = msg;
 	[self calculateMessageHeight];
 }
 

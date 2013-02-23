@@ -21,7 +21,6 @@
 	_highlightView.clipsToBounds = YES;
 	_highlightView.hidden = YES;
 	[self insertSubview:_highlightView belowSubview:self.imageView];
-	[_highlightView release];
 	
 	_hightlightViewInsets = UIEdgeInsetsMake( -2, -2, -2, -2 );
 	

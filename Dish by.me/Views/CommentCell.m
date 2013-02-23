@@ -22,7 +22,7 @@
 	_lineView = [[UIImageView alloc] init];
 	[self addSubview:_lineView];
 	
-	_profileImageButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+	_profileImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	_profileImageButton.frame = CGRectMake( 10, 10, 30, 30 );
 	[_profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 	[self addSubview:_profileImageButton];
@@ -55,8 +55,8 @@
 
 - (void)setComment:(Comment *)comment atIndexPath:(NSIndexPath *)indexPath
 {
-	_comment = [comment retain];
-	_indexPath = [indexPath retain];
+	_comment = comment;
+	_indexPath = indexPath;
 	[self fillContents];
 	[self layoutContentView];
 	[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];

@@ -89,13 +89,13 @@
 - (UIImage *)userPhoto
 {
 	if( !_userPhoto )
-		_userPhoto = [[UIImage imageWithContentsOfFile:[(NSString *)[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"]] retain];
+		_userPhoto = [UIImage imageWithContentsOfFile:[(NSString *)[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"]];
 	return _userPhoto;
 }
 
 - (void)setUserPhoto:(UIImage *)userPhoto
 {
-	[UIImagePNGRepresentation( _userPhoto = [userPhoto retain] ) writeToFile:[[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"] atomically:YES];
+	[UIImagePNGRepresentation( _userPhoto = userPhoto ) writeToFile:[[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"] atomically:YES];
 }
 
 @end

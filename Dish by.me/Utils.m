@@ -11,16 +11,16 @@
 
 @implementation Utils
 
-+ (id)parseJSON:(NSString *)json
++ (id)parseJSON:(NSString *)jsonString
 {
-	SBJsonParser *parser = [[SBJsonParser alloc] init];
-	return [[parser autorelease] objectWithString:json];
+	NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+	return [NSJSONSerialization JSONObjectWithData:jsonData options:nil error:nil];
 }
 
 + (NSString *)writeJSON:(id)object
 {
-	SBJsonWriter *writer = [[SBJsonWriter alloc] init];
-	return [[writer autorelease] stringWithObject:object];
+	NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object options:nil error:nil];
+	return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 
 + (UIColor *)colorWithHex:(NSInteger)color alpha:(CGFloat)alpha
@@ -47,10 +47,10 @@
 
 + (NSDate *)dateFromString:(NSString *)string
 {
-	NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	formatter.dateFormat = @"eee, dd MMM yyyy HH:mm:ss ZZZZ";
 	formatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-	formatter.locale = [[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] autorelease];
+	formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
 	return [formatter dateFromString:string];
 }
 
@@ -113,7 +113,7 @@
 	// From here, return date with time if withTime is YES
 	NSString *string = nil;
 	
-	NSCalendar *calendar = [[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar] autorelease];
+	NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 	
 	NSDateComponents *components = [calendar components:NSUIntegerMax fromDate:date];
 	NSInteger day = components.day;
@@ -149,7 +149,7 @@
 		// 올해 8일 <= n : M월 d일
 		else if( year == thisYear )
 		{
-			NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+			NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 			formatter.dateFormat = NSLocalizedString( @"DATE_FORMAT_WITH_MONTH_DAY", @"M월 d일" );
 			string = [formatter stringFromDate:date];
 		}
@@ -158,7 +158,7 @@
 	// 나머지 : YYYY년 M월 d일
 	else
 	{
-		NSDateFormatter *formatter = [[[NSDateFormatter alloc] init] autorelease];
+		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 		formatter.dateFormat = NSLocalizedString( @"DATE_FORMAT_WITH_YEAR_MONTH_DAY", @"yyyy년 M월 d일" );
 		string = [formatter stringFromDate:date];
 	}
