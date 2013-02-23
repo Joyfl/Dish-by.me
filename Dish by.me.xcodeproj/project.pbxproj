@@ -24,6 +24,8 @@
 		033C52E61610797400F0B5E5 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52E51610797400F0B5E5 /* UserManager.m */; };
 		0349EA5116D8F0350057BD12 /* DishByMeAPILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */; };
 		0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5416D8F6E90057BD12 /* JLLogger.m */; };
+		0349EA5816D90C870057BD12 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5616D90C7B0057BD12 /* SystemConfiguration.framework */; };
+		0349EA5A16D90C930057BD12 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5916D90C930057BD12 /* MobileCoreServices.framework */; };
 		034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 034A0A0E1656779700C7DA93 /* DishTileCell.m */; };
 		03677999169DE68700F26BBA /* BookmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 03677998169DE68700F26BBA /* BookmarkButton.m */; };
 		0370EDB0169F050E00EBE2D9 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0370ED37169F050E00EBE2D9 /* .gitignore */; };
@@ -231,6 +233,8 @@
 		0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishByMeAPILoader.m; path = "Dish by.me/DishByMeAPILoader.m"; sourceTree = SOURCE_ROOT; };
 		0349EA5316D8F6E90057BD12 /* JLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLLogger.h; sourceTree = "<group>"; };
 		0349EA5416D8F6E90057BD12 /* JLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLLogger.m; sourceTree = "<group>"; };
+		0349EA5616D90C7B0057BD12 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		0349EA5916D90C930057BD12 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		034A0A0D1656779700C7DA93 /* DishTileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishTileCell.h; path = Views/DishTileCell.h; sourceTree = "<group>"; };
 		034A0A0E1656779700C7DA93 /* DishTileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishTileCell.m; path = Views/DishTileCell.m; sourceTree = "<group>"; };
 		03677997169DE68700F26BBA /* BookmarkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarkButton.h; sourceTree = "<group>"; };
@@ -444,6 +448,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0349EA5A16D90C930057BD12 /* MobileCoreServices.framework in Frameworks */,
+				0349EA5816D90C870057BD12 /* SystemConfiguration.framework in Frameworks */,
 				03B597FC1602FDC0007BD6AF /* UIKit.framework in Frameworks */,
 				03B597FE1602FDC0007BD6AF /* Foundation.framework in Frameworks */,
 				03B598001602FDC0007BD6AF /* CoreGraphics.framework in Frameworks */,
@@ -765,6 +771,8 @@
 		03B597FA1602FDC0007BD6AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0349EA5916D90C930057BD12 /* MobileCoreServices.framework */,
+				0349EA5616D90C7B0057BD12 /* SystemConfiguration.framework */,
 				03B597FB1602FDC0007BD6AF /* UIKit.framework */,
 				03B597FD1602FDC0007BD6AF /* Foundation.framework */,
 				03B597FF1602FDC0007BD6AF /* CoreGraphics.framework */,

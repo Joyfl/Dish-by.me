@@ -28,7 +28,6 @@
 	_client = [[AFHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:API_ROOT_URL]];
 	[_client setDefaultHeader:@"Accept" value:@"application/json; version=1.0;"];
 	[_client setDefaultHeader:@"Content-Type" value:@"application/json"];
-//	[_client setParameterEncoding:AFJSONParameterEncoding];
 	[_client registerHTTPOperationClass:[AFJSONRequestOperation class]];
 	
 	return self;

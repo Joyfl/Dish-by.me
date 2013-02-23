@@ -56,9 +56,17 @@ enum {
 
 - (void)updateDishes
 {
+	JLLog( @"updateDishes" );
+	
 	_updating = YES;
 	
-	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:nil success:^(id response) {
+	NSDictionary *params = nil;
+	if( [UserManager manager].loggedIn )
+		params = @{ @"access_token": [UserManager manager].accessToken };
+	
+	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"Success" );
+		
 		[_dishes removeAllObjects];
 		
 		NSArray *data = [response objectForKey:@"data"];
@@ -85,11 +93,17 @@ enum {
 
 - (void)loadMoreDishes
 {
+	JLLog( @"loadMoreDishes" );
+	
 	_loading = YES;
 	
-	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _offset] };
+	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObject:[NSString stringWithFormat:@"%d", _offset] forKey:@"offset"];
+	if( [UserManager manager].loggedIn )
+		[params setObject:[UserManager manager].accessToken forKey:@"access_token"];
 	
 	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"Success" );
+		
 		NSArray *data = [response objectForKey:@"data"];
 		_offset += data.count;
 		
@@ -120,10 +134,10 @@ enum {
 	JLLog( @"bookmarkDish" );
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
-	NSDictionary *params = @{@"access_token": [UserManager manager].accessToken};
+	NSDictionary *params = @{ @"access_token": [UserManager manager].accessToken };
 	
 	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
-		JLLog( @"bookmark succeed." );
+		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -137,10 +151,10 @@ enum {
 	JLLog( @"unbookmarkDish" );
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
-	NSDictionary *params = @{@"access_token": [UserManager manager].accessToken};
+	NSDictionary *params = @{ @"access_token": [UserManager manager].accessToken };
 	
 	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:params success:^(id response) {
-		JLLog( @"bookmark succeed." );
+		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -161,7 +175,6 @@ enum {
 - (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)refreshHeaerView
 {
 	return _updating;
-//	return [_loader hasRequestId:kRequestIdUpdateDishes];
 }
 
 - (NSDate *)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)refreshHeaerView
