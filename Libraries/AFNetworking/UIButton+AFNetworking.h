@@ -125,7 +125,7 @@
 /**
  Cancels any executing image request operation for the receiver, if one exists.
  */
-- (void)cancelImageRequestOperation;
+- (void)cancelBackgroundImageRequestOperation;
 
 
 @end
