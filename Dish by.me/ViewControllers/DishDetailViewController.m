@@ -92,9 +92,10 @@ enum {
 	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
 	[self.view addGestureRecognizer:tapRecognizer];
 	
-	_dim = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
-	_dim.alpha = 0;
-	[self.view addSubview:_dim];
+	_dimView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
+	_dimView.userInteractionEnabled = YES;
+	_dimView.alpha = 0;
+	[self.view addSubview:_dimView];
 	
 	lastLoggedIn = [UserManager manager].loggedIn;
 	
@@ -780,7 +781,7 @@ enum {
 	recipeView.frame = CGRectMake( 7, -originalFrame.size.height, originalFrame.size.width, originalFrame.size.height );
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		_dim.alpha = 1;
+		_dimView.alpha = 1;
 		recipeView.frame = originalFrame;
 	}];
 }
@@ -790,7 +791,7 @@ enum {
 	RecipeView *recipeView = (RecipeView *)closeButton.superview;
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		_dim.alpha = 0;
+		_dimView.alpha = 0;
 		recipeView.frame = CGRectMake( 7, -recipeView.frame.size.height, recipeView.frame.size.width, recipeView.frame.size.height );
 	}];
 }
