@@ -227,50 +227,52 @@ enum {
 		for( NSInteger i = 0; i < data.count; i++ )
 			height += [[_comments objectAtIndex:i] messageHeight] + 32;
 		
-		// 댓글이 추가된 _tableView의 스크린샷을 찍음
-		_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
-		_tableView.contentOffset = originalContentOffset;
-		UIImage *screenshotAfterReload = [_tableView screenshot];
-		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
-		
-		// midImage : 추가된 새 댓글부분의 스크린샷
-		UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height) * scale, 320 * scale, height * scale )];
-		_midView = [[UIImageView alloc] initWithImage:midImage];
-		_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _midView.frame.size.width / scale, _midView.frame.size.height / scale );
-		
-		JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
-		foldableView.contentView = _midView;
-		
-		NSInteger foldCount = data.count / 4;
-		if( data.count == 1 ) foldCount = 1;
-		else if( foldCount < 2 ) foldCount = 2;
-		
-		foldableView.foldCount = foldCount;
-		foldableView.fraction = 0;
-		[self.view addSubview:foldableView];
-		
-		[UIView animateWithDuration:0.5 animations:^{
-			foldableView.fraction = 0.9999;
-			foldableView.frame = _midView.frame;
-			_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
-		} completion:^(BOOL finished) {
-			[_topView removeFromSuperview];
-			[_midView removeFromSuperview];
-			[_botView removeFromSuperview];
-			[foldableView removeFromSuperview];
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+			// 댓글이 추가된 _tableView의 스크린샷을 찍음
+			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
+			_tableView.contentOffset = originalContentOffset;
+			UIImage *screenshotAfterReload = [_tableView screenshot];
+			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
 			
-			[self.view addSubview:_tableView];
-			[_moreCommentsIndicatorView removeFromSuperview];
+			// midImage : 추가된 새 댓글부분의 스크린샷
+			UIImage *midImage = [Utils cropImage:screenshotAfterReload toRect:CGRectMake( 0, (moreCommentCell.frame.origin.y + moreCommentCell.frame.size.height) * scale, 320 * scale, height * scale )];
+			_midView = [[UIImageView alloc] initWithImage:midImage];
+			_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _midView.frame.size.width / scale, _midView.frame.size.height / scale );
+		
+			JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
+			foldableView.contentView = _midView;
 			
-			// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
-			_loadedAllComments = _commentOffset == _dish.commentCount;
-			if( _loadedAllComments )
-			{
-				[_tableView beginUpdates];
-				[_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]] withRowAnimation:UITableViewRowAnimationNone];
-				[_tableView endUpdates];
-			}
-		}];
+			NSInteger foldCount = data.count / 4;
+			if( data.count == 1 ) foldCount = 1;
+			else if( foldCount < 2 ) foldCount = 2;
+			
+			foldableView.foldCount = foldCount;
+			foldableView.fraction = 0;
+			[self.view addSubview:foldableView];
+			
+			[UIView animateWithDuration:0.5 animations:^{
+				foldableView.fraction = 0.9999;
+				foldableView.frame = _midView.frame;
+				_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
+			} completion:^(BOOL finished) {
+				[_topView removeFromSuperview];
+				[_midView removeFromSuperview];
+				[_botView removeFromSuperview];
+				[foldableView removeFromSuperview];
+				
+				[self.view addSubview:_tableView];
+				[_moreCommentsIndicatorView removeFromSuperview];
+				
+				// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
+				_loadedAllComments = _commentOffset == _dish.commentCount;
+				if( _loadedAllComments )
+				{
+					[_tableView beginUpdates];
+					[_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]] withRowAnimation:UITableViewRowAnimationNone];
+					[_tableView endUpdates];
+				}
+			}];
+		});
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
