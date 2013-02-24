@@ -47,7 +47,8 @@ enum {
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	[self updateDishes];
+//	[self updateDishes];
+	[_tableView reloadData];
 }
 
 
