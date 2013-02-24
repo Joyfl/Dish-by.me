@@ -15,7 +15,8 @@
 	static UIImageView *dimView = nil;
 	if( !dimView )
 	{
-		dimView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
+		dimView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, UIScreenWidth, UIScreenHeight )];
+		dimView.image = [UIImage imageNamed:@"dim.png"];
 		dimView.userInteractionEnabled = YES;
 	}
 	return dimView;
