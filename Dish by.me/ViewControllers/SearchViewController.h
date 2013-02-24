@@ -14,6 +14,7 @@
 	UIView *_searchBar;
 	UITextField *_searchInput;
 	UITableView *_tableView;
+	UIView *_dimView;
 	
 	NSMutableArray *_dishes;
 	NSInteger _count;

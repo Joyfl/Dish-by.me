@@ -33,6 +33,7 @@
 	_searchInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
 	_searchInput.font = [UIFont systemFontOfSize:13];
 	_searchInput.placeholder = NSLocalizedString( @"SEARCH_INPUT", @"" );
+	[_searchInput addTarget:self action:@selector(searchInputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
 	[_searchBar addSubview:_searchInput];
 	
 	DMButton *searchButton = [[DMButton alloc] initWithTitle:NSLocalizedString( @"SEARCH", @"" )];
@@ -47,6 +48,15 @@
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	[self.view addSubview:_tableView];
+	
+	_dimView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 45, 320, UIScreenHeight )];
+	_dimView.userInteractionEnabled = YES;
+	_dimView.backgroundColor = [UIColor blackColor];
+	_dimView.alpha = 0;
+	[self.view addSubview:_dimView];
+	
+	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dimViewDidTap)];
+	[_dimView addGestureRecognizer:tapRecognizer];
 	
 	_dishes = [[NSMutableArray alloc] init];
 	
@@ -205,17 +215,35 @@
 
 
 #pragma mark -
+#pragma mark SearchInput
+
+- (void)searchInputEditingDidBegin
+{
+	[UIView animateWithDuration:0.25 animations:^{
+		_dimView.alpha = 0.7;
+	}];
+}
+
+
+#pragma mark -
 #pragma mark Selectors
 
 - (void)searchButtonDidTouchUpInside
 {
 	[_dishes removeAllObjects];
 	[_tableView reloadData];
+	[self dimViewDidTap];
 	
+	[self search:_searchInput.text];
+}
+
+- (void)dimViewDidTap
+{
 	[_searchInput resignFirstResponder];
 	
-	[_dishes removeAllObjects];
-	[self search:_searchInput.text];
+	[UIView animateWithDuration:0.25 animations:^{
+		_dimView.alpha = 0;
+	}];
 }
 
 @end
