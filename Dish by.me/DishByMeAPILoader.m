@@ -52,12 +52,41 @@
 		success( responseObject );
 		
 	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-		NSLog( @"URL : %@", operation.request.URL );
+		
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
-		failure( operation.response.statusCode, [[errorInfo objectForKey:@"code"] integerValue], [errorInfo objectForKey:@"message"] );
+		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
+		
+		// AccessToken is expired
+		if( errorCode == 2000 )
+		{
+			JLLog( @"AccessToken is expired" );
+			
+			[self extendAccessToken:^(id response) {
+				JLLog( @"AccessToken is extended" );
+				
+				[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
+				[self api:api method:method parameters:parameters success:success failure:failure];
+				
+			} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+				JLLog( @"statusCode : %d", statusCode );
+				JLLog( @"errorCode : %d", errorCode );
+				JLLog( @"message : %@", message );
+			}];
+			return;
+		}
+		
+		NSLog( @"URL : %@", operation.request.URL );
+		failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
 	}];
 	
 	[_client enqueueHTTPRequestOperation:operation];
+}
+
+- (void)extendAccessToken:(void (^)(id response))success
+				  failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
+{
+	NSDictionary *params = @{ @"access_token": [[UserManager manager] accessToken] };
+	[self api:@"/auth/renew" method:@"POST" parameters:params success:success failure:failure];
 }
 
 - (void)loadImageFromURL:(NSURL *)url
