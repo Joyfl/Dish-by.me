@@ -107,21 +107,20 @@
 
 - (void)uploadButtonDidTouchUpInside
 {
+	[self backgroundDidTap];
 	[self dim];
 	
-	return;
-	
-	
-	NSDictionary *params = @{
-						  @"name": _nameInput.text,
-		@"description": _messageInput.text
-		};
+	NSDictionary *params = @{ @"name": _nameInput.text,
+						   @"description": _messageInput.text,
+						   @"recipe": _recipeView.recipeView.text };
 	
 	[[DishByMeAPILoader sharedLoader] api:@"/dish" method:@"POST" image:_photo parameters:params success:^(id response) {
 		JLLog( @"Success" );
+		[self undim];
 		[self dismissViewControllerAnimated:YES completion:nil];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		[self undim];
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
