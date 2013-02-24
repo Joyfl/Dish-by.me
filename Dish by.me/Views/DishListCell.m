@@ -11,6 +11,7 @@
 #import "Utils.h"
 #import <QuartzCore/CALayer.h>
 #import "UserManager.h"
+#import "DishByMeAPILoader.h"
 
 @implementation DishListCell
 
@@ -103,7 +104,7 @@
 		if( !_dish.photoHasBeenShown )
 		{
 			_dish.photoHasBeenShown = YES;
-			[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+			[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction animations:^{
 				_photoView.image = _dish.photo;
 			} completion:nil];
 		}
@@ -116,7 +117,7 @@
 			_dish.photo = [UIImage imageWithData:data];
 			 
 			 if( [_indexPath isEqual:indexPath] )
-				 [UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+				 [UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction animations:^{
 					 _photoView.image = _dish.photo;
 				 } completion:nil];
 		 }];
