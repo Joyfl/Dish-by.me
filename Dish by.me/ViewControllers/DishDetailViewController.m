@@ -22,8 +22,9 @@
 #import "LoginViewController.h"
 #import "DMNavigationController.h"
 #import "JLLabelButton.h"
-#import "UIView+Screenshot.h"
 #import "JLFoldableView.h"
+#import "UIView+Screenshot.h"
+#import "NSObject+Dim.h"
 
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
 
@@ -91,11 +92,6 @@ enum {
 	
 	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
 	[self.view addGestureRecognizer:tapRecognizer];
-	
-	_dimView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
-	_dimView.userInteractionEnabled = YES;
-	_dimView.alpha = 0;
-	[self.view addSubview:_dimView];
 	
 	lastLoggedIn = [UserManager manager].loggedIn;
 	
@@ -774,24 +770,26 @@ enum {
 
 - (void)recipeButtonDidTouchUpInside
 {
+	[self dim];
+	
 	RecipeView *recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) recipe:_dish.recipe closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside:)];
-	[self.view addSubview:recipeView];
+	[[[UIApplication sharedApplication] keyWindow] addSubview:recipeView];
 	
 	CGRect originalFrame = recipeView.frame;
 	recipeView.frame = CGRectMake( 7, -originalFrame.size.height, originalFrame.size.width, originalFrame.size.height );
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		_dimView.alpha = 1;
 		recipeView.frame = originalFrame;
 	}];
 }
 
 - (void)closeButtonDidTouchUpInside:(UIButton *)closeButton
 {
+	[self undim];
+	
 	RecipeView *recipeView = (RecipeView *)closeButton.superview;
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		_dimView.alpha = 0;
 		recipeView.frame = CGRectMake( 7, -recipeView.frame.size.height, recipeView.frame.size.width, recipeView.frame.size.height );
 	}];
 }

@@ -38,8 +38,6 @@
 	UIView *_commentBar;
 	UITextField *_commentInput;
 	DMButton *_sendButton;
-	
-	UIImageView *_dimView;
 }
 
 - (id)initWithDish:(Dish *)dish;
