@@ -34,25 +34,17 @@
 	return self;
 }
 
+#pragma mark -
+
 - (void)api:(NSString *)api
 	 method:(NSString *)method
  parameters:(NSDictionary *)parameters
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
-	if( [[UserManager manager] loggedIn] )
-	{
-		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:parameters];
-		[params setObject:[[UserManager manager] accessToken] forKey:@"access_token"];
-		parameters = params;
-	}
+	NSURLRequest *request = [_client requestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters]];
 	
-	NSURLRequest *request = [_client requestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:parameters];
-	AFHTTPRequestOperation *operation = [_client HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-		success( responseObject );
-		
-	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-		
+	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
 		
@@ -78,8 +70,76 @@
 		NSLog( @"URL : %@", operation.request.URL );
 		failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
 	}];
+}
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+	  image:(UIImage *)image
+ parameters:(NSDictionary *)parameters
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
+{
+	NSURLRequest *request = [_client multipartFormRequestWithMethod:@"POST" path:@"/api/dish" parameters:[self parametersWithAccessToken:parameters] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+		[formData appendPartWithFileData:UIImageJPEGRepresentation( image, 1 ) name:@"photo" fileName:@"photo" mimeType:@"image/jpeg"];
+	}];
 	
+	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
+		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
+		
+		// AccessToken is expired
+		if( errorCode == 2000 )
+		{
+			JLLog( @"AccessToken is expired" );
+			
+			[self extendAccessToken:^(id response) {
+				JLLog( @"AccessToken is extended" );
+				
+				[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
+				[self api:api method:method image:image parameters:parameters success:success failure:failure];
+				
+			} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+				JLLog( @"statusCode : %d", statusCode );
+				JLLog( @"errorCode : %d", errorCode );
+				JLLog( @"message : %@", message );
+			}];
+			return;
+		}
+		
+		JLLog( @"URL : %@", operation.request.URL );
+		failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
+	}];
+}
+
+
+#pragma mark -
+
+- (void)sendRequest:(NSURLRequest *)request
+			success:(void (^)(id response))success
+			failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
+{
+	AFHTTPRequestOperation *operation = [_client HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+		success( responseObject );
+		
+	} failure:failure];
 	[_client enqueueHTTPRequestOperation:operation];
+}
+
+
+#pragma mark -
+
+- (NSDictionary *)parametersWithAccessToken:(NSDictionary *)parameters
+{
+	if( [[UserManager manager] loggedIn] )
+	{
+		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:parameters];
+		NSLog( @"parmas : %@", params );
+		[params setObject:[[UserManager manager] accessToken] forKey:@"access_token"];
+		NSLog( @"parmas : %@", params );
+		return params;
+	}
+	
+	return parameters;
 }
 
 - (void)extendAccessToken:(void (^)(id response))success
@@ -88,6 +148,9 @@
 	NSDictionary *params = @{ @"access_token": [[UserManager manager] accessToken] };
 	[self api:@"/auth/renew" method:@"POST" parameters:params success:success failure:failure];
 }
+
+
+#pragma mark -
 
 - (void)loadImageFromURL:(NSURL *)url
 				 success:(void (^)(UIImage *image))success

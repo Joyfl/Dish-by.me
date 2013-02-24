@@ -21,6 +21,13 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
 
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+	  image:(UIImage *)image
+ parameters:(NSDictionary *)parameters
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
+
 - (void)loadImageFromURL:(NSURL *)url
 				 success:(void (^)(UIImage *image))success;
 
