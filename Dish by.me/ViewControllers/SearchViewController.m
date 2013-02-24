@@ -9,10 +9,9 @@
 #import "SearchViewController.h"
 #import "Utils.h"
 #import "Dish.h"
-#import "DishTileItem.h"
-#import "DishTileCell.h"
 #import "DMButton.h"
 #import "DishDetailViewController.h"
+#import "DishByMeAPILoader.h"
 
 @implementation SearchViewController
 
@@ -42,7 +41,7 @@
 	[searchButton addTarget:self action:@selector(searchButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[_searchBar addSubview:searchButton];
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 45, 320, 322 ) style:UITableViewStylePlain];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 45, 320, UIScreenHeight - 158 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -51,9 +50,6 @@
 	
 	_dishes = [[NSMutableArray alloc] init];
 	
-	_loader = [[JLHTTPLoader alloc] init];
-	_loader.delegate = self;
-	
 	self.navigationItem.title = @"Dish by.me";
 	
     return self;
@@ -61,21 +57,19 @@
 
 
 #pragma mark -
-#pragma mark JLHTTPLoaderDelegate
+#pragma mark Loading
 
-- (BOOL)shouldLoadWithrequest:(JLHTTPRequest *)request
+- (void)search:(NSString *)query
 {
-	return YES;
-}
-
-- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
-{
-	//	NSLog( @"%@", request.data );
+	JLLog( @"search" );
+	if( !query ) return;
 	
-	if( response.requestId == 0 )
-	{
-		NSDictionary *result = [Utils parseJSON:response.body];
-		NSArray *data = [result objectForKey:@"data"];
+	_searching = YES;
+	
+	NSDictionary *params = @{ @"query": query, @"offset": [NSString stringWithFormat:@"%d", _dishes.count] };
+	[[DishByMeAPILoader sharedLoader] api:@"/search" method:@"GET" parameters:params success:^(id response) {		
+		_count = [[response objectForKey:@"count"] integerValue];
+		NSArray *data = [response objectForKey:@"data"];
 		
 		for( NSDictionary *d in data )
 		{
@@ -83,52 +77,130 @@
 			[_dishes addObject:dish];
 		}
 		
+		_lastQuery = query;
+		
+		_searching = NO;
 		[_tableView reloadData];
-	}
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		_searching = NO;
+		
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)bookmarkDish:(Dish *)dish
+{
+	JLLog( @"bookmarkDish" );
+	
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)unbookmarkDish:(Dish *)dish
+{
+	JLLog( @"unbookmarkDish" );
+	
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 
 #pragma mark -
 #pragma mark UITableView
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+	return 1 + (_dishes.count != _count);
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return ceil( _dishes.count / 3.0 );
+	if( section == 1 ) return 1;
+	return _dishes.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return DISH_TILE_LEN + DISH_TILE_GAP;
+	if( indexPath.section == 1 ) return 45;
+	if( indexPath.row == _dishes.count - 1 ) return 355;
+	return 345;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellId = @"dishCell";
-	DishTileCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 	
-	if( !cell )
+	if( indexPath.section == 0 )
 	{
-		cell = [[DishTileCell alloc] initWithReuseIdentifier:cellId target:self action:@selector(dishItemDidTouchUpInside:)];
-	}
-	
-	for( NSInteger i = 0; i < 3; i++ )
-	{
-		DishTileItem *dishItem = [cell dishItemAt:i];
+		DishListCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+		if( !cell )
+		{
+			cell = [[DishListCell alloc] initWithReuseIdentifier:cellId];
+			cell.delegate = self;
+		}
 		
-		if( _dishes.count > indexPath.row * 3 + i )
-		{
-			dishItem.hidden = NO;
-			
-			Dish *dish = [_dishes objectAtIndex:indexPath.row * 3 + i];
-			dishItem.dish = dish;
-		}
-		else
-		{
-			dishItem.hidden = YES;
-		}
+		Dish *dish = [_dishes objectAtIndex:indexPath.row];
+		[cell setDish:dish atIndexPath:indexPath];
+		
+		return cell;
 	}
-	
-	return cell;
+	else
+	{
+		static NSString *activityIndicatorCellId = @"activityIndicatorCellId";
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:activityIndicatorCellId];
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:activityIndicatorCellId];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
+		
+		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		indicator.frame = CGRectMake( 141, 0, 37, 37 );
+		[indicator startAnimating];
+		[cell.contentView addSubview:indicator];
+		
+		if( !_searching )
+			[self search:_lastQuery];
+		
+		return cell;
+	}
+}
+
+
+#pragma mark -
+#pragma mark DishListCellDelegate
+
+- (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath
+{
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
+	[self.navigationController pushViewController:dishDetailViewController animated:YES];
+}
+
+- (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath
+{
+	[self bookmarkDish:[_dishes objectAtIndex:indexPath.row]];
+}
+
+- (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath
+{
+	[self unbookmarkDish:[_dishes objectAtIndex:indexPath.row]];
 }
 
 
@@ -142,16 +214,8 @@
 	
 	[_searchInput resignFirstResponder];
 	
-	NSString *rootUrl = API_ROOT_URL;
-//	NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:_searchInput.text, @"query", nil];
-//	[_loader addRequestWithRequestId:0 url:[NSString stringWithFormat:@"%@/search", rootUrl] method: params:params];
-	[_loader startLoading];
-}
-
-- (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem
-{
-	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:dishTileItem.dish];
-	[self.navigationController pushViewController:dishDetailViewController animated:YES];
+	[_dishes removeAllObjects];
+	[self search:_searchInput.text];
 }
 
 @end
