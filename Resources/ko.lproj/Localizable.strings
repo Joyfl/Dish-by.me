@@ -49,9 +49,11 @@
 
 // ProfileView
 "DISHES" = "요리";
-"LIKES" = "찜";
 
 // SettingsView
+"SHARE_SETTINGS" = "공유 설정";
+"PUSH_NOTIFICATIONS_SETTINGS" = "푸시 알림 설정";
+"LOGOUT" = "로그아웃";
 "LOGOUT_SUCCEED" = "로그아웃되었습니다.";
 
 // Date

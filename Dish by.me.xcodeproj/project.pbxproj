@@ -198,6 +198,8 @@
 		03F67F5716D8E33200AB0600 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F4C16D8E33200AB0600 /* AFURLConnectionOperation.m */; };
 		03F67F5816D8E33200AB0600 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F4E16D8E33200AB0600 /* AFXMLRequestOperation.m */; };
 		03F67F5916D8E33200AB0600 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F5016D8E33200AB0600 /* UIImageView+AFNetworking.m */; };
+		03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */; };
+		03F6FF0D16DA66AC008B5D9C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -444,6 +446,9 @@
 		03F67F4E16D8E33200AB0600 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		03F67F4F16D8E33200AB0600 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		03F67F5016D8E33200AB0600 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
+		03F6FF0916DA659B008B5D9C /* FacebookSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookSettingsViewController.h; sourceTree = "<group>"; };
+		03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookSettingsViewController.m; sourceTree = "<group>"; };
+		03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = Libraries/FacebookSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -457,6 +462,7 @@
 				03B597FE1602FDC0007BD6AF /* Foundation.framework in Frameworks */,
 				03B598001602FDC0007BD6AF /* CoreGraphics.framework in Frameworks */,
 				031AAB15160EFFB9007B42B3 /* QuartzCore.framework in Frameworks */,
+				03F6FF0D16DA66AC008B5D9C /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,6 +499,8 @@
 				03178846160C76DB0041DAD7 /* ProfileViewController.m */,
 				03178849160C76DB0041DAD7 /* SettingsViewController.h */,
 				0317884A160C76DB0041DAD7 /* SettingsViewController.m */,
+				03F6FF0916DA659B008B5D9C /* FacebookSettingsViewController.h */,
+				03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */,
 				031AAB4A160F42CB007B42B3 /* CameraOverlayViewController.h */,
 				031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */,
 				031AAB3B160F3B4F007B42B3 /* WritingViewController.h */,
@@ -774,6 +782,7 @@
 		03B597FA1602FDC0007BD6AF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */,
 				0349EA5916D90C930057BD12 /* MobileCoreServices.framework */,
 				0349EA5616D90C7B0057BD12 /* SystemConfiguration.framework */,
 				03B597FB1602FDC0007BD6AF /* UIKit.framework */,
@@ -1161,6 +1170,7 @@
 				03F67F5916D8E33200AB0600 /* UIImageView+AFNetworking.m in Sources */,
 				0349EA5116D8F0350057BD12 /* DishByMeAPILoader.m in Sources */,
 				0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */,
+				03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1246,6 +1256,10 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Su Yeol Jeon (E92TEKJ8BD)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libraries\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Dish by.me/Dish by.me-Prefix.pch";
 				INFOPLIST_FILE = "Dish by.me/Dish by.me-Info.plist";
@@ -1260,6 +1274,10 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Su Yeol Jeon (E92TEKJ8BD)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libraries\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Dish by.me/Dish by.me-Prefix.pch";
 				INFOPLIST_FILE = "Dish by.me/Dish by.me-Info.plist";
