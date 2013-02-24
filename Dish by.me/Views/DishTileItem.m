@@ -7,7 +7,6 @@
 //
 
 #import "DishTileItem.h"
-#import "Const.h"
 
 @implementation DishTileItem
 

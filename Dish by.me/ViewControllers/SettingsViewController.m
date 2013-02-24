@@ -39,17 +39,6 @@ enum {
 	return 3;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{	
-	if( section == kSectionShareSettings )
-		return NSLocalizedString( @"SHARE_SETTINGS", @"공유 설정" );
-	
-	else if( section == kSectionNotifications )
-		return NSLocalizedString( @"PUSH_NOTIFICATIONS_SETTINGS", @"푸시 알림 설정" );
-	
-	return nil;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if( section == kSectionShareSettings )
@@ -62,6 +51,24 @@ enum {
 		return 1;
 	
 	return 0;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{	
+	if( section == kSectionShareSettings )
+		return NSLocalizedString( @"SHARE_SETTINGS", @"공유 설정" );
+	
+	else if( section == kSectionNotifications )
+		return NSLocalizedString( @"PUSH_NOTIFICATIONS_SETTINGS", @"푸시 알림 설정" );
+	
+	return nil;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+	if( section == kSectionLogout )
+		return [NSString stringWithFormat:@"Version : %@ (Build %@)", VERSION, BUILD];
+	return nil;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

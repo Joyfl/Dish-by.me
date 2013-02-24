@@ -8,7 +8,6 @@
 
 #import "CommentCell.h"
 #import "Comment.h"
-#import "Const.h"
 #import "Utils.h"
 #import "JLHTTPLoader.h"
 

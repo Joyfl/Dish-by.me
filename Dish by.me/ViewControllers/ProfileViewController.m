@@ -7,7 +7,6 @@
 //
 
 #import "ProfileViewController.h"
-#import "Const.h"
 #import "Utils.h"
 #import "User.h"
 #import "Dish.h"
@@ -155,7 +154,7 @@ enum {
 	if( indexPath.section == 0 )
 		return 105;
 	
-	return DISH_TILE_LEN + DISH_TILE_GAP;
+	return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

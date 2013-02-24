@@ -9,7 +9,6 @@
 #import "DishDetailViewController.h"
 #import "Dish.h"
 #import "Comment.h"
-#import "Const.h"
 #import "Utils.h"
 #import "DMBarButtonItem.h"
 #import "CommentCell.h"

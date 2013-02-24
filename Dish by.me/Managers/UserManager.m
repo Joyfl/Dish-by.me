@@ -7,7 +7,6 @@
 //
 
 #import "UserManager.h"
-#import "Const.h"
 
 @implementation UserManager
 

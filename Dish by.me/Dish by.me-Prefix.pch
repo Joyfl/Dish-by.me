@@ -13,7 +13,7 @@
 	#import <Foundation/Foundation.h>
 #endif
 
-#import "Const.h"
+#import "Common.h"
 #import "Utils.h"
 #import "DishByMeAPILoader.h"
 #import "JLLogger.h"

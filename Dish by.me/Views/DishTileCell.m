@@ -21,7 +21,7 @@
 	for( NSInteger i = 0; i < 3; i++ )
 	{
 		DishTileItem *dishItem = [[DishTileItem alloc] init];
-		dishItem.frame = CGRectMake( DISH_TILE_GAP * ( i + 1 ) + DISH_TILE_LEN * i, DISH_TILE_GAP, DISH_TILE_LEN, DISH_TILE_LEN );
+//		dishItem.frame = CGRectMake( DISH_TILE_GAP * ( i + 1 ) + DISH_TILE_LEN * i, DISH_TILE_GAP, DISH_TILE_LEN, DISH_TILE_LEN );
 		dishItem.hidden = YES;
 		[dishItem addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:dishItem];

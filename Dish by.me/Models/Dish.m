@@ -7,7 +7,6 @@
 //
 
 #import "Dish.h"
-#import "Const.h"
 #import "Utils.h"
 
 @implementation Dish
