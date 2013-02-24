@@ -7,22 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JLHTTPLoader.h"
 
 @class RecipeView;
 
-@interface WritingViewController : UIViewController <UIScrollViewDelegate, JLHTTPLoaderDelegate>
+@interface WritingViewController : UIViewController <UIScrollViewDelegate>
 {
 	UIImage *_photo;
 	UIScrollView *_scrollView;
 	UITextField *_nameInput;
 	UITextView *_messageInput;
 	
-	UIImageView *_dim;
 	RecipeView *_recipeView;
 	CGRect _recipeViewOriginalFrame;
-	
-	JLHTTPLoader *_loader;
 }
 
 - (id)initWithPhoto:(UIImage *)photo;

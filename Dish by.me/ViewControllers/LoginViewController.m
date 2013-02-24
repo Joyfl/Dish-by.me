@@ -214,7 +214,10 @@
 	NSDictionary *params = @{ @"email": email, @"password": password };
 	[[DishByMeAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
 		JLLog( @"Login succeeded" );
-		[self getUser:[UserManager manager].accessToken = [response objectForKey:@"access_token"]];
+		
+		[UserManager manager].loggedIn = YES;
+		[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
+		[self getUser];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"Login failed : %@", message );
@@ -234,16 +237,13 @@
 }
 
 
-- (void)getUser:(NSString *)accessToken
+- (void)getUser
 {
-	NSDictionary *params = @{ @"access_token": accessToken };
-	[[DishByMeAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:params success:^(id response) {
+	[[DishByMeAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"getUser success" );
 		
 		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] success:^(UIImage *image) {
 			JLLog( @"Image loading succeeded" );
-			
-			[UserManager manager].loggedIn = YES;
 			[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
 			[UserManager manager].userName = [response objectForKey:@"name"];
 			[UserManager manager].userPhoto = image;
@@ -256,7 +256,9 @@
 		}];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		JLLog( @"getUser failed : %@", message );
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
 	}];
 }
 

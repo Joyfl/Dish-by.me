@@ -15,7 +15,10 @@
 {
 	static UserManager *manager = nil;
 	if( !manager )
+	{
 		manager = [[UserManager alloc] init];
+		[manager logout];
+	}
 	return manager;
 }
 

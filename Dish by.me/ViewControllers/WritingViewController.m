@@ -12,6 +12,8 @@
 #import "Utils.h"
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
+#import "DishByMeAPILoader.h"
+#import "NSObject+Dim.h"
 
 @implementation WritingViewController
 
@@ -28,10 +30,10 @@
 	
 	_photo = photo;
 	
-	UIGestureRecognizer *recognizer = [[UIGestureRecognizer alloc] initWithTarget:self action:@selector(gestureDidRecognize)];
-	self.view.gestureRecognizers = [NSArray arrayWithObject:recognizer];
+	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
+	[self.view addGestureRecognizer:tapRecognizer];
 	
-	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 0, 0, 320, 416 )];
+	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 64 )];
 	_scrollView.delegate = self;
 	_scrollView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	_scrollView.contentSize = CGSizeMake( 320, 520 );
@@ -45,26 +47,18 @@
 	borderView.frame = CGRectMake( 5, 5, 310, 340 );
 	[_scrollView addSubview:borderView];
 	
-	_nameInput = [[UITextField alloc] initWithFrame:CGRectMake( 20, 314, 280, 20 )];
+	_nameInput = [[UITextField alloc] initWithFrame:CGRectMake( 20, 310, 280, 20 )];
 	_nameInput.placeholder = NSLocalizedString( @"INPUT_DISH_NAME", @"" );
 	_nameInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
 	_nameInput.font = [UIFont boldSystemFontOfSize:15];
 	_nameInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	_nameInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
-	[_nameInput addTarget:self action:@selector(textDidBeginEditting:) forControlEvents:UIControlEventEditingDidBegin];
+	[_nameInput addTarget:self action:@selector(textDidBeginEditting) forControlEvents:UIControlEventEditingDidBegin];
 	[_scrollView addSubview:_nameInput];
 	
-	UIImageView *messageBoxTopView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_top.png"]];
-	messageBoxTopView.frame = CGRectMake( 8, 350, 304, 15 );
-	[_scrollView addSubview:messageBoxTopView];
-	
-	UIImageView *messageBoxCenterView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_center.png"]];
-	messageBoxCenterView.frame = CGRectMake( 8, 365, 304, 70 );
-	[_scrollView addSubview:messageBoxCenterView];
-	
-	UIImageView *messageBoxBottomView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_bottom.png"]];
-	messageBoxBottomView.frame = CGRectMake( 8, 355 + messageBoxCenterView.frame.size.height, 304, 15 );
-	[_scrollView addSubview:messageBoxBottomView];
+	UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
+	messageBoxView.frame = CGRectMake( 9, 350, 304, 100 );
+	[_scrollView addSubview:messageBoxView];
 	
 	_messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 360, 290, 70 )];
 	_messageInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
@@ -85,28 +79,19 @@
 	recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
 	[_scrollView addSubview:recipeButton];
 	
-	UIImageView *bottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
-	bottomLine.frame = CGRectMake( 0, 500, 320, 10 );
-	[_scrollView addSubview:bottomLine];
+	UIImageView *recipeBottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
+	recipeBottomLine.frame = CGRectMake( 0, 493, 320, 15 );
+	[_scrollView addSubview:recipeBottomLine];
 	
-	_dim = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dim.png"]];
-	_dim.alpha = 0;
-	[self.view addSubview:_dim];
-	
-#warning closeButton이 제대로 눌리지 않음 - closeButton 터치 후 텍스트필드 터치하면 이벤트 트리거됨.
 	_recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"WRITE_RECIPE", @"" ) recipe:@"\n\n\n\n" closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside)];
 	_recipeView.recipeView.text = @"";
 	_recipeView.recipeView.editable = YES;
-	[self.view addSubview:_recipeView];
 	
 	_recipeViewOriginalFrame = _recipeView.frame;
 	_recipeViewOriginalFrame.origin.y = ( 200 - _recipeViewOriginalFrame.size.height ) / 2;
 	_recipeView.frame = CGRectMake( 7, -_recipeViewOriginalFrame.size.height, _recipeViewOriginalFrame.size.width, _recipeViewOriginalFrame.size.height );
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
-	
-	_loader = [[JLHTTPLoader alloc] init];
-	_loader.delegate = self;
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting) name:UITextViewTextDidBeginEditingNotification object:nil];
 	
 	return self;
 }
@@ -120,19 +105,55 @@
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)textDidBeginEditting:(id)sender
+- (void)uploadButtonDidTouchUpInside
 {
+	[self dim];
+	
+	return;
+	
+	
+	NSDictionary *params = @{
+						  @"name": _nameInput.text,
+		@"description": _messageInput.text
+		};
+	
+	[[DishByMeAPILoader sharedLoader] api:@"/dish" method:@"POST" image:_photo parameters:params success:^(id response) {
+		JLLog( @"Success" );
+		[self dismissViewControllerAnimated:YES completion:nil];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)textDidBeginEditting
+{
+	[_scrollView setContentOffset:CGPointMake( 0, 300 ) animated:YES];
+	
 	[UIView animateWithDuration:0.25 animations:^{
-		_scrollView.frame = CGRectMake( 0, 0, 320, 200 );
+		_scrollView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 64 - 216 );
+	}];
+}
+
+- (void)backgroundDidTap
+{
+	[_nameInput resignFirstResponder];
+	[_messageInput resignFirstResponder];
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		_scrollView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 64 );
 	}];
 }
 
 - (void)recipeButtonDidTouchUpInside
 {
-	_scrollView.userInteractionEnabled = NO;
+	[self dim];
+	
+	[[[UIApplication sharedApplication] keyWindow] addSubview:_recipeView];
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		_dim.alpha = 1;
 		_recipeView.frame = _recipeViewOriginalFrame;
 	} completion:^(BOOL finished) {
 		[_recipeView.recipeView becomeFirstResponder];
@@ -141,47 +162,17 @@
 
 - (void)closeButtonDidTouchUpInside
 {
+	[self undim];
+	
 	[_recipeView.recipeView resignFirstResponder];
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		_dim.alpha = 0;
 		_recipeView.frame = CGRectMake( 7, -_recipeView.frame.size.height, _recipeView.frame.size.width, _recipeView.frame.size.height );
-		_scrollView.frame = CGRectMake( 0, 0, 320, 416 );
+		_scrollView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 64 );
+		
 	} completion:^(BOOL finished) {
-		_scrollView.userInteractionEnabled = YES;
+		[[[UIApplication sharedApplication] keyWindow] addSubview:_recipeView];
 	}];
-}
-
-- (void)uploadButtonDidTouchUpInside
-{
-	_scrollView.userInteractionEnabled = NO;
-	
-	[UIView animateWithDuration:0.25 animations:^{
-		_dim.alpha = 1;
-	}];
-	 
-//	NSMutableDictionary *params = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-//								   _photo, @"photo",
-//								   _nameInput.text, @"dish_name",
-//								   _messageInput.text, @"message",
-//								   [(AppDelegate *)[UIApplication sharedApplication].delegate currentWritingForkedFrom], @"forked_from",
-//								   _recipeView.recipeView.text, @"recipe", nil];
-#warning Const에 있는걸로 가져다쓰기
-//	[_loader addTokenWithTokenId:0 url:@"http://api.dishby.me/dish" method:JLHTTPLoaderMethodPOST params:params];
-	[_loader startLoading];
-}
-
-
-#pragma mark -
-#pragma mark JLHTTPLoaderDelegate
-
-- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
-{
-	NSDictionary *data = [Utils parseJSON:response.body];
-	if( [[data objectForKey:@"status"] isEqualToString:@"ok"] )
-	{
-		[self dismissViewControllerAnimated:YES completion:nil];
-	}
 }
 
 @end

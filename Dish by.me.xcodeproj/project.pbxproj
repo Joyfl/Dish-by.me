@@ -200,6 +200,7 @@
 		03F67F5916D8E33200AB0600 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F5016D8E33200AB0600 /* UIImageView+AFNetworking.m */; };
 		03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */; };
 		03F6FF0D16DA66AC008B5D9C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */; };
+		03F6FF1016DA754A008B5D9C /* NSObject+Dim.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F6FF0F16DA754A008B5D9C /* NSObject+Dim.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -449,6 +450,8 @@
 		03F6FF0916DA659B008B5D9C /* FacebookSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookSettingsViewController.h; sourceTree = "<group>"; };
 		03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookSettingsViewController.m; sourceTree = "<group>"; };
 		03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = Libraries/FacebookSDK.framework; sourceTree = "<group>"; };
+		03F6FF0E16DA754A008B5D9C /* NSObject+Dim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Dim.h"; path = "Categories/NSObject+Dim.h"; sourceTree = "<group>"; };
+		03F6FF0F16DA754A008B5D9C /* NSObject+Dim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Dim.m"; path = "Categories/NSObject+Dim.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -807,6 +810,7 @@
 				03C89989160B1253001E488B /* Models */,
 				030D8AB9160B5AED00BF843D /* Views */,
 				033C52E01610786200F0B5E5 /* Managers */,
+				03F6FF1116DA7550008B5D9C /* Categories */,
 				03B598021602FDC0007BD6AF /* Supporting Files */,
 			);
 			path = "Dish by.me";
@@ -921,6 +925,15 @@
 				03F67F5016D8E33200AB0600 /* UIImageView+AFNetworking.m */,
 			);
 			path = AFNetworking;
+			sourceTree = "<group>";
+		};
+		03F6FF1116DA7550008B5D9C /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				03F6FF0E16DA754A008B5D9C /* NSObject+Dim.h */,
+				03F6FF0F16DA754A008B5D9C /* NSObject+Dim.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1171,6 +1184,7 @@
 				0349EA5116D8F0350057BD12 /* DishByMeAPILoader.m in Sources */,
 				0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */,
 				03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */,
+				03F6FF1016DA754A008B5D9C /* NSObject+Dim.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
