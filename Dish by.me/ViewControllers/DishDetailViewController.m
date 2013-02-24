@@ -156,6 +156,7 @@ enum {
 		
 		NSArray *data = [response objectForKey:@"data"];
 		
+		_dish.commentCount = [[response objectForKey:@"count"] integerValue];
 		_commentOffset += data.count;
 		
 		// 로드된 댓글이 없을 경우
@@ -298,6 +299,7 @@ enum {
 		[_comments addObject:comment];
 		
 		_dish.commentCount ++;
+		_commentOffset ++;
 		
 		[_tableView reloadData];
 		_commentInput.text = @"";
@@ -314,9 +316,14 @@ enum {
 
 - (void)deleteComment:(NSInteger)commentId
 {
-	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", _dish.dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+	NSString *api = [NSString stringWithFormat:@"/comment/%d", commentId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
+		
+		_dish.commentCount --;
+		if( _commentOffset > 0 )
+			_commentOffset --;
+		
 		[_tableView reloadData];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -718,6 +725,7 @@ enum {
 		_commentBar.frame = CGRectMake( 0, _tableView.contentSize.height - comment.messageHeight - 72, 320, 40 );
 	}];
 	
+	NSLog( @"removeComment" );
 	[_comments removeObjectAtIndex:indexPath.row];
 	[_tableView beginUpdates];
 	[_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row inSection:kSectionComment]] withRowAnimation:UITableViewRowAnimationLeft];
