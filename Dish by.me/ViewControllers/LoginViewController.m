@@ -242,7 +242,7 @@
 	[[DishByMeAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"getUser success" );
 		
-		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] success:^(UIImage *image) {
+		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] context:nil success:^(UIImage *image, id context) {
 			JLLog( @"Image loading succeeded" );
 			[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
 			[UserManager manager].userName = [response objectForKey:@"name"];

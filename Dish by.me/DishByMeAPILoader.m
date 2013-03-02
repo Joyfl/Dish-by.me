@@ -153,10 +153,13 @@
 #pragma mark -
 
 - (void)loadImageFromURL:(NSURL *)url
-				 success:(void (^)(UIImage *image))success
+				 context:(id)context
+				 success:(void (^)(UIImage *image, __strong id context))success
 {
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
-	AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:request success:success];
+	AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:request success:^(UIImage *image) {
+		success( image, context );
+	}];
 	[operation start];
 }
 

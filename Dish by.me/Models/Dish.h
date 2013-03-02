@@ -11,27 +11,27 @@
 @interface Dish : NSObject
 
 @property (nonatomic, assign) NSInteger dishId;
-@property (nonatomic, retain) NSString *dishName;
+@property (nonatomic, strong) NSString *dishName;
 @property (nonatomic, assign) NSInteger userId;
-@property (nonatomic, retain) NSString *userName;
-@property (nonatomic, retain) NSString *userPhotoURL;
-@property (nonatomic, retain) UIImage *userPhoto;
-@property (nonatomic, retain) NSString *description;
-@property (nonatomic, retain) NSString *recipe;
-@property (nonatomic, retain) NSString *photoURL;
-@property (nonatomic, retain) UIImage *photo;
-@property (nonatomic, retain) NSString *thumbnailURL;
-@property (nonatomic, retain) UIImage *thumbnail;
+@property (nonatomic, strong) NSString *userName;
+@property (nonatomic, strong) NSString *userPhotoURL;
+@property (nonatomic, strong) UIImage *userPhoto;
+@property (nonatomic, strong) NSString *description;
+@property (nonatomic, strong) NSString *recipe;
+@property (nonatomic, strong) NSString *photoURL;
+@property (nonatomic, strong) UIImage *photo;
+@property (nonatomic, strong) NSString *thumbnailURL;
+@property (nonatomic, strong) UIImage *thumbnail;
 @property (nonatomic, assign) NSInteger forkedFromId;
-@property (nonatomic, retain) NSString *forkedFromName;
+@property (nonatomic, strong) NSString *forkedFromName;
 @property (nonatomic, assign) NSInteger forkCount;
 @property (nonatomic, assign) NSInteger bookmarkCount;
 @property (nonatomic, assign) NSInteger commentCount;
 @property (nonatomic, assign) BOOL bookmarked;
-@property (nonatomic, retain) NSDate *createdTime;
-@property (nonatomic, retain) NSString *relativeCreatedTime;
-@property (nonatomic, retain) NSDate *updatedTime;
-@property (nonatomic, retain) NSString *relativeUpdatedTime;
+@property (nonatomic, strong) NSDate *createdTime;
+@property (nonatomic, strong) NSString *relativeCreatedTime;
+@property (nonatomic, strong) NSDate *updatedTime;
+@property (nonatomic, strong) NSString *relativeUpdatedTime;
 
 @property (nonatomic, assign) BOOL photoHasBeenShown;
 
