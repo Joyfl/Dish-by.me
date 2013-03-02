@@ -129,11 +129,8 @@
 
 - (void)textDidBeginEditting:(id)sender
 {
-	NSLog( @"%@", sender );
 	if( [sender respondsToSelector:@selector(object)] && [[sender object] isEqual:_recipeView.recipeView] )
-	{
 		return;
-	}
 	
 	[_scrollView setContentOffset:CGPointMake( 0, 300 ) animated:YES];
 	

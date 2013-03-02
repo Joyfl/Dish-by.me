@@ -41,7 +41,9 @@
 
 - (void)calculateMessageHeight
 {
-	self.messageHeight = [self.message sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:CGSizeMake( 263, NSIntegerMax ) lineBreakMode:NSLineBreakByWordWrapping].height;
+	CGFloat height = [self.message sizeWithFont:[UIFont systemFontOfSize:13] constrainedToSize:CGSizeMake( 263, NSIntegerMax ) lineBreakMode:NSLineBreakByWordWrapping].height;
+	if( height < 16 ) height = 16;
+	self.messageHeight = height;
 }
 
 @end

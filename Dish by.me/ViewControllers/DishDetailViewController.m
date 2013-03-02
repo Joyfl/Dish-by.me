@@ -78,6 +78,7 @@ enum {
 	
 	_commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
 	_commentInput.font = [UIFont systemFontOfSize:13];
+	_commentInput.enabled = NO;
 	[_commentInput addTarget:self action:@selector(commentInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
 	[_commentBar addSubview:_commentInput];
 	
@@ -158,6 +159,8 @@ enum {
 		
 		_dish.commentCount = [[response objectForKey:@"count"] integerValue];
 		_commentOffset += data.count;
+		
+		_commentInput.enabled = YES;
 		
 		// 로드된 댓글이 없을 경우
 		if( data.count == 0 )
@@ -280,32 +283,37 @@ enum {
 
 - (void)sendComment
 {
+	Comment *comment = [[Comment alloc] init];
+	comment.userId = [UserManager manager].userId;
+	comment.userName = [UserManager manager].userName;
+	comment.userPhoto = [UserManager manager].userPhoto;
+	comment.message = _commentInput.text;
+	comment.createdTime = [NSDate date];
+	comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
+	comment.sending = YES;
+	[comment calculateMessageHeight];
+	[_comments addObject:comment];
+	
+	[_tableView reloadData];
+	[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/comment", _dish.dishId];
 	NSDictionary *params = @{ @"message": _commentInput.text };
+	
+	_commentInput.text = @"";
+	
 	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		
 		[self updateAllCommentsRelativeTime];
 		
-		Comment *comment = [[Comment alloc] init];
 		comment.commentId = [[response objectForKey:@"id"] integerValue];
-		comment.userId = [UserManager manager].userId;
-		comment.userName = [UserManager manager].userName;
-		comment.userPhoto = [UserManager manager].userPhoto;
-		comment.message = _commentInput.text;
-		comment.createdTime = [Utils dateFromString:[response objectForKey:@"created_time"]];
-		comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
-		[comment calculateMessageHeight];
-		[_comments addObject:comment];
+		comment.sending = NO;
 		
 		_dish.commentCount ++;
 		_commentOffset ++;
 		
 		[_tableView reloadData];
-		_commentInput.text = @"";
-		_commentInput.enabled = YES;
-		
-		[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -399,7 +407,6 @@ enum {
 		case kSectionComment:
 			if( isFirstCommentLoaded )
 				return 1; // Loading UI
-			JLLog( @"%d Comments.", _comments.count );
 			return _comments.count;
 			
 		case kSectionCommentInput:
@@ -837,8 +844,6 @@ enum {
 			return;
 		
 		[self backgroundDidTap];
-		_commentInput.enabled = NO;
-		
 		[self sendComment];
 	}
 	else

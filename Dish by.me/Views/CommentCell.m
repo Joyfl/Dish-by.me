@@ -88,6 +88,11 @@
 	_nameLabel.text = _comment.userName;
 	_timeLabel.text = _comment.relativeCreatedTime;
 	_messageLabel.text = _comment.message;
+	
+	if( !_comment.sending )
+		_timeLabel.alpha = _messageLabel.alpha = 1;
+	else
+		_timeLabel.alpha = _messageLabel.alpha = 0.7;
 }
 
 - (void)layoutContentView

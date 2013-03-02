@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSDate *updatedTime;
 @property (nonatomic, strong) NSString *relativeUpdatedTime;
 @property (nonatomic, assign) CGFloat messageHeight;
+@property (nonatomic, assign) BOOL sending;
 
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary;
 - (void)updateRelativeTime;
