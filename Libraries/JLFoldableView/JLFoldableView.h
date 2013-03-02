@@ -26,5 +26,10 @@
 @property (nonatomic, retain) UIView *contentView;
 @property (nonatomic, assign) NSInteger foldCount;
 @property (nonatomic, assign) CGFloat fraction;
+@property (nonatomic, assign) NSArray *topGradientColors;
+@property (nonatomic, assign) NSArray *bottomGradientColors;
+
+- (void)setTopGradientColors:(NSArray *)colors atLocations:(NSArray *)locations;
+- (void)setBottomGradientColors:(NSArray *)colors atLocations:(NSArray *)locations;
 
 @end

@@ -125,15 +125,17 @@
 		[_bottomViews addObject:bottomView];
 		
 		CAGradientLayer *topGradientLayer = [CAGradientLayer layer];
-		topGradientLayer.startPoint = CGPointMake( 0, 1 );
-		topGradientLayer.endPoint = CGPointMake( 0, 0 );
-		topGradientLayer.colors = @[(id)[UIColor colorWithWhite:0 alpha:0.2].CGColor, (id)[UIColor clearColor].CGColor];
+		topGradientLayer.startPoint = CGPointMake( 0, 0 );
+		topGradientLayer.endPoint = CGPointMake( 0, 1 );
+		topGradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor colorWithWhite:0xFFFFFF alpha:1].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.5].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.9].CGColor];
+		topGradientLayer.locations = @[@0, @0.025, @0.05, @1];
 		[_topGradientLayers addObject:topGradientLayer];
 		
 		CAGradientLayer *bottomGradientLayer = [CAGradientLayer layer];
-		bottomGradientLayer.startPoint = CGPointMake( 0, 1 );
-		bottomGradientLayer.endPoint = CGPointMake( 0, 0 );
-		bottomGradientLayer.colors = @[(id)[UIColor clearColor].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.4].CGColor];
+		bottomGradientLayer.startPoint = CGPointMake( 0, 0 );
+		bottomGradientLayer.endPoint = CGPointMake( 0, 1 );
+		bottomGradientLayer.colors = @[(id)[UIColor colorWithWhite:0 alpha:0.7].CGColor, (id)[UIColor colorWithWhite:0 alpha:0.3].CGColor, (id)[UIColor colorWithWhite:0xFFFFFF alpha:1].CGColor, (id)[UIColor clearColor].CGColor];
+		bottomGradientLayer.locations = @[@0, @0.95, @0.975, @1];
 		[_bottomGradientLayers addObject:bottomGradientLayer];
 		
 		UIView *topShadowView = [[UIView alloc] init];
@@ -180,11 +182,55 @@
 		UIView *topShadowView = [_topShadowViews objectAtIndex:i];
 		UIView *bottomShadowView = [_bottomShadowViews objectAtIndex:i];
 		
-		topShadowView.alpha = 1 - fraction;
-		bottomShadowView.alpha = 1 - fraction;
+		CGFloat alpha = ( 1 - fraction ) * 0.6;
+		topShadowView.alpha = alpha;
+		bottomShadowView.alpha = alpha;
+		
+		NSLog( @"fraction : %f", fraction );
+		NSLog( @"alpha : %f", topShadowView.alpha );
 	}
 	
 	_fraction = fraction;
+}
+
+
+- (NSArray *)topGradientColors
+{
+	return [[_topGradientLayers objectAtIndex:0] colors];
+}
+
+- (void)setTopGradientColors:(NSArray *)topGradientColors
+{
+	[self setTopGradientColors:topGradientColors atLocations:nil];
+}
+
+- (void)setTopGradientColors:(NSArray *)colors atLocations:(NSArray *)locations
+{
+	for( CAGradientLayer *topGradientLayer in _topGradientLayers )
+	{
+		topGradientLayer.colors = colors;
+		topGradientLayer.locations = locations;
+	}
+}
+
+
+- (NSArray *)bottomGradientColors
+{
+	return [[_bottomGradientLayers objectAtIndex:0] colors];
+}
+
+- (void)setBottomGradientColors:(NSArray *)bottomGradientColors
+{
+	[self setBottomGradientColors:bottomGradientColors atLocations:nil];
+}
+
+- (void)setBottomGradientColors:(NSArray *)colors atLocations:(NSArray *)locations
+{
+	for( CAGradientLayer *bottomGradientLayer in _bottomGradientLayers )
+	{
+		bottomGradientLayer.colors = colors;
+		bottomGradientLayer.locations = locations;
+	}
 }
 
 @end
