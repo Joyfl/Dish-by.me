@@ -53,7 +53,7 @@
 	_nameInput.font = [UIFont boldSystemFontOfSize:15];
 	_nameInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	_nameInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
-	[_nameInput addTarget:self action:@selector(textDidBeginEditting) forControlEvents:UIControlEventEditingDidBegin];
+	[_nameInput addTarget:self action:@selector(textDidBeginEditting:) forControlEvents:UIControlEventEditingDidBegin];
 	[_scrollView addSubview:_nameInput];
 	
 	UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
@@ -91,7 +91,7 @@
 	_recipeViewOriginalFrame.origin.y = ( 200 - _recipeViewOriginalFrame.size.height ) / 2;
 	_recipeView.frame = CGRectMake( 7, -_recipeViewOriginalFrame.size.height, _recipeViewOriginalFrame.size.width, _recipeViewOriginalFrame.size.height );
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting) name:UITextViewTextDidBeginEditingNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
 	
 	return self;
 }
@@ -127,8 +127,14 @@
 	}];
 }
 
-- (void)textDidBeginEditting
+- (void)textDidBeginEditting:(id)sender
 {
+	NSLog( @"%@", sender );
+	if( [sender respondsToSelector:@selector(object)] && [[sender object] isEqual:_recipeView.recipeView] )
+	{
+		return;
+	}
+	
 	[_scrollView setContentOffset:CGPointMake( 0, 300 ) animated:YES];
 	
 	[UIView animateWithDuration:0.25 animations:^{
