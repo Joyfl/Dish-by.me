@@ -182,15 +182,94 @@
 		UIView *topShadowView = [_topShadowViews objectAtIndex:i];
 		UIView *bottomShadowView = [_bottomShadowViews objectAtIndex:i];
 		
-		CGFloat alpha = ( 1 - fraction ) * 0.6;
-		topShadowView.alpha = alpha;
-		bottomShadowView.alpha = alpha;
-		
-		NSLog( @"fraction : %f", fraction );
-		NSLog( @"alpha : %f", topShadowView.alpha );
+		topShadowView.alpha = 1 - fraction;
+		bottomShadowView.alpha = 1 - fraction;
 	}
 	
 	_fraction = fraction;
+}
+
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated completion:(void (^)(BOOL complete))completion
+{
+	if( !animated )
+		[self setFraction:fraction];
+	else
+		[self setFraction:fraction animated:animated withDuration:0.5 completion:completion];
+}
+
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration completion:(void (^)(BOOL complete))completion
+{
+	if( !animated )
+		[self setFraction:fraction];
+	else
+		[self setFraction:fraction animated:animated withDuration:duration curve:UIViewAnimationCurveEaseInOut completion:completion];
+}
+
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration curve:(UIViewAnimationCurve)curve completion:(void (^)(BOOL complete))completion
+{
+	if( !animated )
+		[self setFraction:fraction];
+	else
+	{
+		CGFloat fromFraction = self.fraction;
+		NSTimeInterval interval = 1.0 / 60.0; // 60fps
+		
+		float (*easingFunction)( float, float, float, float ) = NULL;
+		switch ( curve )
+		{
+			case UIViewAnimationCurveLinear:
+				easingFunction = easeLinear;
+				break;
+				
+			case UIViewAnimationCurveEaseIn:
+				easingFunction = easeIn;
+				break;
+				
+			case UIViewAnimationCurveEaseOut:
+				easingFunction = easeOut;
+				break;
+				
+			default:
+				easingFunction = easeInOut;
+				break;
+		}
+		
+		for( NSTimeInterval time = 0; time < duration; time += interval )
+		{
+			dispatch_time_t tickTime = dispatch_time( DISPATCH_TIME_NOW, time * NSEC_PER_SEC );
+			dispatch_after( tickTime, dispatch_get_main_queue(), ^(void){
+				self.fraction = easingFunction( time, fromFraction, fraction, duration );
+				if( time + interval >= duration && completion )
+					completion( YES );
+			});
+		}
+	}
+}
+
+// Easing functions from: http://www.gizma.com/easing
+float easeLinear( float t, float b, float c, float d )
+{
+	return c*t/d + b;
+}
+
+float easeIn( float t, float b, float c, float d )
+{
+	t /= d;
+	return c*t*t + b;
+}
+
+float easeOut( float t, float b, float c, float d )
+{
+	t /= d;
+	return -c * t*(t-2) + b;
+}
+
+float easeInOut( float t, float b, float c, float d )
+{
+	t /= d/2;
+	if (t < 1) return c/2*t*t + b;
+	t--;
+	return -c/2 * (t*(t-2) - 1) + b;
 }
 
 

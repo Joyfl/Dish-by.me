@@ -227,7 +227,7 @@ enum {
 		for( NSInteger i = 0; i < data.count; i++ )
 			height += [[_comments objectAtIndex:i] messageHeight] + 32;
 		
-		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
+		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 50 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
 			// 댓글이 추가된 _tableView의 스크린샷을 찍음
 			_tableView.frame = CGRectMake( 0, 0, 320, _tableView.contentOffset.y + UIScreenHeight - 114 );
 			_tableView.contentOffset = originalContentOffset;
@@ -239,20 +239,21 @@ enum {
 			_midView = [[UIImageView alloc] initWithImage:midImage];
 			_midView.frame = CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, _midView.frame.size.width / scale, _midView.frame.size.height / scale );
 		
-			JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _topView.frame.origin.y + _topView.frame.size.height, 320, _midView.frame.size.height )];
+			JLFoldableView *foldableView = [[JLFoldableView alloc] initWithFrame:CGRectMake( 0, _midView.frame.origin.y, 320, 0 )];
 			foldableView.contentView = _midView;
 			
 			NSInteger foldCount = data.count / 4;
 			if( data.count == 1 ) foldCount = 1;
 			else if( foldCount < 2 ) foldCount = 2;
+			else if( foldCount > 4 ) foldCount = 4;
 			
 			foldableView.foldCount = foldCount;
 			foldableView.fraction = 0;
+			[foldableView setFraction:1 animated:YES completion:nil];
 			[self.view addSubview:foldableView];
 			
 			[UIView animateWithDuration:0.5 animations:^{
-				foldableView.fraction = 0.9999;
-				foldableView.frame = _midView.frame;
+				foldableView.frame = CGRectMake( 0, foldableView.frame.origin.y, 320, foldableView.frame.size.height / 2 );
 				_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
 			} completion:^(BOOL finished) {
 				[_topView removeFromSuperview];
