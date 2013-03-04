@@ -184,6 +184,13 @@
 		
 		topShadowView.alpha = 1 - fraction;
 		bottomShadowView.alpha = 1 - fraction;
+		
+		if( i == _foldCount - 1 )
+		{
+			CGRect frame = self.frame;
+			frame.size.height = ( topView.frame.size.height + bottomView.frame.size.height ) * _foldCount;
+			self.frame = frame;
+		}
 	}
 	
 	_fraction = fraction;
@@ -202,10 +209,10 @@
 	if( !animated )
 		[self setFraction:fraction];
 	else
-		[self setFraction:fraction animated:animated withDuration:duration curve:UIViewAnimationCurveEaseInOut completion:completion];
+		[self setFraction:fraction animated:animated withDuration:duration curve:UIViewAnimationCurveEaseInOut tick:nil completion:completion];
 }
 
-- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration curve:(UIViewAnimationCurve)curve completion:(void (^)(BOOL complete))completion
+- (void)setFraction:(CGFloat)fraction animated:(BOOL)animated withDuration:(NSTimeInterval)duration curve:(UIViewAnimationCurve)curve tick:(void (^)(void))tick completion:(void (^)(BOOL complete))completion
 {
 	if( !animated )
 		[self setFraction:fraction];
@@ -239,6 +246,7 @@
 			dispatch_time_t tickTime = dispatch_time( DISPATCH_TIME_NOW, time * NSEC_PER_SEC );
 			dispatch_after( tickTime, dispatch_get_main_queue(), ^(void){
 				self.fraction = easingFunction( time, fromFraction, fraction, duration );
+				if( tick ) tick();
 				if( time + interval >= duration && completion )
 					completion( YES );
 			});
