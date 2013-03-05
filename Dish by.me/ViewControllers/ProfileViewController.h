@@ -9,24 +9,32 @@
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
 #import "DishListCell.h"
+#import "EGORefreshTableHeaderView.h"
 
 @class User;
 
-@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, DishListCellDelegate>
+@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishListCellDelegate>
 {
 	User *_user;
 	
 	UITableView *_tableView;
+	EGORefreshTableHeaderView *_refreshHeaderView;
 	UIButton *_profileImage;
+	UILabel *_bioLabel;
+	UILabel *_dishCountLabel;
+	UILabel *_dishLabel;
+	UILabel *_bookmarkCountLabel;
+	UILabel *_bookmarkLabel;
 	UIImageView *_arrowView;
 	
-	NSMutableArray *_dishes;
-	NSMutableArray *_bookmarks;
+	BOOL _updating;
 	
+	NSMutableArray *_dishes;
 	NSInteger _dishOffset;
 	BOOL _loadedLastDish;
 	BOOL _loadingDishes;
 	
+	NSMutableArray *_bookmarks;
 	NSInteger _bookmarkOffset;
 	BOOL _loadedLastBookmark;	
 	BOOL _loadingBookmarks;

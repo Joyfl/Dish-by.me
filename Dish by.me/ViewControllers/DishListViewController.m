@@ -54,6 +54,7 @@
 	JLLog( @"updateDishes" );
 	
 	_updating = YES;
+	_loadedLastDish = NO;
 	
 	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
@@ -69,9 +70,9 @@
 		}
 		
 		[_tableView reloadData];
-		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 		
 		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -79,6 +80,7 @@
 		JLLog( @"message : %@", message );
 		
 		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 	}];
 }
 

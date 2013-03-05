@@ -33,6 +33,11 @@
 	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	[self.view addSubview:_tableView];
 	
+	_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake( 0, -_tableView.bounds.size.height, self.view.frame.size.width, _tableView.bounds.size.height )];
+	_refreshHeaderView.delegate = self;
+	_refreshHeaderView.backgroundColor = self.view.backgroundColor;
+	[_tableView addSubview:_refreshHeaderView];
+	
 	_dishes = [[NSMutableArray alloc] init];
 	_bookmarks = [[NSMutableArray alloc] init];
 	
@@ -43,6 +48,7 @@
 
 - (void)setUserId:(NSInteger)userId
 {
+	_userId = userId;
 	[self loadUserId:userId];
 }
 
@@ -52,9 +58,31 @@
 		_user = [User userFromDictionary:response];
 		self.navigationItem.title = _user.name;
 		
-		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
-			_user.photo = image;
-		}];
+		[_tableView reloadData];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)updateUser
+{
+	_loadedLastDish = NO;
+	_loadedLastBookmark = NO;
+	[_dishes removeAllObjects];
+	[_bookmarks removeAllObjects];
+	_dishOffset = _bookmarkOffset = 0;
+	
+	_updating = YES;
+	
+	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+		_user = [User userFromDictionary:response];
+		self.navigationItem.title = _user.name;
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 		
 		[_tableView reloadData];
 		
@@ -62,6 +90,9 @@
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 	}];
 }
 
@@ -149,6 +180,25 @@
 
 
 #pragma mark -
+#pragma mark EGORefreshTableHeaderDelegate
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView *)refreshHeaerView
+{
+	[self updateUser];
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView *)refreshHeaerView
+{
+	return _updating;
+}
+
+- (NSDate *)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)refreshHeaerView
+{
+	return [NSDate date];
+}
+
+
+#pragma mark -
 #pragma mark UITableView
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -190,7 +240,6 @@
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
 			_profileImage = [[UIButton alloc] initWithFrame:CGRectMake( 14, 14, 85, 86 )];
-			[_profileImage setBackgroundImage:_user.photo forState:UIControlStateNormal];
 			[cell addSubview:_profileImage];
 			
 			UIImageView *profileBorder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"profile_border.png"]];
@@ -214,13 +263,12 @@
 				bioButton = NO; // ???????
 			}
 			
-			UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 10, 165, 30 )];
-			bioLabel.text = _user.bio;
-			bioLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
-			bioLabel.font = [UIFont systemFontOfSize:13];
-			bioLabel.backgroundColor = [UIColor clearColor];
-			bioLabel.numberOfLines = 2;
-			[bioButton addSubview:bioLabel];
+			_bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 10, 165, 30 )];
+			_bioLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			_bioLabel.font = [UIFont systemFontOfSize:13];
+			_bioLabel.backgroundColor = [UIColor clearColor];
+			_bioLabel.numberOfLines = 2;
+			[bioButton addSubview:_bioLabel];
 			
 			[cell addSubview:bioButton];
 			
@@ -229,47 +277,53 @@
 			[dishButton addTarget:self action:@selector(dishButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell addSubview:dishButton];
 			
-			UILabel *dishCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 94, 20 )];
-			dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
-			dishCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
-			dishCountLabel.textAlignment = NSTextAlignmentCenter;
-			dishCountLabel.font = [UIFont boldSystemFontOfSize:20];
-			dishCountLabel.backgroundColor = [UIColor clearColor];
-			[dishButton addSubview:dishCountLabel];
+			_dishCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 94, 20 )];
+			_dishCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
+			_dishCountLabel.textAlignment = NSTextAlignmentCenter;
+			_dishCountLabel.font = [UIFont boldSystemFontOfSize:20];
+			_dishCountLabel.backgroundColor = [UIColor clearColor];
+			[dishButton addSubview:_dishCountLabel];
 			
-			UILabel *dishLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 94, 20 )];
-			dishLabel.text = NSLocalizedString( @"DISHES", @"" );
-			dishLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
-			dishLabel.textAlignment = NSTextAlignmentCenter;
-			dishLabel.font = [UIFont systemFontOfSize:13];
-			dishLabel.backgroundColor = [UIColor clearColor];
-			[dishButton addSubview:dishLabel];
+			_dishLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 94, 20 )];
+			_dishLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			_dishLabel.textAlignment = NSTextAlignmentCenter;
+			_dishLabel.font = [UIFont systemFontOfSize:13];
+			_dishLabel.backgroundColor = [UIColor clearColor];
+			[dishButton addSubview:_dishLabel];
 			
 			UIButton *bookmarkButton = [[UIButton alloc] initWithFrame:CGRectMake( 207, 57, 107, 47 )];
 			[bookmarkButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_right.png"] forState:UIControlStateNormal];
 			[bookmarkButton addTarget:self action:@selector(bookmarkButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell addSubview:bookmarkButton];
 			
-			UILabel *bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
-			bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
-			bookmarkCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
-			bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
-			bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:20];
-			bookmarkCountLabel.backgroundColor = [UIColor clearColor];
-			[bookmarkButton addSubview:bookmarkCountLabel];
+			_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
+			_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
+			_bookmarkCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
+			_bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
+			_bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:20];
+			_bookmarkCountLabel.backgroundColor = [UIColor clearColor];
+			[bookmarkButton addSubview:_bookmarkCountLabel];
 			
-			UILabel *bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 97, 20 )];
-			bookmarkLabel.text = NSLocalizedString( @"BOOKMARKS", @"" );
-			bookmarkLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
-			bookmarkLabel.textAlignment = NSTextAlignmentCenter;
-			bookmarkLabel.font = [UIFont systemFontOfSize:13];
-			bookmarkLabel.backgroundColor = [UIColor clearColor];
-			[bookmarkButton addSubview:bookmarkLabel];
+			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 97, 20 )];
+			_bookmarkLabel.text = NSLocalizedString( @"BOOKMARKS", @"" );
+			_bookmarkLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			_bookmarkLabel.textAlignment = NSTextAlignmentCenter;
+			_bookmarkLabel.font = [UIFont systemFontOfSize:13];
+			_bookmarkLabel.backgroundColor = [UIColor clearColor];
+			[bookmarkButton addSubview:_bookmarkLabel];
 			
 			_arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
 			_arrowView.frame = CGRectMake( ARROW_LEFT_X, 101, 25, 11 );
 			[cell addSubview:_arrowView];
 		}
+		
+		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
+			[_profileImage setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
+		}];
+		
+		_bioLabel.text = _user.bio;
+		_dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
+		_dishLabel.text = NSLocalizedString( @"DISHES", @"" );
 		
 		return cell;
 	}
@@ -340,6 +394,16 @@
 	}
 	
 	return nil;
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
 }
 
 

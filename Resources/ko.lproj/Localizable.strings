@@ -49,6 +49,7 @@
 
 // ProfileView
 "DISHES" = "요리";
+"BOOKMARKS" = "북마크";
 
 // SettingsView
 "SHARE_SETTINGS" = "공유 설정";

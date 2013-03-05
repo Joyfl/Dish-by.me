@@ -133,9 +133,7 @@
 	if( [[UserManager manager] loggedIn] )
 	{
 		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:parameters];
-		NSLog( @"parmas : %@", params );
 		[params setObject:[[UserManager manager] accessToken] forKey:@"access_token"];
-		NSLog( @"parmas : %@", params );
 		return params;
 	}
 	

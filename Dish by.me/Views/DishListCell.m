@@ -20,6 +20,7 @@
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
+	self.backgroundColor = [UIColor clearColor];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	_photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 12, 292, 292 )];
