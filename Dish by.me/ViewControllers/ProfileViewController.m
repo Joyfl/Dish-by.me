@@ -14,8 +14,8 @@
 #import "UserManager.h"
 #import "DishByMeAPILoader.h"
 
-#define ARROW_LEFT_X	142
-#define ARROW_RIGHT_X	248
+#define ARROW_LEFT_X	140
+#define ARROW_RIGHT_X	246
 
 
 @implementation ProfileViewController
@@ -79,10 +79,6 @@
 	
 	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", _user.userId] method:@"GET" parameters:nil success:^(id response) {
 		_user = [User userFromDictionary:response];
-		self.navigationItem.title = _user.name;
-		
-		_updating = NO;
-		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 		
 		[_tableView reloadData];
 		
@@ -115,6 +111,9 @@
 		if( _selectedTab == 0 )
 			[_tableView reloadData];
 		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
@@ -140,6 +139,9 @@
 		
 		if( _selectedTab == 1 )
 			[_tableView reloadData];
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -239,16 +241,17 @@
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:profileCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			_profileImage = [[UIButton alloc] initWithFrame:CGRectMake( 14, 14, 85, 86 )];
+			_profileImage = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 86 )];
 			[cell addSubview:_profileImage];
 			
 			UIImageView *profileBorder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"profile_border.png"]];
-			profileBorder.frame = CGRectMake( 10, 10, 93, 94 );
+			profileBorder.frame = CGRectMake( 8, 9, 93, 94 );
 			[cell addSubview:profileBorder];
 			
-			UIButton *bioButton = [[UIButton alloc] initWithFrame:CGRectMake( 103, 10, 211, 47 )];
+			UIButton *bioButton = [[UIButton alloc] initWithFrame:CGRectMake( 101, 9, 211, 47 )];
 			bioButton.titleLabel.font = [UIFont systemFontOfSize:13];
 			bioButton.titleLabel.textAlignment = NSTextAlignmentLeft;
+			bioButton.adjustsImageWhenHighlighted = NO;
 			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top.png"] forState:UIControlStateNormal];
 			
 			// My profile
@@ -263,7 +266,7 @@
 				bioButton = NO; // ???????
 			}
 			
-			_bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 10, 165, 30 )];
+			_bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 8, 9, 165, 30 )];
 			_bioLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
 			_bioLabel.font = [UIFont systemFontOfSize:13];
 			_bioLabel.backgroundColor = [UIColor clearColor];
@@ -272,31 +275,33 @@
 			
 			[cell addSubview:bioButton];
 			
-			UIButton *dishButton = [[UIButton alloc] initWithFrame:CGRectMake( 103, 57, 104, 47 )];
+			UIButton *dishButton = [[UIButton alloc] initWithFrame:CGRectMake( 101, 56, 104, 47 )];
 			[dishButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_left.png"] forState:UIControlStateNormal];
 			[dishButton addTarget:self action:@selector(dishButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			dishButton.adjustsImageWhenHighlighted = NO;
 			[cell addSubview:dishButton];
 			
-			_dishCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 94, 20 )];
+			_dishCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 5, 94, 20 )];
 			_dishCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
 			_dishCountLabel.textAlignment = NSTextAlignmentCenter;
 			_dishCountLabel.font = [UIFont boldSystemFontOfSize:20];
 			_dishCountLabel.backgroundColor = [UIColor clearColor];
 			[dishButton addSubview:_dishCountLabel];
 			
-			_dishLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 94, 20 )];
+			_dishLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 21, 94, 20 )];
 			_dishLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
 			_dishLabel.textAlignment = NSTextAlignmentCenter;
 			_dishLabel.font = [UIFont systemFontOfSize:13];
 			_dishLabel.backgroundColor = [UIColor clearColor];
 			[dishButton addSubview:_dishLabel];
 			
-			UIButton *bookmarkButton = [[UIButton alloc] initWithFrame:CGRectMake( 207, 57, 107, 47 )];
+			UIButton *bookmarkButton = [[UIButton alloc] initWithFrame:CGRectMake( 205, 56, 107, 47 )];
 			[bookmarkButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_right.png"] forState:UIControlStateNormal];
 			[bookmarkButton addTarget:self action:@selector(bookmarkButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			bookmarkButton.adjustsImageWhenHighlighted = NO;
 			[cell addSubview:bookmarkButton];
 			
-			_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
+			_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 5, 97, 20 )];
 			_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
 			_bookmarkCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
 			_bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
@@ -304,7 +309,7 @@
 			_bookmarkCountLabel.backgroundColor = [UIColor clearColor];
 			[bookmarkButton addSubview:_bookmarkCountLabel];
 			
-			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 97, 20 )];
+			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 21, 97, 20 )];
 			_bookmarkLabel.text = NSLocalizedString( @"BOOKMARKS", @"" );
 			_bookmarkLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
 			_bookmarkLabel.textAlignment = NSTextAlignmentCenter;
@@ -313,7 +318,7 @@
 			[bookmarkButton addSubview:_bookmarkLabel];
 			
 			_arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
-			_arrowView.frame = CGRectMake( ARROW_LEFT_X, 101, 25, 11 );
+			_arrowView.frame = CGRectMake( ARROW_LEFT_X, 100, 25, 11 );
 			[cell addSubview:_arrowView];
 		}
 		
