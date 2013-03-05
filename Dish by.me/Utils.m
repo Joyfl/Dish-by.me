@@ -60,8 +60,6 @@
 {
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	formatter.dateFormat = @"eee, dd MMM yyyy HH:mm:ss ZZZZ";
-	formatter.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
-	formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
 	return [formatter dateFromString:string];
 }
 
@@ -74,7 +72,7 @@
 
 + (NSDate *)dateToGlobalTimeZone:(NSDate *)date
 {
-	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+	NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     NSInteger seconds = [timeZone secondsFromGMTForDate:date];
     return [NSDate dateWithTimeInterval:seconds sinceDate:date];
 }
@@ -83,7 +81,7 @@
 + (NSString *)relativeDateString:(NSDate *)date withTime:(BOOL)withTime
 {
 	NSDate *now = [NSDate date];
-	NSInteger interval = abs( [date timeIntervalSinceDate:now] );
+	NSInteger interval = [now timeIntervalSinceDate:date];
 	
 	// n < 10초 : 몇 초 전
 	if( interval < 10 )
@@ -126,19 +124,18 @@
 	
 	NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
 	
-	NSDateComponents *components = [calendar components:NSUIntegerMax fromDate:date];
-	NSInteger day = components.day;
+	NSDateComponents *components = [calendar components:NSYearCalendarUnit fromDate:date];
 	NSInteger year = components.year;
 	
-	components = [calendar components:NSUIntegerMax fromDate:now];
-	NSInteger today = components.day;
+	components = [calendar components:NSYearCalendarUnit fromDate:now];
 	NSInteger thisYear = components.year;
-	
-	NSInteger dayInterval = today - day;
 	
 	// 올해
 	if( year == thisYear )
 	{
+		components = [calendar components:NSUIntegerMax fromDate:date toDate:now options:0];
+		NSInteger dayInterval = components.day;
+		
 		// 1일 : 어제
 		if( dayInterval == 1 )
 		{
@@ -171,7 +168,7 @@
 	{
 		NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 		formatter.dateFormat = NSLocalizedString( @"DATE_FORMAT_WITH_YEAR_MONTH_DAY", @"yyyy년 M월 d일" );
-		string = [formatter stringFromDate:date];
+		string = [formatter stringFromDate:[Utils dateToLocalTimeZone:date]];
 	}
 	
 	if( withTime )
