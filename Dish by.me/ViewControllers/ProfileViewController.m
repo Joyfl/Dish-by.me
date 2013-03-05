@@ -17,6 +17,9 @@
 #define ARROW_LEFT_X	140
 #define ARROW_RIGHT_X	246
 
+#define isLastDishLoaded (_dishes.count == _user.dishCount)
+#define isLastBookmarkLoaded (_bookmarks.count == _user.bookmarkCount)
+#define selectedDishArray _selectedTab == 0 ? _dishes : _bookmarks
 
 @implementation ProfileViewController
 
@@ -67,32 +70,7 @@
 	}];
 }
 
-- (void)updateUser
-{
-	_loadedLastDish = NO;
-	_loadedLastBookmark = NO;
-	[_dishes removeAllObjects];
-	[_bookmarks removeAllObjects];
-	_dishOffset = _bookmarkOffset = 0;
-	
-	_updating = YES;
-	
-	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", _user.userId] method:@"GET" parameters:nil success:^(id response) {
-		_user = [User userFromDictionary:response];
-		
-		[_tableView reloadData];
-		
-	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		JLLog( @"statusCode : %d", statusCode );
-		JLLog( @"errorCode : %d", errorCode );
-		JLLog( @"message : %@", message );
-		
-		_updating = NO;
-		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
-	}];
-}
-
-- (void)loadDishes
+- (void)loadMoreDishes
 {
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _dishOffset] };
 	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:params success:^(id response) {
@@ -104,9 +82,6 @@
 			Dish *dish = [Dish dishFromDictionary:d];
 			[_dishes addObject:dish];
 		}
-		
-		if( data.count == 0 )
-			_loadedLastDish = YES;
 		
 		if( _selectedTab == 0 )
 			[_tableView reloadData];
@@ -121,7 +96,7 @@
 	}];
 }
 
-- (void)loadBookmarks
+- (void)loadMoreBookmarks
 {
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _bookmarkOffset] };
 	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:params success:^(id response) {
@@ -134,8 +109,89 @@
 			[_bookmarks addObject:dish];
 		}
 		
-		if( data.count == 0 )
-			_loadedLastBookmark = YES;
+		if( _selectedTab == 1 )
+			[_tableView reloadData];
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)updateUser
+{	
+	_updating = YES;
+	
+	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+		_user.userId = [[response objectForKey:@"id"] integerValue];
+		_user.name = [response objectForKey:@"name"];
+		_user.photoURL = [response objectForKey:@"photo_url"];
+		_user.thumbnailURL = [response objectForKey:@"thumbnail_url"];
+		_user.bio = [response objectForKey:@"bio"];
+		_user.dishCount = [[response objectForKey:@"dish_count"] integerValue];
+		_user.bookmarkCount = [[response objectForKey:@"bookmark_count"] integerValue];
+		_user.followingCount = [[response objectForKey:@"following_count"] integerValue];
+		_user.followersCount = [[response objectForKey:@"followers_count"] integerValue];
+		
+		self.navigationItem.title = _user.name;
+		
+		[self updateDishes];
+		[self updateBookmarks];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+	}];
+}
+
+- (void)updateDishes
+{
+	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+		[_dishes removeAllObjects];
+		
+		NSArray *data = [response objectForKey:@"data"];
+		_dishOffset = data.count;
+		
+		for( NSDictionary *d in data )
+		{
+			Dish *dish = [Dish dishFromDictionary:d];
+			[_dishes addObject:dish];
+		}
+		
+		if( _selectedTab == 0 )
+			[_tableView reloadData];
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)updateBookmarks
+{
+	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+		[_bookmarks removeAllObjects];
+		
+		NSArray *data = [response objectForKey:@"data"];
+		_bookmarkOffset = data.count;
+		
+		for( NSDictionary *d in data )
+		{
+			Dish *dish = [Dish dishFromDictionary:d];
+			[_bookmarks addObject:dish];
+		}
 		
 		if( _selectedTab == 1 )
 			[_tableView reloadData];
@@ -205,7 +261,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 2 + ( _selectedTab == 0 ? !_loadedLastDish : !_loadedLastBookmark );
+	return 2 + ( _selectedTab == 0 ? !(BOOL)isLastDishLoaded : !(BOOL)isLastBookmarkLoaded );
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -289,6 +345,7 @@
 			[dishButton addSubview:_dishCountLabel];
 			
 			_dishLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 21, 94, 20 )];
+			_dishLabel.text = NSLocalizedString( @"DISHES", @"" );
 			_dishLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
 			_dishLabel.textAlignment = NSTextAlignmentCenter;
 			_dishLabel.font = [UIFont systemFontOfSize:13];
@@ -302,7 +359,6 @@
 			[cell addSubview:bookmarkButton];
 			
 			_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 5, 97, 20 )];
-			_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
 			_bookmarkCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
 			_bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
 			_bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:20];
@@ -328,48 +384,23 @@
 		
 		_bioLabel.text = _user.bio;
 		_dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
-		_dishLabel.text = NSLocalizedString( @"DISHES", @"" );
+		_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
 		
 		return cell;
 	}
 	
 	else if( indexPath.section == 1 )
 	{
-		DishListCell *cell = nil;
+		DishListCell *cell = [tableView dequeueReusableCellWithIdentifier:dishCellId];
 		
-		//
-		// Dishes
-		//
-		if( _selectedTab == 0 )
+		if( !cell )
 		{
-			cell = [tableView dequeueReusableCellWithIdentifier:dishCellId];
-			
-			if( !cell )
-			{
-				cell = [[DishListCell alloc] initWithReuseIdentifier:dishCellId];
-				cell.delegate = self;
-			}
-			
-			Dish *dish = [_dishes objectAtIndex:indexPath.row];
-			[cell setDish:dish atIndexPath:indexPath];
+			cell = [[DishListCell alloc] initWithReuseIdentifier:dishCellId];
+			cell.delegate = self;
 		}
 		
-		//
-		// Bookmarks
-		//
-		else
-		{
-			cell = [_tableView dequeueReusableCellWithIdentifier:bookmarkCellId];
-			
-			if( !cell )
-			{
-				cell = [[DishListCell alloc] initWithReuseIdentifier:bookmarkCellId];
-				cell.delegate = self;
-			}
-			
-			Dish *dish = [_bookmarks objectAtIndex:indexPath.row];
-			[cell setDish:dish atIndexPath:indexPath];
-		}
+		Dish *dish = [selectedDishArray objectAtIndex:indexPath.row];
+		[cell setDish:dish atIndexPath:indexPath];
 		
 		return cell;
 	}
@@ -390,10 +421,10 @@
 		[cell.contentView addSubview:indicator];
 		
 		if( !_loadingDishes && _selectedTab == 0 )
-			[self loadDishes];
+			[self loadMoreDishes];
 		
 		else if( !_loadingBookmarks && _selectedTab == 1 )
-			[self loadBookmarks];
+			[self loadMoreBookmarks];
 		
 		return cell;
 	}
@@ -441,18 +472,18 @@
 
 - (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath
 {
-	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[selectedDishArray objectAtIndex:indexPath.row]];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
 }
 
 - (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath
 {
-	[self bookmarkDish:[_dishes objectAtIndex:indexPath.row]];
+	[self bookmarkDish:[selectedDishArray objectAtIndex:indexPath.row]];
 }
 
 - (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath
 {
-	[self unbookmarkDish:[_dishes objectAtIndex:indexPath.row]];
+	[self unbookmarkDish:[selectedDishArray objectAtIndex:indexPath.row]];
 }
 
 @end

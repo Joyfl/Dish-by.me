@@ -62,6 +62,7 @@
 		[_dishes removeAllObjects];
 		
 		NSArray *data = [response objectForKey:@"data"];
+		_offset = data.count;
 		
 		for( NSDictionary *d in data )
 		{
