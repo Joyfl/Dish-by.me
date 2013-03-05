@@ -36,15 +36,6 @@ enum {
 	kSectionCommentInput = 3,
 };
 
-enum {
-	kRequestIdComments = 0,
-	kRequestIdSendComment = 1,
-	kRequestIdDeleteComment = 2,
-	kRequestIdBookmark = 3,
-	kRequestIdUnbookmark = 4,
-	kRequestIdReloadDish = 5,
-};
-
 - (id)initWithDish:(Dish *)dish
 {
 	self = [super init];

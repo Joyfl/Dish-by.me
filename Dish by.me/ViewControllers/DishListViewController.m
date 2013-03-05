@@ -14,13 +14,6 @@
 
 @implementation DishListViewController
 
-enum {
-	kRequestIdUpdateDishes = 0,
-	kRequestIdLoadMoreDishes = 1,
-	kRequestIdBookmark = 2,
-	kRequestIdUnbookmark = 3,
-};
-
 - (id)init
 {
     self = [super init];
@@ -191,7 +184,7 @@ enum {
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if( indexPath.section == 1 ) return 45;
-	if( indexPath.row == _dishes.count - 1 ) return 355;
+	else if( indexPath.row == _dishes.count - 1 ) return 355;
 	return 345;
 }
 
