@@ -7,29 +7,35 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JLHTTPLoader.h"
 #import "GAITrackedViewController.h"
+#import "DishListCell.h"
 
 @class User;
 
-@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
+@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, DishListCellDelegate>
 {
 	User *_user;
 	
+	UITableView *_tableView;
 	UIButton *_profileImage;
 	UIImageView *_arrowView;
-	UITableView *_tableView;
 	
 	NSMutableArray *_dishes;
-	NSMutableArray *_likes;
+	NSMutableArray *_bookmarks;
+	
+	NSInteger _dishOffset;
+	BOOL _loadedLastDish;
+	BOOL _loadingDishes;
+	
+	NSInteger _bookmarkOffset;
+	BOOL _loadedLastBookmark;	
+	BOOL _loadingBookmarks;
 	
 	// 0 : dishes
-	// 1 : likes
+	// 1 : bookmarks
 	NSInteger _selectedTab;
-	
-	JLHTTPLoader *_loader;
 }
 
-- (void)activateWithUserId:(NSInteger)userId;
+@property (nonatomic, assign) NSInteger userId;
 
 @end

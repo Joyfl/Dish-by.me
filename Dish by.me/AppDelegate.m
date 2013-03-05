@@ -27,7 +27,7 @@
 {
 	[GAI sharedInstance].trackUncaughtExceptions = YES;
 	[GAI sharedInstance].dispatchInterval = 20;
-	[GAI sharedInstance].debug = YES;
+//	[GAI sharedInstance].debug = YES;
 	id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-38348585-3"];
 	
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -58,6 +58,7 @@
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
 	profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
 	profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
+	if( [UserManager manager].loggedIn ) profileViewController.userId = [UserManager manager].userId;
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
 	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:settingsViewController];
@@ -218,7 +219,7 @@
 {
 	NSLog( @"[AppDelegate] loginDidFinish" );
 	[dishListViewController updateDishes];
-	[profileViewController activateWithUserId:[UserManager manager].userId];
+	profileViewController.userId = [UserManager manager].userId;
 }
 
 @end

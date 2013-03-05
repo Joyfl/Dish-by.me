@@ -10,21 +10,15 @@
 #import "Utils.h"
 #import "User.h"
 #import "Dish.h"
-#import "DishTileItem.h"
-#import "DishTileCell.h"
 #import "DishDetailViewController.h"
 #import "UserManager.h"
+#import "DishByMeAPILoader.h"
 
 #define ARROW_LEFT_X	142
 #define ARROW_RIGHT_X	248
 
-@implementation ProfileViewController
 
-enum {
-	krequestIdUser = 0,
-	krequestIdDishes = 1,
-	krequestIdLikes = 2
-};
+@implementation ProfileViewController
 
 - (id)init
 {
@@ -32,78 +26,51 @@ enum {
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	self.trackedViewName = [[self class] description];
 	
-	_dishes = [[NSMutableArray alloc] init];
-	_likes = [[NSMutableArray alloc] init];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStylePlain];
+	_tableView.delegate = self;
+	_tableView.dataSource = self;
+	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	[self.view addSubview:_tableView];
 	
-	_loader = [[JLHTTPLoader alloc] init];
-	_loader.delegate = self;
+	_dishes = [[NSMutableArray alloc] init];
+	_bookmarks = [[NSMutableArray alloc] init];
 	
 	self.navigationItem.title = @"Dish by.me";
 	
 	return self;
 }
 
-- (void)activateWithUserId:(NSInteger)userId
+- (void)setUserId:(NSInteger)userId
 {
-	NSString *rootUrl = API_ROOT_URL;
-//	[_loader addrequestWithrequestId:krequestIdUser url:[NSString stringWithFormat:@"%@/user/%d", rootUrl, userId] method:JLHTTPLoaderMethodGET params:nil];
-//	[_loader addrequestWithrequestId:krequestIdDishes url:[NSString stringWithFormat:@"%@/user/%d/dish", rootUrl, userId] method:JLHTTPLoaderMethodGET params:nil];
-//	[_loader addrequestWithrequestId:krequestIdLikes url:[NSString stringWithFormat:@"%@/user/%d/yum", rootUrl, userId] method:JLHTTPLoaderMethodGET params:nil];
-	[_loader startLoading];
+	[self loadUserId:userId];
 }
 
-- (void)viewDidLoad
+- (void)loadUserId:(NSInteger)userId
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view.
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-
-
-#pragma mark -
-#pragma mark JLHTTPLoaderDelegate
-
-- (void)loaderDidFinishLoading:(JLHTTPResponse *)response
-{
-	NSDictionary *result = [Utils parseJSON:response.body];
-	
-	if( response.requestId == krequestIdUser )
-	{
-		_user = [[User alloc] init];
-		_user.userId = [[result objectForKey:@"user_id"] integerValue];
-		_user.name = [result objectForKey:@"user_name"];
-		_user.bio =[result objectForKey:@"bio"];
-		_user.dishCount = [[result objectForKey:@"dish_count"] integerValue];
-		_user.bookmarkCount = [[result objectForKey:@"yum_count"] integerValue];
-		
+	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
+		_user = [User userFromDictionary:response];
 		self.navigationItem.title = _user.name;
 		
-		dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
-			NSString *rootURL = WEB_ROOT_URL;
-			NSString *url = [NSString stringWithFormat:@"%@/images/original/profile/%d.jpg", rootURL, _user.userId];
-			NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:url]];
-			if( data == nil )
-				return;
-			
-			dispatch_async( dispatch_get_main_queue(), ^{
-				_user.photo = [UIImage imageWithData:data];
-			} );
-		});
-	}
-	
-	else if( response.requestId == krequestIdDishes )
-	{
-		NSArray *data = [result objectForKey:@"data"];
+		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
+			_user.photo = image;
+		}];
+		
+		[_tableView reloadData];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)loadDishes
+{
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _dishOffset] };
+	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:params success:^(id response) {
+		NSArray *data = [response objectForKey:@"data"];
+		_dishOffset += data.count;
 		
 		for( NSDictionary *d in data )
 		{
@@ -111,26 +78,73 @@ enum {
 			[_dishes addObject:dish];
 		}
 		
-		_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, 367 )];
-		_tableView.delegate = self;
-		_tableView.dataSource = self;
-		_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-		_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
-		[self.view addSubview:_tableView];
-	}
-	
-	else if( response.requestId == krequestIdLikes )
-	{
-		NSArray *data = [result objectForKey:@"data"];
+		if( data.count == 0 )
+			_loadedLastDish = YES;
+		
+		if( _selectedTab == 0 )
+			[_tableView reloadData];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)loadBookmarks
+{
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _bookmarkOffset] };
+	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:params success:^(id response) {
+		NSArray *data = [response objectForKey:@"data"];
+		_bookmarkOffset += data.count;
 		
 		for( NSDictionary *d in data )
 		{
 			Dish *dish = [Dish dishFromDictionary:d];
-			[_likes addObject:dish];
+			[_bookmarks addObject:dish];
 		}
 		
-		[_tableView reloadData];
-	}
+		if( data.count == 0 )
+			_loadedLastBookmark = YES;
+		
+		if( _selectedTab == 1 )
+			[_tableView reloadData];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)bookmarkDish:(Dish *)dish
+{
+	JLLog( @"bookmarkDish" );
+	
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)unbookmarkDish:(Dish *)dish
+{
+	JLLog( @"unbookmarkDish" );
+	
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 
@@ -139,31 +153,34 @@ enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 2;
+	return 2 + ( _selectedTab == 0 ? !_loadedLastDish : !_loadedLastBookmark );
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	if( section == 0 )
-		return 1;
-	
-	return _selectedTab == 0 ? ceil( _dishes.count / 3.0 ) : ceil( _likes.count / 3.0 );
+	if( section == 0 ) return 1;
+	else if( section == 1 ) return _selectedTab == 0 ? _dishes.count : _bookmarks.count;
+	return 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if( indexPath.section == 0 )
-		return 105;
-	
-	return 0;
+	if( indexPath.section == 0 ) return 105;
+	else if( indexPath.section == 2 ) return 45;
+	else if( _selectedTab == 0 && indexPath.row == _dishes.count - 1 ) return 355;
+	else if( _selectedTab == 1 && indexPath.row == _bookmarks.count - 1 ) return 355;
+	return 345;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *profileCellId = @"profileCell";
 	static NSString *dishCellId = @"dishCell";
-	static NSString *likeCellId = @"likeCell";
+	static NSString *bookmarkCellId = @"bookmarkCell";
 	
+	//
+	// Profile
+	//
 	if( indexPath.section == 0 )
 	{
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:profileCellId];
@@ -194,7 +211,7 @@ enum {
 			}
 			else
 			{
-				bioButton = NO;
+				bioButton = NO; // ???????
 			}
 			
 			UILabel *bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 10, 10, 165, 30 )];
@@ -228,26 +245,26 @@ enum {
 			dishLabel.backgroundColor = [UIColor clearColor];
 			[dishButton addSubview:dishLabel];
 			
-			UIButton *likeButton = [[UIButton alloc] initWithFrame:CGRectMake( 207, 57, 107, 47 )];
-			[likeButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_right.png"] forState:UIControlStateNormal];
-			[likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-			[cell addSubview:likeButton];
+			UIButton *bookmarkButton = [[UIButton alloc] initWithFrame:CGRectMake( 207, 57, 107, 47 )];
+			[bookmarkButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bottom_right.png"] forState:UIControlStateNormal];
+			[bookmarkButton addTarget:self action:@selector(bookmarkButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[cell addSubview:bookmarkButton];
 			
-			UILabel *likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
-			likeCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
-			likeCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
-			likeCountLabel.textAlignment = NSTextAlignmentCenter;
-			likeCountLabel.font = [UIFont boldSystemFontOfSize:20];
-			likeCountLabel.backgroundColor = [UIColor clearColor];
-			[likeButton addSubview:likeCountLabel];
+			UILabel *bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 4, 97, 20 )];
+			bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
+			bookmarkCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
+			bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
+			bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:20];
+			bookmarkCountLabel.backgroundColor = [UIColor clearColor];
+			[bookmarkButton addSubview:bookmarkCountLabel];
 			
-			UILabel *likeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 97, 20 )];
-			likeLabel.text = NSLocalizedString( @"LIKES", @"" );
-			likeLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
-			likeLabel.textAlignment = NSTextAlignmentCenter;
-			likeLabel.font = [UIFont systemFontOfSize:13];
-			likeLabel.backgroundColor = [UIColor clearColor];
-			[likeButton addSubview:likeLabel];
+			UILabel *bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 5, 20, 97, 20 )];
+			bookmarkLabel.text = NSLocalizedString( @"BOOKMARKS", @"" );
+			bookmarkLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			bookmarkLabel.textAlignment = NSTextAlignmentCenter;
+			bookmarkLabel.font = [UIFont systemFontOfSize:13];
+			bookmarkLabel.backgroundColor = [UIColor clearColor];
+			[bookmarkButton addSubview:bookmarkLabel];
 			
 			_arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
 			_arrowView.frame = CGRectMake( ARROW_LEFT_X, 101, 25, 11 );
@@ -259,63 +276,65 @@ enum {
 	
 	else if( indexPath.section == 1 )
 	{
-		DishTileCell *cell;
+		DishListCell *cell = nil;
 		
+		//
 		// Dishes
+		//
 		if( _selectedTab == 0 )
 		{
 			cell = [tableView dequeueReusableCellWithIdentifier:dishCellId];
 			
 			if( !cell )
 			{
-				cell = [[DishTileCell alloc] initWithReuseIdentifier:dishCellId target:self action:@selector(dishItemDidTouchUpInside:)];
+				cell = [[DishListCell alloc] initWithReuseIdentifier:dishCellId];
+				cell.delegate = self;
 			}
 			
-			for( NSInteger i = 0; i < 3; i++ )
-			{
-				DishTileItem *dishItem = [cell dishItemAt:i];
-				
-				if( _dishes.count > indexPath.row * 3 + i )
-				{
-					dishItem.hidden = NO;
-					
-					Dish *dish = [_dishes objectAtIndex:indexPath.row * 3 + i];
-					dishItem.dish = dish;
-				}
-				else
-				{
-					dishItem.hidden = YES;
-				}
-			}
+			Dish *dish = [_dishes objectAtIndex:indexPath.row];
+			[cell setDish:dish atIndexPath:indexPath];
 		}
 		
-		// Likes
+		//
+		// Bookmarks
+		//
 		else
 		{
-			cell = [_tableView dequeueReusableCellWithIdentifier:likeCellId];
+			cell = [_tableView dequeueReusableCellWithIdentifier:bookmarkCellId];
 			
 			if( !cell )
 			{
-				cell = [[DishTileCell alloc] initWithReuseIdentifier:dishCellId target:self action:@selector(dishItemDidTouchUpInside:)];
+				cell = [[DishListCell alloc] initWithReuseIdentifier:bookmarkCellId];
+				cell.delegate = self;
 			}
 			
-			for( NSInteger i = 0; i < 3; i++ )
-			{
-				DishTileItem *dishItem = [cell dishItemAt:i];
-				
-				if( _dishes.count > indexPath.row * 3 + i )
-				{
-					dishItem.hidden = NO;
-					
-					Dish *dish = [_dishes objectAtIndex:indexPath.row * 3 + i];
-					dishItem.dish = dish;
-				}
-				else
-				{
-					dishItem.hidden = YES;
-				}
-			}
+			Dish *dish = [_bookmarks objectAtIndex:indexPath.row];
+			[cell setDish:dish atIndexPath:indexPath];
 		}
+		
+		return cell;
+	}
+	
+	else
+	{
+		static NSString *activityIndicatorCellId = @"activityIndicatorCellId";
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:activityIndicatorCellId];
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:activityIndicatorCellId];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+		}
+		
+		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		indicator.frame = CGRectMake( 141, 0, 37, 37 );
+		[indicator startAnimating];
+		[cell.contentView addSubview:indicator];
+		
+		if( !_loadingDishes && _selectedTab == 0 )
+			[self loadDishes];
+		
+		else if( !_loadingBookmarks && _selectedTab == 1 )
+			[self loadBookmarks];
 		
 		return cell;
 	}
@@ -337,7 +356,7 @@ enum {
 	_arrowView.frame = frame;
 }
 
-- (void)likeButtonDidTouchUpInside
+- (void)bookmarkButtonDidTouchUpInside
 {
 	_selectedTab = 1;
 	[_tableView reloadData];
@@ -347,10 +366,24 @@ enum {
 	_arrowView.frame = frame;
 }
 
-- (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem
+
+#pragma mark -
+#pragma mark DishListCellDelegate
+
+- (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath
 {
-	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:dishTileItem.dish];
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
+}
+
+- (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath
+{
+	[self bookmarkDish:[_dishes objectAtIndex:indexPath.row]];
+}
+
+- (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath
+{
+	[self unbookmarkDish:[_dishes objectAtIndex:indexPath.row]];
 }
 
 @end
