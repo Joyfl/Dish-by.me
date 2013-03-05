@@ -72,11 +72,9 @@
 
 - (void)loadMoreDishes
 {
-	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _dishOffset] };
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _dishes.count] };
 	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:params success:^(id response) {
 		NSArray *data = [response objectForKey:@"data"];
-		_dishOffset += data.count;
-		
 		for( NSDictionary *d in data )
 		{
 			Dish *dish = [Dish dishFromDictionary:d];
@@ -98,11 +96,9 @@
 
 - (void)loadMoreBookmarks
 {
-	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _bookmarkOffset] };
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _bookmarks.count] };
 	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:params success:^(id response) {
 		NSArray *data = [response objectForKey:@"data"];
-		_bookmarkOffset += data.count;
-		
 		for( NSDictionary *d in data )
 		{
 			Dish *dish = [Dish dishFromDictionary:d];
@@ -158,8 +154,6 @@
 		[_dishes removeAllObjects];
 		
 		NSArray *data = [response objectForKey:@"data"];
-		_dishOffset = data.count;
-		
 		for( NSDictionary *d in data )
 		{
 			Dish *dish = [Dish dishFromDictionary:d];
@@ -184,9 +178,7 @@
 	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:nil success:^(id response) {
 		[_bookmarks removeAllObjects];
 		
-		NSArray *data = [response objectForKey:@"data"];
-		_bookmarkOffset = data.count;
-		
+		NSArray *data = [response objectForKey:@"data"];		
 		for( NSDictionary *d in data )
 		{
 			Dish *dish = [Dish dishFromDictionary:d];
@@ -261,7 +253,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 2 + ( _selectedTab == 0 ? !(BOOL)isLastDishLoaded : !(BOOL)isLastBookmarkLoaded );
+	return 2 + ( _selectedTab == 0 ? !isLastDishLoaded : !isLastBookmarkLoaded );
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -273,7 +265,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	if( indexPath.section == 0 ) return 105;
+	if( indexPath.section == 0 ) return 110;
 	else if( indexPath.section == 2 ) return 45;
 	else if( _selectedTab == 0 && indexPath.row == _dishes.count - 1 ) return 355;
 	else if( _selectedTab == 1 && indexPath.row == _bookmarks.count - 1 ) return 355;
@@ -374,7 +366,6 @@
 			[bookmarkButton addSubview:_bookmarkLabel];
 			
 			_arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
-			_arrowView.frame = CGRectMake( ARROW_LEFT_X, 100, 25, 11 );
 			[cell addSubview:_arrowView];
 		}
 		
@@ -385,6 +376,8 @@
 		_bioLabel.text = _user.bio;
 		_dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
 		_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
+		NSLog( @"selected tab : %d", _selectedTab );
+		_arrowView.frame = CGRectMake( _selectedTab == 0 ? ARROW_LEFT_X : ARROW_RIGHT_X, 100, 25, 11 );
 		
 		return cell;
 	}
@@ -450,20 +443,12 @@
 {
 	_selectedTab = 0;
 	[_tableView reloadData];
-	
-	CGRect frame = _arrowView.frame;
-	frame.origin.x = ARROW_LEFT_X;
-	_arrowView.frame = frame;
 }
 
 - (void)bookmarkButtonDidTouchUpInside
 {
 	_selectedTab = 1;
 	[_tableView reloadData];
-	
-	CGRect frame = _arrowView.frame;
-	frame.origin.x = ARROW_RIGHT_X;
-	_arrowView.frame = frame;
 }
 
 

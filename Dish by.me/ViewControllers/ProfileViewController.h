@@ -30,11 +30,9 @@
 	BOOL _updating;
 	
 	NSMutableArray *_dishes;
-	NSInteger _dishOffset;
 	BOOL _loadingDishes;
 	
 	NSMutableArray *_bookmarks;
-	NSInteger _bookmarkOffset;
 	BOOL _loadingBookmarks;
 	
 	// 0 : dishes
