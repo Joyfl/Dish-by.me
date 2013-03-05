@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface FacebookSettingsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface FacebookSettingsViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate>
 {
 	UITableView *_tableView;
 }

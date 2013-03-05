@@ -19,6 +19,7 @@
 {
     self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.trackedViewName = [[self class] description];
 	
 	_searchBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 45 )];
 	[self.view addSubview:_searchBar];

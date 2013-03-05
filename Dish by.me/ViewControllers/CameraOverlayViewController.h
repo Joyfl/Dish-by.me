@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface CameraOverlayViewController : UIViewController
+@interface CameraOverlayViewController : GAITrackedViewController
 
 - (id)initWithPicker:(UIImagePickerController *)picker;
 

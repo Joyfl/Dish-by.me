@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
-@interface LoginViewController : UIViewController <UITextFieldDelegate>
+@interface LoginViewController : GAITrackedViewController <UITextFieldDelegate>
 {
 	UIImageView *_forkAndKnife;
 	UIImageView *_loginBox;

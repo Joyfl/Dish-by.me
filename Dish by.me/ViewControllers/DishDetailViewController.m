@@ -49,6 +49,7 @@ enum {
 {
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0x333333 alpha:1];
+	self.trackedViewName = [[self class] description];
 	
 	_dish = dish;
 	

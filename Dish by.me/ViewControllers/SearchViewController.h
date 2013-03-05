@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "DishListCell.h"
+#import "GAITrackedViewController.h"
 
-@interface SearchViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, DishListCellDelegate>
+@interface SearchViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, DishListCellDelegate>
 {
 	UIView *_searchBar;
 	UITextField *_searchInput;

@@ -19,6 +19,7 @@
 {
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.trackedViewName = [[self class] description];
 	
 	DMBarButtonItem *cancelButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;

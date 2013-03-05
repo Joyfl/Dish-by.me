@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "JLHTTPLoader.h"
+#import "GAITrackedViewController.h"
 
 @class User;
 
-@interface ProfileViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
+@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, JLHTTPLoaderDelegate>
 {
 	User *_user;
 	

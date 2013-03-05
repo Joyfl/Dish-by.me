@@ -17,6 +17,7 @@
 #import "LoginViewController.h"
 #import "UserManager.h"
 #import "User.h"
+#import "GAI.h"
 
 @implementation AppDelegate
 
@@ -24,6 +25,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	[GAI sharedInstance].trackUncaughtExceptions = YES;
+	[GAI sharedInstance].dispatchInterval = 20;
+	[GAI sharedInstance].debug = YES;
+	id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-38348585-3"];
+	
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

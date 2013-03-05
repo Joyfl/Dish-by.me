@@ -19,6 +19,7 @@ enum {
 - (id)init
 {
     self = [super init];
+	self.trackedViewName = [[self class] description];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStyleGrouped];
 	_tableView.dataSource = self;

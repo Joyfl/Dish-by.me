@@ -10,8 +10,9 @@
 #import "JLHTTPLoader.h"
 #import "EGORefreshTableHeaderView.h"
 #import "DishListCell.h"
+#import "GAITrackedViewController.h"
 
-@interface DishListViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishListCellDelegate>
+@interface DishListViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishListCellDelegate>
 {
 	UITableView *_tableView;
 	NSMutableArray *_dishes;

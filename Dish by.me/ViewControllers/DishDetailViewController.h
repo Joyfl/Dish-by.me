@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "DMButton.h"
 #import "BookmarkButton.h"
+#import "GAITrackedViewController.h"
 
 @class Dish;
 
-@interface DishDetailViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, BookmarkButtonDelegate>
+@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, BookmarkButtonDelegate>
 {
 	Dish *_dish;
 	NSMutableArray *_comments;

@@ -30,6 +30,7 @@ enum {
 {
     self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.trackedViewName = [[self class] description];
 	
 	_dishes = [[NSMutableArray alloc] init];
 	_likes = [[NSMutableArray alloc] init];

@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GAITrackedViewController.h"
 
 @class RecipeView;
 
-@interface WritingViewController : UIViewController <UIScrollViewDelegate>
+@interface WritingViewController : GAITrackedViewController <UIScrollViewDelegate>
 {
 	UIImage *_photo;
 	UIScrollView *_scrollView;

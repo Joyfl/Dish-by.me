@@ -13,6 +13,7 @@
 - (id)initWithPicker:(UIImagePickerController *)picker
 {
 	self = [super init];
+	self.trackedViewName = [[self class] description];
 	
 	UIView *topView = [[UIView alloc] initWithFrame:CGRectMake( 0, -20, 320, 54 )];
 	topView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.6];
