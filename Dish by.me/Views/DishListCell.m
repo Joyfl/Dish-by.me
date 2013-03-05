@@ -104,9 +104,9 @@
 		if( !_dish.photoHasBeenShown )
 		{
 			_dish.photoHasBeenShown = YES;
-			[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction animations:^{
+//			[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction animations:^{
 				_photoView.image = _dish.photo;
-			} completion:nil];
+//			} completion:nil];
 		}
 		else
 			_photoView.image = _dish.photo;
@@ -117,9 +117,9 @@
 			_dish.photo = [UIImage imageWithData:data];
 			 
 			 if( [_indexPath isEqual:indexPath] )
-				 [UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction animations:^{
+//				 [UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction animations:^{
 					 _photoView.image = _dish.photo;
-				 } completion:nil];
+//				 } completion:nil];
 		 }];
 	}
 	
