@@ -35,8 +35,8 @@
 
 - (void)updateRelativeTime
 {
-	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:NO];
-	self.relativeUpdatedTime = [Utils relativeDateString:self.updatedTime withTime:NO];
+	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:YES];
+	self.relativeUpdatedTime = [Utils relativeDateString:self.updatedTime withTime:YES];
 }
 
 - (void)calculateMessageHeight

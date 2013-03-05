@@ -60,6 +60,8 @@
 {
 	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 	formatter.dateFormat = @"eee, dd MMM yyyy HH:mm:ss ZZZZ";
+	formatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+	formatter.locale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
 	return [formatter dateFromString:string];
 }
 
@@ -133,7 +135,7 @@
 	// 올해
 	if( year == thisYear )
 	{
-		components = [calendar components:NSUIntegerMax fromDate:date toDate:now options:0];
+		components = [calendar components:NSDayCalendarUnit fromDate:date toDate:now options:0];
 		NSInteger dayInterval = components.day;
 		
 		// 1일 : 어제
@@ -155,11 +157,11 @@
 		}
 		
 		// 올해 8일 <= n : M월 d일
-		else if( year == thisYear )
+		else
 		{
 			NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 			formatter.dateFormat = NSLocalizedString( @"DATE_FORMAT_WITH_MONTH_DAY", @"M월 d일" );
-			string = [formatter stringFromDate:date];
+			string = [formatter stringFromDate:[Utils dateToLocalTimeZone:date]];
 		}
 	}
 	
