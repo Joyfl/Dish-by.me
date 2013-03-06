@@ -28,5 +28,6 @@
 + (NSString *)relativeDateString:(NSDate *)date withTime:(BOOL)withTime;
 
 + (UIImage *)cropImage:(UIImage *)imageToCrop toRect:(CGRect)rect;
++ (UIImage *)scaleAndRotateImage:(UIImage *)image;
 
 @end

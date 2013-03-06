@@ -325,8 +325,7 @@ enum {
 {
 	[picker dismissViewControllerAnimated:YES completion:nil];
 	
-	NSLog( @"Album : %@", info );
-	UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+	UIImage *image = [Utils scaleAndRotateImage:[info objectForKey:@"UIImagePickerControllerOriginalImage"]];
 	
 	// 카메라로 찍은 경우 앨범에 저장
 	if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
