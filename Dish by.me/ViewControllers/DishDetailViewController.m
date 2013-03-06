@@ -261,31 +261,6 @@ enum {
 					[_tableView endUpdates];
 				}
 			}];
-			
-			
-			return;
-			
-			[UIView animateWithDuration:0.5 animations:^{
-				foldableView.frame = CGRectMake( 0, foldableView.frame.origin.y, 320, foldableView.frame.size.height / 2 );
-				_botView.frame = (CGRect){{0, _midView.frame.origin.y + _midView.frame.size.height}, _botView.frame.size};
-			} completion:^(BOOL finished) {
-				[_topView removeFromSuperview];
-				[_midView removeFromSuperview];
-				[_botView removeFromSuperview];
-				[foldableView removeFromSuperview];
-				
-				[self.view addSubview:_tableView];
-				[_moreCommentsIndicatorView removeFromSuperview];
-				
-				// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
-				_loadedAllComments = _commentOffset == _dish.commentCount;
-				if( _loadedAllComments )
-				{
-					[_tableView beginUpdates];
-					[_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:kSectionMoreComments]] withRowAnimation:UITableViewRowAnimationNone];
-					[_tableView endUpdates];
-				}
-			}];
 		});
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
