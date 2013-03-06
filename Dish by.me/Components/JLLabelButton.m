@@ -22,7 +22,7 @@
 	_highlightView.hidden = YES;
 	[self insertSubview:_highlightView belowSubview:self.imageView];
 	
-	_hightlightViewInsets = UIEdgeInsetsMake( -2, -2, -2, -2 );
+//	_hightlightViewInsets = UIEdgeInsetsMake( -2, -2, -2, -2 );
 	
 	return self;
 }

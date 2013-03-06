@@ -86,6 +86,7 @@ enum {
 	[_tableView addSubview:_commentBar];
 	
 	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
+	tapRecognizer.enabled = NO; // 댓글입력중일때만 활성화 (TTTAttributedLabel 링크 터치 중복문제)
 	[self.view addGestureRecognizer:tapRecognizer];
 	
 	lastLoggedIn = [UserManager manager].loggedIn;
@@ -551,18 +552,26 @@ enum {
 			messageBoxDotLineView.frame = CGRectMake( 9, 24 + messageLabel.frame.size.height, 285, 2 );
 			[messageBoxView addSubview:messageBoxDotLineView];
 			
-#warning 조금 더 획기적인 UI 필요
 			if( _dish.forkedFromId )
 			{
-				JLLabelButton *forkedFromLabelButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 12, messageBoxDotLineView.frame.origin.y + 9, 280, 20 )];
-				[forkedFromLabelButton setTitle:_dish.forkedFromName forState:UIControlStateNormal];
-				[forkedFromLabelButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
-				[forkedFromLabelButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
-				forkedFromLabelButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-				forkedFromLabelButton.titleLabel.font = [UIFont boldSystemFontOfSize:14];
-				forkedFromLabelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-				[forkedFromLabelButton sizeToFit];
-				[messageBoxView addSubview:forkedFromLabelButton];
+				TTTAttributedLabel *forkedFromLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake( 12, messageBoxDotLineView.frame.origin.y + 4, 280, 30 )];
+				forkedFromLabel.delegate = self;
+				forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
+				forkedFromLabel.backgroundColor = [UIColor clearColor];
+				forkedFromLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+				forkedFromLabel.linkAttributes = @{ (NSString *)kCTUnderlineStyleAttributeName: @NO };
+				forkedFromLabel.activeLinkAttributes = @{ (NSString *)kTTTBackgroundFillColorAttributeName: (id)[UIColor lightGrayColor].CGColor, (NSString *)kTTTBackgroundCornerRadiusAttributeName: @3 };
+				
+				__block NSRange dishNameRange;
+				[forkedFromLabel setText:NSLocalizedString( @"FORKED_FROM_S", @"" ) afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+					dishNameRange = [mutableAttributedString.string rangeOfString:@"%@"];
+					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(__bridge id)[Utils colorWithHex:0x4A4746 alpha:1].CGColor range:dishNameRange];
+					[mutableAttributedString replaceCharactersInRange:dishNameRange withString:_dish.forkedFromName];
+					return mutableAttributedString;
+				}];
+				
+				[forkedFromLabel addLinkToURL:nil withRange:dishNameRange];
+				[messageBoxView addSubview:forkedFromLabel];
 			}
 			
 			// (NSInteger)log10f : 자리수
@@ -811,6 +820,7 @@ enum {
 
 - (void)backgroundDidTap
 {
+	[[self.view.gestureRecognizers objectAtIndex:0] setEnabled:NO];
 	[_commentInput resignFirstResponder];
 	
 	[UIView animateWithDuration:0.18 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^
@@ -868,6 +878,8 @@ enum {
 
 - (void)commentInputDidBeginEditing
 {
+	[[self.view.gestureRecognizers objectAtIndex:0] setEnabled:YES];
+	
 	[UIView animateWithDuration:0.2 animations:^
 	{
 		_commentBar.frame = CGRectMake( 0, _tableView.contentSize.height - 41, 320, 40 );
@@ -898,6 +910,15 @@ enum {
 		
 		[self presentViewController:navigationController animated:YES completion:nil];
 	}
+}
+
+
+#pragma mark -
+#pragma mark TTTAttributedLabelDelegate
+
+- (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
+{
+//	DishDetailViewController *detailViewController = [DishDetailViewController alloc] init
 }
 
 
