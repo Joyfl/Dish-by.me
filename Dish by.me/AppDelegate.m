@@ -140,73 +140,15 @@
 - (void)cameraButtonDidTouchUpInside
 {
 	if( [UserManager manager].loggedIn )
-		[self presentActionSheet];
+	{
+		WritingViewController *writingViewController = [[WritingViewController alloc] init];
+		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
+		[tabBarController presentViewController:navController animated:YES completion:nil];;
+	}
 	else
+	{
 		[self presentLoginViewController];
-}
-
-#pragma mark -
-#pragma mark UIActionSheetDelegate
-
-- (void)presentActionSheet
-{
-	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString( @"CANCEL", @"" ) destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString( @"TAKE_A_PHOTO", @"" ), NSLocalizedString( @"FROM_LIBRARY", @"" ), nil];
-	[actionSheet showInView:self.window];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-	
-	if( buttonIndex == 0 ) // Camera
-	{
-		@try
-		{
-			picker.sourceType = UIImagePickerControllerSourceTypeCamera;
-		}
-		@catch( NSException *exception )
-		{
-			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_NO_SUPPORT_CAMERA", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
-			return;
-		}
-		
-		CameraOverlayViewController *overlayViewController = [[CameraOverlayViewController alloc] initWithPicker:picker];
-		picker.cameraOverlayView = overlayViewController.view;
-		picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
 	}
-	else if( buttonIndex == 1 ) // Album
-	{
-		picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-	}
-	else
-	{
-		return;
-	}
-	
-	picker.delegate = self;
-	picker.allowsEditing = YES;
-	[tabBarController presentViewController:picker animated:YES completion:nil];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-	NSLog( @"Album : %@", info );
-	UIImage *image = [info objectForKey:@"UIImagePickerControllerEditedImage"];
-	
-	// 카메라로 찍은 경우 앨범에 저장
-//	if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
-//		UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
-	
-	[self performSelector:@selector(presentWritingViewControllerWithImage:) withObject:image afterDelay:0.5];
-}
-
-- (void)presentWritingViewControllerWithImage:(UIImage *)image
-{
-	[tabBarController dismissViewControllerAnimated:NO completion:nil];
-	
-	WritingViewController *writingViewController = [[WritingViewController alloc] initWithPhoto:image];
-	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
-	[tabBarController presentViewController:navController animated:NO completion:nil];;
 }
 
 - (void)presentLoginViewController

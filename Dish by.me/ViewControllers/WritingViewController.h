@@ -11,10 +11,13 @@
 
 @class RecipeView;
 
-@interface WritingViewController : GAITrackedViewController <UIScrollViewDelegate>
+@interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
-	UIImage *_photo;
-	UIScrollView *_scrollView;
+	UITableView *_tableView;
+	
+	NSInteger _photoHeight;
+	UIButton *_photoButton;
+	UIImageView *_borderView;
 	UITextField *_nameInput;
 	UITextView *_messageInput;
 	
@@ -22,6 +25,6 @@
 	CGRect _recipeViewOriginalFrame;
 }
 
-- (id)initWithPhoto:(UIImage *)photo;
+- (id)initWithOriginalDishId:(NSInteger)dishId;
 
 @end

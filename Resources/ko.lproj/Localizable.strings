@@ -40,6 +40,8 @@
 "SEARCH" = "검색";
 
 // WritingView
+"NEW_DISH" = "새 요리";
+"DO_FORK" = "포크하기";
 "TAKE_A_PHOTO" = "사진 찍기";
 "FROM_LIBRARY" = "라이브러리에서 선택";
 "INPUT_DISH_NAME" = "요리 이름";
