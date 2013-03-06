@@ -23,6 +23,8 @@
 	dish.userPhotoURL = [[dictionary objectForKey:@"user"] objectForKey:@"photo_url"];
 	dish.description = [dictionary objectForKey:@"description"];
 	dish.recipe = [dictionary objectForKey:@"recipe"];
+	dish.photoWidth = [[dictionary objectForKey:@"photo_width"] integerValue];
+	dish.photoHeight = [[dictionary objectForKey:@"photo_height"] integerValue];
 	dish.photoURL = [dictionary objectForKey:@"photo_url"];
 	dish.thumbnailURL = [dictionary objectForKey:@"thumbnail_url"];
 	dish.forkedFromId = [[[dictionary objectForKey:@"forked_from"] objectForKey:@"id"] integerValue];

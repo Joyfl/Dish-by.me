@@ -25,15 +25,17 @@
 #import "ProfileViewController.h"
 #import "WritingViewController.h"
 
+#define photoHeight 298 * _dish.photoHeight / _dish.photoWidth
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
 
 @implementation DishDetailViewController
 
 enum {
-	kSectionContent = 0,
-	kSectionMoreComments = 1,
-	kSectionComment = 2,
-	kSectionCommentInput = 3,
+	kSectionPhoto = 0,
+	kSectionContent = 1,
+	kSectionMoreComments = 2,
+	kSectionComment = 3,
+	kSectionCommentInput = 4,
 };
 
 - (id)initWithDish:(Dish *)dish
@@ -50,7 +52,7 @@ enum {
 	
 	self.navigationItem.title = _dish.dishName;
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 )];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, photoHeight + 100 )];
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -130,11 +132,6 @@ enum {
 	[_tableView reloadData];
 	
 	lastLoggedIn = [UserManager manager].loggedIn;
-}
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
 }
 
 
@@ -408,13 +405,16 @@ enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 4;
+	return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	switch( section )
 	{
+		case kSectionPhoto:
+			return 1;
+			
 		case kSectionContent:
 			return 1;
 			
@@ -437,6 +437,9 @@ enum {
 {
 	switch( indexPath.section )
 	{
+		case kSectionPhoto:
+			return photoHeight + 24;
+			
 		case kSectionContent:
 			return _contentRowHeight;
 			
@@ -456,14 +459,64 @@ enum {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+{NSLog( @"cellForRowAtIndexPath : %@", indexPath );
+	static NSString *photoCellId = @"photoCellId";
 	static NSString *contentCellId = @"contentCellId";
 	static NSString *moreCommentCellId = @"moreCommentCellId";
 	static NSString *commentCellId = @"commentCellId";
 	static NSString *commentInputCellId = @"commentInputCellId";
 	static NSString *loadingCellId = @"loadingCellId";
 	
-	if( indexPath.section == kSectionContent )
+	if( indexPath.section == kSectionPhoto )
+	{
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:photoCellId];
+		if( !cell )
+		{
+			// 이미지 세로 사이즈가 클 경우 kSectionContent가 미리 만들어져있지 않아서
+			// tableView 생성기 photoHeight + 100으로 tableView의 높이를 지정했다가
+			// 이곳에서 원래 사이즈로 다시 변경
+			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+			
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:photoCellId];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			
+			//
+			// Photo
+			//
+			UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, photoHeight )];
+			if( _dish.photo )
+			{
+				imageView.image = _dish.photo;
+			}
+			else if( _dish.thumbnail )
+			{
+				imageView.image = _dish.thumbnail;
+				[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
+					imageView.image = _dish.photo = image;
+				}];
+			}
+			else
+			{
+				imageView.image = [UIImage imageNamed:@"placeholder.png"];
+				[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.thumbnailURL] context:nil success:^(UIImage *image, id context) {
+					imageView.image = _dish.thumbnail = image;
+					
+					[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
+						imageView.image = _dish.photo = image;
+					}];
+				}];
+			}
+			[cell.contentView addSubview:imageView];
+			
+			UIImageView *borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_detail_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )]];
+			borderView.frame = CGRectMake( 5, 5, 310, imageView.frame.size.height + 12 );
+			[cell.contentView addSubview:borderView];
+		}
+		
+		return cell;
+	}
+	
+	else if( indexPath.section == kSectionContent )
 	{
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:contentCellId];
 		if( !cell )
@@ -471,18 +524,7 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contentCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			//
-			// Photo
-			//
-			UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, 298 )];
-			[imageView setImageWithURL:[NSURL URLWithString:_dish.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
-			[cell.contentView addSubview:imageView];
-			
-			UIImageView *borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_border.png"]];
-			borderView.frame = CGRectMake( 5, 5, 310, 310 );
-			[cell.contentView addSubview:borderView];
-			
-			UIButton *profileImageButton = [[UIButton alloc] initWithFrame:CGRectMake( 13, 320, 25, 25 )];
+			UIButton *profileImageButton = [[UIButton alloc] initWithFrame:CGRectMake( 13, 0, 25, 25 )];
 			profileImageButton.adjustsImageWhenHighlighted = NO;
 			[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 			[profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_dish.userPhotoURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
@@ -492,7 +534,7 @@ enum {
 			//
 			// User, Date
 			//
-			UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 45, 325, 270, 14 )];
+			UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 45, 5, 270, 14 )];
 			nameLabel.text = _dish.userName;
 			nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
 			nameLabel.font = [UIFont boldSystemFontOfSize:14];
@@ -528,7 +570,7 @@ enum {
 			[messageLabel sizeToFit];
 			[messageBoxView addSubview:messageLabel];
 			
-			messageBoxView.frame = CGRectMake( 8, 350, 304, 66 + messageLabel.frame.size.height );
+			messageBoxView.frame = CGRectMake( 8, 30, 304, 66 + messageLabel.frame.size.height );
 			
 			UIImageView *messageBoxDotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_dot_line.png"]];
 			messageBoxDotLineView.frame = CGRectMake( 9, 24 + messageLabel.frame.size.height, 285, 2 );
@@ -613,7 +655,7 @@ enum {
 			_bookmarkButton.position = CGPointMake( 320, recipeButtonBottomY + 30 );
 			
 			_contentRowHeight = recipeButtonBottomY + 65;
-			[_tableView reloadData];
+//			[_tableView reloadData];
 		}
 		
 		_timeLabel.text = _dish.relativeCreatedTime;
