@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UIImage *photo;
 @property (nonatomic, strong) NSString *thumbnailURL;
 @property (nonatomic, strong) UIImage *thumbnail;
+@property (nonatomic, strong) UIImage *croppedThumbnail;
 @property (nonatomic, assign) NSInteger forkedFromId;
 @property (nonatomic, strong) NSString *forkedFromName;
 @property (nonatomic, assign) NSInteger forkCount;
@@ -32,8 +33,6 @@
 @property (nonatomic, strong) NSString *relativeCreatedTime;
 @property (nonatomic, strong) NSDate *updatedTime;
 @property (nonatomic, strong) NSString *relativeUpdatedTime;
-
-@property (nonatomic, assign) BOOL photoHasBeenShown;
 
 + (id)dishFromDictionary:(NSDictionary *)dictionary;
 - (void)updateRelativeTime;

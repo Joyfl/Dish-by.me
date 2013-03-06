@@ -15,7 +15,7 @@
 
 @implementation DishListCell
 
-@synthesize delegate;
+static const NSInteger PhotoViewMaxLength = 292;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -100,27 +100,38 @@
 {
 	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
 	
-	if( _dish.photo )
+	if( _dish.croppedThumbnail )
 	{
-		if( !_dish.photoHasBeenShown )
-		{
-			_dish.photoHasBeenShown = YES;
-//			[UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction animations:^{
-				_photoView.image = _dish.photo;
-//			} completion:nil];
-		}
-		else
-			_photoView.image = _dish.photo;
+		_photoView.image = _dish.croppedThumbnail;
 	}
 	else
 	{
-		[JLHTTPLoader loadAsyncFromURL:_dish.photoURL withObject:_indexPath completion:^(id indexPath, NSData *data){
-			_dish.photo = [UIImage imageWithData:data];
-			 
+		[JLHTTPLoader loadAsyncFromURL:_dish.thumbnailURL withObject:_indexPath completion:^(id indexPath, NSData *data){
+			UIImage *thumbnail = [UIImage imageWithData:data];
+			_dish.thumbnail = thumbnail;
+			
+			// Square
+			if( thumbnail.size.width == thumbnail.size.height )
+			{
+				_dish.croppedThumbnail = thumbnail;
+			}
+			
+			// Landscape
+			else if( thumbnail.size.width > thumbnail.size.height )
+			{
+				CGRect rect = CGRectMake( ( thumbnail.size.width - thumbnail.size.height ) / 2, 0, thumbnail.size.height, thumbnail.size.height );
+				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
+			}
+			
+			// Portrait
+			else
+			{
+				CGRect rect = CGRectMake( 0, ( thumbnail.size.height - thumbnail.size.width ) / 2, thumbnail.size.width, thumbnail.size.width );
+				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
+			}
+			
 			 if( [_indexPath isEqual:indexPath] )
-//				 [UIView transitionWithView:_photoView duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction animations:^{
-					 _photoView.image = _dish.photo;
-//				 } completion:nil];
+				  _photoView.image = _dish.croppedThumbnail;
 		 }];
 	}
 	
@@ -170,7 +181,7 @@
 - (void)photoViewDidTap
 {
 	NSLog( @"tap : %d", _dish.dishId );
-	[delegate dishListCell:self didTouchPhotoViewAtIndexPath:_indexPath];
+	[_delegate dishListCell:self didTouchPhotoViewAtIndexPath:_indexPath];
 }
 
 
@@ -183,7 +194,7 @@
 	{
 		if( !_dish.bookmarked )
 		{
-			[delegate dishListCell:self didBookmarkAtIndexPath:_indexPath];
+			[_delegate dishListCell:self didBookmarkAtIndexPath:_indexPath];
 			
 			_dish.bookmarked = YES;
 			_dish.bookmarkCount++;
@@ -226,7 +237,7 @@
 	{
 		if( _dish.bookmarked )
 		{
-			[delegate dishListCell:self didUnbookmarkAtIndexPath:_indexPath];
+			[_delegate dishListCell:self didUnbookmarkAtIndexPath:_indexPath];
 			
 			_dish.bookmarked = NO;
 			_dish.bookmarkCount--;
