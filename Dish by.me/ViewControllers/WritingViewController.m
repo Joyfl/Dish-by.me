@@ -26,6 +26,8 @@
 	DMBarButtonItem *cancelButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	
+	self.navigationItem.title = NSLocalizedString( @"UPLOAD", @"업로드" );
+	
 	DMBarButtonItem *uploadButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"UPLOAD", @"" ) target:self action:@selector(uploadButtonDidTouchUpInside)];
 	self.navigationItem.rightBarButtonItem = uploadButton;
 	
