@@ -15,7 +15,6 @@
 {
 	UITableView *_tableView;
 	
-	NSInteger _photoHeight;
 	UIButton *_photoButton;
 	UIImageView *_borderView;
 	UITextField *_nameInput;
@@ -23,6 +22,9 @@
 	
 	RecipeView *_recipeView;
 	CGRect _recipeViewOriginalFrame;
+	
+	NSInteger _originalDishId;
+	NSInteger _photoHeight;
 }
 
 - (id)initWithOriginalDishId:(NSInteger)dishId;

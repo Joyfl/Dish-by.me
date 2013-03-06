@@ -14,7 +14,6 @@
 #import "DMButton.h"
 #import "RecipeView.h"
 #import "UserManager.h"
-#import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "User.h"
 #import "LoginViewController.h"
@@ -24,6 +23,7 @@
 #import "UIView+Screenshot.h"
 #import "NSObject+Dim.h"
 #import "ProfileViewController.h"
+#import "WritingViewController.h"
 
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
 
@@ -788,9 +788,9 @@ enum {
 
 - (void)forkButtonDidTouchUpInside
 {
-	AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-	appDelegate.currentWritingForkedFrom = _dish.dishId;
-	[appDelegate cameraButtonDidTouchUpInside];
+	WritingViewController *writingViewController = [[WritingViewController alloc] initWithOriginalDishId:_dish.dishId];
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
+	[self.navigationController presentViewController:navController animated:YES completion:NO];
 }
 
 - (void)backgroundDidTap

@@ -35,6 +35,7 @@ enum {
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
 	
+	_originalDishId = dishId;
 	if( !dishId )
 	{
 		self.trackedViewName = @"WritingViewController (New)";
@@ -204,9 +205,12 @@ enum {
 	[self backgroundDidTap];
 	[self dim];
 	
-	NSDictionary *params = @{ @"name": _nameInput.text,
-						   @"description": _messageInput.text,
-						   @"recipe": _recipeView.recipeView.text };
+	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
+								   @{ @"name": _nameInput.text,
+								   @"description": _messageInput.text,
+								   @"recipe": _recipeView.recipeView.text }];
+	if( _originalDishId )
+		[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
 	
 	[[DishByMeAPILoader sharedLoader] api:@"/dish" method:@"POST" image:image parameters:params success:^(id response) {
 		JLLog( @"Success" );
