@@ -673,6 +673,7 @@ enum {
 			_bookmarkButton.position = CGPointMake( 320, recipeButtonBottomY + 30 );
 			
 			_contentRowHeight = recipeButtonBottomY + 65;
+			[_tableView reloadData]; // _contentRowHeight가 설정된 후 cellRow를 다시 잡아줌
 		}
 		
 		_timeLabel.text = _dish.relativeCreatedTime;
