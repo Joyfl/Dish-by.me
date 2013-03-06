@@ -23,7 +23,9 @@
 	
 	_profileImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	_profileImageButton.frame = CGRectMake( 10, 10, 30, 30 );
+	_profileImageButton.adjustsImageWhenHighlighted = NO;
 	[_profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
+	[_profileImageButton addTarget:self action:@selector(profileImageButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self addSubview:_profileImageButton];
 	
 	_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 47, 2, 150, 30 )];
@@ -108,6 +110,11 @@
 	_timeLabel.frame = frame;
 	
 	_messageLabel.frame = CGRectMake( 47, 25, 263, _comment.messageHeight );
+}
+
+- (void)profileImageButtonDidTouchUpInside
+{
+	[self.delegate commentCell:self didTouchProfilePhotoViewAtIndexPath:_indexPath];
 }
 
 @end

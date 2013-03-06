@@ -28,7 +28,7 @@
 	[GAI sharedInstance].trackUncaughtExceptions = YES;
 	[GAI sharedInstance].dispatchInterval = 20;
 //	[GAI sharedInstance].debug = YES;
-	id<GAITracker> tracker = [[GAI sharedInstance] trackerWithTrackingId:@"UA-38348585-3"];
+	[[GAI sharedInstance] trackerWithTrackingId:@"UA-38348585-3"];
 	
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
@@ -39,8 +39,8 @@
 	tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar_bg.png"];
 	tabBarController.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tab_bar_bg_selected.png"];
 	
-	dishListViewController = [[DishListViewController alloc] init];
-	DMNavigationController *dishNavigationController = [[DMNavigationController alloc] initWithRootViewController:dishListViewController];
+	self.dishListViewController = [[DishListViewController alloc] init];
+	DMNavigationController *dishNavigationController = [[DMNavigationController alloc] initWithRootViewController:self.dishListViewController];
 //	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
 	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_dish.png"];
 	dishNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
@@ -53,12 +53,12 @@
 	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_search.png"];
 	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	
-	profileViewController = [[ProfileViewController alloc] init];
-	DMNavigationController *profileNavigationController = [[DMNavigationController alloc] initWithRootViewController:profileViewController];
+	self.profileViewController = [[ProfileViewController alloc] init];
+	DMNavigationController *profileNavigationController = [[DMNavigationController alloc] initWithRootViewController:self.profileViewController];
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
-	profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
-	profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
-	if( [UserManager manager].loggedIn ) profileViewController.userId = [UserManager manager].userId;
+	self.profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
+	self.profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
+	if( [UserManager manager].loggedIn ) self.profileViewController.userId = [UserManager manager].userId;
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
 	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:settingsViewController];
@@ -117,8 +117,10 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
+	[(DMNavigationController *)viewController popToRootViewControllerAnimated:NO];
+	
 	// ProfileView 선택시
-	if( [[(UINavigationController *)viewController viewControllers] objectAtIndex:0] == profileViewController )
+	if( [(DMNavigationController *)viewController rootViewController] == self.profileViewController )
 	{
 		// 로그인이 되어있지 않으면 LoginView를 띄움
 		if( ![UserManager manager].loggedIn )
@@ -218,8 +220,8 @@
 - (void)loginDidFinish
 {
 	NSLog( @"[AppDelegate] loginDidFinish" );
-	[dishListViewController updateDishes];
-	profileViewController.userId = [UserManager manager].userId;
+	[self.dishListViewController updateDishes];
+	self.profileViewController.userId = [UserManager manager].userId;
 }
 
 @end

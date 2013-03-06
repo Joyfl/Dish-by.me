@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol CommentCellDelegate;
 @class Comment;
 
 @interface CommentCell : UITableViewCell
@@ -22,9 +23,17 @@
 	UILabel *_messageLabel;
 }
 
+@property (nonatomic, weak) id<CommentCellDelegate> delegate;
 @property (nonatomic, readonly) Comment *comment;
 
 - (id)initWithResueIdentifier:(NSString *)resueIdentifier;
 - (void)setComment:(Comment *)comment atIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+
+@protocol CommentCellDelegate
+
+- (void)commentCell:(CommentCell *)commentCell didTouchProfilePhotoViewAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

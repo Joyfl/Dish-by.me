@@ -10,4 +10,6 @@
 
 @interface DMNavigationController : UINavigationController
 
+@property (nonatomic, readonly) UIViewController *rootViewController;
+
 @end

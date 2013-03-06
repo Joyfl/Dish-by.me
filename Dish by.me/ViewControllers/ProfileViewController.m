@@ -13,6 +13,8 @@
 #import "DishDetailViewController.h"
 #import "UserManager.h"
 #import "DishByMeAPILoader.h"
+#import "DMBarButtonItem.h"
+#import "AppDelegate.h"
 
 #define ARROW_LEFT_X	140
 #define ARROW_RIGHT_X	246
@@ -27,7 +29,6 @@
 {
     self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
-	self.trackedViewName = [[self class] description];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;
@@ -44,16 +45,42 @@
 	_dishes = [[NSMutableArray alloc] init];
 	_bookmarks = [[NSMutableArray alloc] init];
 	
-	self.navigationItem.title = @"Dish by.me";
-	
 	return self;
 }
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	if( self == [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController] )
+	{
+		self.navigationItem.leftBarButtonItem = nil;
+		self.trackedViewName = @"ProfileViewController (Tab)";
+	}
+	else
+	{
+		DMBarButtonItem *backButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
+		self.navigationItem.leftBarButtonItem = backButton;
+		self.trackedViewName = [[self class] description];
+	}
+}
+
+- (void)backButtonDidTouchUpInside
+{
+	[self.navigationController popViewControllerAnimated:YES];
+}
+
+
+#pragma mark -
+#pragma mark Setter
 
 - (void)setUserId:(NSInteger)userId
 {
 	_userId = userId;
 	[self loadUserId:userId];
 }
+
+
+#pragma mark -
+#pragma mark Loading
 
 - (void)loadUserId:(NSInteger)userId
 {
@@ -276,7 +303,6 @@
 {
 	static NSString *profileCellId = @"profileCell";
 	static NSString *dishCellId = @"dishCell";
-	static NSString *bookmarkCellId = @"bookmarkCell";
 	
 	//
 	// Profile
@@ -308,10 +334,6 @@
 				bioButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[bioButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
 				bioButton.enabled = YES;
-			}
-			else
-			{
-				bioButton = NO; // ???????
 			}
 			
 			_bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 8, 9, 165, 30 )];
@@ -376,7 +398,6 @@
 		_bioLabel.text = _user.bio;
 		_dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
 		_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
-		NSLog( @"selected tab : %d", _selectedTab );
 		_arrowView.frame = CGRectMake( _selectedTab == 0 ? ARROW_LEFT_X : ARROW_RIGHT_X, 100, 25, 11 );
 		
 		return cell;

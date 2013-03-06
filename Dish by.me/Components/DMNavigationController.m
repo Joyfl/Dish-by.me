@@ -13,7 +13,7 @@
 
 - (id)initWithRootViewController:rootViewController
 {
-	self = [super initWithRootViewController:rootViewController];
+	self = [super initWithRootViewController:_rootViewController = rootViewController];
 	
 	[self.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigation_bar.png"] forBarMetrics:UIBarMetricsDefault];
 	

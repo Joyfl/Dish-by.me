@@ -11,7 +11,6 @@
 #import "Comment.h"
 #import "Utils.h"
 #import "DMBarButtonItem.h"
-#import "CommentCell.h"
 #import "DMButton.h"
 #import "RecipeView.h"
 #import "UserManager.h"
@@ -24,6 +23,7 @@
 #import "JLFoldableView.h"
 #import "UIView+Screenshot.h"
 #import "NSObject+Dim.h"
+#import "ProfileViewController.h"
 
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
 
@@ -482,10 +482,11 @@ enum {
 			borderView.frame = CGRectMake( 5, 5, 310, 310 );
 			[cell.contentView addSubview:borderView];
 			
-			UIButton *profileImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-			profileImageButton.frame = CGRectMake( 13, 320, 25, 25 );
+			UIButton *profileImageButton = [[UIButton alloc] initWithFrame:CGRectMake( 13, 320, 25, 25 )];
+			profileImageButton.adjustsImageWhenHighlighted = NO;
 			[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 			[profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_dish.userPhotoURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+			[profileImageButton addTarget:self action:@selector(profileImageButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:profileImageButton];
 			
 			//
@@ -687,7 +688,10 @@ enum {
 		
 		CommentCell *cell = [_tableView dequeueReusableCellWithIdentifier:commentCellId];
 		if( !cell )
+		{
 			cell = [[CommentCell alloc] initWithResueIdentifier:commentCellId];
+			cell.delegate = self;
+		}
 		
 		Comment *comment = [_comments objectAtIndex:indexPath.row];
 		[cell setComment:comment atIndexPath:indexPath];
@@ -797,6 +801,13 @@ enum {
 	{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
 	} completion:nil];
+}
+
+- (void)profileImageButtonDidTouchUpInside
+{
+	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+	profileViewController.userId = _dish.userId;
+	[self.navigationController pushViewController:profileViewController animated:YES];
 }
 
 - (void)recipeButtonDidTouchUpInside
@@ -915,6 +926,17 @@ enum {
 			[self updateBookmarkUI];
 		}
 	}
+}
+
+
+#pragma mark -
+#pragma mark CommentCellDelegate
+
+- (void)commentCell:(CommentCell *)commentCell didTouchProfilePhotoViewAtIndexPath:(NSIndexPath *)indexPath
+{
+	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+	profileViewController.userId = [[_comments objectAtIndex:indexPath.row] userId];
+	[self.navigationController pushViewController:profileViewController animated:YES];
 }
 
 
