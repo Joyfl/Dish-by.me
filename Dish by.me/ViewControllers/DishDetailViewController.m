@@ -434,7 +434,7 @@ enum {
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{NSLog( @"cellForRowAtIndexPath : %@", indexPath );
+{
 	static NSString *photoCellId = @"photoCellId";
 	static NSString *contentCellId = @"contentCellId";
 	static NSString *moreCommentCellId = @"moreCommentCellId";
@@ -630,12 +630,11 @@ enum {
 			_bookmarkButton.position = CGPointMake( 320, recipeButtonBottomY + 30 );
 			
 			_contentRowHeight = recipeButtonBottomY + 65;
-//			[_tableView reloadData];
 		}
 		
 		_timeLabel.text = _dish.relativeCreatedTime;
 		[_timeLabel sizeToFit];
-		_timeLabel.frame = CGRectMake( 306 - _timeLabel.frame.size.width, 327, _timeLabel.frame.size.width, 10 );
+		_timeLabel.frame = CGRectMake( 306 - _timeLabel.frame.size.width, 7, _timeLabel.frame.size.width, 10 );
 		
 		if( _dish.bookmarked )
 			_bookmarkButton.buttonX = 10;
