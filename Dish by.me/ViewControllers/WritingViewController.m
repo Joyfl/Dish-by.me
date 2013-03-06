@@ -50,6 +50,7 @@ enum {
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	
 	DMBarButtonItem *uploadButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"UPLOAD", @"" ) target:self action:@selector(uploadButtonDidTouchUpInside)];
+	uploadButton.enabled = NO;
 	self.navigationItem.rightBarButtonItem = uploadButton;
 	
 	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
@@ -131,6 +132,7 @@ enum {
 			[cell.contentView addSubview:_nameInput];
 		}
 		
+		NSLog( @"photoHeight : %d", _photoHeight );
 		_photoButton.frame = CGRectMake( 11, 11, PhotoButtonMaxWidth, _photoHeight );
 		_borderView.frame = _borderView.frame = CGRectMake( 5, 5, 310, _photoButton.frame.size.height + 42 );
 		_nameInput.frame = CGRectMake( 20, _photoHeight + 12, 280, 20 );
@@ -197,12 +199,7 @@ enum {
 
 - (void)uploadButtonDidTouchUpInside
 {
-	UIImage *image = [_photoButton imageForState:UIControlStateNormal];
-	if( !image )
-	{
-		NSLog( @"No Image!" );
-		return;
-	}
+	UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
 	
 	[self backgroundDidTap];
 	[self dim];
@@ -331,8 +328,10 @@ enum {
 	if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
 		UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
 	
+	self.navigationItem.rightBarButtonItem.enabled = YES;
+	
 	_photoHeight = PhotoButtonMaxWidth * image.size.height / image.size.width;
-	[_photoButton setImage:image forState:UIControlStateNormal];
+	[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
 	[_tableView reloadData];
 }
 
