@@ -18,6 +18,7 @@
 #import "UserManager.h"
 #import "User.h"
 #import "GAI.h"
+#import "JLHangulUtils.h"
 
 @implementation AppDelegate
 

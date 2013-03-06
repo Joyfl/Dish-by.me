@@ -24,6 +24,7 @@
 #import "NSObject+Dim.h"
 #import "ProfileViewController.h"
 #import "WritingViewController.h"
+#import "JLHangulUtils.h"
 
 #define photoHeight !_dish ? 298 : 298 * _dish.photoHeight / _dish.photoWidth
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
@@ -584,9 +585,20 @@ enum {
 				forkedFromLabel.linkAttributes = @{ (NSString *)kCTUnderlineStyleAttributeName: @NO };
 				forkedFromLabel.activeLinkAttributes = @{ (NSString *)kTTTBackgroundFillColorAttributeName: (id)[UIColor lightGrayColor].CGColor, (NSString *)kTTTBackgroundCornerRadiusAttributeName: @3 };
 				
+				NSString *text = nil;
+				if( [LANGUAGE isEqualToString:@"ko"] )
+				{
+					NSArray *hangul = [JLHangulUtils separateHangul:[_dish.dishName substringFromIndex:_dish.dishName.length - 1]];
+					text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), [[hangul objectAtIndex:2] length] ? @"을" : @"를"];
+				}
+				else
+				{
+					text = NSLocalizedString( @"FORKED_FROM_S", @"" );
+				}
+				
 				__block NSRange dishNameRange;
-				[forkedFromLabel setText:NSLocalizedString( @"FORKED_FROM_S", @"" ) afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-					dishNameRange = [mutableAttributedString.string rangeOfString:@"%@"];
+				[forkedFromLabel setText:text afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+					dishNameRange = [mutableAttributedString.string rangeOfString:@"$[DISH]"];
 					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(__bridge id)[Utils colorWithHex:0x4A4746 alpha:1].CGColor range:dishNameRange];
 					[mutableAttributedString replaceCharactersInRange:dishNameRange withString:_dish.forkedFromName];
 					return mutableAttributedString;

@@ -8,6 +8,7 @@
 
 #define VERSION [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 #define BUILD [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
+#define LANGUAGE [[NSLocale preferredLanguages] objectAtIndex:0]
 
 #define WEB_ROOT_URL	@"http://www.dishby.me"
 #define API_ROOT_URL	@"http://dev.dishby.me/api"

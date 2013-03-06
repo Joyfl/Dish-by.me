@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0314A11316E775AC00DAF40A /* TTTAttributedLabel.m */; };
 		0314A11716E776AC00DAF40A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0314A11516E7769F00DAF40A /* CoreText.framework */; };
+		0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0314A11916E7950E00DAF40A /* JLHangulUtils.m */; };
 		0317883A160C6DDC0041DAD7 /* DishTileItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178839160C6DDC0041DAD7 /* DishTileItem.m */; };
 		0317884B160C76DB0041DAD7 /* DishDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178842160C76DB0041DAD7 /* DishDetailViewController.m */; };
 		0317884C160C76DB0041DAD7 /* DishListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178844160C76DB0041DAD7 /* DishListViewController.m */; };
@@ -212,6 +213,8 @@
 		0314A11216E775AC00DAF40A /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		0314A11316E775AC00DAF40A /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		0314A11516E7769F00DAF40A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		0314A11816E7950D00DAF40A /* JLHangulUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHangulUtils.h; sourceTree = "<group>"; };
+		0314A11916E7950E00DAF40A /* JLHangulUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLHangulUtils.m; sourceTree = "<group>"; };
 		03178838160C6DDC0041DAD7 /* DishTileItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishTileItem.h; path = Views/DishTileItem.h; sourceTree = "<group>"; };
 		03178839160C6DDC0041DAD7 /* DishTileItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishTileItem.m; path = Views/DishTileItem.m; sourceTree = "<group>"; };
 		03178841160C76DB0041DAD7 /* DishDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DishDetailViewController.h; sourceTree = "<group>"; };
@@ -851,6 +854,8 @@
 				03C89987160B0FC2001E488B /* Common.h */,
 				03C899B8160B1693001E488B /* Utils.h */,
 				03C899B9160B1693001E488B /* Utils.m */,
+				0314A11816E7950D00DAF40A /* JLHangulUtils.h */,
+				0314A11916E7950E00DAF40A /* JLHangulUtils.m */,
 				0349EA4F16D8F0350057BD12 /* DishByMeAPILoader.h */,
 				0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */,
 				03CB749F160CC42700A5C6A3 /* Components */,
@@ -1250,6 +1255,7 @@
 				03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */,
 				03F6FF1016DA754A008B5D9C /* NSObject+Dim.m in Sources */,
 				0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */,
+				0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
