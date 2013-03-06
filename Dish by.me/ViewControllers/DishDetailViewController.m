@@ -25,7 +25,7 @@
 #import "ProfileViewController.h"
 #import "WritingViewController.h"
 
-#define photoHeight 298 * _dish.photoHeight / _dish.photoWidth
+#define photoHeight !_dish ? 298 : 298 * _dish.photoHeight / _dish.photoWidth
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
 
 @implementation DishDetailViewController
@@ -40,17 +40,20 @@ enum {
 
 - (id)initWithDish:(Dish *)dish
 {
+	_dish = dish;
+	return [self initWithDishId:_dish.dishId dishName:_dish.dishName];
+}
+
+- (id)initWithDishId:(NSInteger)dishId dishName:(NSString *)dishName
+{
 	self = [super init];
 	self.view.backgroundColor = [Utils colorWithHex:0x333333 alpha:1];
 	self.trackedViewName = [[self class] description];
 	
-	_dish = dish;
-	NSLog( @"createdTime : %@", _dish.createdTime );
-	
 	DMBarButtonItem *backButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = backButton;
 	
-	self.navigationItem.title = _dish.dishName;
+	self.navigationItem.title = dishName;
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, photoHeight + 100 )];
 	_tableView.delegate = self;
@@ -91,7 +94,10 @@ enum {
 	
 	lastLoggedIn = [UserManager manager].loggedIn;
 	
-	[self loadComments];
+	if( !_dish )
+		[self loadDishId:dishId];
+	else
+		[self loadComments];
 	
 	return self;
 }
@@ -138,6 +144,22 @@ enum {
 
 #pragma mark -
 #pragma mark Loading
+
+- (void)loadDishId:(NSInteger)dishId
+{
+	NSString *api = [NSString stringWithFormat:@"/dish/%d", dishId];
+	[[DishByMeAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
+		_dish = [Dish dishFromDictionary:response];
+		
+		[_tableView reloadData];
+		[self loadComments];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
 
 - (void)loadComments
 {
@@ -443,6 +465,9 @@ enum {
 	static NSString *commentInputCellId = @"commentInputCellId";
 	static NSString *loadingCellId = @"loadingCellId";
 	
+	//
+	// Photo
+	//
 	if( indexPath.section == kSectionPhoto )
 	{
 		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:photoCellId];
@@ -456,37 +481,34 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:photoCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			//
-			// Photo
-			//
-			UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, photoHeight )];
-			if( _dish.photo )
-			{
-				imageView.image = _dish.photo;
-			}
-			else if( _dish.thumbnail )
-			{
-				imageView.image = _dish.thumbnail;
-				[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
-					imageView.image = _dish.photo = image;
-				}];
-			}
-			else
-			{
-				imageView.image = [UIImage imageNamed:@"placeholder.png"];
-				[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.thumbnailURL] context:nil success:^(UIImage *image, id context) {
-					imageView.image = _dish.thumbnail = image;
-					
-					[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
-						imageView.image = _dish.photo = image;
-					}];
-				}];
-			}
-			[cell.contentView addSubview:imageView];
+			photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, photoHeight )];
+			[cell.contentView addSubview:photoView];
 			
 			UIImageView *borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_detail_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )]];
-			borderView.frame = CGRectMake( 5, 5, 310, imageView.frame.size.height + 12 );
+			borderView.frame = CGRectMake( 5, 5, 310, photoView.frame.size.height + 12 );
 			[cell.contentView addSubview:borderView];
+		}
+		
+		if( _dish.photo )
+		{
+			photoView.image = _dish.photo;
+		}
+		else if( _dish.thumbnail )
+		{
+			photoView.image = _dish.thumbnail;
+			[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
+				photoView.image = _dish.photo = image;
+			}];
+		}
+		else
+		{
+			photoView.image = [UIImage imageNamed:@"placeholder.png"];
+			[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.thumbnailURL] context:nil success:^(UIImage *image, id context) {
+				photoView.image = _dish.thumbnail = image;
+				[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
+					photoView.image = _dish.photo = image;
+				}];
+			}];
 		}
 		
 		return cell;
@@ -918,7 +940,8 @@ enum {
 
 - (void)attributedLabel:(TTTAttributedLabel *)label didSelectLinkWithURL:(NSURL *)url
 {
-//	DishDetailViewController *detailViewController = [DishDetailViewController alloc] init
+	DishDetailViewController *detailViewController = [[DishDetailViewController alloc] initWithDishId:_dish.forkedFromId dishName:_dish.forkedFromName];
+	[self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 

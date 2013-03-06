@@ -31,6 +31,7 @@
 	
 	CGFloat _contentRowHeight;
 	
+	UIImageView *photoView;
 	UILabel *_timeLabel;
 	UIButton *_recipeButton;
 	UIImageView *_bookmarkIconView;
