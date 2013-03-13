@@ -106,12 +106,12 @@ enum {
 {
 	if( [UserManager manager].loggedIn )
 	{
-		if( _dish.userId == [UserManager manager].userId )
-		{
-			DMBarButtonItem *editButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
-			self.navigationItem.rightBarButtonItem = editButton;
-		}
-		else
+//		if( _dish.userId == [UserManager manager].userId )
+//		{
+//			DMBarButtonItem *editButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
+//			self.navigationItem.rightBarButtonItem = editButton;
+//		}
+//		else
 		{
 			DMBarButtonItem *forkButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 			self.navigationItem.rightBarButtonItem = forkButton;
