@@ -12,10 +12,12 @@
 #import "GAITrackedViewController.h"
 #import "CommentCell.h"
 #import "TTTAttributedLabel.h"
+#import "WritingViewController.h"
+#import "JLLabelButton.h"
 
 @class Dish;
 
-@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, BookmarkButtonDelegate, CommentCellDelegate>
+@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate>
 {
 	Dish *_dish;
 	NSMutableArray *_comments;
@@ -31,8 +33,10 @@
 	
 	CGFloat _contentRowHeight;
 	
-	UIImageView *photoView;
+	UIImageView *_photoView;
+	UIImageView *_borderView;
 	UILabel *_timeLabel;
+	JLLabelButton *_forkCountButton;
 	UIButton *_recipeButton;
 	UIImageView *_bookmarkIconView;
 	UILabel *_bookmarkLabel;

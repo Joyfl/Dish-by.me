@@ -11,6 +11,8 @@
 
 @class RecipeView;
 
+@protocol WritingViewControllerDelegate;
+
 @interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 {
 	UITableView *_tableView;
@@ -27,6 +29,15 @@
 	NSInteger _photoHeight;
 }
 
+@property (nonatomic, weak) id<WritingViewControllerDelegate> delegate;
+
 - (id)initWithOriginalDishId:(NSInteger)dishId;
+
+@end
+
+
+@protocol WritingViewControllerDelegate
+
+- (void)writingViewControllerDidFinishUpload:(WritingViewController *)writingViewController;
 
 @end

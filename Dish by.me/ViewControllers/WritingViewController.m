@@ -216,6 +216,7 @@ enum {
 		JLLog( @"Success" );
 		[self undim];
 		[self dismissViewControllerAnimated:YES completion:nil];
+		[self.delegate writingViewControllerDidFinishUpload:self];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		[self undim];

@@ -18,12 +18,10 @@
 #import "User.h"
 #import "LoginViewController.h"
 #import "DMNavigationController.h"
-#import "JLLabelButton.h"
 #import "JLFoldableView.h"
 #import "UIView+Screenshot.h"
 #import "NSObject+Dim.h"
 #import "ProfileViewController.h"
-#import "WritingViewController.h"
 #import "JLHangulUtils.h"
 #import "ForkListViewController.h"
 
@@ -124,7 +122,7 @@ enum {
 		
 		// 로그아웃상태에서 로그인상태로
 		if( !lastLoggedIn )
-			[self reloadDish];
+			[self loadDishId:_dish.dishId];
 	}
 	
 	else
@@ -383,21 +381,6 @@ enum {
 	}];
 }
 
-- (void)reloadDish
-{
-	NSString *api = [NSString stringWithFormat:@"/dish/%d", _dish.dishId];
-	[[DMAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
-		JLLog( @"Success" );
-		_dish.bookmarked = [[response objectForKey:@"bookmarked"] boolValue];
-		[_tableView reloadData];
-		
-	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		JLLog( @"statusCode : %d", statusCode );
-		JLLog( @"errorCode : %d", errorCode );
-		JLLog( @"message : %@", message );
-	}];
-}
-
 
 #pragma mark -
 #pragma mark UITableView
@@ -482,32 +465,34 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:photoCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			photoView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 11, 298, photoHeight )];
-			[cell.contentView addSubview:photoView];
+			_photoView = [[UIImageView alloc] init];
+			[cell.contentView addSubview:_photoView];
 			
-			UIImageView *borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_detail_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )]];
-			borderView.frame = CGRectMake( 5, 5, 310, photoView.frame.size.height + 12 );
-			[cell.contentView addSubview:borderView];
+			_borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_detail_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )]];
+			[cell.contentView addSubview:_borderView];
 		}
+		
+		_photoView.frame = CGRectMake( 11, 11, 298, photoHeight );
+		_borderView.frame = CGRectMake( 5, 5, 310, _photoView.frame.size.height + 12 );
 		
 		if( _dish.photo )
 		{
-			photoView.image = _dish.photo;
+			_photoView.image = _dish.photo;
 		}
 		else if( _dish.thumbnail )
 		{
-			photoView.image = _dish.thumbnail;
+			_photoView.image = _dish.thumbnail;
 			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
-				photoView.image = _dish.photo = image;
+				_photoView.image = _dish.photo = image;
 			}];
 		}
 		else
 		{
-			photoView.image = [UIImage imageNamed:@"placeholder.png"];
+			_photoView.image = [UIImage imageNamed:@"placeholder.png"];
 			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.thumbnailURL] context:nil success:^(UIImage *image, id context) {
-				photoView.image = _dish.thumbnail = image;
+				_photoView.image = _dish.thumbnail = image;
 				[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
-					photoView.image = _dish.photo = image;
+					_photoView.image = _dish.photo = image;
 				}];
 			}];
 		}
@@ -610,18 +595,17 @@ enum {
 			
 			// (NSInteger)log10f : 자리수
 			CGFloat forkedButtonWidth = _dish.forkCount == 0 ? 35 : 30 + ((NSInteger)log10f( _dish.forkCount ) + 1) * 5;
-			JLLabelButton *forkCountButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 297 - forkedButtonWidth, messageBoxDotLineView.frame.origin.y + 9, forkedButtonWidth, 20 )];
-			forkCountButton.titleLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:14];
-			forkCountButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-			forkCountButton.titleLabel.textAlignment = NSTextAlignmentRight;
-			[forkCountButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
-			[forkCountButton setTitleColor:[UIColor colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
-			[forkCountButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
-			[forkCountButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
-			forkCountButton.titleEdgeInsets = UIEdgeInsetsMake( -2, 0, 0, -8 );
-			forkCountButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 0, 0, 5 );
-			[forkCountButton addTarget:self action:@selector(forkCountButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-			[messageBoxView addSubview:forkCountButton];
+			_forkCountButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 297 - forkedButtonWidth, messageBoxDotLineView.frame.origin.y + 9, forkedButtonWidth, 20 )];
+			_forkCountButton.titleLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:14];
+			_forkCountButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			_forkCountButton.titleLabel.textAlignment = NSTextAlignmentRight;
+			[_forkCountButton setTitleColor:[UIColor colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+			[_forkCountButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
+			[_forkCountButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
+			_forkCountButton.titleEdgeInsets = UIEdgeInsetsMake( -2, 0, 0, -8 );
+			_forkCountButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 0, 0, 5 );
+			[_forkCountButton addTarget:self action:@selector(forkCountButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[messageBoxView addSubview:_forkCountButton];
 			
 			NSInteger messageBoxBottomY = messageBoxView.frame.origin.y + messageBoxView.frame.size.height;
 			NSInteger recipeButtonBottomY = messageBoxBottomY + 8;
@@ -679,6 +663,8 @@ enum {
 		_timeLabel.text = _dish.relativeCreatedTime;
 		[_timeLabel sizeToFit];
 		_timeLabel.frame = CGRectMake( 306 - _timeLabel.frame.size.width, 7, _timeLabel.frame.size.width, 10 );
+		
+		[_forkCountButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
 		
 		if( _dish.bookmarked )
 			_bookmarkButton.buttonX = 10;
@@ -849,6 +835,7 @@ enum {
 - (void)forkButtonDidTouchUpInside
 {
 	WritingViewController *writingViewController = [[WritingViewController alloc] initWithOriginalDishId:_dish.dishId];
+	writingViewController.delegate = self;
 	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
 	[self.navigationController presentViewController:navController animated:YES completion:NO];
 }
@@ -1011,6 +998,16 @@ enum {
 	profileViewController.userId = [[_comments objectAtIndex:indexPath.row] userId];
 	[self.navigationController pushViewController:profileViewController animated:YES];
 }
+
+
+#pragma mark -
+#pragma mark WritingViewControllerDelegate
+
+- (void)writingViewControllerDidFinishUpload:(WritingViewController *)writingViewController
+{
+	[self loadDishId:_dish.dishId];
+}
+
 
 
 #pragma mark -
