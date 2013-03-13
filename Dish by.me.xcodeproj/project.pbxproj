@@ -25,7 +25,7 @@
 		031AAB4C160F42CB007B42B3 /* CameraOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */; };
 		033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52DE1610782900F0B5E5 /* LoginViewController.m */; };
 		033C52E61610797400F0B5E5 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52E51610797400F0B5E5 /* UserManager.m */; };
-		0349EA5116D8F0350057BD12 /* DishByMeAPILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */; };
+		0349EA5116D8F0350057BD12 /* DMAPILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5016D8F0350057BD12 /* DMAPILoader.m */; };
 		0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5416D8F6E90057BD12 /* JLLogger.m */; };
 		0349EA5816D90C870057BD12 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5616D90C7B0057BD12 /* SystemConfiguration.framework */; };
 		0349EA5A16D90C930057BD12 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5916D90C930057BD12 /* MobileCoreServices.framework */; };
@@ -158,6 +158,10 @@
 		037EF61E16887BBA00FA765D /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		038A529A1698863A001FDF75 /* DishListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 038A52991698863A001FDF75 /* DishListCell.m */; };
 		03927C2316F014D8001606A6 /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03927C2216F014D8001606A6 /* UIColor+Utils.m */; };
+		0392A53116F0464B0045209E /* UIActionSheet+HTBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0392A52A16F0464B0045209E /* UIActionSheet+HTBlock.m */; };
+		0392A53216F0464B0045209E /* UIAlertView+HTBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0392A52C16F0464B0045209E /* UIAlertView+HTBlock.m */; };
+		0392A53316F0464B0045209E /* UIControl+HTBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0392A52E16F0464B0045209E /* UIControl+HTBlock.m */; };
+		0392A53416F0464B0045209E /* UIImagePickerController+HTBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0392A53016F0464B0045209E /* UIImagePickerController+HTBlock.m */; };
 		0396E09016E5E60D00CA2531 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0396E08E16E5E60D00CA2531 /* libGoogleAnalytics.a */; };
 		0396E09116E5E60D00CA2531 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0396E08F16E5E60D00CA2531 /* libGoogleAnalytics_debug.a */; };
 		0396E09416E5E7CD00CA2531 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0396E09216E5E7BD00CA2531 /* CoreData.framework */; };
@@ -245,8 +249,8 @@
 		033C52DE1610782900F0B5E5 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		033C52E41610797400F0B5E5 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserManager.h; path = Managers/UserManager.h; sourceTree = "<group>"; };
 		033C52E51610797400F0B5E5 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserManager.m; path = Managers/UserManager.m; sourceTree = "<group>"; };
-		0349EA4F16D8F0350057BD12 /* DishByMeAPILoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishByMeAPILoader.h; path = "Dish by.me/DishByMeAPILoader.h"; sourceTree = SOURCE_ROOT; };
-		0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishByMeAPILoader.m; path = "Dish by.me/DishByMeAPILoader.m"; sourceTree = SOURCE_ROOT; };
+		0349EA4F16D8F0350057BD12 /* DMAPILoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DMAPILoader.h; path = "Dish by.me/DMAPILoader.h"; sourceTree = SOURCE_ROOT; };
+		0349EA5016D8F0350057BD12 /* DMAPILoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DMAPILoader.m; path = "Dish by.me/DMAPILoader.m"; sourceTree = SOURCE_ROOT; };
 		0349EA5316D8F6E90057BD12 /* JLLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLLogger.h; sourceTree = "<group>"; };
 		0349EA5416D8F6E90057BD12 /* JLLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLLogger.m; sourceTree = "<group>"; };
 		0349EA5616D90C7B0057BD12 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -392,6 +396,15 @@
 		038A52991698863A001FDF75 /* DishListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishListCell.m; path = Views/DishListCell.m; sourceTree = "<group>"; };
 		03927C2116F014D8001606A6 /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Utils.h"; path = "Categories/UIColor+Utils.h"; sourceTree = "<group>"; };
 		03927C2216F014D8001606A6 /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Utils.m"; path = "Categories/UIColor+Utils.m"; sourceTree = "<group>"; };
+		0392A52816F0464B0045209E /* HTBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTBlock.h; sourceTree = "<group>"; };
+		0392A52916F0464B0045209E /* UIActionSheet+HTBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+HTBlock.h"; sourceTree = "<group>"; };
+		0392A52A16F0464B0045209E /* UIActionSheet+HTBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+HTBlock.m"; sourceTree = "<group>"; };
+		0392A52B16F0464B0045209E /* UIAlertView+HTBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+HTBlock.h"; sourceTree = "<group>"; };
+		0392A52C16F0464B0045209E /* UIAlertView+HTBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+HTBlock.m"; sourceTree = "<group>"; };
+		0392A52D16F0464B0045209E /* UIControl+HTBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+HTBlock.h"; sourceTree = "<group>"; };
+		0392A52E16F0464B0045209E /* UIControl+HTBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+HTBlock.m"; sourceTree = "<group>"; };
+		0392A52F16F0464B0045209E /* UIImagePickerController+HTBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImagePickerController+HTBlock.h"; sourceTree = "<group>"; };
+		0392A53016F0464B0045209E /* UIImagePickerController+HTBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImagePickerController+HTBlock.m"; sourceTree = "<group>"; };
 		0396E08916E5E60D00CA2531 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		0396E08A16E5E60D00CA2531 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		0396E08B16E5E60D00CA2531 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
@@ -745,6 +758,7 @@
 		037EF5E916887B9200FA765D /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0392A52616F0464B0045209E /* HTBlock */,
 				0314A11116E775AC00DAF40A /* TTTAttributedLabel */,
 				0396E08816E5E60D00CA2531 /* GoogleAnalytics */,
 				0349EA5216D8F6E90057BD12 /* JLLogger */,
@@ -784,6 +798,22 @@
 				037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */,
 			);
 			path = EGOTableViewPullRefresh;
+			sourceTree = "<group>";
+		};
+		0392A52616F0464B0045209E /* HTBlock */ = {
+			isa = PBXGroup;
+			children = (
+				0392A52816F0464B0045209E /* HTBlock.h */,
+				0392A52916F0464B0045209E /* UIActionSheet+HTBlock.h */,
+				0392A52A16F0464B0045209E /* UIActionSheet+HTBlock.m */,
+				0392A52B16F0464B0045209E /* UIAlertView+HTBlock.h */,
+				0392A52C16F0464B0045209E /* UIAlertView+HTBlock.m */,
+				0392A52D16F0464B0045209E /* UIControl+HTBlock.h */,
+				0392A52E16F0464B0045209E /* UIControl+HTBlock.m */,
+				0392A52F16F0464B0045209E /* UIImagePickerController+HTBlock.h */,
+				0392A53016F0464B0045209E /* UIImagePickerController+HTBlock.m */,
+			);
+			path = HTBlock;
 			sourceTree = "<group>";
 		};
 		0396E08816E5E60D00CA2531 /* GoogleAnalytics */ = {
@@ -861,6 +891,8 @@
 				0314A11916E7950E00DAF40A /* JLHangulUtils.m */,
 				0349EA4F16D8F0350057BD12 /* DishByMeAPILoader.h */,
 				0349EA5016D8F0350057BD12 /* DishByMeAPILoader.m */,
+				0349EA4F16D8F0350057BD12 /* DMAPILoader.h */,
+				0349EA5016D8F0350057BD12 /* DMAPILoader.m */,
 				03CB749F160CC42700A5C6A3 /* Components */,
 				03178840160C76DB0041DAD7 /* ViewControllers */,
 				03C89989160B1253001E488B /* Models */,
@@ -1256,12 +1288,17 @@
 				03F67F5816D8E33200AB0600 /* AFXMLRequestOperation.m in Sources */,
 				03F67F5916D8E33200AB0600 /* UIImageView+AFNetworking.m in Sources */,
 				0349EA5116D8F0350057BD12 /* DishByMeAPILoader.m in Sources */,
+				0349EA5116D8F0350057BD12 /* DMAPILoader.m in Sources */,
 				0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */,
 				03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */,
 				03F6FF1016DA754A008B5D9C /* NSObject+Dim.m in Sources */,
 				0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */,
 				0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */,
 				03927C2316F014D8001606A6 /* UIColor+Utils.m in Sources */,
+				0392A53116F0464B0045209E /* UIActionSheet+HTBlock.m in Sources */,
+				0392A53216F0464B0045209E /* UIAlertView+HTBlock.m in Sources */,
+				0392A53316F0464B0045209E /* UIControl+HTBlock.m in Sources */,
+				0392A53416F0464B0045209E /* UIImagePickerController+HTBlock.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

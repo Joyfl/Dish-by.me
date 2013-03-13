@@ -12,9 +12,9 @@
 
 enum {
 	DMBarButtonItemTypeNormal = 0,
-	DMBarButtonItemTypeBack = 1
 };
 
 - (id)initWithType:(NSInteger)type title:(NSString *)title target:(id)target action:(SEL)action;
++ (void)setBackButtonToViewController:(UIViewController *)viewController;
 
 @end

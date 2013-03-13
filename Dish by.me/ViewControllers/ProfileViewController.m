@@ -57,8 +57,7 @@
 	}
 	else
 	{
-		DMBarButtonItem *backButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
-		self.navigationItem.leftBarButtonItem = backButton;
+		[DMBarButtonItem setBackButtonToViewController:self];
 		self.trackedViewName = [[self class] description];
 	}
 }

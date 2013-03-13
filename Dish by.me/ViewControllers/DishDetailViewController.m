@@ -51,8 +51,7 @@ enum {
 	self.view.backgroundColor = [UIColor colorWithHex:0x333333 alpha:1];
 	self.trackedViewName = [[self class] description];
 	
-	DMBarButtonItem *backButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
-	self.navigationItem.leftBarButtonItem = backButton;
+	[DMBarButtonItem setBackButtonToViewController:self];
 	
 	self.navigationItem.title = dishName;
 	
