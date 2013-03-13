@@ -106,11 +106,6 @@
 	return self;
 }
 
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-}
-
 
 #pragma mark -
 #pragma mark Animations
@@ -205,7 +200,7 @@
 		return;
 	}
 	
-	NSString *password = _passwordInput.text;
+	NSString *password = [Utils sha1:_passwordInput.text];
 	if( password.length == 0 )
 	{
 		[_passwordInput becomeFirstResponder];
