@@ -28,13 +28,13 @@
 - (id)init
 {
     self = [super init];
-	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	_tableView.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	[self.view addSubview:_tableView];
 	
 	_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake( 0, -_tableView.bounds.size.height, self.view.frame.size.width, _tableView.bounds.size.height )];
@@ -337,7 +337,7 @@
 			}
 			
 			_bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 8, 9, 165, 30 )];
-			_bioLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			_bioLabel.textColor = [UIColor colorWithHex:0x6B6663 alpha:1];
 			_bioLabel.font = [UIFont systemFontOfSize:13];
 			_bioLabel.backgroundColor = [UIColor clearColor];
 			_bioLabel.numberOfLines = 2;
@@ -352,7 +352,7 @@
 			[cell addSubview:dishButton];
 			
 			_dishCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 5, 94, 20 )];
-			_dishCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
+			_dishCountLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
 			_dishCountLabel.textAlignment = NSTextAlignmentCenter;
 			_dishCountLabel.font = [UIFont boldSystemFontOfSize:20];
 			_dishCountLabel.backgroundColor = [UIColor clearColor];
@@ -360,7 +360,7 @@
 			
 			_dishLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 21, 94, 20 )];
 			_dishLabel.text = NSLocalizedString( @"DISHES", @"" );
-			_dishLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			_dishLabel.textColor = [UIColor colorWithHex:0x6B6663 alpha:1];
 			_dishLabel.textAlignment = NSTextAlignmentCenter;
 			_dishLabel.font = [UIFont systemFontOfSize:13];
 			_dishLabel.backgroundColor = [UIColor clearColor];
@@ -373,7 +373,7 @@
 			[cell addSubview:bookmarkButton];
 			
 			_bookmarkCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 5, 97, 20 )];
-			_bookmarkCountLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1];
+			_bookmarkCountLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
 			_bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
 			_bookmarkCountLabel.font = [UIFont boldSystemFontOfSize:20];
 			_bookmarkCountLabel.backgroundColor = [UIColor clearColor];
@@ -381,7 +381,7 @@
 			
 			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 3, 21, 97, 20 )];
 			_bookmarkLabel.text = NSLocalizedString( @"BOOKMARKS", @"" );
-			_bookmarkLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1];
+			_bookmarkLabel.textColor = [UIColor colorWithHex:0x6B6663 alpha:1];
 			_bookmarkLabel.textAlignment = NSTextAlignmentCenter;
 			_bookmarkLabel.font = [UIFont systemFontOfSize:13];
 			_bookmarkLabel.backgroundColor = [UIColor clearColor];

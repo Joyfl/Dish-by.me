@@ -33,7 +33,7 @@ enum {
 - (id)initWithOriginalDishId:(NSInteger)dishId
 {
 	self = [super init];
-	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	
 	_originalDishId = dishId;
 	if( !dishId )
@@ -60,7 +60,7 @@ enum {
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 64 )];
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
-	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	_tableView.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self.view addSubview:_tableView];
 	
@@ -125,7 +125,7 @@ enum {
 			
 			_nameInput = [[UITextField alloc] init];
 			_nameInput.placeholder = NSLocalizedString( @"INPUT_DISH_NAME", @"" );
-			_nameInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
+			_nameInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 			_nameInput.font = [UIFont boldSystemFontOfSize:15];
 			_nameInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 			_nameInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
@@ -152,7 +152,7 @@ enum {
 			[cell.contentView addSubview:messageBoxView];
 			
 			_messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 70 )];
-			_messageInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
+			_messageInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 			_messageInput.backgroundColor = [UIColor clearColor];
 			_messageInput.font = [UIFont boldSystemFontOfSize:15];
 			_messageInput.layer.shadowOffset = CGSizeMake( 0, 1 );
@@ -173,7 +173,7 @@ enum {
 			[recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
 			[recipeButton setTitle:NSLocalizedString( @"WRITE_RECIPE", @"" ) forState:UIControlStateNormal];
-			[recipeButton setTitleColor:[Utils colorWithHex:0x5B5046 alpha:1] forState:UIControlStateNormal];
+			[recipeButton setTitleColor:[UIColor colorWithHex:0x5B5046 alpha:1] forState:UIControlStateNormal];
 			[recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
 			recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 			recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );

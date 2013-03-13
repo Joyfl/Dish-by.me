@@ -157,6 +157,7 @@
 		037EF5FF16887B9200FA765D /* JLHTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5F816887B9200FA765D /* JLHTTPResponse.m */; };
 		037EF61E16887BBA00FA765D /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		038A529A1698863A001FDF75 /* DishListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 038A52991698863A001FDF75 /* DishListCell.m */; };
+		03927C2316F014D8001606A6 /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03927C2216F014D8001606A6 /* UIColor+Utils.m */; };
 		0396E09016E5E60D00CA2531 /* libGoogleAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0396E08E16E5E60D00CA2531 /* libGoogleAnalytics.a */; };
 		0396E09116E5E60D00CA2531 /* libGoogleAnalytics_debug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0396E08F16E5E60D00CA2531 /* libGoogleAnalytics_debug.a */; };
 		0396E09416E5E7CD00CA2531 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0396E09216E5E7BD00CA2531 /* CoreData.framework */; };
@@ -389,6 +390,8 @@
 		037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		038A52981698863A001FDF75 /* DishListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishListCell.h; path = Views/DishListCell.h; sourceTree = "<group>"; };
 		038A52991698863A001FDF75 /* DishListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishListCell.m; path = Views/DishListCell.m; sourceTree = "<group>"; };
+		03927C2116F014D8001606A6 /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Utils.h"; path = "Categories/UIColor+Utils.h"; sourceTree = "<group>"; };
+		03927C2216F014D8001606A6 /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Utils.m"; path = "Categories/UIColor+Utils.m"; sourceTree = "<group>"; };
 		0396E08916E5E60D00CA2531 /* GAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAI.h; sourceTree = "<group>"; };
 		0396E08A16E5E60D00CA2531 /* GAITrackedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITrackedViewController.h; sourceTree = "<group>"; };
 		0396E08B16E5E60D00CA2531 /* GAITracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GAITracker.h; sourceTree = "<group>"; };
@@ -984,6 +987,8 @@
 			children = (
 				03F6FF0E16DA754A008B5D9C /* NSObject+Dim.h */,
 				03F6FF0F16DA754A008B5D9C /* NSObject+Dim.m */,
+				03927C2116F014D8001606A6 /* UIColor+Utils.h */,
+				03927C2216F014D8001606A6 /* UIColor+Utils.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1256,6 +1261,7 @@
 				03F6FF1016DA754A008B5D9C /* NSObject+Dim.m in Sources */,
 				0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */,
 				0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */,
+				03927C2316F014D8001606A6 /* UIColor+Utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

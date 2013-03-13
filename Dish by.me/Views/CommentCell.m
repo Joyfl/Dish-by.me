@@ -29,7 +29,7 @@
 	[self addSubview:_profileImageButton];
 	
 	_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 47, 2, 150, 30 )];
-	_nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
+	_nameLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1.0];
 	_nameLabel.font = [UIFont boldSystemFontOfSize:14];
 	_nameLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
 	_nameLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -37,7 +37,7 @@
 	[self addSubview:_nameLabel];
 	
 	_timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 260, 8, 50, 30 )];
-	_timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
+	_timeLabel.textColor = [UIColor colorWithHex:0xAAA4A1 alpha:1.0];
 	_timeLabel.font = [UIFont systemFontOfSize:10];
 	_timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
 	_timeLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -45,7 +45,7 @@
 	[self addSubview:_timeLabel];
 	
 	_messageLabel = [[UILabel alloc] init];
-	_messageLabel.textColor = [Utils colorWithHex:0x6B6663 alpha:1.0];
+	_messageLabel.textColor = [UIColor colorWithHex:0x6B6663 alpha:1.0];
 	_messageLabel.backgroundColor = [UIColor clearColor];
 	_messageLabel.font = [UIFont systemFontOfSize:13];
 	_messageLabel.numberOfLines = 0;

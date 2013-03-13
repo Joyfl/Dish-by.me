@@ -59,14 +59,14 @@ static const NSInteger PhotoViewMaxLength = 292;
 	[self.contentView addSubview:_bookmarkCountLabel];
 	
 	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 16, 312, 280, 20 )];
-	_dishNameLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	_dishNameLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	_dishNameLabel.font = [UIFont boldSystemFontOfSize:16];
 	_dishNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	_dishNameLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[self.contentView addSubview:_dishNameLabel];
 	
 	_userNameLabel = [[UILabel alloc] init];
-	_userNameLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	_userNameLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	_userNameLabel.font = [UIFont systemFontOfSize:11];
 	_userNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	_userNameLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -162,7 +162,7 @@ static const NSInteger PhotoViewMaxLength = 292;
 	else
 	{
 		_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark_selected.png"];
-		_bookmarkCountLabel.textColor = [Utils colorWithHex:0x0DCFEC alpha:1];
+		_bookmarkCountLabel.textColor = [UIColor colorWithHex:0x0DCFEC alpha:1];
 	}
 }
 

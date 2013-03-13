@@ -18,8 +18,6 @@
 + (id)parseJSONData:(NSData *)jsonData;
 + (NSString *)writeJSON:(id)object;
 
-+ (UIColor *)colorWithHex:(NSInteger)color alpha:(CGFloat)alpha;
-
 + (NSString *)sha1:(NSString *)input;
 
 + (NSDate *)dateFromString:(NSString *)string;

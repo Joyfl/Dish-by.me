@@ -18,7 +18,7 @@
 - (id)initWithTarget:(id)target action:(SEL)action
 {
 	self = [super init];
-	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	self.trackedViewName = [[self class] description];
 	
 	DMBarButtonItem *cancelButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
@@ -50,7 +50,7 @@
 	_emailInput.delegate = self;
 	_emailInput.placeholder = NSLocalizedString( @"EMAIL", @"" );
 	_emailInput.font = [UIFont boldSystemFontOfSize:13];
-	_emailInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	_emailInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	_emailInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	_emailInput.layer.shadowColor = [UIColor whiteColor].CGColor;
 	_emailInput.layer.shadowOpacity = 1;
@@ -59,7 +59,7 @@
 	_emailInput.returnKeyType = UIReturnKeyNext;
 	_emailInput.autocorrectionType = UITextAutocorrectionTypeNo;
 	_emailInput.autocapitalizationType = UITextAutocapitalizationTypeNone;
-	[_emailInput setValue:[Utils colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+	[_emailInput setValue:[UIColor colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 	[_emailInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
 	[_emailInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:_emailInput];
@@ -68,14 +68,14 @@
 	_passwordInput.delegate = self;
 	_passwordInput.placeholder = NSLocalizedString( @"PASSWORD", @"" );
 	_passwordInput.font = [UIFont boldSystemFontOfSize:13];
-	_passwordInput.textColor = [Utils colorWithHex:0x808283 alpha:1];
+	_passwordInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	_passwordInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	_passwordInput.layer.shadowColor = [UIColor whiteColor].CGColor;
 	_passwordInput.layer.shadowOpacity = 1;
 	_passwordInput.layer.shadowRadius = 0;
 	_passwordInput.secureTextEntry = YES;
 	_passwordInput.returnKeyType = UIReturnKeyGo;
-	[_passwordInput setValue:[Utils colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+	[_passwordInput setValue:[UIColor colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 	[_passwordInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
 	[_passwordInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:_passwordInput];

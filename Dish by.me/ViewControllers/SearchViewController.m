@@ -18,7 +18,7 @@
 - (id)init
 {
     self = [super init];
-	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	self.trackedViewName = [[self class] description];
 	
 	_searchBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 45 )];
@@ -47,7 +47,7 @@
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	_tableView.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	[self.view addSubview:_tableView];
 	
 	_dimView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 45, 320, UIScreenHeight )];

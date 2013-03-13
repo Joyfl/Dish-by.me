@@ -36,7 +36,7 @@
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 103, 20, 100, 20 )];
 	titleLabel.text = title;
-	titleLabel.textColor = [Utils colorWithHex:0x5B5046 alpha:1];
+	titleLabel.textColor = [UIColor colorWithHex:0x5B5046 alpha:1];
 	titleLabel.textAlignment = NSTextAlignmentCenter;
 	titleLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.8];
 	titleLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -51,7 +51,7 @@
 	
 	recipeView = [[UITextView alloc] initWithFrame:CGRectMake( 10, 60, 280, 200 )];
 	recipeView.text = recipe;
-	recipeView.textColor = [Utils colorWithHex:0x6B6663 alpha:1.0];
+	recipeView.textColor = [UIColor colorWithHex:0x6B6663 alpha:1.0];
 	recipeView.textAlignment = NSTextAlignmentCenter;
 	recipeView.backgroundColor = [UIColor clearColor];
 	recipeView.font = [UIFont systemFontOfSize:14];

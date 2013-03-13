@@ -48,7 +48,7 @@ enum {
 - (id)initWithDishId:(NSInteger)dishId dishName:(NSString *)dishName
 {
 	self = [super init];
-	self.view.backgroundColor = [Utils colorWithHex:0x333333 alpha:1];
+	self.view.backgroundColor = [UIColor colorWithHex:0x333333 alpha:1];
 	self.trackedViewName = [[self class] description];
 	
 	DMBarButtonItem *backButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeBack title:NSLocalizedString( @"BACK", @"" ) target:self action:@selector(backButtonDidTouchUpInside)];
@@ -60,7 +60,7 @@ enum {
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-	_tableView.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	_tableView.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	_tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 0, 0, 40, 0 );
 	[self.view addSubview:_tableView];
 	
@@ -535,7 +535,7 @@ enum {
 			//
 			UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 45, 5, 270, 14 )];
 			nameLabel.text = _dish.userName;
-			nameLabel.textColor = [Utils colorWithHex:0x4A4746 alpha:1.0];
+			nameLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1.0];
 			nameLabel.font = [UIFont boldSystemFontOfSize:14];
 			nameLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
 			nameLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -543,7 +543,7 @@ enum {
 			[cell.contentView addSubview:nameLabel];
 			
 			_timeLabel = [[UILabel alloc] init];
-			_timeLabel.textColor = [Utils colorWithHex:0xAAA4A1 alpha:1.0];
+			_timeLabel.textColor = [UIColor colorWithHex:0xAAA4A1 alpha:1.0];
 			_timeLabel.textAlignment = NSTextAlignmentRight;
 			_timeLabel.font = [UIFont systemFontOfSize:10];
 			_timeLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1.0];
@@ -560,7 +560,7 @@ enum {
 			
 			UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 12, 15, 280, 20 )];
 			messageLabel.text = _dish.description;
-			messageLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+			messageLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 			messageLabel.font = [UIFont boldSystemFontOfSize:14];
 			messageLabel.shadowOffset = CGSizeMake( 0, 1 );
 			messageLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
@@ -581,7 +581,7 @@ enum {
 				forkedFromLabel.delegate = self;
 				forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
 				forkedFromLabel.backgroundColor = [UIColor clearColor];
-				forkedFromLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+				forkedFromLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 				forkedFromLabel.linkAttributes = @{ (NSString *)kCTUnderlineStyleAttributeName: @NO };
 				forkedFromLabel.activeLinkAttributes = @{ (NSString *)kTTTBackgroundFillColorAttributeName: (id)[UIColor lightGrayColor].CGColor, (NSString *)kTTTBackgroundCornerRadiusAttributeName: @3 };
 				
@@ -599,7 +599,7 @@ enum {
 				__block NSRange dishNameRange;
 				[forkedFromLabel setText:text afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 					dishNameRange = [mutableAttributedString.string rangeOfString:@"$[DISH]"];
-					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(__bridge id)[Utils colorWithHex:0x4A4746 alpha:1].CGColor range:dishNameRange];
+					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(__bridge id)[UIColor colorWithHex:0x4A4746 alpha:1].CGColor range:dishNameRange];
 					[mutableAttributedString replaceCharactersInRange:dishNameRange withString:_dish.forkedFromName];
 					return mutableAttributedString;
 				}];
@@ -615,7 +615,7 @@ enum {
 			forkedButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 			forkedButton.titleLabel.textAlignment = NSTextAlignmentRight;
 			[forkedButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
-			[forkedButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+			[forkedButton setTitleColor:[UIColor colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
 			[forkedButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
 			[forkedButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
 			forkedButton.titleEdgeInsets = UIEdgeInsetsMake( -2, 0, 0, -8 );
@@ -657,7 +657,7 @@ enum {
 			// Bookmark
 			//
 			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 28, recipeButtonBottomY + 35, 180, 12 )];
-			_bookmarkLabel.textColor = [Utils colorWithHex:0x808283 alpha:1];
+			_bookmarkLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 			_bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
 			_bookmarkLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
 			_bookmarkLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -710,8 +710,8 @@ enum {
 				_moreCommentsButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 2, 320, 43 )];
 				[_moreCommentsButton setImage:[UIImage imageNamed:@"icon_comment_gray.png"] forState:UIControlStateNormal];
 				[_moreCommentsButton setTitle:NSLocalizedString( @"MORE_COMMENTS", @"" ) forState:UIControlStateNormal];
-				[_moreCommentsButton setTitleColor:[Utils colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
-				[_moreCommentsButton setTitleColor:[Utils colorWithHex:0x343535 alpha:1] forState:UIControlStateHighlighted];
+				[_moreCommentsButton setTitleColor:[UIColor colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+				[_moreCommentsButton setTitleColor:[UIColor colorWithHex:0x343535 alpha:1] forState:UIControlStateHighlighted];
 				[_moreCommentsButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:1] forState:UIControlStateNormal];
 				_moreCommentsButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 				_moreCommentsButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];

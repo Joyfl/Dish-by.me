@@ -17,7 +17,7 @@
 - (id)init
 {
     self = [super init];
-	self.view.backgroundColor = [Utils colorWithHex:0xF3EEEA alpha:1];
+	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	self.trackedViewName = [[self class] description];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStylePlain];

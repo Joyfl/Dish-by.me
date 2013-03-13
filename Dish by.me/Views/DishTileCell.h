@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+NSInteger DishTileGap = 14;
+NSInteger DishTileLength = 88;
+
 @class DishTileItem;
 
 @interface DishTileCell : UITableViewCell
