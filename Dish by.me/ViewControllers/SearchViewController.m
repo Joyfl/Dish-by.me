@@ -11,7 +11,7 @@
 #import "Dish.h"
 #import "DMButton.h"
 #import "DishDetailViewController.h"
-#import "DishByMeAPILoader.h"
+#import "DMAPILoader.h"
 
 @implementation SearchViewController
 
@@ -78,7 +78,7 @@
 	_searching = YES;
 	
 	NSDictionary *params = @{ @"query": query, @"offset": [NSString stringWithFormat:@"%d", _dishes.count] };
-	[[DishByMeAPILoader sharedLoader] api:@"/search" method:@"GET" parameters:params success:^(id response) {		
+	[[DMAPILoader sharedLoader] api:@"/search" method:@"GET" parameters:params success:^(id response) {		
 		_count = [[response objectForKey:@"count"] integerValue];
 		NSArray *data = [response objectForKey:@"data"];
 		
@@ -107,7 +107,7 @@
 	JLLog( @"bookmarkDish" );
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -122,7 +122,7 @@
 	JLLog( @"unbookmarkDish" );
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {

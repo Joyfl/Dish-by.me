@@ -12,7 +12,7 @@
 #import "Dish.h"
 #import "DishDetailViewController.h"
 #import "UserManager.h"
-#import "DishByMeAPILoader.h"
+#import "DMAPILoader.h"
 #import "DMBarButtonItem.h"
 #import "AppDelegate.h"
 
@@ -84,7 +84,7 @@
 
 - (void)loadUserId:(NSInteger)userId
 {
-	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
 		_user = [User userFromDictionary:response];
 		self.navigationItem.title = _user.name;
 		
@@ -100,7 +100,7 @@
 - (void)loadMoreDishes
 {
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _dishes.count] };
-	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:params success:^(id response) {
 		NSArray *data = [response objectForKey:@"data"];
 		for( NSDictionary *d in data )
 		{
@@ -124,7 +124,7 @@
 - (void)loadMoreBookmarks
 {
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _bookmarks.count] };
-	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:params success:^(id response) {
 		NSArray *data = [response objectForKey:@"data"];
 		for( NSDictionary *d in data )
 		{
@@ -149,7 +149,7 @@
 {	
 	_updating = YES;
 	
-	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", _user.userId] method:@"GET" parameters:nil success:^(id response) {
 		_user.userId = [[response objectForKey:@"id"] integerValue];
 		_user.name = [response objectForKey:@"name"];
 		_user.photoURL = [response objectForKey:@"photo_url"];
@@ -177,7 +177,7 @@
 
 - (void)updateDishes
 {
-	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:nil success:^(id response) {
 		[_dishes removeAllObjects];
 		
 		NSArray *data = [response objectForKey:@"data"];
@@ -202,7 +202,7 @@
 
 - (void)updateBookmarks
 {
-	[[DishByMeAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:nil success:^(id response) {
 		[_bookmarks removeAllObjects];
 		
 		NSArray *data = [response objectForKey:@"data"];		
@@ -230,7 +230,7 @@
 	JLLog( @"bookmarkDish" );
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -245,7 +245,7 @@
 	JLLog( @"unbookmarkDish" );
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -391,7 +391,7 @@
 			[cell addSubview:_arrowView];
 		}
 		
-		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
+		[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
 			[_profileImage setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
 		}];
 		

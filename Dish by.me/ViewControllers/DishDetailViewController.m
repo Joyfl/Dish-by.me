@@ -149,7 +149,7 @@ enum {
 - (void)loadDishId:(NSInteger)dishId
 {
 	NSString *api = [NSString stringWithFormat:@"/dish/%d", dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
 		_dish = [Dish dishFromDictionary:response];
 		
 		[_tableView reloadData];
@@ -166,7 +166,7 @@ enum {
 {
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/comments", _dish.dishId];
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _commentOffset] };
-	[[DishByMeAPILoader sharedLoader] api:api method:@"GET" parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"GET" parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		
 		NSArray *data = [response objectForKey:@"data"];
@@ -315,7 +315,7 @@ enum {
 	
 	_commentInput.text = @"";
 	
-	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		
 		[self updateAllCommentsRelativeTime];
@@ -338,7 +338,7 @@ enum {
 - (void)deleteComment:(NSInteger)commentId
 {
 	NSString *api = [NSString stringWithFormat:@"/comment/%d", commentId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 		_dish.commentCount --;
@@ -357,7 +357,7 @@ enum {
 - (void)bookmark
 {
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", _dish.dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 		_dish.updatedTime = [response objectForKey:@"updated_time"];
@@ -373,7 +373,7 @@ enum {
 - (void)unbookmark
 {
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", _dish.dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -386,7 +386,7 @@ enum {
 - (void)reloadDish
 {
 	NSString *api = [NSString stringWithFormat:@"/dish/%d", _dish.dishId];
-	[[DishByMeAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		_dish.bookmarked = [[response objectForKey:@"bookmarked"] boolValue];
 		[_tableView reloadData];
@@ -497,16 +497,16 @@ enum {
 		else if( _dish.thumbnail )
 		{
 			photoView.image = _dish.thumbnail;
-			[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
+			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
 				photoView.image = _dish.photo = image;
 			}];
 		}
 		else
 		{
 			photoView.image = [UIImage imageNamed:@"placeholder.png"];
-			[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.thumbnailURL] context:nil success:^(UIImage *image, id context) {
+			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.thumbnailURL] context:nil success:^(UIImage *image, id context) {
 				photoView.image = _dish.thumbnail = image;
-				[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
+				[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
 					photoView.image = _dish.photo = image;
 				}];
 			}];

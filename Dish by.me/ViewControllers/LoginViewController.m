@@ -213,7 +213,7 @@
 	}
 	
 	NSDictionary *params = @{ @"email": email, @"password": password };
-	[[DishByMeAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
 		JLLog( @"Login succeeded" );
 		
 		[UserManager manager].loggedIn = YES;
@@ -240,10 +240,10 @@
 
 - (void)getUser
 {
-	[[DishByMeAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"getUser success" );
 		
-		[[DishByMeAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] context:nil success:^(UIImage *image, id context) {
+		[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] context:nil success:^(UIImage *image, id context) {
 			JLLog( @"Image loading succeeded" );
 			[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
 			[UserManager manager].userName = [response objectForKey:@"name"];

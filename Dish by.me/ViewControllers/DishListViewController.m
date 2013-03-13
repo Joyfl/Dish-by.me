@@ -56,7 +56,7 @@
 	_updating = YES;
 	_loadedLastDish = NO;
 	
-	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 		[_dishes removeAllObjects];
@@ -92,7 +92,7 @@
 	_loading = YES;
 	
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _offset] };
-	[[DishByMeAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/dishes" method:@"GET" parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		
 		NSArray *data = [response objectForKey:@"data"];
@@ -125,7 +125,7 @@
 	JLLog( @"bookmarkDish" );
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];	
-	[[DishByMeAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -140,7 +140,7 @@
 	JLLog( @"unbookmarkDish" );
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];	
-	[[DishByMeAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {

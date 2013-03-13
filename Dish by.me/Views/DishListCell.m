@@ -11,7 +11,7 @@
 #import "Utils.h"
 #import <QuartzCore/CALayer.h>
 #import "UserManager.h"
-#import "DishByMeAPILoader.h"
+#import "DMAPILoader.h"
 
 @implementation DishListCell
 

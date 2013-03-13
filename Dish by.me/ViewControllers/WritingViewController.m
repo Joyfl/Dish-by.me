@@ -12,7 +12,7 @@
 #import "Utils.h"
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
-#import "DishByMeAPILoader.h"
+#import "DMAPILoader.h"
 #import "NSObject+Dim.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
@@ -212,7 +212,7 @@ enum {
 	if( _originalDishId )
 		[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
 	
-	[[DishByMeAPILoader sharedLoader] api:@"/dish" method:@"POST" image:image parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/dish" method:@"POST" image:image parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		[self undim];
 		[self dismissViewControllerAnimated:YES completion:nil];

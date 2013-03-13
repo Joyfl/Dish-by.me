@@ -6,11 +6,11 @@
 //  Copyright (c) 2013년 Joyfl. All rights reserved.
 //
 
-#import "DishByMeAPILoader.h"
+#import "DMAPILoader.h"
 #import "Utils.h"
 #import "UserManager.h"
 
-@implementation DishByMeAPILoader
+@implementation DMAPILoader
 
 + (id)sharedLoader
 {

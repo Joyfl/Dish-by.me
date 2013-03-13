@@ -8,7 +8,7 @@
 
 #import "AFNetworking.h"
 
-@interface DishByMeAPILoader : NSObject
+@interface DMAPILoader : NSObject
 {
 	AFHTTPClient *_client;
 }

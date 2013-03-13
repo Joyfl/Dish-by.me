@@ -16,5 +16,5 @@
 #import "Common.h"
 #import "Utils.h"
 #import "UIColor+Utils.h"
-#import "DishByMeAPILoader.h"
+#import "DMAPILoader.h"
 #import "JLLogger.h"
