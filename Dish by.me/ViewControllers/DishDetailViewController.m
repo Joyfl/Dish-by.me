@@ -25,6 +25,7 @@
 #import "ProfileViewController.h"
 #import "WritingViewController.h"
 #import "JLHangulUtils.h"
+#import "ForkListViewController.h"
 
 #define photoHeight !_dish ? 298 : 298 * _dish.photoHeight / _dish.photoWidth
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
@@ -609,18 +610,18 @@ enum {
 			
 			// (NSInteger)log10f : 자리수
 			CGFloat forkedButtonWidth = _dish.forkCount == 0 ? 35 : 30 + ((NSInteger)log10f( _dish.forkCount ) + 1) * 5;
-			JLLabelButton *forkedButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 297 - forkedButtonWidth, messageBoxDotLineView.frame.origin.y + 9, forkedButtonWidth, 20 )];
-			forkedButton.titleLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:14];
-			forkedButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-			forkedButton.titleLabel.textAlignment = NSTextAlignmentRight;
-			[forkedButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
-			[forkedButton setTitleColor:[UIColor colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
-			[forkedButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
-			[forkedButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
-			forkedButton.titleEdgeInsets = UIEdgeInsetsMake( -2, 0, 0, -8 );
-			forkedButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 0, 0, 5 );
-			[forkedButton addTarget:self action:@selector(forkedButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-			[messageBoxView addSubview:forkedButton];
+			JLLabelButton *forkCountButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 297 - forkedButtonWidth, messageBoxDotLineView.frame.origin.y + 9, forkedButtonWidth, 20 )];
+			forkCountButton.titleLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:14];
+			forkCountButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			forkCountButton.titleLabel.textAlignment = NSTextAlignmentRight;
+			[forkCountButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
+			[forkCountButton setTitleColor:[UIColor colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+			[forkCountButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.1] forState:UIControlStateNormal];
+			[forkCountButton setImage:[UIImage imageNamed:@"fork.png"] forState:UIControlStateNormal];
+			forkCountButton.titleEdgeInsets = UIEdgeInsetsMake( -2, 0, 0, -8 );
+			forkCountButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 0, 0, 5 );
+			[forkCountButton addTarget:self action:@selector(forkCountButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[messageBoxView addSubview:forkCountButton];
 			
 			NSInteger messageBoxBottomY = messageBoxView.frame.origin.y + messageBoxView.frame.size.height;
 			NSInteger recipeButtonBottomY = messageBoxBottomY + 8;
@@ -1022,9 +1023,10 @@ enum {
 
 
 
-- (void)forkedButtonDidTouchUpInside
+- (void)forkCountButtonDidTouchUpInside
 {
-	NSLog( @"asd" );
+	ForkListViewController *forkListViewController = [[ForkListViewController alloc] initWithDish:_dish];
+	[self.navigationController pushViewController:forkListViewController animated:YES];
 }
 
 @end

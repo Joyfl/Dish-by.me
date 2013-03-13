@@ -10,13 +10,7 @@
 #import "Dish.h"
 
 @interface DishTileItem : UIButton
-{
-	Dish *dish;
-}
 
-@property (nonatomic, retain) Dish *dish;
-
-- (void)loadThumbnail;
-- (void)loadPhoto;
+@property (nonatomic, strong) Dish *dish;
 
 @end

@@ -8,17 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
-NSInteger DishTileGap = 14;
-NSInteger DishTileLength = 88;
-
 @class DishTileItem;
+@protocol DishTileCellDelegate;
 
 @interface DishTileCell : UITableViewCell
 {
 	NSMutableArray *dishItems;
 }
 
-- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier target:(id)target action:(SEL)action;
+@property (nonatomic, weak) id<DishTileCellDelegate> delegate;
+
+- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (DishTileItem *)dishItemAt:(NSInteger)index;
+
+@end
+
+
+@protocol DishTileCellDelegate
+
+- (void)dishTileCell:(DishTileCell *)dishTileCell didSelectDishTileItem:(DishTileItem *)dishTileItem;
 
 @end

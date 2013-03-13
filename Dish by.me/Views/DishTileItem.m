@@ -7,10 +7,9 @@
 //
 
 #import "DishTileItem.h"
+#import "JLHTTPLoader.h"
 
 @implementation DishTileItem
-
-@synthesize dish;
 
 - (id)init
 {
@@ -21,49 +20,45 @@
 	return self;
 }
 
-- (void)setDish:(Dish *)_dish
+- (void)setDish:(Dish *)dish
 {
-	dish = _dish;
+	_dish = dish;
+	
 	[self setImage:[UIImage imageNamed:dish.recipe ? @"dish_tile_border_ribbon.png" : @"dish_tile_border.png"] forState:UIControlStateNormal];
 	
-	if( dish.photo )
+	if( _dish.croppedThumbnail )
 	{
-		[self setBackgroundImage:dish.photo forState:UIControlStateNormal];
+		[self setBackgroundImage:_dish.croppedThumbnail forState:UIControlStateNormal];
 	}
 	else
 	{
-		[self loadPhoto];
+		[JLHTTPLoader loadAsyncFromURL:_dish.thumbnailURL withObject:nil completion:^(id object, NSData *data){
+			UIImage *thumbnail = [UIImage imageWithData:data];
+			_dish.thumbnail = thumbnail;
+			
+			// Square
+			if( thumbnail.size.width == thumbnail.size.height )
+			{
+				_dish.croppedThumbnail = thumbnail;
+			}
+			
+			// Landscape
+			else if( thumbnail.size.width > thumbnail.size.height )
+			{
+				CGRect rect = CGRectMake( ( thumbnail.size.width - thumbnail.size.height ) / 2, 0, thumbnail.size.height, thumbnail.size.height );
+				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
+			}
+			
+			// Portrait
+			else
+			{
+				CGRect rect = CGRectMake( 0, ( thumbnail.size.height - thumbnail.size.width ) / 2, thumbnail.size.width, thumbnail.size.width );
+				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
+			}
+			
+			[self setBackgroundImage:_dish.croppedThumbnail forState:UIControlStateNormal];
+		}];
 	}
-}
-
-- (void)loadThumbnail
-{
-	dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
-		NSString *rootURL = WEB_ROOT_URL;
-		NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:[NSString stringWithFormat:@"%@/images/thumbnail/dish/%d", rootURL, dish.dishId]]];
-		if( data == nil )
-			return;
-		
-		dispatch_async( dispatch_get_main_queue(), ^{
-			dish.photo = [UIImage imageWithData: data];
-		} );
-	});
-}
-
-- (void)loadPhoto
-{
-	dispatch_async( dispatch_get_global_queue( 0, 0 ), ^{
-		NSString *rootURL = WEB_ROOT_URL;
-		NSString *url = [NSString stringWithFormat:@"%@/images/original/dish/%d_%d.jpg", rootURL, dish.dishId, dish.userId];
-		NSData * data = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:url]];
-		if( data == nil )
-			return;
-		
-		dispatch_async( dispatch_get_main_queue(), ^{
-			dish.photo = [UIImage imageWithData:data];
-			[self setBackgroundImage:dish.photo forState:UIControlStateNormal];
-		} );
-	});
 }
 
 @end

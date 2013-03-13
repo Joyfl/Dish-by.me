@@ -9,9 +9,12 @@
 #import "DishTileCell.h"
 #import "DishTileItem.h"
 
+NSInteger DishTileGap = 14;
+NSInteger DishTileLength = 88;
+
 @implementation DishTileCell
 
-- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier target:(id)target action:(SEL)action
+- (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -22,8 +25,9 @@
 	{
 		DishTileItem *dishItem = [[DishTileItem alloc] init];
 		dishItem.frame = CGRectMake( DishTileGap * ( i + 1 ) + DishTileLength * i, DishTileGap, DishTileLength, DishTileLength );
+		dishItem.adjustsImageWhenHighlighted = NO;
 		dishItem.hidden = YES;
-		[dishItem addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+		[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:dishItem];
 		
 		[dishItems addObject:dishItem];
@@ -37,11 +41,9 @@
 	return [dishItems objectAtIndex:index];
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+- (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem
 {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+	[self.delegate dishTileCell:self didSelectDishTileItem:dishTileItem];
 }
 
 @end
