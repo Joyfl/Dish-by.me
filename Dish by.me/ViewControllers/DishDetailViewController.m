@@ -573,7 +573,7 @@ enum {
 				NSString *text = nil;
 				if( [LANGUAGE isEqualToString:@"ko"] )
 				{
-					NSArray *hangul = [JLHangulUtils separateHangul:[_dish.dishName substringFromIndex:_dish.dishName.length - 1]];
+					NSArray *hangul = [JLHangulUtils separateHangul:[_dish.forkedFromName substringFromIndex:_dish.forkedFromName.length - 1]];
 					text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), [[hangul objectAtIndex:2] length] ? @"을" : @"를"];
 				}
 				else

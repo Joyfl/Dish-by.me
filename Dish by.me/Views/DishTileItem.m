@@ -24,7 +24,7 @@
 {
 	_dish = dish;
 	
-	[self setImage:[UIImage imageNamed:dish.recipe ? @"dish_tile_border_ribbon.png" : @"dish_tile_border.png"] forState:UIControlStateNormal];
+	[self setImage:[UIImage imageNamed:@"dish_tile_border.png"] forState:UIControlStateNormal];
 	
 	if( _dish.croppedThumbnail )
 	{
