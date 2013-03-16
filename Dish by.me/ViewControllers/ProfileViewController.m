@@ -87,7 +87,7 @@
 {
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
 		_user = [User userFromDictionary:response];
-		self.navigationItem.title = _user.name;
+		self.navigationItem.title = _user.name.length > 0 ? _user.name : NSLocalizedString( @"NO_NAME", nil );
 		
 		[_tableView reloadData];
 		
@@ -161,7 +161,7 @@
 		_user.followingCount = [[response objectForKey:@"following_count"] integerValue];
 		_user.followersCount = [[response objectForKey:@"followers_count"] integerValue];
 		
-		self.navigationItem.title = _user.name;
+		self.navigationItem.title = _user.name.length > 0 ? _user.name : NSLocalizedString( @"NO_NAME", nil );
 		
 		[self updateDishes];
 		[self updateBookmarks];
@@ -398,7 +398,7 @@
 			[_profileImage setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
 		}];
 		
-		_bioLabel.text = _user.bio;
+		_bioLabel.text = _user.bio.length > 0 ? _user.bio : NSLocalizedString( @"NO_BIO", nil );
 		_dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
 		_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
 		_arrowView.frame = CGRectMake( _selectedTab == 0 ? ARROW_LEFT_X : ARROW_RIGHT_X, 100, 25, 11 );

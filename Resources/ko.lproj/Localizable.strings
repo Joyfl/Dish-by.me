@@ -53,6 +53,8 @@
 "UPLOAD" = "업로드";
 
 // ProfileView
+"NO_NAME" = "이름이 아직 없습니다.";
+"NO_BIO" = "Dish by.me에 처음 왔어요!";
 "DISHES" = "요리";
 "BOOKMARKS" = "북마크";
 
