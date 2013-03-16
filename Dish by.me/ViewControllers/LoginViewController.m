@@ -274,6 +274,8 @@
 				[self undim];
 				break;
 		}
+		
+		[[FBSession activeSession] closeAndClearTokenInformation];
 	}];
 }
 
