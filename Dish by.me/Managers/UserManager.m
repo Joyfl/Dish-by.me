@@ -34,6 +34,10 @@
 	[_userDefaults removeObjectForKey:SETTING_KEY_USER_ID];
 	[_userDefaults removeObjectForKey:SETTING_KEY_USER_NAME];
 	[_userDefaults synchronize];
+	
+	NSString *userPhotoPath = [[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"UserPhoto.png"];
+	if( [[NSFileManager defaultManager] fileExistsAtPath:userPhotoPath] )
+		[[NSFileManager defaultManager] removeItemAtPath:userPhotoPath error:nil];
 }
 
 #pragma mark -
