@@ -190,8 +190,6 @@
 
 - (void)login
 {
-	[self dim];
-	
 	NSString *email = _emailInput.text;
 	if( email.length == 0 )
 	{
@@ -205,6 +203,8 @@
 		[_passwordInput becomeFirstResponder];
 		return;
 	}
+	
+	[self dim];
 	
 	NSDictionary *params = @{ @"email": email, @"password": password };
 	[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
