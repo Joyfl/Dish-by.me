@@ -12,6 +12,8 @@
 #import "UserManager.h"
 #import "User.h"
 #import "JLHTTPLoader.h"
+#import <FacebookSDK/FacebookSDK.h>
+#import "DMAPILoader.h"
 
 @implementation LoginViewController
 
@@ -186,11 +188,6 @@
 #pragma mark -
 #pragma mark Login
 
-- (void)facebookLoginButtonDidTouchUpInside
-{
-	
-}
-
 - (void)login
 {
 	NSString *email = _emailInput.text;
@@ -225,13 +222,44 @@
 	[self animateDown];
 }
 
-- (void)signUpButtonDidTouchUpInside
+
+#pragma mark -
+#pragma mark Facebook Login
+
+- (void)facebookLoginButtonDidTouchUpInside
 {
-//	SignUpViewController *signUpViewController = [[SignUpViewController alloc] init];
-//	[self.navigationController pushViewController:signUpViewController animated:YES];
-//	[signUpViewController release];
+	[FBSession openActiveSessionWithReadPermissions:@[@"offline_access"] allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+		switch( status )
+		{
+			case FBSessionStateOpen:
+			{
+				// Facebook 회원가입을 먼저 요청
+				NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
+				[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:params success:^(id response) {
+#warning 프로필 완성단계로 넘어가기
+					JLLog( @"%@", response );
+				} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+					
+					// 중복된 계정이 있다면 로그인 요청을 보낸다
+					[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
+						[UserManager manager].loggedIn = YES;
+						[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
+						[self getUser];
+					} failure:nil];
+				}];
+				break;
+			}
+				
+			default:
+				NSLog( @"%d", status );
+				break;
+		}
+	}];
 }
 
+
+#pragma mark -
+#pragma mark Get User
 
 - (void)getUser
 {
@@ -256,6 +284,17 @@
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
 	}];
+}
+
+
+#pragma mark -
+#pragma mark Sign Up
+
+- (void)signUpButtonDidTouchUpInside
+{
+//	SignUpViewController *signUpViewController = [[SignUpViewController alloc] init];
+//	[self.navigationController pushViewController:signUpViewController animated:YES];
+//	[signUpViewController release];
 }
 
 @end

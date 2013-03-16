@@ -68,6 +68,9 @@
 		}
 		
 		NSLog( @"URL : %@", operation.request.URL );
+		JLLog( @"statusCode : %d", operation.response.statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", [errorInfo objectForKey:@"message"] );
 		failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
 	}];
 }
