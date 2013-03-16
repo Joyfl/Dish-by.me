@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LoginViewController.h"
 
 @class DishListViewController;
 @class ProfileViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate, LoginViewControllerDelegate>
 {
 	UITabBarController *tabBarController;
 	

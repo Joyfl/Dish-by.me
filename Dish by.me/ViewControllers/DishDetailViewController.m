@@ -16,7 +16,6 @@
 #import "UserManager.h"
 #import <QuartzCore/QuartzCore.h>
 #import "User.h"
-#import "LoginViewController.h"
 #import "DMNavigationController.h"
 #import "JLFoldableView.h"
 #import "UIView+Screenshot.h"
@@ -926,7 +925,8 @@ enum {
 	}
 	else
 	{
-		LoginViewController *loginViewController = [[LoginViewController alloc] initWithTarget:self action:@selector(loginDidFinish)];
+		LoginViewController *loginViewController = [[LoginViewController alloc] init];
+		loginViewController.delegate = self;
 		DMNavigationController *navigationController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
 		navigationController.navigationBarHidden = YES;
 		
@@ -1011,11 +1011,11 @@ enum {
 
 
 #pragma mark -
-#pragma mark LoginViewController
+#pragma mark LoginViewControllerDelegate
 
-- (void)loginDidFinish
+- (void)loginViewControllerDidSucceedLogin:(LoginViewController *)loginViewController
 {
-	
+	JLLog( @"Login succeed" );
 }
 
 

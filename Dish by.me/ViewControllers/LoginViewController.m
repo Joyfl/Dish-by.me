@@ -17,7 +17,7 @@
 
 @implementation LoginViewController
 
-- (id)initWithTarget:(id)target action:(SEL)action
+- (id)init
 {
 	self = [super init];
 	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
@@ -101,9 +101,6 @@
 	[_facebookLoginButton setBackgroundImage:[UIImage imageNamed:@"login_facebook_button.png"] forState:UIControlStateNormal];
 	[_facebookLoginButton addTarget:self action:@selector(facebookLoginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_facebookLoginButton];
-	
-	_target = target;
-	_action = action;
 	
 	return self;
 }
@@ -266,17 +263,15 @@
 	[[DMAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"getUser success" );
 		
+		[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
+		[UserManager manager].userName = [response objectForKey:@"name"];
+		
+		[self dismissViewControllerAnimated:YES completion:nil];
+		[self.delegate loginViewControllerDidSucceedLogin:self];
+		
 		[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] context:nil success:^(UIImage *image, id context) {
 			JLLog( @"Image loading succeeded" );
-			[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
-			[UserManager manager].userName = [response objectForKey:@"name"];
 			[UserManager manager].userPhoto = image;
-			
-#warning delegate 패턴으로 바꾸기
-			if( [_target respondsToSelector:_action] )
-				[_target performSelector:_action];
-			
-			[self dismissViewControllerAnimated:YES completion:nil];
 		}];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {

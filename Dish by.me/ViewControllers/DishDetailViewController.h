@@ -14,10 +14,11 @@
 #import "TTTAttributedLabel.h"
 #import "WritingViewController.h"
 #import "JLLabelButton.h"
+#import "LoginViewController.h"
 
 @class Dish;
 
-@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate>
+@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate, LoginViewControllerDelegate>
 {
 	Dish *_dish;
 	NSMutableArray *_comments;

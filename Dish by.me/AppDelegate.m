@@ -14,7 +14,6 @@
 #import "SettingsViewController.h"
 #import "WritingViewController.h"
 #import "CameraOverlayViewController.h"
-#import "LoginViewController.h"
 #import "UserManager.h"
 #import "User.h"
 #import "GAI.h"
@@ -160,15 +159,20 @@
 
 - (void)presentLoginViewController
 {
-	LoginViewController *loginViewController = [[LoginViewController alloc] initWithTarget:self action:@selector(loginDidFinish)];
+	LoginViewController *loginViewController = [[LoginViewController alloc] init];
+	loginViewController.delegate = self;
 	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
 	navController.navigationBarHidden = YES;
 	[tabBarController presentViewController:navController animated:YES completion:nil];
 }
 
-- (void)loginDidFinish
+
+#pragma mark -
+#pragma mark LoginViewControllerDelegate
+
+- (void)loginViewControllerDidSucceedLogin:(LoginViewController *)loginViewController
 {
-	NSLog( @"[AppDelegate] loginDidFinish" );
+	JLLog( @"Login succeed" );
 	[self.dishListViewController updateDishes];
 	self.profileViewController.userId = [UserManager manager].userId;
 }
