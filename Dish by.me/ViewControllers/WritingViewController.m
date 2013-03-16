@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "DMAPILoader.h"
-#import "NSObject+Dim.h"
+#import "UIViewController+Dim.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 

@@ -215,7 +215,7 @@
 		03F67F5916D8E33200AB0600 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F5016D8E33200AB0600 /* UIImageView+AFNetworking.m */; };
 		03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */; };
 		03F6FF0D16DA66AC008B5D9C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */; };
-		03F6FF1016DA754A008B5D9C /* NSObject+Dim.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F6FF0F16DA754A008B5D9C /* NSObject+Dim.m */; };
+		03F6FF1016DA754A008B5D9C /* UIViewController+Dim.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F6FF0F16DA754A008B5D9C /* UIViewController+Dim.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -494,8 +494,8 @@
 		03F6FF0916DA659B008B5D9C /* FacebookSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookSettingsViewController.h; sourceTree = "<group>"; };
 		03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookSettingsViewController.m; sourceTree = "<group>"; };
 		03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = Libraries/FacebookSDK.framework; sourceTree = "<group>"; };
-		03F6FF0E16DA754A008B5D9C /* NSObject+Dim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+Dim.h"; path = "Categories/NSObject+Dim.h"; sourceTree = "<group>"; };
-		03F6FF0F16DA754A008B5D9C /* NSObject+Dim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+Dim.m"; path = "Categories/NSObject+Dim.m"; sourceTree = "<group>"; };
+		03F6FF0E16DA754A008B5D9C /* UIViewController+Dim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Dim.h"; path = "Categories/UIViewController+Dim.h"; sourceTree = "<group>"; };
+		03F6FF0F16DA754A008B5D9C /* UIViewController+Dim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Dim.m"; path = "Categories/UIViewController+Dim.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1032,8 +1032,8 @@
 		03F6FF1116DA7550008B5D9C /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				03F6FF0E16DA754A008B5D9C /* NSObject+Dim.h */,
-				03F6FF0F16DA754A008B5D9C /* NSObject+Dim.m */,
+				03F6FF0E16DA754A008B5D9C /* UIViewController+Dim.h */,
+				03F6FF0F16DA754A008B5D9C /* UIViewController+Dim.m */,
 				03927C2116F014D8001606A6 /* UIColor+Utils.h */,
 				03927C2216F014D8001606A6 /* UIColor+Utils.m */,
 			);
@@ -1305,7 +1305,7 @@
 				0349EA5116D8F0350057BD12 /* DMAPILoader.m in Sources */,
 				0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */,
 				03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */,
-				03F6FF1016DA754A008B5D9C /* NSObject+Dim.m in Sources */,
+				03F6FF1016DA754A008B5D9C /* UIViewController+Dim.m in Sources */,
 				0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */,
 				0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */,
 				03927C2316F014D8001606A6 /* UIColor+Utils.m in Sources */,

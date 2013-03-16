@@ -6,9 +6,9 @@
 //  Copyright (c) 2013년 Joyfl. All rights reserved.
 //
 
-#import "NSObject+Dim.h"
+#import "UIViewController+Dim.h"
 
-@implementation NSObject (Dim)
+@implementation UIViewController (Dim)
 
 - (UIImageView *)dimView
 {

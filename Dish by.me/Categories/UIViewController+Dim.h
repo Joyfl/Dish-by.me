@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NSObject (Dim)
+@interface UIViewController (Dim)
 
 - (void)dim;
 - (void)dimWithDuration:(NSTimeInterval)duration completion:(void (^)(BOOL finished))completion;

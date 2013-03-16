@@ -19,7 +19,7 @@
 #import "DMNavigationController.h"
 #import "JLFoldableView.h"
 #import "UIView+Screenshot.h"
-#import "NSObject+Dim.h"
+#import "UIViewController+Dim.h"
 #import "ProfileViewController.h"
 #import "JLHangulUtils.h"
 #import "ForkListViewController.h"

@@ -14,6 +14,9 @@
 #import "JLHTTPLoader.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "DMAPILoader.h"
+#import "UIViewController+Dim.h"
+
+#define showErrorAlert() [[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Status Code : %d\nError Code : %d\nMessage : %@", statusCode, errorCode, message] delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil] show];
 
 @implementation LoginViewController
 
@@ -187,6 +190,8 @@
 
 - (void)login
 {
+	[self dim];
+	
 	NSString *email = _emailInput.text;
 	if( email.length == 0 )
 	{
@@ -211,6 +216,7 @@
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"Login failed : %@", message );
+		[self undim];
 		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
 	}];
 	
@@ -225,6 +231,8 @@
 
 - (void)facebookLoginButtonDidTouchUpInside
 {
+	[self dim];
+	
 	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
 		switch( status )
 		{
@@ -235,7 +243,9 @@
 				[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:params success:^(id response) {
 #warning 프로필 완성단계로 넘어가기
 					JLLog( @"Sign up complete" );
-					[self getUser];
+					
+					[self undim];
+					[[[UIAlertView alloc] initWithTitle:nil message:@"회원가입 완료. [페이스북으로 로그인] 버튼을 다시 눌러주세요." delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil] show];
 					
 				} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 					// 중복된 계정이 있다면 로그인 요청을 보낸다
@@ -245,7 +255,15 @@
 							[UserManager manager].loggedIn = YES;
 							[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
 							[self getUser];
-						} failure:nil];
+						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+							[self undim];
+							showErrorAlert();
+						}];
+					}
+					else
+					{
+						[self undim];
+						showErrorAlert();
 					}
 				}];
 				break;
@@ -253,6 +271,7 @@
 				
 			default:
 				NSLog( @"%d", status );
+				[self undim];
 				break;
 		}
 	}];
@@ -267,6 +286,8 @@
 	[[DMAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"getUser success" );
 		
+		[self undim];
+		
 		[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
 		[UserManager manager].userName = [response objectForKey:@"name"];
 		
@@ -279,9 +300,8 @@
 		}];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		JLLog( @"statusCode : %d", statusCode );
-		JLLog( @"errorCode : %d", errorCode );
-		JLLog( @"message : %@", message );
+		[self undim];
+		showErrorAlert();
 	}];
 }
 
