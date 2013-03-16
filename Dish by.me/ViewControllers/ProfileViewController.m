@@ -15,13 +15,15 @@
 #import "DMAPILoader.h"
 #import "DMBarButtonItem.h"
 #import "AppDelegate.h"
+#import "DishTileItem.h"
+
 
 #define ARROW_LEFT_X	140
 #define ARROW_RIGHT_X	246
 
 #define isLastDishLoaded (_dishes.count == _user.dishCount)
 #define isLastBookmarkLoaded (_bookmarks.count == _user.bookmarkCount)
-#define selectedDishArray _selectedTab == 0 ? _dishes : _bookmarks
+#define selectedDishArray (_selectedTab == 0 ? _dishes : _bookmarks)
 
 @implementation ProfileViewController
 
@@ -277,6 +279,7 @@
 #pragma mark -
 #pragma mark UITableView
 
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 2 + ( _selectedTab == 0 ? !isLastDishLoaded : !isLastBookmarkLoaded );
@@ -285,7 +288,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if( section == 0 ) return 1;
-	else if( section == 1 ) return _selectedTab == 0 ? _dishes.count : _bookmarks.count;
+	else if( section == 1 ) return ceil( selectedDishArray.count / 3.0 );
 	return 1;
 }
 
@@ -293,9 +296,10 @@
 {
 	if( indexPath.section == 0 ) return 110;
 	else if( indexPath.section == 2 ) return 45;
-	else if( _selectedTab == 0 && indexPath.row == _dishes.count - 1 ) return 355;
-	else if( _selectedTab == 1 && indexPath.row == _bookmarks.count - 1 ) return 355;
-	return 345;
+	else if( indexPath.row == ceil( selectedDishArray.count / 3.0 ) - 1 ) return 116;
+//	else if( _selectedTab == 0 && indexPath.row == _dishes.count - 1 ) return 112;
+//	else if( _selectedTab == 1 && indexPath.row == _bookmarks.count - 1 ) return 112;
+	return 102;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -404,16 +408,29 @@
 	
 	else if( indexPath.section == 1 )
 	{
-		DishListCell *cell = [tableView dequeueReusableCellWithIdentifier:dishCellId];
+		DishTileCell *cell = [_tableView dequeueReusableCellWithIdentifier:dishCellId];
 		
 		if( !cell )
 		{
-			cell = [[DishListCell alloc] initWithReuseIdentifier:dishCellId];
+			cell = [[DishTileCell alloc] initWithReuseIdentifier:dishCellId];
 			cell.delegate = self;
 		}
 		
-		Dish *dish = [selectedDishArray objectAtIndex:indexPath.row];
-		[cell setDish:dish atIndexPath:indexPath];
+		for( NSInteger i = 0; i < 3; i++ )
+		{
+			DishTileItem *dishItem = [cell dishItemAt:i];
+			if( selectedDishArray.count > indexPath.row * 3 + i )
+			{
+				dishItem.hidden = NO;
+				
+				Dish *dish = [selectedDishArray objectAtIndex:indexPath.row * 3 + i];
+				dishItem.dish = dish;
+			}
+			else
+			{
+				dishItem.hidden = YES;
+			}
+		}
 		
 		return cell;
 	}
@@ -475,20 +492,10 @@
 #pragma mark -
 #pragma mark DishListCellDelegate
 
-- (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath
+- (void)dishTileCell:(DishTileCell *)dishTileCell didSelectDishTileItem:(DishTileItem *)dishTileItem
 {
-	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[selectedDishArray objectAtIndex:indexPath.row]];
+	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:dishTileItem.dish];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
-}
-
-- (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath
-{
-	[self bookmarkDish:[selectedDishArray objectAtIndex:indexPath.row]];
-}
-
-- (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath
-{
-	[self unbookmarkDish:[selectedDishArray objectAtIndex:indexPath.row]];
 }
 
 @end

@@ -24,7 +24,7 @@ NSInteger DishTileLength = 88;
 	for( NSInteger i = 0; i < 3; i++ )
 	{
 		DishTileItem *dishItem = [[DishTileItem alloc] init];
-		dishItem.frame = CGRectMake( DishTileGap * ( i + 1 ) + DishTileLength * i, DishTileGap, DishTileLength, DishTileLength );
+		dishItem.frame = CGRectMake( DishTileGap * ( i + 1 ) + DishTileLength * i, 10, DishTileLength, DishTileLength );
 		dishItem.adjustsImageWhenHighlighted = NO;
 		dishItem.hidden = YES;
 		[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];

@@ -85,6 +85,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	if( indexPath.row == ceil( _dishes.count / 3.0 ) - 1 ) return 116;
 	return 102;
 }
 

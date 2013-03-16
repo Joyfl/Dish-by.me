@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
-#import "DishListCell.h"
+#import "DishTileCell.h"
 #import "EGORefreshTableHeaderView.h"
 
 @class User;
 
-@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishListCellDelegate>
+@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishTileCellDelegate>
 {
 	User *_user;
 	
