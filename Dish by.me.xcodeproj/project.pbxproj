@@ -23,6 +23,7 @@
 		031AAB37160F23A1007B42B3 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB36160F23A1007B42B3 /* User.m */; };
 		031AAB3D160F3B4F007B42B3 /* WritingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB3C160F3B4F007B42B3 /* WritingViewController.m */; };
 		031AAB4C160F42CB007B42B3 /* CameraOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */; };
+		033BA84316F5899900926F51 /* DMTextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033BA84216F5899900926F51 /* DMTextFieldViewController.m */; };
 		033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52DE1610782900F0B5E5 /* LoginViewController.m */; };
 		033C52E61610797400F0B5E5 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52E51610797400F0B5E5 /* UserManager.m */; };
 		0349EA5116D8F0350057BD12 /* DMAPILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5016D8F0350057BD12 /* DMAPILoader.m */; };
@@ -249,6 +250,8 @@
 		031AAB3C160F3B4F007B42B3 /* WritingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WritingViewController.m; sourceTree = "<group>"; };
 		031AAB4A160F42CB007B42B3 /* CameraOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraOverlayViewController.h; sourceTree = "<group>"; };
 		031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraOverlayViewController.m; sourceTree = "<group>"; };
+		033BA84116F5899900926F51 /* DMTextFieldViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMTextFieldViewController.h; sourceTree = "<group>"; };
+		033BA84216F5899900926F51 /* DMTextFieldViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMTextFieldViewController.m; sourceTree = "<group>"; };
 		033C52DD1610782900F0B5E5 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		033C52DE1610782900F0B5E5 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		033C52E41610797400F0B5E5 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserManager.h; path = Managers/UserManager.h; sourceTree = "<group>"; };
@@ -572,6 +575,8 @@
 				031AAB3C160F3B4F007B42B3 /* WritingViewController.m */,
 				033C52DD1610782900F0B5E5 /* LoginViewController.h */,
 				033C52DE1610782900F0B5E5 /* LoginViewController.m */,
+				033BA84116F5899900926F51 /* DMTextFieldViewController.h */,
+				033BA84216F5899900926F51 /* DMTextFieldViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1314,6 +1319,7 @@
 				0392A53216F0464B0045209E /* UIAlertView+HTBlock.m in Sources */,
 				0392A53316F0464B0045209E /* UIControl+HTBlock.m in Sources */,
 				0392A53416F0464B0045209E /* UIImagePickerController+HTBlock.m in Sources */,
+				033BA84316F5899900926F51 /* DMTextFieldViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

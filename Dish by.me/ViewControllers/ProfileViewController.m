@@ -16,14 +16,17 @@
 #import "DMBarButtonItem.h"
 #import "AppDelegate.h"
 #import "DishTileItem.h"
+#import "DMTextFieldViewController.h"
 
 
 #define ARROW_LEFT_X	140
 #define ARROW_RIGHT_X	246
 
-#define isLastDishLoaded (_dishes.count == _user.dishCount)
-#define isLastBookmarkLoaded (_bookmarks.count == _user.bookmarkCount)
-#define selectedDishArray (_selectedTab == 0 ? _dishes : _bookmarks)
+#define isLastDishLoaded ( _dishes.count == _user.dishCount )
+#define isLastBookmarkLoaded ( _bookmarks.count == _user.bookmarkCount )
+#define selectedDishArray ( _selectedTab == 0 ? _dishes : _bookmarks )
+#define userNameWithPlaceholder ( _user.name.length > 0 ? _user.name : NSLocalizedString( @"NO_NAME", nil ) )
+#define userBioWithPlaceholder ( _user.bio.length > 0 ? _user.bio : NSLocalizedString( @"NO_BIO", nil ) )
 
 @implementation ProfileViewController
 
@@ -87,7 +90,7 @@
 {
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
 		_user = [User userFromDictionary:response];
-		self.navigationItem.title = _user.name.length > 0 ? _user.name : NSLocalizedString( @"NO_NAME", nil );
+		self.navigationItem.title = userNameWithPlaceholder;
 		
 		[_tableView reloadData];
 		
@@ -161,7 +164,7 @@
 		_user.followingCount = [[response objectForKey:@"following_count"] integerValue];
 		_user.followersCount = [[response objectForKey:@"followers_count"] integerValue];
 		
-		self.navigationItem.title = _user.name.length > 0 ? _user.name : NSLocalizedString( @"NO_NAME", nil );
+		self.navigationItem.title = userNameWithPlaceholder;
 		
 		[self updateDishes];
 		[self updateBookmarks];
@@ -256,6 +259,18 @@
 	}];
 }
 
+- (void)editUserInfo:(NSDictionary *)userInfo
+{
+	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" parameters:userInfo success:^(id response) {
+		JLLog( @"Succeed" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
 
 #pragma mark -
 #pragma mark EGORefreshTableHeaderDelegate
@@ -330,6 +345,7 @@
 			bioButton.titleLabel.textAlignment = NSTextAlignmentLeft;
 			bioButton.adjustsImageWhenHighlighted = NO;
 			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top.png"] forState:UIControlStateNormal];
+			[bioButton addTarget:self action:@selector(bioButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			
 			// My profile
 			if( _user.userId == [[UserManager manager] userId] )
@@ -398,7 +414,7 @@
 			[_profileImage setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
 		}];
 		
-		_bioLabel.text = _user.bio.length > 0 ? _user.bio : NSLocalizedString( @"NO_BIO", nil );
+		_bioLabel.text = userBioWithPlaceholder;
 		_dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
 		_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _user.bookmarkCount];
 		_arrowView.frame = CGRectMake( _selectedTab == 0 ? ARROW_LEFT_X : ARROW_RIGHT_X, 100, 25, 11 );
@@ -475,6 +491,18 @@
 
 #pragma mark -
 #pragma mark Selectors
+
+- (void)bioButtonDidTouchUpInside
+{
+	DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"BIO", nil ) completion:^(DMTextFieldViewController *textFieldViewController, NSString *text) {
+		_user.bio = text;
+		[self editUserInfo:@{ @"bio": text }];
+		[_tableView reloadData];
+	}];
+	textFieldViewController.textField.text = _user.bio;
+	textFieldViewController.textField.placeholder = userBioWithPlaceholder;
+	[self.navigationController pushViewController:textFieldViewController animated:YES];
+}
 
 - (void)dishButtonDidTouchUpInside
 {
