@@ -54,11 +54,6 @@
 	viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 
-- (void)asd
-{
-	
-}
-
 
 #pragma mark -
 #pragma mark Getter/Setter
