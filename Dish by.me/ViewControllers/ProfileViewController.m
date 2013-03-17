@@ -596,7 +596,7 @@
 			[picker dismissViewControllerAnimated:YES completion:nil];
 		}];
 		
-	}] showFromTabBar:self.tabBarController.tabBar];
+	}] showInView:self.navigationController.view];
 }
 
 - (void)bioButtonDidTouchUpInside
