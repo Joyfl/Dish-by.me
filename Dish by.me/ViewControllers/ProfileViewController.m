@@ -58,11 +58,13 @@
 	if( self == [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController] )
 	{
 		self.navigationItem.leftBarButtonItem = nil;
+		self.navigationItem.rightBarButtonItem = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", nil ) target:self action:@selector(nameEditButtonHandler)];
 		self.trackedViewName = @"ProfileViewController (Tab)";
 	}
 	else
 	{
 		[DMBarButtonItem setBackButtonToViewController:self];
+		self.navigationItem.rightBarButtonItem = nil;
 		self.trackedViewName = [[self class] description];
 	}
 }
@@ -492,6 +494,19 @@
 #pragma mark -
 #pragma mark Selectors
 
+- (void)nameEditButtonHandler
+{
+	DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"NAME", nil ) completion:^(DMTextFieldViewController *textFieldViewController, NSString *text) {
+		_user.name = text;
+		[self editUserInfo:@{ @"name": text }];
+		self.navigationItem.title = userNameWithPlaceholder;
+	}];
+	textFieldViewController.trackedViewName = @"DMTextFieldViewController (Name)";
+	textFieldViewController.textField.text = _user.name;
+	textFieldViewController.textField.placeholder = userNameWithPlaceholder;
+	[self.navigationController pushViewController:textFieldViewController animated:YES];
+}
+
 - (void)bioButtonDidTouchUpInside
 {
 	DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"BIO", nil ) completion:^(DMTextFieldViewController *textFieldViewController, NSString *text) {
@@ -499,6 +514,7 @@
 		[self editUserInfo:@{ @"bio": text }];
 		[_tableView reloadData];
 	}];
+	textFieldViewController.trackedViewName = @"DMTextFieldViewController (Bio)";
 	textFieldViewController.textField.text = _user.bio;
 	textFieldViewController.textField.placeholder = userBioWithPlaceholder;
 	[self.navigationController pushViewController:textFieldViewController animated:YES];
