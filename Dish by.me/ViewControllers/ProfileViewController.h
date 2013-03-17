@@ -19,7 +19,7 @@
 	
 	UITableView *_tableView;
 	EGORefreshTableHeaderView *_refreshHeaderView;
-	UIButton *_profileImage;
+	UIButton *_userPhotoButton;
 	UILabel *_bioLabel;
 	UILabel *_dishCountLabel;
 	UILabel *_dishLabel;

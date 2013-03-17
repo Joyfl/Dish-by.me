@@ -17,7 +17,7 @@
 #import "AppDelegate.h"
 #import "DishTileItem.h"
 #import "DMTextFieldViewController.h"
-
+#import "HTBlock.h"
 
 #define ARROW_LEFT_X	140
 #define ARROW_RIGHT_X	246
@@ -273,6 +273,18 @@
 	}];
 }
 
+- (void)uploadUserPhoto:(UIImage *)photo
+{
+	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" image:photo parameters:nil success:^(id response) {
+		JLLog( @"Succeed" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
 
 #pragma mark -
 #pragma mark EGORefreshTableHeaderDelegate
@@ -335,8 +347,9 @@
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:profileCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			_profileImage = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 86 )];
-			[cell addSubview:_profileImage];
+			_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 86 )];
+			[_userPhotoButton addTarget:self action:@selector(userPhotoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[cell addSubview:_userPhotoButton];
 			
 			UIImageView *profileBorder = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"profile_border.png"]];
 			profileBorder.frame = CGRectMake( 8, 9, 93, 94 );
@@ -412,9 +425,28 @@
 			[cell addSubview:_arrowView];
 		}
 		
-		[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
-			[_profileImage setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
-		}];
+		if( _user.userId == [UserManager manager].userId )
+		{
+			[_userPhotoButton setBackgroundImage:_user.photo = [UserManager manager].userPhoto forState:UIControlStateNormal];
+		}
+		else
+		{
+			if( _user.photo )
+			{
+				[_userPhotoButton setBackgroundImage:_user.photo forState:UIControlStateNormal];
+			}
+			
+			else if( _user.thumbnail )
+			{
+				[_userPhotoButton setBackgroundImage:_user.thumbnail forState:UIControlStateNormal];
+			}
+			else
+			{
+				[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
+					[_userPhotoButton setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
+				}];
+			}
+		}
 		
 		_bioLabel.text = userBioWithPlaceholder;
 		_dishCountLabel.text = [NSString stringWithFormat:@"%d", _user.dishCount];
@@ -505,6 +537,62 @@
 	textFieldViewController.textField.text = _user.name;
 	textFieldViewController.textField.placeholder = userNameWithPlaceholder;
 	[self.navigationController pushViewController:textFieldViewController animated:YES];
+}
+
+- (void)userPhotoButtonDidTouchUpInside
+{
+	[[[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"TAKE_A_PHOTO", nil ), NSLocalizedString( @"FROM_LIBRARY", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+		
+		UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+		
+		if( buttonIndex == 0 ) // Camera
+		{
+			@try
+			{
+				picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+			}
+			@catch( NSException *exception )
+			{
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_NO_SUPPORT_CAMERA", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
+				return;
+			}
+			
+			picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+		}
+		else if( buttonIndex == 1 ) // Album
+		{
+			picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+		}
+		else
+		{
+			return;
+		}
+		
+		picker.allowsEditing = YES;
+		[self presentViewController:picker animated:YES completion:nil];
+		
+		[picker setFinishBlock:^(UIImagePickerController *picker, NSDictionary *info) {
+			[picker dismissViewControllerAnimated:YES completion:nil];
+			
+			UIImage *image = [Utils scaleAndRotateImage:[info objectForKey:@"UIImagePickerControllerEditedImage"]];
+			
+			// 카메라로 찍은 경우 앨범에 저장
+			if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
+				UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
+			
+			_user.thumbnail = image;
+			_user.photo = image;
+			[UserManager manager].userPhoto = image;
+			[self uploadUserPhoto:image];
+			[_tableView reloadData];
+
+		}];
+		
+		[picker setCancelBlock:^(UIImagePickerController *picker) {
+			[picker dismissViewControllerAnimated:YES completion:nil];
+		}];
+		
+	}] showFromTabBar:self.tabBarController.tabBar];
 }
 
 - (void)bioButtonDidTouchUpInside

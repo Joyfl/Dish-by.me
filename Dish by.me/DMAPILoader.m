@@ -83,7 +83,7 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
-	NSURLRequest *request = [_client multipartFormRequestWithMethod:@"POST" path:@"/api/dish" parameters:[self parametersWithAccessToken:parameters] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+	NSURLRequest *request = [_client multipartFormRequestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 		[formData appendPartWithFileData:UIImageJPEGRepresentation( image, 1 ) name:@"photo" fileName:@"photo" mimeType:@"image/jpeg"];
 	}];
 	
