@@ -80,6 +80,10 @@
 
 - (void)setUserId:(NSInteger)userId
 {
+	_dishes = [[NSMutableArray alloc] init];
+	_bookmarks = [[NSMutableArray alloc] init];
+	[_tableView reloadData];
+	
 	_userId = userId;
 	[self loadUserId:userId];
 }
