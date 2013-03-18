@@ -329,8 +329,6 @@
 	if( indexPath.section == 0 ) return 110;
 	else if( indexPath.section == 2 ) return 45;
 	else if( indexPath.row == ceil( selectedDishArray.count / 3.0 ) - 1 ) return 116;
-//	else if( _selectedTab == 0 && indexPath.row == _dishes.count - 1 ) return 112;
-//	else if( _selectedTab == 1 && indexPath.row == _bookmarks.count - 1 ) return 112;
 	return 102;
 }
 
@@ -351,6 +349,7 @@
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
 			_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 86 )];
+			[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 			[_userPhotoButton addTarget:self action:@selector(userPhotoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell addSubview:_userPhotoButton];
 			
