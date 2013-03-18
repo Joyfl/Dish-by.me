@@ -16,5 +16,6 @@ enum {
 
 - (id)initWithType:(NSInteger)type title:(NSString *)title target:(id)target action:(SEL)action;
 + (void)setBackButtonToViewController:(UIViewController *)viewController;
++ (void)setBackButtonToViewController:(UIViewController *)viewController viewControllerWillBePopped:(void (^)(void))viewControllerWillBePopped;
 
 @end

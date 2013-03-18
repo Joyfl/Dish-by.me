@@ -36,6 +36,11 @@
 
 + (void)setBackButtonToViewController:(UIViewController *)viewController
 {
+	[self setBackButtonToViewController:viewController viewControllerWillBePopped:nil];
+}
+
++ (void)setBackButtonToViewController:(UIViewController *)viewController viewControllerWillBePopped:(void (^)(void))viewControllerWillBePopped
+{
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	button.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	button.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -48,6 +53,7 @@
 	[button setBackgroundImage:bg forState:UIControlStateNormal];
 	
 	[button addTargetBlock:^(id sender) {
+		if( viewControllerWillBePopped ) viewControllerWillBePopped();
 		[viewController.navigationController popViewControllerAnimated:YES];
 	} forControlEvents:UIControlEventTouchUpInside];
 	

@@ -11,11 +11,15 @@
 @interface UIViewController (Dim)
 
 - (void)dim;
+- (void)dimAnimated:(BOOL)animated;
 - (void)dimWithDuration:(NSTimeInterval)duration completion:(void (^)(BOOL finished))completion;
 - (void)dimWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay completion:(void (^)(BOOL finished))completion;
 
 - (void)undim;
+- (void)undimAnimated:(BOOL)animated;
 - (void)undimWithDuration:(NSTimeInterval)duration completion:(void (^)(BOOL finished))completion;
 - (void)undimWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay completion:(void (^)(BOOL finished))completion;
+
+- (BOOL)isDimmed;
 
 @end

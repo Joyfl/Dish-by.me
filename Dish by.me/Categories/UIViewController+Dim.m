@@ -7,6 +7,7 @@
 //
 
 #import "UIViewController+Dim.h"
+#import <objc/runtime.h>
 
 @implementation UIViewController (Dim)
 
@@ -23,9 +24,17 @@
 }
 
 
+#pragma mark -
+#pragma mark Dim
+
 - (void)dim
 {
-	[self dimWithDuration:0.25 completion:nil];
+	[self dimAnimated:YES];
+}
+
+- (void)dimAnimated:(BOOL)animated
+{
+	[self dimWithDuration:animated ? 0.25 : 0 completion:nil];
 }
 
 - (void)dimWithDuration:(NSTimeInterval)duration completion:(void (^)(BOOL finished))completion
@@ -35,6 +44,9 @@
 
 - (void)dimWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay completion:(void (^)(BOOL finished))completion
 {
+	if( self.isDimmed ) return;
+	[self setIsDimmed:YES];
+	
 	UIImageView *dimView = [self dimView];
 	
 	[[[UIApplication sharedApplication] keyWindow] addSubview:dimView];
@@ -50,9 +62,17 @@
 }
 
 
+#pragma mark -
+#pragma mark Undim
+
 - (void)undim
 {
 	[self undimWithDuration:0.25 completion:nil];
+}
+
+- (void)undimAnimated:(BOOL)animated
+{
+	[self undimWithDuration:animated ? 0.25 : 0 completion:nil];
 }
 
 - (void)undimWithDuration:(NSTimeInterval)duration completion:(void (^)(BOOL finished))completion
@@ -62,6 +82,9 @@
 
 - (void)undimWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay completion:(void (^)(BOOL finished))completion
 {
+	if( !self.isDimmed ) return;
+	[self setIsDimmed:NO];
+	
 	UIImageView *dimView = [self dimView];
 	
 	[UIView animateWithDuration:duration delay:delay options:0 animations:^{
@@ -72,6 +95,20 @@
 		if( completion )
 			completion( finished );
 	}];
+}
+
+
+#pragma mark -
+#pragma mark isDimmed
+
+- (void)setIsDimmed:(BOOL)isDimmed
+{
+	objc_setAssociatedObject( self, "_isDimmed", [NSNumber numberWithBool:isDimmed], OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+}
+
+- (BOOL)isDimmed
+{
+	return [objc_getAssociatedObject( self, "_isDimmed" ) boolValue];
 }
 
 @end

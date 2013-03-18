@@ -15,13 +15,16 @@
 {
 	UIImageView *_forkAndKnife;
 	UIImageView *_loginBox;
-	UITextField *_emailInput;
 	UITextField *_passwordInput;
 	UIButton *_loginButton;
 	UIButton *_facebookLoginButton;
+	UIButton *_signUpButton;
 }
 
 @property (nonatomic, weak) id<LoginViewControllerDelegate> delegate;
+@property (nonatomic, strong) UITextField *emailInput;
+
+- (void)getUser;
 
 @end
 

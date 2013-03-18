@@ -349,7 +349,6 @@
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
 			_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 86 )];
-			[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 			[_userPhotoButton addTarget:self action:@selector(userPhotoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell addSubview:_userPhotoButton];
 			
@@ -438,6 +437,7 @@
 		}
 		else
 		{
+			[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
 				[_userPhotoButton setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
 			}];
@@ -586,7 +586,7 @@
 			[picker dismissViewControllerAnimated:YES completion:nil];
 		}];
 		
-	}] showInView:self.navigationController.view];
+	}] showInView:[[UIApplication sharedApplication] keyWindow]];
 }
 
 - (void)bioButtonDidTouchUpInside

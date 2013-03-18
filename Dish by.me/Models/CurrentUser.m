@@ -65,7 +65,9 @@
 	self.userId = 0;
 	self.name = nil;
 	self.photoURL = nil;
+	self.photo = nil;
 	self.thumbnailURL = nil;
+	self.thumbnail = nil;
 	self.bio = nil;
 	self.dishCount = 0;
 	self.bookmarkCount = 0;

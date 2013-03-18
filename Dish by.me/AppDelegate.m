@@ -150,7 +150,7 @@
 	{
 		WritingViewController *writingViewController = [[WritingViewController alloc] init];
 		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
-		[tabBarController presentViewController:navController animated:YES completion:nil];;
+		[tabBarController presentViewController:navController animated:YES completion:nil];
 	}
 	else
 	{
@@ -160,7 +160,7 @@
 
 - (void)presentNeedLoginActionSheetWithTitle:(NSString *)title
 {
-	[[[UIActionSheet alloc] initWithTitle:title cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"LOGIN", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+	[[[UIActionSheet alloc] initWithTitle:title cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"LOGIN_OR_SIGNUP", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
 		
 		// 로그인
 		if( buttonIndex == 0 )

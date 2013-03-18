@@ -1,8 +1,10 @@
 // Common
 "BACK" = "뒤로";
 "OOPS" = "어머나!";
+"WOW" = "우와!";
 "I_GOT_IT" = "알겠어요";
 "CANCEL" = "취소";
+"YES" = "네";
 
 // Messages
 "MESSAGE_LOGIN_FAILED" = "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
@@ -10,6 +12,10 @@
 "MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
 "MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
+"MESSAGE_SIGNUP_STEP_ONE" = "사용하실 이메일과 패스워드를 입력해주세요.";
+"MESSAGE_ALREADY_SIGNED_UP" = "이미 가입된 이메일이에요.";
+"MESSAGE_SIGNUP_COMPLETE" = "회원가입이 완료되었습니다!\n프로필을 완성해주세요.";
+"MESSAGE_PROFILE_UPDATE_COMPLETE" = "프로필이 예쁘게 만들어졌어요!\n가입한 계정으로 로그인할게요 :D";
 
 // Login
 "EMAIL" = "이메일";
@@ -17,6 +23,14 @@
 "LOGIN" = "로그인";
 "LOGIN_WITH_FACEBOOK" = "페이스북으로 로그인";
 "LOGIN_OR_SIGNUP" = "로그인 또는 계정 생성";
+"NO_ACCOUNT" = "아직 계정이 없으신가요?";
+
+// Sign Up
+"SIGNUP" = "가입하기";
+"DONE" = "완료";
+"WELCOME" = "환영합니다!";
+"DO_IT_LATER" = "나중에 하기";
+"PROFILE" = "프로필";
 
 // 
 "PULL_DOWN_TO_UPDATE" = "업데이트하시려면 아래로 당기세요.";

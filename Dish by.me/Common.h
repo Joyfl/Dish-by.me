@@ -19,3 +19,5 @@
 #define SETTING_KEY_USER_NAME		@"userName"
 
 #define DMUserDefaultsKeyCurrentUser @"DMUserDefaultsKeyCurrentUser"
+
+#define showErrorAlert() [[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Status Code : %d\nError Code : %d\nMessage : %@", statusCode, errorCode, message] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];

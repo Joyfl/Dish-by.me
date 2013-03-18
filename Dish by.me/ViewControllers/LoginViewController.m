@@ -15,8 +15,9 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "DMAPILoader.h"
 #import "UIViewController+Dim.h"
-
-#define showErrorAlert() [[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Status Code : %d\nError Code : %d\nMessage : %@", statusCode, errorCode, message] delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil] show];
+#import "SignUpStepOneViewController.h"
+#import "SignUpStepTwoViewController.h"
+#import "HTBlock.h"
 
 @implementation LoginViewController
 
@@ -51,23 +52,23 @@
 	_loginBox.frame = CGRectMake( 65, 193, 230, 75 );
 	[self.view addSubview:_loginBox];
 	
-	_emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 203, 245, 31 )];
-	_emailInput.delegate = self;
-	_emailInput.placeholder = NSLocalizedString( @"EMAIL", @"" );
-	_emailInput.font = [UIFont boldSystemFontOfSize:13];
-	_emailInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
-	_emailInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-	_emailInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-	_emailInput.layer.shadowOpacity = 1;
-	_emailInput.layer.shadowRadius = 0;
-	_emailInput.keyboardType = UIKeyboardTypeEmailAddress;
-	_emailInput.returnKeyType = UIReturnKeyNext;
-	_emailInput.autocorrectionType = UITextAutocorrectionTypeNo;
-	_emailInput.autocapitalizationType = UITextAutocapitalizationTypeNone;
-	[_emailInput setValue:[UIColor colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
-	[_emailInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
-	[_emailInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
-	[self.view addSubview:_emailInput];
+	self.emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 203, 245, 31 )];
+	self.emailInput.delegate = self;
+	self.emailInput.placeholder = NSLocalizedString( @"EMAIL", @"" );
+	self.emailInput.font = [UIFont boldSystemFontOfSize:13];
+	self.emailInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+	self.emailInput.layer.shadowOffset = CGSizeMake( 0, 1 );
+	self.emailInput.layer.shadowColor = [UIColor whiteColor].CGColor;
+	self.emailInput.layer.shadowOpacity = 1;
+	self.emailInput.layer.shadowRadius = 0;
+	self.emailInput.keyboardType = UIKeyboardTypeEmailAddress;
+	self.emailInput.returnKeyType = UIReturnKeyNext;
+	self.emailInput.autocorrectionType = UITextAutocorrectionTypeNo;
+	self.emailInput.autocapitalizationType = UITextAutocapitalizationTypeNone;
+	[self.emailInput setValue:[UIColor colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+	[self.emailInput addTarget:self action:@selector(inputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
+	[self.emailInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
+	[self.view addSubview:self.emailInput];
 	
 	_passwordInput = [[UITextField alloc] initWithFrame:CGRectMake( 75, 240, 245, 31 )];
 	_passwordInput.delegate = self;
@@ -105,7 +106,20 @@
 	[_facebookLoginButton addTarget:self action:@selector(facebookLoginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_facebookLoginButton];
 	
+	_signUpButton = [[UIButton alloc] initWithFrame:CGRectMake( 65, 390, 230, 40 )];
+	_signUpButton.titleLabel.font = [UIFont systemFontOfSize:13];
+	_signUpButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[_signUpButton setTitle:NSLocalizedString( @"NO_ACCOUNT", nil ) forState:UIControlStateNormal];
+	[_signUpButton setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
+	[_signUpButton addTarget:self action:@selector(signUpButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:_signUpButton];
+	
 	return self;
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 
@@ -117,10 +131,11 @@
 	[UIView animateWithDuration:0.25 animations:^{
 		_forkAndKnife.frame = CGRectMake( 140, 10, 80, 90 );
 		_loginBox.frame = CGRectMake( 65, 108, 230, 75 );
-		_emailInput.frame = CGRectMake( 75, 118, 245, 31 );
+		self.emailInput.frame = CGRectMake( 75, 118, 245, 31 );
 		_passwordInput.frame = CGRectMake( 75, 155, 245, 31 );
 		_loginButton.frame = CGRectMake( 65, 195, 230, 40 );
 		_facebookLoginButton.frame = CGRectMake( 65, 245, 230, 40 );
+		_signUpButton.frame = CGRectMake( 65, 295, 230, 40 );
 	}];
 }
 
@@ -129,10 +144,11 @@
 	[UIView animateWithDuration:0.25 animations:^{
 		_forkAndKnife.frame = CGRectMake( 140, 55, 80, 90 );
 		_loginBox.frame = CGRectMake( 65, 193, 230, 75 );
-		_emailInput.frame = CGRectMake( 75, 203, 245, 31 );
+		self.emailInput.frame = CGRectMake( 75, 203, 245, 31 );
 		_passwordInput.frame = CGRectMake( 75, 240, 245, 31 );
 		_loginButton.frame = CGRectMake( 65, 290, 230, 40 );
 		_facebookLoginButton.frame = CGRectMake( 65, 340, 230, 40 );
+		_signUpButton.frame = CGRectMake( 65, 390, 230, 40 );
 	}];
 }
 
@@ -147,7 +163,7 @@
 
 - (void)bgViewDidTouchDown
 {
-	[_emailInput resignFirstResponder];
+	[self.emailInput resignFirstResponder];
 	[_passwordInput resignFirstResponder];
 	[self animateDown];
 }
@@ -173,7 +189,7 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
-	if( textField == _emailInput )
+	if( textField == self.emailInput )
 	{
 		[_passwordInput becomeFirstResponder];
 		return NO;
@@ -190,10 +206,10 @@
 
 - (void)login
 {
-	NSString *email = _emailInput.text;
+	NSString *email = self.emailInput.text;
 	if( email.length == 0 )
 	{
-		[_emailInput becomeFirstResponder];
+		[self.emailInput becomeFirstResponder];
 		return;
 	}
 	
@@ -220,7 +236,7 @@
 		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_LOGIN_FAILED", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
 	}];
 	
-	[_emailInput resignFirstResponder];
+	[self.emailInput resignFirstResponder];
 	[_passwordInput resignFirstResponder];
 	[self animateDown];
 }
@@ -252,11 +268,34 @@
 					if( errorCode == 4100 )
 					{
 						[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:params success:^(id response) {
-#warning 프로필 완성단계로 넘어가기
-							JLLog( @"Sign up complete" );
+							JLLog( @"SignUp complete" );
 							
-							[self undim];
-							[[[UIAlertView alloc] initWithTitle:nil message:@"회원가입 완료. [페이스북으로 로그인] 버튼을 다시 눌러주세요." delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil] show];
+							// 회원가입이 완료되면 로그인
+							[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
+								[self undim];
+								
+								[CurrentUser user].loggedIn = YES;
+								[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
+								
+								[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WELCOME", nil ) message:NSLocalizedString( @"MESSAGE_SIGNUP_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"DO_IT_LATER", nil ) otherButtonTitles:@[NSLocalizedString( @"YES", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+									
+									// 나중에 하기
+									if( buttonIndex == 0 )
+									{
+										[self getUser];
+									}
+									else
+									{
+										NSInteger userId = [[response objectForKey:@"id"] integerValue];
+										SignUpStepTwoViewController *signUpViewController = [[SignUpStepTwoViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
+										[self.navigationController pushViewController:signUpViewController animated:YES];
+									}
+								}] show];
+								
+							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+								[self undim];
+								showErrorAlert();
+							}];
 							
 						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 							[self undim];
@@ -295,8 +334,8 @@
 		[[CurrentUser user] updateToDictionary:response];
 		[[CurrentUser user] save];
 		
-		[self dismissViewControllerAnimated:YES completion:nil];
 		[self.delegate loginViewControllerDidSucceedLogin:self];
+		[self dismissViewControllerAnimated:YES completion:nil];
 		
 		[[FBSession activeSession] closeAndClearTokenInformation];
 		
@@ -317,9 +356,8 @@
 
 - (void)signUpButtonDidTouchUpInside
 {
-//	SignUpViewController *signUpViewController = [[SignUpViewController alloc] init];
-//	[self.navigationController pushViewController:signUpViewController animated:YES];
-//	[signUpViewController release];
+	SignUpStepOneViewController *signUpViewController = [[SignUpStepOneViewController alloc] init];
+	[self.navigationController pushViewController:signUpViewController animated:YES];
 }
 
 @end
