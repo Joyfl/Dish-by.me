@@ -8,12 +8,15 @@
 "MESSAGE_LOGIN_FAILED" = "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
 "MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
 "MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
+"MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
+"MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
 
 // Login
 "EMAIL" = "이메일";
 "PASSWORD" = "비밀번호";
 "LOGIN" = "로그인";
 "LOGIN_WITH_FACEBOOK" = "페이스북으로 로그인";
+"LOGIN_OR_SIGNUP" = "로그인 또는 계정 생성";
 
 // 
 "PULL_DOWN_TO_UPDATE" = "업데이트하시려면 아래로 당기세요.";

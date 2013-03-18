@@ -19,6 +19,7 @@
 #import "GAI.h"
 #import "JLHangulUtils.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "HTBlock.h"
 
 @implementation AppDelegate
 
@@ -131,7 +132,7 @@
 		// 로그인이 되어있지 않으면 LoginView를 띄움
 		if( ![CurrentUser user].loggedIn )
 		{
-			[self presentLoginViewController];
+			[self presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE", nil )];
 			return NO;
 		}
 	}
@@ -153,8 +154,21 @@
 	}
 	else
 	{
-		[self presentLoginViewController];
+		[self presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_UPLOAD", nil )];
 	}
+}
+
+- (void)presentNeedLoginActionSheetWithTitle:(NSString *)title
+{
+	[[[UIActionSheet alloc] initWithTitle:title cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"LOGIN", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+		
+		// 로그인
+		if( buttonIndex == 0 )
+		{
+			[self presentLoginViewController];
+		}
+		
+	}] showInView:self.window];
 }
 
 - (void)presentLoginViewController
