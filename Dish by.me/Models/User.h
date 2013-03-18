@@ -9,19 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface User : NSObject
-{
-	NSInteger userId;
-	NSString *name;
-	NSString *photoURL;
-	UIImage *photo;
-	NSString *thumbnailURL;
-	UIImage *thumbnail;
-	NSString *bio;
-	NSInteger dishCount;
-	NSInteger bookmarkCount;
-	NSInteger followingCount;
-	NSInteger followersCount;
-}
 
 @property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, strong) NSString *name;
@@ -35,6 +22,7 @@
 @property (nonatomic, assign) NSInteger followingCount;
 @property (nonatomic, assign) NSInteger followersCount;
 
-+ (User *)userFromDictionary:(NSDictionary *)dictionary;
++ (id)userFromDictionary:(NSDictionary *)dictionary;
+- (id)dictionary;
 
 @end

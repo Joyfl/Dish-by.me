@@ -10,7 +10,7 @@
 #import "JLHTTPLoader.h"
 #import "Utils.h"
 #import <QuartzCore/CALayer.h>
-#import "UserManager.h"
+#import "CurrentUser.h"
 #import "DMAPILoader.h"
 
 @implementation DishListCell
@@ -142,7 +142,7 @@ static const NSInteger PhotoViewMaxLength = 292;
 	
 	[self updateBookmarkUI];
 	
-	_bookmarkButton.hidden = ![UserManager manager].loggedIn;
+	_bookmarkButton.hidden = ![CurrentUser user].loggedIn;
 		 
 	if( _dish.bookmarked )
 		_bookmarkButton.buttonX = 10;
@@ -154,7 +154,7 @@ static const NSInteger PhotoViewMaxLength = 292;
 {
 	_bookmarkCountLabel.text = [NSString stringWithFormat:@"%d", _dish.bookmarkCount];
 	
-	if( !_dish.bookmarked || ![UserManager manager].loggedIn )
+	if( !_dish.bookmarked || ![CurrentUser user].loggedIn )
 	{
 		_bookmarkIconView.image = [UIImage imageNamed:@"icon_bookmark.png"];
 		_bookmarkCountLabel.textColor = [UIColor whiteColor];

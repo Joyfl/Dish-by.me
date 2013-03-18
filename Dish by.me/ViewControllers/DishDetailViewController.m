@@ -13,7 +13,7 @@
 #import "DMBarButtonItem.h"
 #import "DMButton.h"
 #import "RecipeView.h"
-#import "UserManager.h"
+#import "CurrentUser.h"
 #import <QuartzCore/QuartzCore.h>
 #import "User.h"
 #import "DMNavigationController.h"
@@ -90,7 +90,7 @@ enum {
 	tapRecognizer.enabled = NO; // 댓글입력중일때만 활성화 (TTTAttributedLabel 링크 터치 중복문제)
 	[self.view addGestureRecognizer:tapRecognizer];
 	
-	lastLoggedIn = [UserManager manager].loggedIn;
+	lastLoggedIn = [CurrentUser user].loggedIn;
 	
 	if( !_dish )
 		[self loadDishId:dishId];
@@ -102,7 +102,7 @@ enum {
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	if( [UserManager manager].loggedIn )
+	if( [CurrentUser user].loggedIn )
 	{
 //		if( _dish.userId == [UserManager manager].userId )
 //		{
@@ -136,7 +136,7 @@ enum {
 	[self updateAllCommentsRelativeTime];
 	[_tableView reloadData];
 	
-	lastLoggedIn = [UserManager manager].loggedIn;
+	lastLoggedIn = [CurrentUser user].loggedIn;
 }
 
 
@@ -294,9 +294,9 @@ enum {
 - (void)sendComment
 {
 	Comment *comment = [[Comment alloc] init];
-	comment.userId = [UserManager manager].userId;
-	comment.userName = [UserManager manager].userName;
-	comment.userPhoto = [UserManager manager].userPhoto;
+	comment.userId = [CurrentUser user].userId;
+	comment.userName = [CurrentUser user].name;
+	comment.userPhoto = [CurrentUser user].photo;
 	comment.message = _commentInput.text;
 	comment.createdTime = [NSDate date];
 	comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
@@ -670,7 +670,7 @@ enum {
 		else
 			_bookmarkButton.buttonX = 75;
 
-		_bookmarkButton.hidden = ![UserManager manager].loggedIn;
+		_bookmarkButton.hidden = ![CurrentUser user].loggedIn;
 		[self updateBookmarkUI];
 		
 		return cell;
@@ -779,7 +779,7 @@ enum {
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return indexPath.section == kSectionComment && _comments.count > 0 && [[_comments objectAtIndex:indexPath.row] userId] == [[UserManager manager] userId];
+	return indexPath.section == kSectionComment && _comments.count > 0 && [[_comments objectAtIndex:indexPath.row] userId] == [[CurrentUser user] userId];
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -807,7 +807,7 @@ enum {
 
 - (void)updateBookmarkUI
 {
-	_bookmarkIconView.image = !_dish.bookmarked || ![UserManager manager].loggedIn ? [UIImage imageNamed:@"icon_bookmark_gray.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
+	_bookmarkIconView.image = !_dish.bookmarked || ![CurrentUser user].loggedIn ? [UIImage imageNamed:@"icon_bookmark_gray.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
 	_bookmarkLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), _dish.bookmarkCount];
 }
 
@@ -853,7 +853,7 @@ enum {
 - (void)profileImageButtonDidTouchUpInside
 {
 	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
-	profileViewController.userId = _dish.userId;
+	[profileViewController loadUserId:_dish.userId];
 	[self.navigationController pushViewController:profileViewController animated:YES];
 }
 
@@ -915,7 +915,7 @@ enum {
 
 - (void)sendButtonDidTouchUpInside
 {
-	if( [UserManager manager].loggedIn )
+	if( [CurrentUser user].loggedIn )
 	{
 		if( _commentInput.text.length == 0 || [_commentInput.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0 )
 			return;
@@ -995,7 +995,7 @@ enum {
 - (void)commentCell:(CommentCell *)commentCell didTouchProfilePhotoViewAtIndexPath:(NSIndexPath *)indexPath
 {
 	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
-	profileViewController.userId = [[_comments objectAtIndex:indexPath.row] userId];
+	[profileViewController loadUserId:[[_comments objectAtIndex:indexPath.row] userId]];
 	[self.navigationController pushViewController:profileViewController animated:YES];
 }
 

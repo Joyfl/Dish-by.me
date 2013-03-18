@@ -8,7 +8,7 @@
 
 #import "DMAPILoader.h"
 #import "Utils.h"
-#import "UserManager.h"
+#import "CurrentUser.h"
 
 @implementation DMAPILoader
 
@@ -56,7 +56,7 @@
 			[self extendAccessToken:^(id response) {
 				JLLog( @"AccessToken is extended" );
 				
-				[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
+				[[CurrentUser user] setAccessToken:[response objectForKey:@"access_token"]];
 				[self api:api method:method parameters:parameters success:success failure:failure];
 				
 			} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -67,7 +67,7 @@
 			return;
 		}
 		
-		NSLog( @"URL : %@", operation.request.URL );
+		JLLog( @"URL : %@", operation.request.URL );
 		JLLog( @"statusCode : %d", operation.response.statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", [errorInfo objectForKey:@"message"] );
@@ -99,7 +99,7 @@
 			[self extendAccessToken:^(id response) {
 				JLLog( @"AccessToken is extended" );
 				
-				[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
+				[[CurrentUser user] setAccessToken:[response objectForKey:@"access_token"]];
 				[self api:api method:method image:image parameters:parameters success:success failure:failure];
 				
 			} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -134,10 +134,10 @@
 
 - (NSDictionary *)parametersWithAccessToken:(NSDictionary *)parameters
 {
-	if( [[UserManager manager] loggedIn] )
+	if( [[CurrentUser user] loggedIn] )
 	{
 		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:parameters];
-		[params setObject:[[UserManager manager] accessToken] forKey:@"access_token"];
+		[params setObject:[[CurrentUser user] accessToken] forKey:@"access_token"];
 		return params;
 	}
 	
@@ -147,7 +147,7 @@
 - (void)extendAccessToken:(void (^)(id response))success
 				  failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
-	NSDictionary *params = @{ @"access_token": [[UserManager manager] accessToken] };
+	NSDictionary *params = @{ @"access_token": [[CurrentUser user] accessToken] };
 	[self api:@"/auth/renew" method:@"POST" parameters:params success:success failure:failure];
 }
 

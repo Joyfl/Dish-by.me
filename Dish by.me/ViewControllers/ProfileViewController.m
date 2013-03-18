@@ -11,7 +11,7 @@
 #import "User.h"
 #import "Dish.h"
 #import "DishDetailViewController.h"
-#import "UserManager.h"
+#import "CurrentUser.h"
 #import "DMAPILoader.h"
 #import "DMBarButtonItem.h"
 #import "AppDelegate.h"
@@ -76,35 +76,34 @@
 
 
 #pragma mark -
-#pragma mark Setter
+#pragma mark Loading
 
-- (void)setUserId:(NSInteger)userId
+- (void)loadUserId:(NSInteger)userId
 {
 	_dishes = [[NSMutableArray alloc] init];
 	_bookmarks = [[NSMutableArray alloc] init];
 	[_tableView reloadData];
 	
-	_userId = userId;
-	[self loadUserId:userId];
-}
-
-
-#pragma mark -
-#pragma mark Loading
-
-- (void)loadUserId:(NSInteger)userId
-{
-	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
-		_user = [User userFromDictionary:response];
+	if( userId == [CurrentUser user].userId )
+	{
+		_user = [CurrentUser user];
 		self.navigationItem.title = userNameWithPlaceholder;
-		
 		[_tableView reloadData];
-		
-	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		JLLog( @"statusCode : %d", statusCode );
-		JLLog( @"errorCode : %d", errorCode );
-		JLLog( @"message : %@", message );
-	}];
+	}
+	else
+	{
+		[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
+			_user = [User userFromDictionary:response];
+			self.navigationItem.title = userNameWithPlaceholder;
+			
+			[_tableView reloadData];
+			
+		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+			JLLog( @"statusCode : %d", statusCode );
+			JLLog( @"errorCode : %d", errorCode );
+			JLLog( @"message : %@", message );
+		}];
+	}
 }
 
 - (void)loadMoreDishes
@@ -367,7 +366,7 @@
 			[bioButton addTarget:self action:@selector(bioButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			
 			// My profile
-			if( _user.userId == [[UserManager manager] userId] )
+			if( _user.userId == [[CurrentUser user] userId] )
 			{
 				bioButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[bioButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
@@ -429,27 +428,20 @@
 			[cell addSubview:_arrowView];
 		}
 		
-		if( _user.userId == [UserManager manager].userId )
+		if( _user.photo )
 		{
-			[_userPhotoButton setBackgroundImage:_user.photo = [UserManager manager].userPhoto forState:UIControlStateNormal];
+			[_userPhotoButton setBackgroundImage:_user.photo forState:UIControlStateNormal];
+		}
+		
+		else if( _user.thumbnail )
+		{
+			[_userPhotoButton setBackgroundImage:_user.thumbnail forState:UIControlStateNormal];
 		}
 		else
 		{
-			if( _user.photo )
-			{
-				[_userPhotoButton setBackgroundImage:_user.photo forState:UIControlStateNormal];
-			}
-			
-			else if( _user.thumbnail )
-			{
-				[_userPhotoButton setBackgroundImage:_user.thumbnail forState:UIControlStateNormal];
-			}
-			else
-			{
-				[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
-					[_userPhotoButton setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
-				}];
-			}
+			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
+				[_userPhotoButton setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
+			}];
 		}
 		
 		_bioLabel.text = userBioWithPlaceholder;
@@ -586,7 +578,6 @@
 			
 			_user.thumbnail = image;
 			_user.photo = image;
-			[UserManager manager].userPhoto = image;
 			[self uploadUserPhoto:image];
 			[_tableView reloadData];
 

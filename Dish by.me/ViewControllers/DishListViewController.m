@@ -10,7 +10,7 @@
 #import "Dish.h"
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
-#import "UserManager.h"
+#import "CurrentUser.h"
 
 @implementation DishListViewController
 

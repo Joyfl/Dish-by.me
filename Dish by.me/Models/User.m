@@ -12,7 +12,7 @@
 
 @synthesize userId, name, photoURL, photo, thumbnailURL, thumbnail, bio, dishCount, bookmarkCount, followingCount, followersCount;
 
-+ (User *)userFromDictionary:(NSDictionary *)dictionary
++ (id)userFromDictionary:(NSDictionary *)dictionary
 {
 	User *user = [[User alloc] init];
 	user.userId = [[dictionary objectForKey:@"id"] integerValue];
@@ -25,6 +25,21 @@
 	user.followingCount = [[dictionary objectForKey:@"following_count"] integerValue];
 	user.followersCount = [[dictionary objectForKey:@"followers_count"] integerValue];
 	return user;
+}
+
+- (id)dictionary
+{
+	return [NSDictionary dictionaryWithObjectsAndKeys:
+			[NSNumber numberWithInteger:self.userId], @"id",
+			self.name, @"name",
+			self.photoURL, @"photo_url",
+			self.thumbnailURL, @"thumbnail_url",
+			self.bio, @"bio",
+			[NSNumber numberWithInteger:self.dishCount], @"dish_count",
+			[NSNumber numberWithInteger:self.bookmarkCount], @"bookmark_count",
+			[NSNumber numberWithInteger:self.followingCount], @"following_count",
+			[NSNumber numberWithInteger:self.followersCount], @"followers_count",
+			nil];
 }
 
 @end

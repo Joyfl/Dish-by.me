@@ -7,7 +7,7 @@
 //
 
 #import "SettingsViewController.h"
-#import "UserManager.h"
+#import "CurrentUser.h"
 
 @implementation SettingsViewController
 
@@ -138,7 +138,7 @@ enum {
 	
 	else if( indexPath.section == kSectionLogout )
 	{
-		[[UserManager manager] logout];
+		[[CurrentUser user] logout];
 		[[[UIAlertView alloc] initWithTitle:@"" message:NSLocalizedString( @"LOGOUT_SUCCEED", @"로그아웃되었습니다." ) delegate:nil cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"알겠어요" ) otherButtonTitles:nil] show];
 	}
 	

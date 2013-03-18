@@ -14,7 +14,7 @@
 #import "SettingsViewController.h"
 #import "WritingViewController.h"
 #import "CameraOverlayViewController.h"
-#import "UserManager.h"
+#import "CurrentUser.h"
 #import "User.h"
 #import "GAI.h"
 #import "JLHangulUtils.h"
@@ -59,7 +59,7 @@
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
 	self.profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
 	self.profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
-	if( [UserManager manager].loggedIn ) self.profileViewController.userId = [UserManager manager].userId;
+	if( [CurrentUser user].loggedIn ) [self.profileViewController loadUserId:[CurrentUser user].userId];
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
 	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:settingsViewController];
@@ -129,7 +129,7 @@
 	if( [(DMNavigationController *)viewController rootViewController] == self.profileViewController )
 	{
 		// 로그인이 되어있지 않으면 LoginView를 띄움
-		if( ![UserManager manager].loggedIn )
+		if( ![CurrentUser user].loggedIn )
 		{
 			[self presentLoginViewController];
 			return NO;
@@ -145,7 +145,7 @@
 
 - (void)cameraButtonDidTouchUpInside
 {
-	if( [UserManager manager].loggedIn )
+	if( [CurrentUser user].loggedIn )
 	{
 		WritingViewController *writingViewController = [[WritingViewController alloc] init];
 		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
@@ -172,9 +172,9 @@
 
 - (void)loginViewControllerDidSucceedLogin:(LoginViewController *)loginViewController
 {
-	JLLog( @"Login succeed" );
+	JLLog( @"loginViewControllerDidSucceedLogin" );
 	[self.dishListViewController updateDishes];
-	self.profileViewController.userId = [UserManager manager].userId;
+	[self.profileViewController loadUserId:[CurrentUser user].userId];
 }
 
 @end

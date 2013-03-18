@@ -17,3 +17,5 @@
 #define SETTING_KEY_ACCESS_TOKEN	@"accessToken"
 #define SETTING_KEY_USER_ID			@"userId"
 #define SETTING_KEY_USER_NAME		@"userName"
+
+#define DMUserDefaultsKeyCurrentUser @"DMUserDefaultsKeyCurrentUser"

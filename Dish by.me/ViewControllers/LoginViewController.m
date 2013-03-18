@@ -9,7 +9,7 @@
 #import "LoginViewController.h"
 #import "DMBarButtonItem.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UserManager.h"
+#import "CurrentUser.h"
 #import "User.h"
 #import "JLHTTPLoader.h"
 #import <FacebookSDK/FacebookSDK.h>
@@ -210,8 +210,8 @@
 	[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
 		JLLog( @"Login succeeded" );
 		
-		[UserManager manager].loggedIn = YES;
-		[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
+		[CurrentUser user].loggedIn = YES;
+		[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
 		[self getUser];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
@@ -234,6 +234,8 @@
 	[self dim];
 	
 	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+		JLLog( @"status : %d", status );
+		
 		switch( status )
 		{
 			case FBSessionStateOpen:
@@ -252,8 +254,8 @@
 					if( errorCode == 1400 )
 					{
 						[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
-							[UserManager manager].loggedIn = YES;
-							[[UserManager manager] setAccessToken:[response objectForKey:@"access_token"]];
+							[CurrentUser user].loggedIn = YES;
+							[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
 							[self getUser];
 						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 							[self undim];
@@ -269,9 +271,9 @@
 				break;
 			}
 				
-			default:
-				NSLog( @"%d", status );
+			case FBSessionStateClosedLoginFailed:
 				[self undim];
+				JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
 				break;
 		}
 		
@@ -285,20 +287,21 @@
 
 - (void)getUser
 {
+	JLLog( @"getUser" );
 	[[DMAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"getUser success" );
 		
 		[self undim];
 		
-		[UserManager manager].userId = [[response objectForKey:@"id"] integerValue];
-		[UserManager manager].userName = [response objectForKey:@"name"];
+		[[CurrentUser user] updateToDictionary:response];
+		[[CurrentUser user] save];
 		
 		[self dismissViewControllerAnimated:YES completion:nil];
 		[self.delegate loginViewControllerDidSucceedLogin:self];
 		
 		[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] context:nil success:^(UIImage *image, id context) {
 			JLLog( @"Image loading succeeded" );
-			[UserManager manager].userPhoto = image;
+			[CurrentUser user].photo = image;
 		}];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {

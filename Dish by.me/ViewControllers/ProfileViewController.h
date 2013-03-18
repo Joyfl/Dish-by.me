@@ -40,6 +40,6 @@
 	NSInteger _selectedTab;
 }
 
-@property (nonatomic, assign) NSInteger userId;
+- (void)loadUserId:(NSInteger)userId;
 
 @end
