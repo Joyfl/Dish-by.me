@@ -235,28 +235,29 @@
 	
 	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
 		JLLog( @"status : %d", status );
-		
 		switch( status )
 		{
 			case FBSessionStateOpen:
 			{
-				// Facebook 회원가입을 먼저 요청
+				// 로그인을 먼저 요청
 				NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
-				[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:params success:^(id response) {
-#warning 프로필 완성단계로 넘어가기
-					JLLog( @"Sign up complete" );
-					
-					[self undim];
-					[[[UIAlertView alloc] initWithTitle:nil message:@"회원가입 완료. [페이스북으로 로그인] 버튼을 다시 눌러주세요." delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil] show];
+				[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
+					[CurrentUser user].loggedIn = YES;
+					[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
+					[self getUser];
 					
 				} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-					// 중복된 계정이 있다면 로그인 요청을 보낸다
-					if( errorCode == 1400 )
+					
+					// 해당 계정이 없다면 회원가입 요청을 보낸다
+					if( errorCode == 4100 )
 					{
-						[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
-							[CurrentUser user].loggedIn = YES;
-							[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
-							[self getUser];
+						[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:params success:^(id response) {
+#warning 프로필 완성단계로 넘어가기
+							JLLog( @"Sign up complete" );
+							
+							[self undim];
+							[[[UIAlertView alloc] initWithTitle:nil message:@"회원가입 완료. [페이스북으로 로그인] 버튼을 다시 눌러주세요." delegate:nil cancelButtonTitle:@"확인" otherButtonTitles:nil] show];
+							
 						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 							[self undim];
 							showErrorAlert();
@@ -276,8 +277,6 @@
 				JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
 				break;
 		}
-		
-		[[FBSession activeSession] closeAndClearTokenInformation];
 	}];
 }
 
@@ -298,6 +297,8 @@
 		
 		[self dismissViewControllerAnimated:YES completion:nil];
 		[self.delegate loginViewControllerDidSucceedLogin:self];
+		
+		[[FBSession activeSession] closeAndClearTokenInformation];
 		
 		[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:[response objectForKey:@"photo_url"]] context:nil success:^(UIImage *image, id context) {
 			JLLog( @"Image loading succeeded" );
