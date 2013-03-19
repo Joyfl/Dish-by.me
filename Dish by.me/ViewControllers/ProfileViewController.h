@@ -19,12 +19,17 @@
 	
 	UITableView *_tableView;
 	EGORefreshTableHeaderView *_refreshHeaderView;
+	
 	UIButton *_userPhotoButton;
+	
+	UILabel *_nameLabel;
 	UILabel *_bioLabel;
+	
 	UILabel *_dishCountLabel;
-	UILabel *_dishLabel;
 	UILabel *_bookmarkCountLabel;
-	UILabel *_bookmarkLabel;
+	UILabel *_followingCountLabel;
+	UILabel *_followersCountLabel;
+	
 	UIImageView *_arrowView;
 	
 	BOOL _updating;

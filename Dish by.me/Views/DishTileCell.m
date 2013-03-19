@@ -9,8 +9,8 @@
 #import "DishTileCell.h"
 #import "DishTileItem.h"
 
-NSInteger DishTileGap = 14;
-NSInteger DishTileLength = 88;
+NSInteger DishTileGap = 8;
+NSInteger DishTileLength = 96;
 
 @implementation DishTileCell
 
@@ -23,11 +23,9 @@ NSInteger DishTileLength = 88;
 	
 	for( NSInteger i = 0; i < 3; i++ )
 	{
-		DishTileItem *dishItem = [[DishTileItem alloc] init];
-		dishItem.frame = CGRectMake( DishTileGap * ( i + 1 ) + DishTileLength * i, 10, DishTileLength, DishTileLength );
-		dishItem.adjustsImageWhenHighlighted = NO;
+		DishTileItem *dishItem = [[DishTileItem alloc] initWithFrame:CGRectMake( DishTileGap * ( i + 1 ) + DishTileLength * i, 10, DishTileLength, DishTileLength )];
+		dishItem.delegate = self;
 		dishItem.hidden = YES;
-		[dishItem addTarget:self action:@selector(dishItemDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 		[self addSubview:dishItem];
 		
 		[dishItems addObject:dishItem];
@@ -41,7 +39,11 @@ NSInteger DishTileLength = 88;
 	return [dishItems objectAtIndex:index];
 }
 
-- (void)dishItemDidTouchUpInside:(DishTileItem *)dishTileItem
+
+#pragma mark -
+#pragma mark DishTileItemDelegate
+
+- (void)dishTileItemDidTouchUpInside:(DishTileItem *)dishTileItem
 {
 	[self.delegate dishTileCell:self didSelectDishTileItem:dishTileItem];
 }

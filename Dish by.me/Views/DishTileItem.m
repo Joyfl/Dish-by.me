@@ -11,11 +11,17 @@
 
 @implementation DishTileItem
 
-- (id)init
+- (id)initWithFrame:(CGRect)frame
 {
-	self = [super init];
-	self.imageEdgeInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
-	[self setBackgroundImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal];
+	self = [super initWithFrame:frame];
+	
+	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 4, 4, 88, 88 )];
+	[_photoButton setBackgroundImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal];
+	[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self addSubview:_photoButton];
+	
+	_borderView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_tile_border.png"]];
+	[self addSubview:_borderView];
 	
 	return self;
 }
@@ -24,11 +30,9 @@
 {
 	_dish = dish;
 	
-	[self setImage:[UIImage imageNamed:@"dish_tile_border.png"] forState:UIControlStateNormal];
-	
 	if( _dish.croppedThumbnail )
 	{
-		[self setBackgroundImage:_dish.croppedThumbnail forState:UIControlStateNormal];
+		[_photoButton setBackgroundImage:_dish.croppedThumbnail forState:UIControlStateNormal];
 	}
 	else
 	{
@@ -56,9 +60,14 @@
 				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
 			}
 			
-			[self setBackgroundImage:_dish.croppedThumbnail forState:UIControlStateNormal];
+			[_photoButton setBackgroundImage:_dish.croppedThumbnail forState:UIControlStateNormal];
 		}];
 	}
+}
+
+- (void)photoButtonDidTouchUpInside
+{
+	[self.delegate dishTileItemDidTouchUpInside:self];
 }
 
 @end

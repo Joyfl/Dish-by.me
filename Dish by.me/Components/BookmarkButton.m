@@ -35,7 +35,7 @@
 {
     self = [super init];
 	
-	_bookmarkLabel = [[FXLabel alloc] init];
+	_bookmarkLabel = [[UILabel alloc] init];
 	_bookmarkLabel.text = NSLocalizedString( @"BOOKMARK", @"북마크" );
 	_bookmarkLabel.textColor = [UIColor colorWithHex:0xB3B3B3 alpha:1];
 	_bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
@@ -47,9 +47,9 @@
 //	_bookmarkLabel.layer.shadowOpacity = 0.08;
 //	_bookmarkLabel.layer.shadowRadius = 1;
 //	_bookmarkLabel.layer.shadowOffset = CGSizeMake( 0, -1 );
-	_bookmarkLabel.innerShadowColor = [UIColor colorWithWhite:0 alpha:0.2];
-	_bookmarkLabel.innerShadowBlur = 1;
-	_bookmarkLabel.innerShadowOffset = CGSizeMake( 0.5, 0.5 );
+//	_bookmarkLabel.innerShadowColor = [UIColor colorWithWhite:0 alpha:0.2];
+//	_bookmarkLabel.innerShadowBlur = 1;
+//	_bookmarkLabel.innerShadowOffset = CGSizeMake( 0.5, 0.5 );
 	[_bookmarkLabel sizeToFit];
 	_bookmarkLabel.frame = CGRectMake( 72 - _bookmarkLabel.frame.size.width, 4, _bookmarkLabel.frame.size.width, 15 );
 	

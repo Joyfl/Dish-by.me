@@ -9,8 +9,22 @@
 #import <Foundation/Foundation.h>
 #import "Dish.h"
 
-@interface DishTileItem : UIButton
+@protocol DishTileItemDelegate;
 
+@interface DishTileItem : UIView
+{
+	UIButton *_photoButton;
+	UIImageView *_borderView;
+}
+
+@property (nonatomic, weak) id<DishTileItemDelegate> delegate;
 @property (nonatomic, strong) Dish *dish;
+
+@end
+
+
+@protocol DishTileItemDelegate
+
+- (void)dishTileItemDidTouchUpInside:(DishTileItem *)dishTileItem;
 
 @end

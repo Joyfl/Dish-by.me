@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DishTileItem.h"
 
-@class DishTileItem;
 @protocol DishTileCellDelegate;
 
-@interface DishTileCell : UITableViewCell
+@interface DishTileCell : UITableViewCell <DishTileItemDelegate>
 {
 	NSMutableArray *dishItems;
 }

@@ -77,6 +77,8 @@
 "SAVE" = "저장";
 "DISHES" = "요리";
 "BOOKMARKS" = "북마크";
+"FOLLOWING" = "팔로잉";
+"FOLLOWERS" = "팔로워";
 
 // SettingsView
 "SHARE_SETTINGS" = "공유 설정";
