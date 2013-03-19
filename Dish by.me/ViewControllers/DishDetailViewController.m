@@ -661,7 +661,7 @@ enum {
 		
 		_timeLabel.text = _dish.relativeCreatedTime;
 		[_timeLabel sizeToFit];
-		_timeLabel.frame = CGRectMake( 309 - _timeLabel.frame.size.width, 8, _timeLabel.frame.size.width, 10 );
+		_timeLabel.frame = CGRectMake( 307 - _timeLabel.frame.size.width, 8, _timeLabel.frame.size.width, 10 );
 		
 		[_forkCountButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
 		
