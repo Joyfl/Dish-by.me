@@ -369,6 +369,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			nameButton.adjustsImageWhenHighlighted = NO;
 			nameButton.adjustsImageWhenDisabled = NO;
 			[nameButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top.png"] forState:UIControlStateNormal];
+			[nameButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top_selected.png"] forState:UIControlStateHighlighted];
 			[nameButton addTarget:self action:@selector(nameButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:nameButton];
 			
@@ -388,6 +389,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			bioButton.adjustsImageWhenHighlighted = NO;
 			bioButton.adjustsImageWhenDisabled = NO;
 			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_mid.png"] forState:UIControlStateNormal];
+			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_mid_selected.png"] forState:UIControlStateHighlighted];
 			[bioButton addTarget:self action:@selector(bioButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:bioButton];
 			
@@ -422,7 +424,9 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			UIButton *dishButton = [[UIButton alloc] initWithFrame:CGRectMake( 8, 101, 77, 47 )];
 			dishButton.tag = 0;
 			[dishButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bot_1.png"] forState:UIControlStateNormal];
+			[dishButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bot_1_selected.png"] forState:UIControlStateHighlighted];
 			[dishButton addTarget:self action:@selector(tabDidTouchDown:) forControlEvents:UIControlEventTouchDown];
+			[dishButton addTarget:self action:@selector(tabDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 			[dishButton addTarget:self action:@selector(tabDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 			dishButton.adjustsImageWhenHighlighted = NO;
 			[cell.contentView addSubview:dishButton];
@@ -450,6 +454,9 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			UIButton *bookmarkButton = [[UIButton alloc] initWithFrame:CGRectMake( dishButton.frame.origin.x + dishButton.frame.size.width, dishButton.frame.origin.y, 75, 47 )];
 			bookmarkButton.tag = 1;
 			[bookmarkButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bot_2.png"] forState:UIControlStateNormal];
+			[bookmarkButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bot_2_selected.png"] forState:UIControlStateHighlighted];
+			[bookmarkButton addTarget:self action:@selector(tabDidTouchDown:) forControlEvents:UIControlEventTouchDown];
+			[bookmarkButton addTarget:self action:@selector(tabDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 			[bookmarkButton addTarget:self action:@selector(tabDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 			bookmarkButton.adjustsImageWhenHighlighted = NO;
 			[cell.contentView addSubview:bookmarkButton];
@@ -476,6 +483,9 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			UIButton *followingButton = [[UIButton alloc] initWithFrame:CGRectOffset( bookmarkButton.frame, bookmarkButton.frame.size.width, 0 )];
 			followingButton.tag = 2;
 			[followingButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bot_2.png"] forState:UIControlStateNormal];
+			[followingButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bot_2_selected.png"] forState:UIControlStateHighlighted];
+			[followingButton addTarget:self action:@selector(tabDidTouchDown:) forControlEvents:UIControlEventTouchDown];
+			[followingButton addTarget:self action:@selector(tabDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 			[followingButton addTarget:self action:@selector(tabDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 			followingButton.adjustsImageWhenHighlighted = NO;
 			[cell.contentView addSubview:followingButton];
@@ -502,6 +512,9 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			UIButton *followersButton = [[UIButton alloc] initWithFrame:CGRectMake( followingButton.frame.origin.x + followingButton.frame.size.width, dishButton.frame.origin.y, 77, 47 )];
 			followersButton.tag = 3;
 			[followersButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bot_3.png"] forState:UIControlStateNormal];
+			[followersButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_bot_3_selected.png"] forState:UIControlStateHighlighted];
+			[followersButton addTarget:self action:@selector(tabDidTouchDown:) forControlEvents:UIControlEventTouchDown];
+			[followersButton addTarget:self action:@selector(tabDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 			[followersButton addTarget:self action:@selector(tabDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 			followersButton.adjustsImageWhenHighlighted = NO;
 			[cell.contentView addSubview:followersButton];
@@ -710,7 +723,13 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)tabDidTouchDown:(UIButton *)button
 {
-	button.tintColor = [UIColor redColor];
+	if( _selectedTab == button.tag )
+		_arrowView.image = [UIImage imageNamed:@"arrow_selected.png"];
+}
+
+- (void)tabDidTouchUp:(UIButton *)button
+{
+	_arrowView.image = [UIImage imageNamed:@"arrow.png"];
 }
 
 - (void)tabDidTouchUpInside:(UIButton *)button
