@@ -457,7 +457,7 @@ enum {
 		if( !cell )
 		{
 			// 이미지 세로 사이즈가 클 경우 kSectionContent가 미리 만들어져있지 않아서
-			// tableView 생성기 photoHeight + 100으로 tableView의 높이를 지정했다가
+			// tableView 생성시 photoHeight + 100으로 tableView의 높이를 지정했다가
 			// 이곳에서 원래 사이즈로 다시 변경
 			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
 			
@@ -507,7 +507,7 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contentCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			UIButton *profileImageButton = [[UIButton alloc] initWithFrame:CGRectMake( 13, 0, 25, 25 )];
+			UIButton *profileImageButton = [[UIButton alloc] initWithFrame:CGRectMake( 14, 1, 25, 25 )];
 			profileImageButton.adjustsImageWhenHighlighted = NO;
 			[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
 			[profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_dish.userPhotoURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
@@ -517,7 +517,7 @@ enum {
 			//
 			// User, Date
 			//
-			UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 45, 5, 270, 14 )];
+			UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 45, 6, 270, 14 )];
 			nameLabel.text = _dish.userName;
 			nameLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1.0];
 			nameLabel.font = [UIFont boldSystemFontOfSize:14];
@@ -661,7 +661,7 @@ enum {
 		
 		_timeLabel.text = _dish.relativeCreatedTime;
 		[_timeLabel sizeToFit];
-		_timeLabel.frame = CGRectMake( 306 - _timeLabel.frame.size.width, 7, _timeLabel.frame.size.width, 10 );
+		_timeLabel.frame = CGRectMake( 309 - _timeLabel.frame.size.width, 8, _timeLabel.frame.size.width, 10 );
 		
 		[_forkCountButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
 		
