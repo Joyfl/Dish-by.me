@@ -147,6 +147,12 @@
 			[CurrentUser user].loggedIn = YES;
 			[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
 			
+			NSMutableDictionary *sharingSettings = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] dictionaryForKey:DMUserDefaultsKeySharingSettings]];
+			if( !sharingSettings ) sharingSettings = [NSMutableDictionary dictionary];
+			[sharingSettings setObject:[NSNumber numberWithBool:YES] forKey:@"facebook"];
+			[[NSUserDefaults standardUserDefaults] setObject:sharingSettings forKey:DMUserDefaultsKeySharingSettings];
+			[[NSUserDefaults standardUserDefaults] synchronize];
+			
 			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WELCOME", nil ) message:NSLocalizedString( @"MESSAGE_SIGNUP_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 				
 				NSInteger userId = [[response objectForKey:@"id"] integerValue];

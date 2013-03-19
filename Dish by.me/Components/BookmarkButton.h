@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FXLabel.h"
 
 @protocol BookmarkButtonDelegate;
 
@@ -15,7 +16,7 @@
 	id<BookmarkButtonDelegate> delegate;
 	UIView *_parentView;
 	
-	UILabel *_bookmarkLabel;
+	FXLabel *_bookmarkLabel;
 	UIButton *_bookmarkButton;
 	UIView *_bookmarkButtonContainer;
 }

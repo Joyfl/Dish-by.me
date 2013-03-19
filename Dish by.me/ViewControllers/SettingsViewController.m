@@ -8,6 +8,8 @@
 
 #import "SettingsViewController.h"
 #import "CurrentUser.h"
+#import <FacebookSDK/FacebookSDK.h>
+#import "UIViewController+Dim.h"
 
 @implementation SettingsViewController
 
@@ -27,6 +29,8 @@ enum {
 	_tableView.delegate = self;
 	_tableView.backgroundView.hidden = YES;
 	[self.view addSubview:_tableView];
+	
+	_sharingSettings = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] dictionaryForKey:DMUserDefaultsKeySharingSettings]];
 	
     return self;
 }
@@ -74,54 +78,63 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+	static NSString *switchCellId = @"switchCellId";
 	static NSString *cellId = @"cellId";
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 	
-	if( !cell )
+	if( indexPath.section < 2 )
 	{
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-		cell.textLabel.font = [UIFont systemFontOfSize:16];
-		cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
-		cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-		cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
-		cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
-	}
-	
-//	NSInteger rowCount = [tableView numberOfRowsInSection:indexPath.section];
-//	
-//	if( rowCount == 1 )
-//		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 8, 8 )]];
-//	
-//	else if( indexPath.row == 0 )
-//		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_top.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 2, 8 )]];
-//	
-//	else if( indexPath.row == rowCount - 1 )
-//		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_bottom.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 8, 8, 8 )]];
-//	
-//	else
-//		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_middle.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 2, 2, 2 )]];
-//	
-//	cell.accessoryView = nil;
-	
-	if( indexPath.section == kSectionShareSettings )
-	{
-		if( indexPath.row == 0 )
+		DMSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:switchCellId];
+		
+		if( !cell )
 		{
-			cell.textLabel.text = @"Facebook";
+			cell = [[DMSwitchCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:switchCellId];
+			cell.delegate = self;
+			cell.textLabel.font = [UIFont systemFontOfSize:16];
+			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
+			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
+		
+		cell.indexPath = indexPath;
+		
+		if( indexPath.section == kSectionShareSettings )
+		{
+			if( indexPath.row == 0 )
+			{
+				cell.textLabel.text = @"Facebook";
+				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+				cell.on = [[_sharingSettings objectForKey:@"facebook"] boolValue];
+			}
+		}
+		
+		else if( indexPath.section == kSectionNotifications )
+		{
+			cell.textLabel.text = @"댓글";
+		}
+		
+		return cell;
 	}
-	
-	else if( indexPath.section == kSectionNotifications )
-	{
-		cell.textLabel.text = @"댓글";
-	}
-	
+		
 	else if( indexPath.section == kSectionLogout )
 	{
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+			cell.textLabel.font = [UIFont systemFontOfSize:16];
+			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
+			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+		}
+		
 		cell.textLabel.text = @"로그아웃";
+		
+		return cell;
 	}
 	
-	return cell;
+	return nil;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -146,9 +159,52 @@ enum {
 }
 
 
-- (void)shareSettingsSwitchValueChanged
+#pragma mark -
+#pragma mark DMSwitchCellDelegate
+
+- (void)switchCell:(DMSwitchCell *)switchCell valueChanged:(BOOL)on atIndexPath:(NSIndexPath *)indexPath
 {
-	
+	if( indexPath.section == kSectionShareSettings )
+	{
+		// Facebook
+		if( indexPath.row == 0 )
+		{
+			if( on == YES )
+			{
+				[self dim];
+				[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+					JLLog( @"status : %d", status );
+					switch( status )
+					{
+						case FBSessionStateOpen:
+						{
+							NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
+							[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" parameters:params success:^(id response) {
+								[self undim];
+								JLLog( @"response : %@", response );
+							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+								[self undim];
+								showErrorAlert();
+							}];
+							break;
+						}
+							
+						case FBSessionStateClosedLoginFailed:
+							[self undim];
+							JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
+							break;
+					}
+				}];
+			}
+			
+			
+			
+			
+			[_sharingSettings setObject:[NSNumber numberWithBool:on] forKey:@"facebook"];
+			[[NSUserDefaults standardUserDefaults] setObject:_sharingSettings forKey:DMUserDefaultsKeySharingSettings];
+			[[NSUserDefaults standardUserDefaults] synchronize];
+		}
+	}
 }
 
 

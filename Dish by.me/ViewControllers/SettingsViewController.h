@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
+#import "DMSwitchCell.h"
 
-@interface SettingsViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate>
+@interface SettingsViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, DMSwitchCellDelegate>
 {
 	UITableView *_tableView;
+	NSMutableDictionary *_sharingSettings;
 }
 
 @end

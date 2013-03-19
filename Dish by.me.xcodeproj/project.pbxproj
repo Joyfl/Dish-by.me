@@ -176,6 +176,7 @@
 		03A5E94516B4DBE800C79F8D /* SEGOEUIZ.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93F16B4DBE800C79F8D /* SEGOEUIZ.TTF */; };
 		03A5E94616B4DBE800C79F8D /* seguisb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E94016B4DBE800C79F8D /* seguisb.ttf */; };
 		03A5E94E16B4E48100C79F8D /* JLLabelButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 03A5E94D16B4E48100C79F8D /* JLLabelButton.m */; };
+		03B33D4416F7FA5600B6B089 /* DMSwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B33D4316F7FA5600B6B089 /* DMSwitchCell.m */; };
 		03B597FC1602FDC0007BD6AF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FB1602FDC0007BD6AF /* UIKit.framework */; };
 		03B597FE1602FDC0007BD6AF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FD1602FDC0007BD6AF /* Foundation.framework */; };
 		03B598001602FDC0007BD6AF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B597FF1602FDC0007BD6AF /* CoreGraphics.framework */; };
@@ -216,7 +217,6 @@
 		03F67F5716D8E33200AB0600 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F4C16D8E33200AB0600 /* AFURLConnectionOperation.m */; };
 		03F67F5816D8E33200AB0600 /* AFXMLRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F4E16D8E33200AB0600 /* AFXMLRequestOperation.m */; };
 		03F67F5916D8E33200AB0600 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F5016D8E33200AB0600 /* UIImageView+AFNetworking.m */; };
-		03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */; };
 		03F6FF0D16DA66AC008B5D9C /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */; };
 		03F6FF1016DA754A008B5D9C /* UIViewController+Dim.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F6FF0F16DA754A008B5D9C /* UIViewController+Dim.m */; };
 /* End PBXBuildFile section */
@@ -436,6 +436,8 @@
 		03A5E94016B4DBE800C79F8D /* seguisb.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = seguisb.ttf; sourceTree = "<group>"; };
 		03A5E94C16B4E48100C79F8D /* JLLabelButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLLabelButton.h; sourceTree = "<group>"; };
 		03A5E94D16B4E48100C79F8D /* JLLabelButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLLabelButton.m; sourceTree = "<group>"; };
+		03B33D4216F7FA5600B6B089 /* DMSwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMSwitchCell.h; sourceTree = "<group>"; };
+		03B33D4316F7FA5600B6B089 /* DMSwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMSwitchCell.m; sourceTree = "<group>"; };
 		03B597F71602FDC0007BD6AF /* Dish by.me.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dish by.me.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		03B597FB1602FDC0007BD6AF /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		03B597FD1602FDC0007BD6AF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -500,8 +502,6 @@
 		03F67F4E16D8E33200AB0600 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		03F67F4F16D8E33200AB0600 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		03F67F5016D8E33200AB0600 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
-		03F6FF0916DA659B008B5D9C /* FacebookSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookSettingsViewController.h; sourceTree = "<group>"; };
-		03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookSettingsViewController.m; sourceTree = "<group>"; };
 		03F6FF0C16DA66AC008B5D9C /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = Libraries/FacebookSDK.framework; sourceTree = "<group>"; };
 		03F6FF0E16DA754A008B5D9C /* UIViewController+Dim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+Dim.h"; path = "Categories/UIViewController+Dim.h"; sourceTree = "<group>"; };
 		03F6FF0F16DA754A008B5D9C /* UIViewController+Dim.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+Dim.m"; path = "Categories/UIViewController+Dim.m"; sourceTree = "<group>"; };
@@ -571,8 +571,6 @@
 				03178848160C76DB0041DAD7 /* SearchViewController.m */,
 				03178845160C76DB0041DAD7 /* ProfileViewController.h */,
 				03178846160C76DB0041DAD7 /* ProfileViewController.m */,
-				03F6FF0916DA659B008B5D9C /* FacebookSettingsViewController.h */,
-				03F6FF0A16DA659B008B5D9C /* FacebookSettingsViewController.m */,
 				03178849160C76DB0041DAD7 /* SettingsViewController.h */,
 				0317884A160C76DB0041DAD7 /* SettingsViewController.m */,
 				031AAB4A160F42CB007B42B3 /* CameraOverlayViewController.h */,
@@ -970,6 +968,8 @@
 				03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */,
 				031AAB09160DE2CD007B42B3 /* DMButton.h */,
 				031AAB0A160DE2CD007B42B3 /* DMButton.m */,
+				03B33D4216F7FA5600B6B089 /* DMSwitchCell.h */,
+				03B33D4316F7FA5600B6B089 /* DMSwitchCell.m */,
 				03677997169DE68700F26BBA /* BookmarkButton.h */,
 				03677998169DE68700F26BBA /* BookmarkButton.m */,
 				03A5E94C16B4E48100C79F8D /* JLLabelButton.h */,
@@ -1310,7 +1310,6 @@
 				03F67F5916D8E33200AB0600 /* UIImageView+AFNetworking.m in Sources */,
 				0349EA5116D8F0350057BD12 /* DMAPILoader.m in Sources */,
 				0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */,
-				03F6FF0B16DA659B008B5D9C /* FacebookSettingsViewController.m in Sources */,
 				03F6FF1016DA754A008B5D9C /* UIViewController+Dim.m in Sources */,
 				0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */,
 				0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */,
@@ -1324,6 +1323,7 @@
 				033BA84916F69D9200926F51 /* CurrentUser.m in Sources */,
 				033FBC2D16F73BDB00934FC8 /* SignUpStepOneViewController.m in Sources */,
 				033FBC3016F746DD00934FC8 /* SignUpStepTwoViewController.m in Sources */,
+				03B33D4416F7FA5600B6B089 /* DMSwitchCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

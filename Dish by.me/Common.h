@@ -13,11 +13,7 @@
 #define WEB_ROOT_URL	@"http://www.dishby.me"
 #define API_ROOT_URL	@"http://dev.dishby.me/api"
 
-#define SETTING_KEY_LOGGED_IN		@"loggedIn"
-#define SETTING_KEY_ACCESS_TOKEN	@"accessToken"
-#define SETTING_KEY_USER_ID			@"userId"
-#define SETTING_KEY_USER_NAME		@"userName"
-
 #define DMUserDefaultsKeyCurrentUser @"DMUserDefaultsKeyCurrentUser"
+#define DMUserDefaultsKeySharingSettings @"DMUserDefaultsKeySharingSettings"
 
 #define showErrorAlert() [[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Status Code : %d\nError Code : %d\nMessage : %@", statusCode, errorCode, message] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
