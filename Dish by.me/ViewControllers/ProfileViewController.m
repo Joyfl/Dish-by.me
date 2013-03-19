@@ -42,6 +42,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	_tableView.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	[self.view addSubview:_tableView];
 	
+	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 85 )];
+	
 	_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake( 0, -_tableView.bounds.size.height, self.view.frame.size.width, _tableView.bounds.size.height )];
 	_refreshHeaderView.delegate = self;
 	_refreshHeaderView.backgroundColor = self.view.backgroundColor;
@@ -83,26 +85,19 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	_bookmarks = [[NSMutableArray alloc] init];
 	[_tableView reloadData];
 	
-	if( userId == [CurrentUser user].userId )
-	{
-		_user = [CurrentUser user];
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
+		_user = [User userFromDictionary:response];
+		[self updateUserPhoto];
+		
 		self.navigationItem.title = userNameWithPlaceholder;
+		
 		[_tableView reloadData];
-	}
-	else
-	{
-		[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
-			_user = [User userFromDictionary:response];
-			self.navigationItem.title = userNameWithPlaceholder;
-			
-			[_tableView reloadData];
-			
-		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-			JLLog( @"statusCode : %d", statusCode );
-			JLLog( @"errorCode : %d", errorCode );
-			JLLog( @"message : %@", message );
-		}];
-	}
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
 }
 
 - (void)loadMoreDishes
@@ -287,6 +282,28 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	}];
 }
 
+- (void)updateUserPhoto
+{
+	if( _user.photo )
+	{
+		[_userPhotoButton setBackgroundImage:_user.photo forState:UIControlStateNormal];
+	}
+	
+	else if( _user.thumbnail )
+	{
+		[_userPhotoButton setBackgroundImage:_user.thumbnail forState:UIControlStateNormal];
+	}
+	else
+	{
+		[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
+			[_userPhotoButton setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
+			if( _user.userId == [CurrentUser user].userId )
+				[CurrentUser user].photo = image;
+		}];
+	}
+}
+
 
 #pragma mark -
 #pragma mark EGORefreshTableHeaderDelegate
@@ -347,11 +364,9 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:profileCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			
 			//
 			// Photo
 			//
-			_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 85 )];
 			[_userPhotoButton addTarget:self action:@selector(userPhotoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:_userPhotoButton];
 			
@@ -542,22 +557,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			[cell.contentView addSubview:_arrowView];
 		}
 		
-		if( _user.photo )
-		{
-			[_userPhotoButton setBackgroundImage:_user.photo forState:UIControlStateNormal];
-		}
-		
-		else if( _user.thumbnail )
-		{
-			[_userPhotoButton setBackgroundImage:_user.thumbnail forState:UIControlStateNormal];
-		}
-		else
-		{
-			[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
-				[_userPhotoButton setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
-			}];
-		}
+		[self updateUserPhoto];
 		
 		_nameLabel.text = userNameWithPlaceholder;
 		_bioLabel.text = userBioWithPlaceholder;
