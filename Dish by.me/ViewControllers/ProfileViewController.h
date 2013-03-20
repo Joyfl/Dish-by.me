@@ -10,12 +10,16 @@
 #import "GAITrackedViewController.h"
 #import "DishTileCell.h"
 #import "EGORefreshTableHeaderView.h"
+#import "DMBarButtonItem.h"
 
 @class User;
 
 @interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishTileCellDelegate>
 {
 	User *_user;
+	
+	DMBarButtonItem *_followButton;
+	DMBarButtonItem *_followingButton;
 	
 	UITableView *_tableView;
 	EGORefreshTableHeaderView *_refreshHeaderView;

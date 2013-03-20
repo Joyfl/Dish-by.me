@@ -24,6 +24,7 @@
 	user.bookmarkCount = [[dictionary objectForKey:@"bookmark_count"] integerValue];
 	user.followingCount = [[dictionary objectForKey:@"following_count"] integerValue];
 	user.followersCount = [[dictionary objectForKey:@"followers_count"] integerValue];
+	user.following = [[dictionary objectForKey:@"following"] boolValue];
 	return user;
 }
 

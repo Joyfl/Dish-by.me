@@ -35,6 +35,12 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
     self = [super init];
 	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	
+	_followButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"FOLLOW", nil ) target:self action:@selector(followButtonHandler)];
+	_followingButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"FOLLOWING", nil ) target:self action:@selector(followingButtonHandler)];
+	_followingButton.button.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 8 );
+	[_followingButton.button setImage:[UIImage imageNamed:@"icon_checkmark.png"] forState:UIControlStateNormal];
+	[_followingButton updateFrame];
+	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
@@ -57,6 +63,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)viewWillAppear:(BOOL)animated
 {
+	// 프로필 탭
 	if( self == [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController] )
 	{
 		self.navigationItem.leftBarButtonItem = nil;
@@ -65,14 +72,35 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	else
 	{
 		[DMBarButtonItem setBackButtonToViewController:self];
-		self.navigationItem.rightBarButtonItem = nil;
 		self.trackedViewName = [[self class] description];
 	}
 }
 
-- (void)backButtonDidTouchUpInside
+- (void)updateFollowFollowingButton
 {
-	[self.navigationController popViewControllerAnimated:YES];
+	if( _user.userId != [CurrentUser user].userId )
+	{
+		if( !_user.following )
+			self.navigationItem.rightBarButtonItem = _followButton;
+		else
+			self.navigationItem.rightBarButtonItem = _followingButton;
+	}
+	else
+	{
+		self.navigationItem.rightBarButtonItem = nil;
+	}
+}
+
+- (void)followButtonHandler
+{
+	_followButton.showsActivityIndicatorView = YES;
+	[self follow];
+}
+
+- (void)followingButtonHandler
+{
+	_followingButton.showsActivityIndicatorView = YES;
+	[self unfollow];
 }
 
 
@@ -90,6 +118,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		[self updateUserPhoto];
 		
 		self.navigationItem.title = userNameWithPlaceholder;
+		[self updateFollowFollowingButton];
 		
 		[_tableView reloadData];
 		
@@ -250,6 +279,50 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];
 	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)follow
+{
+	JLLog( @"Follow" );
+	
+	NSString *api = [NSString stringWithFormat:@"/user/%d/follow", _user.userId];
+	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+		JLLog( @"Follow Succeed" );
+		
+		_user.following = YES;
+		_user.followersCount ++;
+		_followButton.showsActivityIndicatorView = NO;
+		[self updateFollowFollowingButton];
+		
+		[_tableView reloadData];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)unfollow
+{
+	JLLog( @"Follow" );
+	
+	NSString *api = [NSString stringWithFormat:@"/user/%d/follow", _user.userId];
+	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+		JLLog( @"Unfollow Succeed" );
+		
+		_user.following = NO;
+		_user.followersCount --;
+		_followingButton.showsActivityIndicatorView = NO;
+		[self updateFollowFollowingButton];
+		
+		[_tableView reloadData];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -553,7 +626,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			//
 			// Arrow
 			//
-			_arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow.png"]];
+			_arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"profile_arrow.png"]];
 			[cell.contentView addSubview:_arrowView];
 		}
 		
@@ -724,12 +797,12 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 - (void)tabDidTouchDown:(UIButton *)button
 {
 	if( _selectedTab == button.tag )
-		_arrowView.image = [UIImage imageNamed:@"arrow_selected.png"];
+		_arrowView.image = [UIImage imageNamed:@"profile_arrow_selected.png"];
 }
 
 - (void)tabDidTouchUp:(UIButton *)button
 {
-	_arrowView.image = [UIImage imageNamed:@"arrow.png"];
+	_arrowView.image = [UIImage imageNamed:@"profile_arrow.png"];
 }
 
 - (void)tabDidTouchUpInside:(UIButton *)button

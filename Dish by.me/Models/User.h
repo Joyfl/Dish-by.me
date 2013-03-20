@@ -21,6 +21,7 @@
 @property (nonatomic, assign) NSInteger bookmarkCount;
 @property (nonatomic, assign) NSInteger followingCount;
 @property (nonatomic, assign) NSInteger followersCount;
+@property (nonatomic, assign) BOOL following;
 
 + (id)userFromDictionary:(NSDictionary *)dictionary;
 - (id)dictionary;
