@@ -20,6 +20,7 @@
 #import "JLHangulUtils.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "HTBlock.h"
+#import "TestFlight.h"
 
 @implementation AppDelegate
 
@@ -31,6 +32,9 @@
 	[GAI sharedInstance].dispatchInterval = 20;
 //	[GAI sharedInstance].debug = YES;
 	[[GAI sharedInstance] trackerWithTrackingId:@"UA-38348585-3"];
+	
+	[TestFlight setDeviceIdentifier:[[UIDevice currentDevice] uniqueIdentifier]];
+	[TestFlight takeOff:@"1caa3854-7d20-4218-b3b3-675352febe43"];
 	
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
