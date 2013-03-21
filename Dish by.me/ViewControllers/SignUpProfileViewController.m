@@ -124,8 +124,6 @@
 	inputField.layer.shadowColor = [UIColor whiteColor].CGColor;
 	inputField.layer.shadowOpacity = 1;
 	inputField.layer.shadowRadius = 0;
-	inputField.keyboardType = UIKeyboardTypeEmailAddress;
-	inputField.returnKeyType = UIReturnKeyNext;
 	inputField.autocorrectionType = UITextAutocorrectionTypeNo;
 	inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
 	return inputField;

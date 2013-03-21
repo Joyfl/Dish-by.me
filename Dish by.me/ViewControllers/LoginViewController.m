@@ -69,13 +69,14 @@
 	[self.view addSubview:orLabel];
 	
 	_emailInput = [self inputFieldAtYPosition:150 placeholder:NSLocalizedString( @"EMAIL", nil )];
+	_emailInput.keyboardType = UIKeyboardTypeEmailAddress;
 	_emailInput.returnKeyType = UIReturnKeyNext;
 	[_emailInput addTarget:self action:@selector(inputFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:_emailInput];
 	
 	_passwordInput = [self inputFieldAtYPosition:_emailInput.frame.origin.y + 40 placeholder:NSLocalizedString( @"PASSWORD", nil )];
 	_passwordInput.secureTextEntry = YES;
-	_passwordInput.returnKeyType = UIReturnKeyNext;
+	_passwordInput.returnKeyType = UIReturnKeyGo;
 	[_passwordInput addTarget:self action:@selector(inputFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:_passwordInput];
 	
@@ -115,8 +116,6 @@
 	inputField.layer.shadowColor = [UIColor whiteColor].CGColor;
 	inputField.layer.shadowOpacity = 1;
 	inputField.layer.shadowRadius = 0;
-	inputField.keyboardType = UIKeyboardTypeEmailAddress;
-	inputField.returnKeyType = UIReturnKeyNext;
 	inputField.autocorrectionType = UITextAutocorrectionTypeNo;
 	inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
 	[inputField addTarget:self action:@selector(inputFieldEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];

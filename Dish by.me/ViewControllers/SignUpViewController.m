@@ -68,6 +68,7 @@
 	[self.view addSubview:orLabel];
 	
 	_emailInput = [self inputFieldAtYPosition:150 placeholder:NSLocalizedString( @"EMAIL", nil )];
+	_emailInput.keyboardType = UIKeyboardTypeEmailAddress;
 	_emailInput.returnKeyType = UIReturnKeyNext;
 	[_emailInput addTarget:self action:@selector(inputFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:_emailInput];
@@ -134,7 +135,6 @@
 	inputField.layer.shadowColor = [UIColor whiteColor].CGColor;
 	inputField.layer.shadowOpacity = 1;
 	inputField.layer.shadowRadius = 0;
-	inputField.keyboardType = UIKeyboardTypeEmailAddress;
 	inputField.returnKeyType = UIReturnKeyNext;
 	inputField.autocorrectionType = UITextAutocorrectionTypeNo;
 	inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
