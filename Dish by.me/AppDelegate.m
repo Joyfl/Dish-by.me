@@ -203,13 +203,14 @@
 	}] showInView:self.window];
 }
 
+#warning LoginViewController
 - (void)presentLoginViewController
 {
-	LoginViewController *loginViewController = [[LoginViewController alloc] init];
-	loginViewController.delegate = self;
-	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
-	navController.navigationBarHidden = YES;
-	[tabBarController presentViewController:navController animated:YES completion:nil];
+//	LoginViewController *loginViewController = [[LoginViewController alloc] init];
+//	loginViewController.delegate = self;
+//	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
+//	navController.navigationBarHidden = YES;
+//	[tabBarController presentViewController:navController animated:YES completion:nil];
 }
 
 

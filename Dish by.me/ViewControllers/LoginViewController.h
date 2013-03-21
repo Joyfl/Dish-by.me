@@ -9,28 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
 
-@protocol LoginViewControllerDelegate;
-
 @interface LoginViewController : GAITrackedViewController <UITextFieldDelegate>
 {
-	UIImageView *_forkAndKnife;
-	UIImageView *_loginBox;
+	UITextField *_emailInput;
 	UITextField *_passwordInput;
 	UIButton *_loginButton;
-	UIButton *_facebookLoginButton;
-	UIButton *_signUpButton;
 }
-
-@property (nonatomic, weak) id<LoginViewControllerDelegate> delegate;
-@property (nonatomic, strong) UITextField *emailInput;
-
-- (void)getUser;
-
-@end
-
-
-@protocol LoginViewControllerDelegate
-
-- (void)loginViewControllerDidSucceedLogin:(LoginViewController *)loginViewController;
 
 @end

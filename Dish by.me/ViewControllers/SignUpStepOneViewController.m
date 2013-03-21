@@ -28,7 +28,8 @@
 	[DMBarButtonItem setBackButtonToViewController:self viewControllerWillBePopped:^{
 		if( _isLastErrorAlreadySignedUp )
 		{
-			[(LoginViewController *)[self.navigationController.viewControllers objectAtIndex:0] emailInput].text = _emailInput.text;
+#warning LoginViewController
+//			[(LoginViewController *)[self.navigationController.viewControllers objectAtIndex:0] emailInput].text = _emailInput.text;
 			[self.navigationController popViewControllerAnimated:YES];
 		}
 	}];
@@ -203,8 +204,9 @@
 		[[CurrentUser user] updateToDictionary:response];
 		[[CurrentUser user] save];
 		
+#warning LoginViewController
 		LoginViewController *loginViewController = [self.navigationController.viewControllers objectAtIndex:0];
-		[loginViewController.delegate loginViewControllerDidSucceedLogin:loginViewController];
+//		[loginViewController.delegate loginViewControllerDidSucceedLogin:loginViewController];
 		
 		[self dismissViewControllerAnimated:YES completion:nil];
 		

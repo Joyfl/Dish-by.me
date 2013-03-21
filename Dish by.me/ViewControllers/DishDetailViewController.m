@@ -925,12 +925,13 @@ enum {
 	}
 	else
 	{
-		LoginViewController *loginViewController = [[LoginViewController alloc] init];
-		loginViewController.delegate = self;
-		DMNavigationController *navigationController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
-		navigationController.navigationBarHidden = YES;
-		
-		[self presentViewController:navigationController animated:YES completion:nil];
+		#warning LoginViewController
+//		LoginViewController *loginViewController = [[LoginViewController alloc] init];
+//		loginViewController.delegate = self;
+//		DMNavigationController *navigationController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
+//		navigationController.navigationBarHidden = YES;
+//		
+//		[self presentViewController:navigationController animated:YES completion:nil];
 	}
 }
 

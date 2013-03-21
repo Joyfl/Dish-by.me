@@ -12,7 +12,7 @@
 @class DishListViewController;
 @class ProfileViewController;
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate, LoginViewControllerDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate>
 {
 	UITabBarController *tabBarController;
 }

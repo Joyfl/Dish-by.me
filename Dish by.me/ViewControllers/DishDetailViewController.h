@@ -18,7 +18,7 @@
 
 @class Dish;
 
-@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate, LoginViewControllerDelegate>
+@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate>
 {
 	Dish *_dish;
 	NSMutableArray *_comments;
