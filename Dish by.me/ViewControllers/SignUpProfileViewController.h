@@ -7,15 +7,18 @@
 //
 
 #import "GAITrackedViewController.h"
+#import "DMBookButton.h"
 
-@interface SignUpStepTwoViewController : GAITrackedViewController <UITextFieldDelegate>
+@interface SignUpProfileViewController : GAITrackedViewController <UITextFieldDelegate>
 {
 	NSInteger _userId;
 	NSString *_facebookAccessToken;
 	
-	UIButton *_profilePhotoButton;
+	UIButton *_userPhotoButton;
 	UITextField *_nameInput;
 	UITextField *_bioInput;
+	
+	DMBookButton *_doneButton;
 }
 
 - (id)initWithUserId:(NSInteger)userId;

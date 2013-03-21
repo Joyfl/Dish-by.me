@@ -8,8 +8,20 @@
 
 #import "GAITrackedViewController.h"
 
+@protocol AuthViewControllerDelegate;
+
+
 @interface AuthViewController : GAITrackedViewController
 
-- (void)loginButtonDidTouchUpInside;
+@property (nonatomic, weak) id<AuthViewControllerDelegate> delegate;
+
+- (void)getUserAndDismissViewController;
+
+@end
+
+
+@protocol AuthViewControllerDelegate
+
+- (void)authViewControllerDidSucceedLogin:(AuthViewController *)authViewController;
 
 @end

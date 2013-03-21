@@ -11,6 +11,9 @@
 #import "LoginViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "DMBookButton.h"
+#import "UIViewController+Dim.h"
+#import "CurrentUser.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 @implementation AuthViewController
 
@@ -61,6 +64,32 @@
 - (void)lookAroundButtonDidTouchUpInside
 {
 	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)getUserAndDismissViewController
+{
+	[self dim];
+	
+	JLLog( @"getUser" );
+	[[DMAPILoader sharedLoader] api:@"/user" method:@"GET" parameters:nil success:^(id response) {
+		JLLog( @"getUser success" );
+		
+		[self undim];
+		
+		[[CurrentUser user] updateToDictionary:response];
+		[[CurrentUser user] save];
+		
+		AuthViewController *authViewController = [self.navigationController.viewControllers objectAtIndex:0];
+		[authViewController.delegate authViewControllerDidSucceedLogin:authViewController];
+		
+		[self dismissViewControllerAnimated:YES completion:nil];
+		
+		[[FBSession activeSession] closeAndClearTokenInformation];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		[self undim];
+		showErrorAlert();
+	}];
 }
 
 @end

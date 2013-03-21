@@ -12,8 +12,9 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "CurrentUser.h"
 #import "HTBlock.h"
-#import "SignUpStepTwoViewController.h"
+#import "SignUpProfileViewController.h"
 #import "LoginViewController.h"
+#import "AuthViewController.h"
 
 @implementation SignUpViewController
 
@@ -27,7 +28,7 @@
 	bgView.image = [UIImage imageNamed:@"book_background.png"];
 	[self.view addSubview:bgView];
 	
-	UIImageView *paperView = [[UIImageView alloc] initWithFrame:CGRectMake( 7, 7, 305, UIScreenHeight - 85 )];
+	UIImageView *paperView = [[UIImageView alloc] initWithFrame:CGRectMake( 7, 7, 305, 395 )];
 	paperView.image = [[UIImage imageNamed:@"book_paper.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 10, 10, 10, 10 )];
 	[self.view addSubview:paperView];
 	
@@ -130,7 +131,7 @@
 	inputField.layer.shadowOffset = CGSizeMake( 0, 1 );
 	inputField.layer.shadowColor = [UIColor whiteColor].CGColor;
 	inputField.layer.shadowOpacity = 1;
-	inputField.layer.shadowRadius = 1;
+	inputField.layer.shadowRadius = 0;
 	inputField.keyboardType = UIKeyboardTypeEmailAddress;
 	inputField.returnKeyType = UIReturnKeyNext;
 	inputField.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -276,8 +277,9 @@
 			[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
 			
 			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WELCOME", nil ) message:NSLocalizedString( @"MESSAGE_SIGNUP_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+				
 				NSInteger userId = [[response objectForKey:@"id"] integerValue];
-				SignUpStepTwoViewController *signUpViewController = [[SignUpStepTwoViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
+				SignUpProfileViewController *signUpViewController = [[SignUpProfileViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
 				[self.navigationController pushViewController:signUpViewController animated:YES];
 			}] show];
 			
@@ -292,26 +294,59 @@
 		// 이미 가입된 사용자
 		if( errorCode == 1400 )
 		{
-			_emailInput.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
-			[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
-			
-			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP", nil ) cancelButtonTitle:NSLocalizedString( @"NO_THANKS", nil ) otherButtonTitles:@[NSLocalizedString( @"LOGIN", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+			// 이미 가입된 페이스북 사용자
+			if( [parameters objectForKey:@"facebook_token"] )
+			{
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP_WITH_FACEBOOK", nil ) cancelButtonTitle:NSLocalizedString( @"NO_THANKS", nil ) otherButtonTitles:@[NSLocalizedString( @"LOGIN", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+					
+					// 괜찮아요
+					if( buttonIndex == 0 )
+					{
+						[_emailInput becomeFirstResponder];
+					}
+					else
+					{
+						[self dim];
+						
+						// 페이스북으로 로그인
+						[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:parameters success:^(id response) {
+							
+							[CurrentUser user].loggedIn = YES;
+							[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
+							
+							[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUserAndDismissViewController];
+							
+						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+							[self undim];
+							showErrorAlert();
+						}];
+					}
+				}] show];
+			}
+			else
+			{
+				_emailInput.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
+				[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 				
-				// 괜찮아요
-				if( buttonIndex == 0 )
-				{
-					[_emailInput becomeFirstResponder];
-				}
-				else
-				{
-					LoginViewController *loginViewController = [[LoginViewController alloc] init];
-					[self.navigationController pushViewController:loginViewController animated:YES];
-				}
-			}] show];
-			return;
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP", nil ) cancelButtonTitle:NSLocalizedString( @"NO", nil ) otherButtonTitles:@[NSLocalizedString( @"PROBABLY", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+					
+					// 괜찮아요
+					if( buttonIndex == 0 )
+					{
+						[_emailInput becomeFirstResponder];
+					}
+					else
+					{
+						LoginViewController *loginViewController = [[LoginViewController alloc] init];
+						[self.navigationController pushViewController:loginViewController animated:YES];
+					}
+				}] show];
+			}
 		}
-		
-		showErrorAlert();
+		else
+		{
+			showErrorAlert();
+		}
 	}];
 }
 

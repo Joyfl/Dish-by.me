@@ -7,7 +7,7 @@
 //
 
 #import "SignUpStepOneViewController.h"
-#import "SignUpStepTwoViewController.h"
+#import "SignUpProfileViewController.h"
 #import "DMBarButtonItem.h"
 #import <QuartzCore/CALayer.h>
 #import "DMAPILoader.h"
@@ -156,7 +156,7 @@
 			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WELCOME", nil ) message:NSLocalizedString( @"MESSAGE_SIGNUP_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 				
 				NSInteger userId = [[response objectForKey:@"id"] integerValue];
-				SignUpStepTwoViewController *signUpStepTwoViewController = [[SignUpStepTwoViewController alloc] initWithUserId:userId];
+				SignUpProfileViewController *signUpStepTwoViewController = [[SignUpProfileViewController alloc] initWithUserId:userId];
 				[self.navigationController pushViewController:signUpStepTwoViewController animated:YES];
 				
 			}] show];

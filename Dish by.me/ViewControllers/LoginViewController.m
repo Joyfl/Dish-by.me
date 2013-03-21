@@ -16,7 +16,7 @@
 #import "DMAPILoader.h"
 #import "UIViewController+Dim.h"
 #import "SignUpStepOneViewController.h"
-#import "SignUpStepTwoViewController.h"
+#import "SignUpProfileViewController.h"
 #import "HTBlock.h"
 
 @implementation LoginViewController
@@ -287,7 +287,7 @@
 									else
 									{
 										NSInteger userId = [[response objectForKey:@"id"] integerValue];
-										SignUpStepTwoViewController *signUpViewController = [[SignUpStepTwoViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
+										SignUpProfileViewController *signUpViewController = [[SignUpProfileViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
 										[self.navigationController pushViewController:signUpViewController animated:YES];
 									}
 								}] show];

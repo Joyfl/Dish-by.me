@@ -5,12 +5,15 @@
 "I_GOT_IT" = "알겠어요";
 "CANCEL" = "취소";
 "YES" = "네";
+"NO" = "아니오";
 "NO_THANKS" = "괜찮아요";
+"PROBABLY" = "그런 것 같아요";
 
 // Messages
 "MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관 및 개인정보취급방침에 동의합니다";
 "MESSAGE_SIGNUP_COMPLETE" = "회원가입이 완료되었습니다!\n프로필을 완성해주세요.";
-"MESSAGE_ALREADY_SIGNED_UP" = "이미 가입된 이메일이에요.\n로그인하러 가시겠어요?";
+"MESSAGE_ALREADY_SIGNED_UP" = "누군가가 이미 사용중인 이메일이에요.\n혹시 가입했던 적이 있나요?";
+"MESSAGE_ALREADY_SIGNED_UP_WITH_FACEBOOK" = "이미 페이스북으로 가입이 되어있어요.\n로그인할까요?";
 "MESSAGE_LOGIN_FAILED" = "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
 "MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
 "MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
