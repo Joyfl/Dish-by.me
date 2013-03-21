@@ -40,10 +40,10 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
 	
-	tabBarController = [[UITabBarController alloc] init];
-	tabBarController.delegate = self;
-	tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar_bg.png"];
-	tabBarController.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tab_bar_bg_selected.png"];
+	self.tabBarController = [[UITabBarController alloc] init];
+	self.tabBarController.delegate = self;
+	self.tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar_bg.png"];
+	self.tabBarController.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tab_bar_bg_selected.png"];
 	
 	self.dishListViewController = [[DishListViewController alloc] init];
 	DMNavigationController *dishNavigationController = [[DMNavigationController alloc] initWithRootViewController:self.dishListViewController];
@@ -71,21 +71,21 @@
 	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_settings.png"];
 	settingsNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	
-	tabBarController.viewControllers = [NSArray arrayWithObjects:
+	self.tabBarController.viewControllers = [NSArray arrayWithObjects:
 										dishNavigationController,
 										searchNavigationController,
 										[[UIViewController alloc] init],
 										profileNavigationController,
 										settingsNavigationController,
 										nil];
-	self.window.rootViewController = tabBarController;
+	self.window.rootViewController = self.tabBarController;
 	
 	UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	cameraButton.frame = CGRectMake( 128, -1, 64, 50 );
 	[cameraButton setImage:[UIImage imageNamed:@"tab_camera.png"] forState:UIControlStateNormal];
 	[cameraButton setImage:[UIImage imageNamed:@"tab_camera_highlighted.png"] forState:UIControlStateHighlighted];
 	[cameraButton addTarget:self action:@selector(cameraButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[tabBarController.tabBar addSubview:cameraButton];
+	[self.tabBarController.tabBar addSubview:cameraButton];
 	
 	if( [CurrentUser user].loggedIn )
 	{
@@ -93,7 +93,7 @@
 	}
 	else
 	{
-		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:tabBarController delegate:self];
+		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:self.tabBarController delegate:self];
 	}
 	
     return YES;
@@ -165,7 +165,7 @@
 	{
 		WritingViewController *writingViewController = [[WritingViewController alloc] init];
 		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
-		[tabBarController presentViewController:navController animated:YES completion:nil];
+		[self.tabBarController presentViewController:navController animated:YES completion:nil];
 	}
 	else
 	{
@@ -180,7 +180,7 @@
 		// 로그인
 		if( buttonIndex == 0 )
 		{
-			[AuthViewController presentAuthViewControllerFromViewController:tabBarController delegate:self];
+			[AuthViewController presentAuthViewControllerFromViewController:self.tabBarController delegate:self];
 		}
 		
 	}] showInView:self.window];

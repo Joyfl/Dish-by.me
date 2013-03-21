@@ -13,11 +13,9 @@
 #import "SettingsViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate, AuthViewControllerDelegate>
-{
-	UITabBarController *tabBarController;
-}
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, strong) UITabBarController *tabBarController;
 @property (nonatomic, strong) DishListViewController *dishListViewController;
 @property (nonatomic, strong) ProfileViewController *profileViewController;
 @property (nonatomic, strong) SettingsViewController *settingsViewController;
