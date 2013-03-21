@@ -7,12 +7,14 @@
 //
 
 #import "GAITrackedViewController.h"
+#import "DMBookButton.h"
 
-@interface SignUpViewController : GAITrackedViewController
+@interface SignUpViewController : GAITrackedViewController <UITextFieldDelegate>
 {
 	UITextField *_emailInput;
 	UITextField *_passwordInput;
 	UITextField *_passwordConfirmationInput;
+	DMBookButton *_signUpButton;
 }
 
 @end
