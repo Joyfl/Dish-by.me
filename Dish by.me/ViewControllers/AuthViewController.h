@@ -7,13 +7,7 @@
 //
 
 #import "GAITrackedViewController.h"
-#import "DMBookButton.h"
 
 @interface AuthViewController : GAITrackedViewController
-{
-	DMBookButton *_signUpButton;
-	DMBookButton *_loginButton;
-	DMBookButton *_lookAroundButton;
-}
 
 @end

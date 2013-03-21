@@ -7,6 +7,7 @@
 "YES" = "네";
 
 // Messages
+"MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관 및 개인정보취급방침에 동의합니다";
 "MESSAGE_LOGIN_FAILED" = "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
 "MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
 "MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
@@ -17,19 +18,17 @@
 "MESSAGE_SIGNUP_COMPLETE" = "회원가입이 완료되었습니다!\n프로필을 완성해주세요.";
 "MESSAGE_PROFILE_UPDATE_COMPLETE" = "프로필이 예쁘게 만들어졌어요!\n가입한 계정으로 로그인할게요 :D";
 
-// FirstView
+// Auth
 "SIGNUP" = "가입하기";
+"SIGNUP_WITH_FACEBOOK" = "페이스북으로 가입하기";
 "LOGIN" = "로그인";
+"LOGIN_WITH_FACEBOOK" = "페이스북으로 로그인";
 "LOOK_AROUND" = "둘러보기";
-
-// Login
+"OR" = "또는";
 "EMAIL" = "이메일";
 "PASSWORD" = "비밀번호";
-"LOGIN_WITH_FACEBOOK" = "페이스북으로 로그인";
+"CONFIRM_PASSWORD" = "비밀번호 확인";
 "LOGIN_OR_SIGNUP" = "로그인 또는 계정 생성";
-"NO_ACCOUNT" = "아직 계정이 없으신가요?";
-
-// Sign Up
 
 "DONE" = "완료";
 "WELCOME" = "환영합니다!";

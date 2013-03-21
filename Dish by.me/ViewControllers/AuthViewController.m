@@ -10,6 +10,7 @@
 #import "SignUpViewController.h"
 #import "LoginViewController.h"
 #import <QuartzCore/QuartzCore.h>
+#import "DMBookButton.h"
 
 @implementation AuthViewController
 
@@ -30,17 +31,17 @@
 	logoView.image = [UIImage imageNamed:@"icon_logo.png"];
 	[self.view addSubview:logoView];
 	
-	_signUpButton = [[DMBookButton alloc] initWithPosition:CGPointMake( 30, UIScreenHeight - 195 ) title:NSLocalizedString( @"SIGNUP", nil )];
-	[_signUpButton addTarget:self action:@selector(signUpButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:_signUpButton];
+	DMBookButton *signUpButton = [DMBookButton bookButtonWithPosition:CGPointMake( 30, UIScreenHeight - 195 ) title:NSLocalizedString( @"SIGNUP", nil )];
+	[signUpButton addTarget:self action:@selector(signUpButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:signUpButton];
 	
-	_loginButton = [[DMBookButton alloc] initWithPosition:CGPointMake( 30, UIScreenHeight - 145 ) title:NSLocalizedString( @"LOGIN", nil )];
-	[_loginButton addTarget:self action:@selector(loginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:_loginButton];
+	DMBookButton *loginButton = [DMBookButton bookButtonWithPosition:CGPointMake( 30, UIScreenHeight - 145 ) title:NSLocalizedString( @"LOGIN", nil )];
+	[loginButton addTarget:self action:@selector(loginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:loginButton];
 	
-	_lookAroundButton = [[DMBookButton alloc] initWithPosition:CGPointMake( 30, UIScreenHeight - 95 ) title:NSLocalizedString( @"LOOK_AROUND", nil )];
-	[_lookAroundButton addTarget:self action:@selector(lookAroundButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:_lookAroundButton];
+	DMBookButton *lookAroundButton = [DMBookButton bookButtonWithPosition:CGPointMake( 30, UIScreenHeight - 95 ) title:NSLocalizedString( @"LOOK_AROUND", nil )];
+	[lookAroundButton addTarget:self action:@selector(lookAroundButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:lookAroundButton];
 	
 	return self;
 }

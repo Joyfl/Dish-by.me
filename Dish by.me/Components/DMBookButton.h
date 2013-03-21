@@ -10,6 +10,7 @@
 
 @interface DMBookButton : UIButton
 
-- (id)initWithPosition:(CGPoint)position title:(NSString *)title;
++ (id)bookButtonWithPosition:(CGPoint)position title:(NSString *)title;
++ (id)blueBookButtonWithPosition:(CGPoint)position title:(NSString *)title;
 
 @end

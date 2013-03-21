@@ -10,7 +10,9 @@
 
 @interface SignUpViewController : GAITrackedViewController
 {
-	
+	UITextField *_emailInput;
+	UITextField *_passwordInput;
+	UITextField *_passwordConfirmationInput;
 }
 
 @end
