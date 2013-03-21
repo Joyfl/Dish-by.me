@@ -126,7 +126,7 @@
 - (void)openBookCoverAfterDelay:(NSTimeInterval)delay
 {
 	UIImageView *coverView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 20 )];
-	coverView.image = [UIImage imageNamed:@"Default.png"];
+	coverView.image = [UIImage imageNamed:UIScreenHeight == 480 ? @"Default.png" : @"Default-568h.png"];
 	[[[UIApplication sharedApplication] keyWindow] addSubview:coverView];
 	[[[UIApplication sharedApplication] keyWindow] bringSubviewToFront:coverView];
 	
@@ -150,7 +150,7 @@
 - (void)closeBookCoverCompletion:(void (^)(UIImageView *coverView))completion
 {
 	UIImageView *coverView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 20 )];
-	coverView.image = [UIImage imageNamed:@"Default.png"];
+	coverView.image = [UIImage imageNamed:UIScreenHeight == 480 ? @"Default.png" : @"Default-568h.png"];
 	[[[UIApplication sharedApplication] keyWindow] addSubview:coverView];
 	[[[UIApplication sharedApplication] keyWindow] bringSubviewToFront:coverView];
 	
