@@ -13,14 +13,15 @@
 "MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관 및 개인정보취급방침에 동의합니다";
 "MESSAGE_SIGNUP_COMPLETE" = "회원가입이 완료되었습니다!\n프로필을 완성해주세요.";
 "MESSAGE_ALREADY_SIGNED_UP" = "누군가가 이미 사용중인 이메일이에요.\n혹시 가입했던 적이 있나요?";
+"MESSAGE_PROFILE_UPDATE_COMPLETE" = "프로필이 예쁘게 만들어졌어요!\n가입한 계정으로 로그인할게요 :D";
 "MESSAGE_ALREADY_SIGNED_UP_WITH_FACEBOOK" = "이미 페이스북으로 가입이 되어있어요.\n로그인할까요?";
-"MESSAGE_LOGIN_FAILED" = "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.";
+"MESSAGE_LOGIN_FAILED" = "로그인에 실패했어요. 이메일과 비밀번호를 확인해주세요.";
+
 "MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
 "MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
 "MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
-"MESSAGE_SIGNUP_STEP_ONE" = "사용하실 이메일과 패스워드를 입력해주세요.";
-"MESSAGE_PROFILE_UPDATE_COMPLETE" = "프로필이 예쁘게 만들어졌어요!\n가입한 계정으로 로그인할게요 :D";
+"MESSAGE_NEED_ACCOUNT_TO_SET_SETTINGS" = "설정을 하려면 Dish by.me 계정이 필요합니다.";
 
 // Auth
 "SIGNUP" = "가입하기";

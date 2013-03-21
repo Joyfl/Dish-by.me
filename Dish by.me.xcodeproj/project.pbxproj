@@ -26,7 +26,6 @@
 		033BA84316F5899900926F51 /* DMTextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033BA84216F5899900926F51 /* DMTextFieldViewController.m */; };
 		033BA84916F69D9200926F51 /* CurrentUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 033BA84816F69D9200926F51 /* CurrentUser.m */; };
 		033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52DE1610782900F0B5E5 /* LoginViewController.m */; };
-		033FBC2D16F73BDB00934FC8 /* SignUpStepOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033FBC2C16F73BDB00934FC8 /* SignUpStepOneViewController.m */; };
 		033FBC3016F746DD00934FC8 /* SignUpProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033FBC2F16F746DD00934FC8 /* SignUpProfileViewController.m */; };
 		0349EA5116D8F0350057BD12 /* DMAPILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5016D8F0350057BD12 /* DMAPILoader.m */; };
 		0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5416D8F6E90057BD12 /* JLLogger.m */; };
@@ -299,8 +298,6 @@
 		033BA84816F69D9200926F51 /* CurrentUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CurrentUser.m; path = Models/CurrentUser.m; sourceTree = "<group>"; };
 		033C52DD1610782900F0B5E5 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		033C52DE1610782900F0B5E5 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		033FBC2B16F73BDB00934FC8 /* SignUpStepOneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpStepOneViewController.h; sourceTree = "<group>"; };
-		033FBC2C16F73BDB00934FC8 /* SignUpStepOneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpStepOneViewController.m; sourceTree = "<group>"; };
 		033FBC2E16F746DC00934FC8 /* SignUpProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpProfileViewController.h; sourceTree = "<group>"; };
 		033FBC2F16F746DD00934FC8 /* SignUpProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpProfileViewController.m; sourceTree = "<group>"; };
 		0349EA4F16D8F0350057BD12 /* DMAPILoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DMAPILoader.h; path = "Dish by.me/DMAPILoader.h"; sourceTree = SOURCE_ROOT; };
@@ -673,8 +670,6 @@
 				031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */,
 				031AAB3B160F3B4F007B42B3 /* WritingViewController.h */,
 				031AAB3C160F3B4F007B42B3 /* WritingViewController.m */,
-				033FBC2B16F73BDB00934FC8 /* SignUpStepOneViewController.h */,
-				033FBC2C16F73BDB00934FC8 /* SignUpStepOneViewController.m */,
 				033BA84116F5899900926F51 /* DMTextFieldViewController.h */,
 				033BA84216F5899900926F51 /* DMTextFieldViewController.m */,
 			);
@@ -1498,7 +1493,6 @@
 				0392A53416F0464B0045209E /* UIImagePickerController+HTBlock.m in Sources */,
 				033BA84316F5899900926F51 /* DMTextFieldViewController.m in Sources */,
 				033BA84916F69D9200926F51 /* CurrentUser.m in Sources */,
-				033FBC2D16F73BDB00934FC8 /* SignUpStepOneViewController.m in Sources */,
 				033FBC3016F746DD00934FC8 /* SignUpProfileViewController.m in Sources */,
 				03B33D4416F7FA5600B6B089 /* DMSwitchCell.m in Sources */,
 				036752AD16FB33B800D889E8 /* AuthViewController.m in Sources */,

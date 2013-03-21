@@ -14,8 +14,34 @@
 #import "UIViewController+Dim.h"
 #import "CurrentUser.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "DMNavigationController.h"
 
 @implementation AuthViewController
+
++ (void)presentAuthViewControllerWithoutClosingCoverFromViewController:(UIViewController *)viewController delegate:(id<AuthViewControllerDelegate>)delegate
+{
+	AuthViewController *authViewController = [[AuthViewController alloc] init];
+	authViewController.delegate = delegate;
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:authViewController];
+	navController.navigationBarHidden = YES;
+	
+	[viewController presentViewController:navController animated:NO completion:nil];
+	[authViewController openBookCover];
+}
+
++ (void)presentAuthViewControllerFromViewController:(UIViewController *)viewController delegate:(id<AuthViewControllerDelegate>)delegate
+{
+	AuthViewController *authViewController = [[AuthViewController alloc] init];
+	authViewController.delegate = delegate;
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:authViewController];
+	navController.navigationBarHidden = YES;
+	
+	[authViewController closeBookCoverCompletion:^(UIImageView *coverView) {
+		[viewController presentViewController:navController animated:NO completion:nil];
+		[coverView removeFromSuperview];
+		[authViewController openBookCover];
+	}];
+}
 
 - (id)init
 {
@@ -89,6 +115,62 @@
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		[self undim];
 		showErrorAlert();
+	}];
+}
+
+- (void)openBookCover
+{
+	[self openBookCoverAfterDelay:0.5];
+}
+
+- (void)openBookCoverAfterDelay:(NSTimeInterval)delay
+{
+	UIImageView *coverView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 20 )];
+	coverView.image = [UIImage imageNamed:@"Default.png"];
+	[[[UIApplication sharedApplication] keyWindow] addSubview:coverView];
+	[[[UIApplication sharedApplication] keyWindow] bringSubviewToFront:coverView];
+	
+	coverView.layer.anchorPoint = CGPointMake( 0, 0.5 );
+	coverView.center = CGPointMake( 0, 20 + coverView.frame.size.height / 2 );
+	coverView.transform = CGAffineTransformMakeTranslation( 0, 0 );
+	CATransform3D transform = CATransform3DIdentity;
+	
+	transform = CATransform3DMakeRotation( M_PI_2, 0, -1, 0 );
+	transform.m34 = 0.001f;
+	transform.m14 = -0.0015f;
+	
+	[UIView animateWithDuration:1 delay:delay options:0 animations:^{
+		coverView.layer.transform = transform;
+		
+	} completion:^(BOOL finished) {
+		[coverView removeFromSuperview];
+	}];
+}
+
+- (void)closeBookCoverCompletion:(void (^)(UIImageView *coverView))completion
+{
+	UIImageView *coverView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 20 )];
+	coverView.image = [UIImage imageNamed:@"Default.png"];
+	[[[UIApplication sharedApplication] keyWindow] addSubview:coverView];
+	[[[UIApplication sharedApplication] keyWindow] bringSubviewToFront:coverView];
+	
+	coverView.layer.anchorPoint = CGPointMake( 0, 0.5 );
+	coverView.center = CGPointMake( 0, 20 + coverView.frame.size.height / 2 );
+	coverView.transform = CGAffineTransformMakeTranslation( 0, 0 );
+	
+	CATransform3D transform = CATransform3DIdentity;
+	transform = CATransform3DMakeRotation( M_PI_2, 0, -1, 0 );
+	transform.m34 = 0.001f;
+	transform.m14 = -0.0015f;
+	coverView.layer.transform = transform;
+	
+	transform = CATransform3DMakeRotation( M_PI_2, 0, 0, 0 );
+	
+	[UIView animateWithDuration:1 animations:^{
+		coverView.layer.transform = transform;
+		
+	} completion:^(BOOL finished) {
+		if( completion ) completion( coverView );
 	}];
 }
 

@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import "DMNavigationController.h"
-#import "AuthViewController.h"
 #import "DishListViewController.h"
 #import "SearchViewController.h"
 #import "ProfileViewController.h"
@@ -66,8 +65,8 @@
 	self.profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
 	self.profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	
-	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
-	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:settingsViewController];
+	self.settingsViewController = [[SettingsViewController alloc] init];
+	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:self.settingsViewController];
 //	settingsNavigationController.title = NSLocalizedString( @"SETTINGS", @"" );
 	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_settings.png"];
 	settingsNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
@@ -94,26 +93,7 @@
 	}
 	else
 	{
-		AuthViewController *authViewController = [[AuthViewController alloc] init];
-		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:authViewController];
-		navController.navigationBarHidden = YES;
-		[tabBarController presentViewController:navController animated:NO completion:nil];
-		
-		UIImageView *splashView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 20 )];
-		splashView.image = [UIImage imageNamed:@"Default.png"];
-		[self.window addSubview:splashView];
-		[self.window bringSubviewToFront:splashView];
-		
-		splashView.layer.anchorPoint = CGPointMake( 0, 0.5 );
-		splashView.center = CGPointMake( 0, 20 + splashView.frame.size.height / 2 );
-		[UIView animateWithDuration:1 animations:^{
-			splashView.transform = CGAffineTransformMakeTranslation(0,0);
-			CATransform3D transform = CATransform3DIdentity;
-			transform = CATransform3DMakeRotation( M_PI_2, 0, -1, 0 );
-			transform.m34 = 0.001f;
-			transform.m14 = -0.0015f;
-			splashView.layer.transform = transform;
-		}];
+		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:tabBarController delegate:self];
 	}
 	
     return YES;
@@ -158,13 +138,16 @@
 {
 	[(DMNavigationController *)viewController popToRootViewControllerAnimated:NO];
 	
-	// ProfileView 선택시
-	if( [(DMNavigationController *)viewController rootViewController] == self.profileViewController )
+	if( ![CurrentUser user].loggedIn )
 	{
-		// 로그인이 되어있지 않으면 LoginView를 띄움
-		if( ![CurrentUser user].loggedIn )
+		if( [(DMNavigationController *)viewController rootViewController] == self.profileViewController )
 		{
 			[self presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE", nil )];
+			return NO;
+		}
+		else if( [(DMNavigationController *)viewController rootViewController] == self.settingsViewController )
+		{
+			[self presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_SET_SETTINGS", nil )];
 			return NO;
 		}
 	}
@@ -197,29 +180,19 @@
 		// 로그인
 		if( buttonIndex == 0 )
 		{
-			[self presentLoginViewController];
+			[AuthViewController presentAuthViewControllerFromViewController:tabBarController delegate:self];
 		}
 		
 	}] showInView:self.window];
 }
 
-#warning LoginViewController
-- (void)presentLoginViewController
-{
-//	LoginViewController *loginViewController = [[LoginViewController alloc] init];
-//	loginViewController.delegate = self;
-//	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
-//	navController.navigationBarHidden = YES;
-//	[tabBarController presentViewController:navController animated:YES completion:nil];
-}
-
 
 #pragma mark -
-#pragma mark LoginViewControllerDelegate
+#pragma mark AuthViewControllerDelegate
 
-- (void)loginViewControllerDidSucceedLogin:(LoginViewController *)loginViewController
+- (void)authViewControllerDidSucceedLogin:(AuthViewController *)authViewController
 {
-	JLLog( @"loginViewControllerDidSucceedLogin" );
+	JLLog( @"loginViewControllerDidSucceedLogin (userId : %d)", [CurrentUser user].userId );
 	[self.dishListViewController updateDishes];
 	[self.profileViewController loadUserId:[CurrentUser user].userId];
 }

@@ -193,6 +193,9 @@ enum {
 							[self undim];
 							JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
 							break;
+							
+						default:
+							break;
 					}
 				}];
 			}

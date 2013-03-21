@@ -925,13 +925,7 @@ enum {
 	}
 	else
 	{
-		#warning LoginViewController
-//		LoginViewController *loginViewController = [[LoginViewController alloc] init];
-//		loginViewController.delegate = self;
-//		DMNavigationController *navigationController = [[DMNavigationController alloc] initWithRootViewController:loginViewController];
-//		navigationController.navigationBarHidden = YES;
-//		
-//		[self presentViewController:navigationController animated:YES completion:nil];
+		[AuthViewController presentAuthViewControllerFromViewController:self delegate:self];
 	}
 }
 
@@ -1012,9 +1006,9 @@ enum {
 
 
 #pragma mark -
-#pragma mark LoginViewControllerDelegate
+#pragma mark AuthViewControllerDelegate
 
-- (void)loginViewControllerDidSucceedLogin:(LoginViewController *)loginViewController
+- (void)authViewControllerDidSucceedLogin:(AuthViewController *)authViewController
 {
 	JLLog( @"Login succeed" );
 }

@@ -15,6 +15,9 @@
 
 @property (nonatomic, weak) id<AuthViewControllerDelegate> delegate;
 
++ (void)presentAuthViewControllerWithoutClosingCoverFromViewController:(UIViewController *)viewController delegate:(id<AuthViewControllerDelegate>)delegate;
++ (void)presentAuthViewControllerFromViewController:(UIViewController *)viewController delegate:(id<AuthViewControllerDelegate>)delegate;
+
 - (void)getUserAndDismissViewController;
 
 @end

@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LoginViewController.h"
+#import "AuthViewController.h"
+#import "DishListViewController.h"
+#import "ProfileViewController.h"
+#import "SettingsViewController.h"
 
-@class DishListViewController;
-@class ProfileViewController;
-
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate, AuthViewControllerDelegate>
 {
 	UITabBarController *tabBarController;
 }
@@ -20,6 +20,7 @@
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) DishListViewController *dishListViewController;
 @property (nonatomic, strong) ProfileViewController *profileViewController;
+@property (nonatomic, strong) SettingsViewController *settingsViewController;
 
 - (void)cameraButtonDidTouchUpInside;
 
