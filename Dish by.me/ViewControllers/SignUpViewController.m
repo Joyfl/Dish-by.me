@@ -15,6 +15,7 @@
 #import "SignUpProfileViewController.h"
 #import "LoginViewController.h"
 #import "AuthViewController.h"
+#import "UIButton+TouchAreaInsets.h"
 
 @implementation SignUpViewController
 
@@ -33,6 +34,7 @@
 	[self.view addSubview:paperView];
 	
 	UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake( 30, 35, 9, 15 )];
+	backButton.touchAreaInsets = UIEdgeInsetsMake( 15, 15, 15, 15 );
 	[backButton setBackgroundImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
 	[backButton addTarget:self action:@selector(backButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:backButton];

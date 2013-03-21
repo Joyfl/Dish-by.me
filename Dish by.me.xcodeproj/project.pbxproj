@@ -190,6 +190,7 @@
 		036752AD16FB33B800D889E8 /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752AB16FB33B800D889E8 /* AuthViewController.m */; };
 		036752B116FB3D7D00D889E8 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752B016FB3D7D00D889E8 /* SignUpViewController.m */; };
 		036752B416FB3DD200D889E8 /* DMBookButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752B316FB3DD200D889E8 /* DMBookButton.m */; };
+		036752B716FB7EEC00D889E8 /* UIButton+TouchAreaInsets.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752B616FB7EEC00D889E8 /* UIButton+TouchAreaInsets.m */; };
 		03677999169DE68700F26BBA /* BookmarkButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 03677998169DE68700F26BBA /* BookmarkButton.m */; };
 		037EF5F916887B9200FA765D /* JLHTTPCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5EC16887B9200FA765D /* JLHTTPCacheManager.m */; };
 		037EF5FA16887B9200FA765D /* JLHTTPFormEncodedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5EE16887B9200FA765D /* JLHTTPFormEncodedRequest.m */; };
@@ -469,6 +470,8 @@
 		036752B016FB3D7D00D889E8 /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
 		036752B216FB3DD200D889E8 /* DMBookButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMBookButton.h; sourceTree = "<group>"; };
 		036752B316FB3DD200D889E8 /* DMBookButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMBookButton.m; sourceTree = "<group>"; };
+		036752B516FB7EEC00D889E8 /* UIButton+TouchAreaInsets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+TouchAreaInsets.h"; path = "Categories/UIButton+TouchAreaInsets.h"; sourceTree = "<group>"; };
+		036752B616FB7EEC00D889E8 /* UIButton+TouchAreaInsets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+TouchAreaInsets.m"; path = "Categories/UIButton+TouchAreaInsets.m"; sourceTree = "<group>"; };
 		03677997169DE68700F26BBA /* BookmarkButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarkButton.h; sourceTree = "<group>"; };
 		03677998169DE68700F26BBA /* BookmarkButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarkButton.m; sourceTree = "<group>"; };
 		037EF5EB16887B9200FA765D /* JLHTTPCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHTTPCacheManager.h; sourceTree = "<group>"; };
@@ -1179,6 +1182,8 @@
 				03F6FF0F16DA754A008B5D9C /* UIViewController+Dim.m */,
 				03927C2116F014D8001606A6 /* UIColor+Utils.h */,
 				03927C2216F014D8001606A6 /* UIColor+Utils.m */,
+				036752B516FB7EEC00D889E8 /* UIButton+TouchAreaInsets.h */,
+				036752B616FB7EEC00D889E8 /* UIButton+TouchAreaInsets.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1498,6 +1503,7 @@
 				036752AD16FB33B800D889E8 /* AuthViewController.m in Sources */,
 				036752B116FB3D7D00D889E8 /* SignUpViewController.m in Sources */,
 				036752B416FB3DD200D889E8 /* DMBookButton.m in Sources */,
+				036752B716FB7EEC00D889E8 /* UIButton+TouchAreaInsets.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
