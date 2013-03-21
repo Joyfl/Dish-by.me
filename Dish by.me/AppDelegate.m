@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "DMNavigationController.h"
+#import "AuthViewController.h"
 #import "DishListViewController.h"
 #import "SearchViewController.h"
 #import "ProfileViewController.h"
@@ -64,7 +65,6 @@
 //	meNavigationController.title = NSLocalizedString( @"ME", @"" );
 	self.profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
 	self.profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
-	if( [CurrentUser user].loggedIn ) [self.profileViewController loadUserId:[CurrentUser user].userId];
 	
 	SettingsViewController *settingsViewController = [[SettingsViewController alloc] init];
 	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:settingsViewController];
@@ -87,6 +87,34 @@
 	[cameraButton setImage:[UIImage imageNamed:@"tab_camera_highlighted.png"] forState:UIControlStateHighlighted];
 	[cameraButton addTarget:self action:@selector(cameraButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[tabBarController.tabBar addSubview:cameraButton];
+	
+	if( [CurrentUser user].loggedIn )
+	{
+		[self.profileViewController loadUserId:[CurrentUser user].userId];
+	}
+	else
+	{
+		AuthViewController *authViewController = [[AuthViewController alloc] init];
+		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:authViewController];
+		navController.navigationBarHidden = YES;
+		[tabBarController presentViewController:navController animated:NO completion:nil];
+		
+		UIImageView *splashView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 20 )];
+		splashView.image = [UIImage imageNamed:@"Default.png"];
+		[self.window addSubview:splashView];
+		[self.window bringSubviewToFront:splashView];
+		
+		splashView.layer.anchorPoint = CGPointMake( 0, 0.5 );
+		splashView.center = CGPointMake( 0, 20 + splashView.frame.size.height / 2 );
+		[UIView animateWithDuration:1 animations:^{
+			splashView.transform = CGAffineTransformMakeTranslation(0,0);
+			CATransform3D transform = CATransform3DIdentity;
+			transform = CATransform3DMakeRotation( M_PI_2, 0, -1, 0 );
+			transform.m34 = 0.001f;
+			transform.m14 = -0.0015f;
+			splashView.layer.transform = transform;
+		}];
+	}
 	
     return YES;
 }
