@@ -10,4 +10,6 @@
 
 @interface AuthViewController : GAITrackedViewController
 
+- (void)loginButtonDidTouchUpInside;
+
 @end

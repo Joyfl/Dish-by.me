@@ -9,6 +9,12 @@
 #import "SignUpViewController.h"
 #import "DMBookButton.h"
 #import <QuartzCore/QuartzCore.h>
+#import "UIViewController+Dim.h"
+#import <FacebookSDK/FacebookSDK.h>
+#import "CurrentUser.h"
+#import "HTBlock.h"
+#import "SignUpStepTwoViewController.h"
+#import "LoginViewController.h"
 
 @implementation SignUpViewController
 
@@ -98,13 +104,12 @@
 
 - (void)backButtonDidTouchUpInside
 {
-	[self.navigationController popViewControllerAnimated:YES];
+	[self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (UITextField *)inputFieldAtYPosition:(CGFloat)y placeholder:(NSString *)placeholder
 {
 	UITextField *inputField = [[UITextField alloc] initWithFrame:CGRectMake( 30, y, 260, 20 )];
-//	emailInput.delegate = self;
 	inputField.placeholder = placeholder;
 	inputField.font = [UIFont boldSystemFontOfSize:13];
 	inputField.textColor = [UIColor colorWithHex:0xADA8A3 alpha:1];
@@ -117,9 +122,7 @@
 	inputField.returnKeyType = UIReturnKeyNext;
 	inputField.autocorrectionType = UITextAutocorrectionTypeNo;
 	inputField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-//	[inputField setValue:[UIColor colorWithHex:0xC6C3BF alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 	[inputField addTarget:self action:@selector(inputFieldEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
-//	[emailInput addTarget:self action:@selector(inputEditChanged:) forControlEvents:UIControlEventEditingChanged];
 	return inputField;
 }
 
@@ -140,7 +143,68 @@
 
 - (void)facebookButtonDidTouchUpInside
 {
+	[self dim];
 	
+	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+		switch( status )
+		{
+			case FBSessionStateOpen:
+			{
+				NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
+				[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:params success:^(id response) {
+					JLLog( @"SignUp complete" );
+					
+					// 회원가입이 완료되면 로그인
+					[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
+						[self undim];
+						
+						[CurrentUser user].loggedIn = YES;
+						[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
+						
+						[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WELCOME", nil ) message:NSLocalizedString( @"MESSAGE_SIGNUP_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+							NSInteger userId = [[response objectForKey:@"id"] integerValue];
+							SignUpStepTwoViewController *signUpViewController = [[SignUpStepTwoViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
+							[self.navigationController pushViewController:signUpViewController animated:YES];
+						}] show];
+						
+					} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+						[self undim];
+						showErrorAlert();
+					}];
+					
+				} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+					[self undim];
+					
+					// 이미 가입된 사용자
+					if( errorCode == 1400 )
+					{
+						[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP", nil ) cancelButtonTitle:NSLocalizedString( @"NO_THANKS", nil ) otherButtonTitles:@[NSLocalizedString( @"LOGIN", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+							
+							// 로그인
+							if( buttonIndex == 1 )
+							{
+								LoginViewController *loginViewController = [[LoginViewController alloc] init];
+								[self.navigationController pushViewController:loginViewController animated:YES];
+							}
+						}] show];
+						return;
+					}
+					
+					showErrorAlert();
+				}];
+				break;
+			}
+				
+			case FBSessionStateClosedLoginFailed:
+				[self undim];
+				JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
+				break;
+				
+			default:
+				[self undim];
+				break;
+		}
+	}];
 }
 
 - (void)signUpButtonDidTouchUpInside

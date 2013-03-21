@@ -5,6 +5,7 @@
 "I_GOT_IT" = "알겠어요";
 "CANCEL" = "취소";
 "YES" = "네";
+"NO_THANKS" = "괜찮아요";
 
 // Messages
 "MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관 및 개인정보취급방침에 동의합니다";
@@ -14,7 +15,7 @@
 "MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_SIGNUP_STEP_ONE" = "사용하실 이메일과 패스워드를 입력해주세요.";
-"MESSAGE_ALREADY_SIGNED_UP" = "이미 가입된 이메일이에요.";
+"MESSAGE_ALREADY_SIGNED_UP" = "이미 가입된 이메일이에요.\n로그인하러 가시겠어요?";
 "MESSAGE_SIGNUP_COMPLETE" = "회원가입이 완료되었습니다!\n프로필을 완성해주세요.";
 "MESSAGE_PROFILE_UPDATE_COMPLETE" = "프로필이 예쁘게 만들어졌어요!\n가입한 계정으로 로그인할게요 :D";
 
