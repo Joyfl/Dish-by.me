@@ -26,8 +26,8 @@
 	[button setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
 	
 	button.adjustsImageWhenHighlighted = NO;
-	[button setBackgroundImage:[UIImage imageNamed:@"button.png"] forState:UIControlStateNormal];
-	[button setBackgroundImage:[UIImage imageNamed:@"button_selected.png"] forState:UIControlStateHighlighted];
+	[button setBackgroundImage:[UIImage imageNamed:@"bar_button.png"] forState:UIControlStateNormal];
+	[button setBackgroundImage:[UIImage imageNamed:@"bar_button_selected.png"] forState:UIControlStateHighlighted];
 	[button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 	
 	DMBarButtonItem *barButtonItem = [[DMBarButtonItem alloc] initWithCustomView:button];

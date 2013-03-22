@@ -16,7 +16,7 @@
 	self.titleLabel.font = [UIFont boldSystemFontOfSize:12];
 	self.titleLabel.shadowOffset = CGSizeMake( 0, -1 );
 	[self setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.3] forState:UIControlStateNormal];
-	[self setBackgroundImage:[UIImage imageNamed:@"button.png"] forState:UIControlStateNormal];
+	[self setBackgroundImage:[UIImage imageNamed:@"bar_button.png"] forState:UIControlStateNormal];
 	return self;
 }
 
