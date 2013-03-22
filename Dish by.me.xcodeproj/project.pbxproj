@@ -237,17 +237,6 @@
 		03E1976C16F8B4C40039EBF3 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E1976B16F8B4C30039EBF3 /* libz.dylib */; };
 		03E7603116D6BA7B004916B0 /* JLFoldableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E7602E16D6BA7B004916B0 /* JLFoldableView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		03E7603216D6BA7B004916B0 /* UIView+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E7603016D6BA7B004916B0 /* UIView+Screenshot.m */; };
-		03E7B3991699AA92003729F4 /* blackArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B38E1699AA92003729F4 /* blackArrow.png */; };
-		03E7B39A1699AA92003729F4 /* blackArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B38F1699AA92003729F4 /* blackArrow@2x.png */; };
-		03E7B39B1699AA92003729F4 /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3901699AA92003729F4 /* blueArrow.png */; };
-		03E7B39C1699AA92003729F4 /* blueArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3911699AA92003729F4 /* blueArrow@2x.png */; };
-		03E7B39D1699AA92003729F4 /* grayArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3921699AA92003729F4 /* grayArrow.png */; };
-		03E7B39E1699AA92003729F4 /* grayArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3931699AA92003729F4 /* grayArrow@2x.png */; };
-		03E7B39F1699AA92003729F4 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3941699AA92003729F4 /* MainWindow.xib */; };
-		03E7B3A01699AA92003729F4 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3951699AA92003729F4 /* RootViewController.xib */; };
-		03E7B3A11699AA92003729F4 /* TableViewPull-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3961699AA92003729F4 /* TableViewPull-Info.plist */; };
-		03E7B3A21699AA92003729F4 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3971699AA92003729F4 /* whiteArrow.png */; };
-		03E7B3A31699AA92003729F4 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03E7B3981699AA92003729F4 /* whiteArrow@2x.png */; };
 		03F67F5116D8E33200AB0600 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F3F16D8E33200AB0600 /* AFHTTPClient.m */; };
 		03F67F5216D8E33200AB0600 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F4116D8E33200AB0600 /* AFHTTPRequestOperation.m */; };
 		03F67F5316D8E33200AB0600 /* AFImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 03F67F4316D8E33200AB0600 /* AFImageRequestOperation.m */; };
@@ -555,17 +544,6 @@
 		03E7602E16D6BA7B004916B0 /* JLFoldableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLFoldableView.m; sourceTree = "<group>"; };
 		03E7602F16D6BA7B004916B0 /* UIView+Screenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Screenshot.h"; sourceTree = "<group>"; };
 		03E7603016D6BA7B004916B0 /* UIView+Screenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Screenshot.m"; sourceTree = "<group>"; };
-		03E7B38E1699AA92003729F4 /* blackArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackArrow.png; sourceTree = "<group>"; };
-		03E7B38F1699AA92003729F4 /* blackArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackArrow@2x.png"; sourceTree = "<group>"; };
-		03E7B3901699AA92003729F4 /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
-		03E7B3911699AA92003729F4 /* blueArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueArrow@2x.png"; sourceTree = "<group>"; };
-		03E7B3921699AA92003729F4 /* grayArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grayArrow.png; sourceTree = "<group>"; };
-		03E7B3931699AA92003729F4 /* grayArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayArrow@2x.png"; sourceTree = "<group>"; };
-		03E7B3941699AA92003729F4 /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
-		03E7B3951699AA92003729F4 /* RootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
-		03E7B3961699AA92003729F4 /* TableViewPull-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "TableViewPull-Info.plist"; sourceTree = "<group>"; };
-		03E7B3971699AA92003729F4 /* whiteArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteArrow.png; sourceTree = "<group>"; };
-		03E7B3981699AA92003729F4 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteArrow@2x.png"; sourceTree = "<group>"; };
 		03F67F3E16D8E33200AB0600 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		03F67F3F16D8E33200AB0600 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		03F67F4016D8E33200AB0600 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -1061,7 +1039,6 @@
 			children = (
 				0367516D16FB323E00D889E8 /* Images */,
 				03A5E93A16B4DBE800C79F8D /* Fonts */,
-				03E7B38D1699AA92003729F4 /* EGOTableViewPullRefreshResources */,
 				03B598231603046E007BD6AF /* Localizable.strings */,
 			);
 			name = Resources;
@@ -1112,25 +1089,6 @@
 				03E7603016D6BA7B004916B0 /* UIView+Screenshot.m */,
 			);
 			path = JLFoldableView;
-			sourceTree = "<group>";
-		};
-		03E7B38D1699AA92003729F4 /* EGOTableViewPullRefreshResources */ = {
-			isa = PBXGroup;
-			children = (
-				03E7B38E1699AA92003729F4 /* blackArrow.png */,
-				03E7B38F1699AA92003729F4 /* blackArrow@2x.png */,
-				03E7B3901699AA92003729F4 /* blueArrow.png */,
-				03E7B3911699AA92003729F4 /* blueArrow@2x.png */,
-				03E7B3921699AA92003729F4 /* grayArrow.png */,
-				03E7B3931699AA92003729F4 /* grayArrow@2x.png */,
-				03E7B3941699AA92003729F4 /* MainWindow.xib */,
-				03E7B3951699AA92003729F4 /* RootViewController.xib */,
-				03E7B3961699AA92003729F4 /* TableViewPull-Info.plist */,
-				03E7B3971699AA92003729F4 /* whiteArrow.png */,
-				03E7B3981699AA92003729F4 /* whiteArrow@2x.png */,
-			);
-			name = EGOTableViewPullRefreshResources;
-			path = Resources/EGOTableViewPullRefreshResources;
 			sourceTree = "<group>";
 		};
 		03F67F3D16D8E33200AB0600 /* AFNetworking */ = {
@@ -1229,17 +1187,6 @@
 			files = (
 				03B598061602FDC0007BD6AF /* InfoPlist.strings in Resources */,
 				03B598211603046E007BD6AF /* Localizable.strings in Resources */,
-				03E7B3991699AA92003729F4 /* blackArrow.png in Resources */,
-				03E7B39A1699AA92003729F4 /* blackArrow@2x.png in Resources */,
-				03E7B39B1699AA92003729F4 /* blueArrow.png in Resources */,
-				03E7B39C1699AA92003729F4 /* blueArrow@2x.png in Resources */,
-				03E7B39D1699AA92003729F4 /* grayArrow.png in Resources */,
-				03E7B39E1699AA92003729F4 /* grayArrow@2x.png in Resources */,
-				03E7B39F1699AA92003729F4 /* MainWindow.xib in Resources */,
-				03E7B3A01699AA92003729F4 /* RootViewController.xib in Resources */,
-				03E7B3A11699AA92003729F4 /* TableViewPull-Info.plist in Resources */,
-				03E7B3A21699AA92003729F4 /* whiteArrow.png in Resources */,
-				03E7B3A31699AA92003729F4 /* whiteArrow@2x.png in Resources */,
 				03A5E94116B4DBE800C79F8D /* SEGOEUI.TTF in Resources */,
 				03A5E94216B4DBE800C79F8D /* SEGOEUIB.TTF in Resources */,
 				03A5E94316B4DBE800C79F8D /* SEGOEUII.TTF in Resources */,

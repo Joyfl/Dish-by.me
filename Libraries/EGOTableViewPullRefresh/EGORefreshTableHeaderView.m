@@ -27,7 +27,7 @@
 #import "EGORefreshTableHeaderView.h"
 
 
-#define TEXT_COLOR	 [UIColor colorWithRed:87.0/255.0 green:108.0/255.0 blue:137.0/255.0 alpha:1.0]
+#define TEXT_COLOR	 [UIColor colorWithRed:87.0/255.0 green:83.0/255.0 blue:80.0/255.0 alpha:1.0]
 #define FLIP_ANIMATION_DURATION 0.18f
 
 
@@ -45,33 +45,20 @@
 		
 		self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		self.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
-
-		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 30.0f, self.frame.size.width, 20.0f)];
-		label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		label.font = [UIFont systemFontOfSize:12.0f];
-		label.textColor = textColor;
-		label.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
-		label.shadowOffset = CGSizeMake(0.0f, 1.0f);
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = NSTextAlignmentCenter;
-		[self addSubview:label];
-		_lastUpdatedLabel=label;
-		[label release];
 		
-		label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 48.0f, self.frame.size.width, 20.0f)];
-		label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-		label.font = [UIFont boldSystemFontOfSize:13.0f];
-		label.textColor = textColor;
-		label.shadowColor = [UIColor colorWithWhite:0.9f alpha:1.0f];
-		label.shadowOffset = CGSizeMake(0.0f, 1.0f);
-		label.backgroundColor = [UIColor clearColor];
-		label.textAlignment = NSTextAlignmentCenter;
-		[self addSubview:label];
-		_statusLabel=label;
-		[label release];
+		_statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, frame.size.height - 48.0f, self.frame.size.width, 20.0f)];
+		_statusLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		_statusLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+		_statusLabel.textColor = textColor;
+		_statusLabel.shadowColor = [UIColor whiteColor];
+		_statusLabel.shadowOffset = CGSizeMake(0.0f, 1.0f);
+		_statusLabel.backgroundColor = [UIColor clearColor];
+		_statusLabel.textAlignment = NSTextAlignmentCenter;
+		[self addSubview:_statusLabel];
+		[_statusLabel release];
 		
 		CALayer *layer = [CALayer layer];
-		layer.frame = CGRectMake(25.0f, frame.size.height - 65.0f, 30.0f, 55.0f);
+		layer.frame = CGRectMake(25.0f, frame.size.height - 50.0f, 23.0f, 23.0f);
 		layer.contentsGravity = kCAGravityResizeAspect;
 		layer.contents = (id)[UIImage imageNamed:arrow].CGImage;
 		
@@ -84,8 +71,13 @@
 		[[self layer] addSublayer:layer];
 		_arrowImage=layer;
 		
+		UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, frame.size.height - 7, self.frame.size.width, 2 )];
+		lineView.image = [UIImage imageNamed:@"line_dotted.png"];
+		[self addSubview:lineView];
+		[lineView release];
+		
 		UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-		view.frame = CGRectMake(25.0f, frame.size.height - 38.0f, 20.0f, 20.0f);
+		view.frame = CGRectMake(25.0f, frame.size.height - 49.0f, 20.0f, 20.0f);
 		[self addSubview:view];
 		_activityView = view;
 		[view release];
@@ -100,34 +92,11 @@
 }
 
 - (id)initWithFrame:(CGRect)frame  {
-  return [self initWithFrame:frame arrowImageName:@"blueArrow.png" textColor:TEXT_COLOR];
+  return [self initWithFrame:frame arrowImageName:@"arrow.png" textColor:TEXT_COLOR];
 }
 
 #pragma mark -
 #pragma mark Setters
-
-- (void)refreshLastUpdatedDate {
-	
-	if ([_delegate respondsToSelector:@selector(egoRefreshTableHeaderDataSourceLastUpdated:)]) {
-		
-		NSDate *date = [_delegate egoRefreshTableHeaderDataSourceLastUpdated:self];
-		
-		[NSDateFormatter setDefaultFormatterBehavior:NSDateFormatterBehaviorDefault];
-		NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-		[dateFormatter setDateStyle:NSDateFormatterShortStyle];
-		[dateFormatter setTimeStyle:NSDateFormatterShortStyle];
-
-		_lastUpdatedLabel.text = [NSString stringWithFormat:@"%@ : %@", NSLocalizedString( @"LAST_UPDATED", @"최근 업데이트" ), [dateFormatter stringFromDate:date]];
-		[[NSUserDefaults standardUserDefaults] setObject:_lastUpdatedLabel.text forKey:@"EGORefreshTableView_LastRefresh"];
-		[[NSUserDefaults standardUserDefaults] synchronize];
-		
-	} else {
-		
-		_lastUpdatedLabel.text = nil;
-		
-	}
-
-}
 
 - (void)setState:(EGOPullRefreshState)aState{
 	
@@ -157,8 +126,6 @@
 			_arrowImage.hidden = NO;
 			_arrowImage.transform = CATransform3DIdentity;
 			[CATransaction commit];
-			
-			[self refreshLastUpdatedDate];
 			
 			break;
 		case EGOOPullRefreshLoading:
@@ -255,7 +222,6 @@
 	_activityView = nil;
 	_statusLabel = nil;
 	_arrowImage = nil;
-	_lastUpdatedLabel = nil;
     [super dealloc];
 }
 
