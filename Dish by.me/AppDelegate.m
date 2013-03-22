@@ -92,6 +92,8 @@
 		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:self.tabBarController delegate:self];
 	}
 	
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=General"]];
+	
     return YES;
 }
 

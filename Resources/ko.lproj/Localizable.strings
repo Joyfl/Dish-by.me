@@ -16,6 +16,7 @@
 "MESSAGE_PROFILE_UPDATE_COMPLETE" = "프로필이 예쁘게 만들어졌어요!\n가입한 계정으로 로그인할게요 :D";
 "MESSAGE_ALREADY_SIGNED_UP_WITH_FACEBOOK" = "이미 페이스북으로 가입이 되어있어요.\n로그인할까요?";
 "MESSAGE_LOGIN_FAILED" = "로그인에 실패했어요. 이메일과 비밀번호를 확인해주세요.";
+"MESSAGE_FACEBOOK_NOT_ALLOWED" = "페이스북 연동에 실패했어요.\n[설정] > [Facebook]에 가서\nDish by.me를 허용해주세요.";
 
 "MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
 "MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";

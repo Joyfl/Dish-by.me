@@ -173,7 +173,7 @@
 - (void)facebookButtonDidTouchUpInside
 {
 	[self dim];
-	
+	[[FBSession activeSession] closeAndClearTokenInformation];
 	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
 		switch( status )
 		{
@@ -185,12 +185,25 @@
 				
 			case FBSessionStateClosedLoginFailed:
 				[self undim];
+				[[FBSession activeSession] closeAndClearTokenInformation];
 				JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
 				break;
 				
 			default:
 				[self undim];
 				break;
+		}
+		
+		if( error )
+		{
+			if( error.code == 2 )
+			{
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_FACEBOOK_NOT_ALLOWED", nil ) delegate:nil cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil] show];
+			}
+			else
+			{
+				JLLog( @"Facebook Error : %@", error );
+			}
 		}
 	}];
 }

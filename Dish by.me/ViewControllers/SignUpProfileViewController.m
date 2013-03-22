@@ -93,6 +93,8 @@
 			_nameInput.text = user.name;
 			_bioInput.text = [user objectForKey:@"bio"];
 			
+			[self inputFieldEditingChanged:_nameInput];
+			
 			NSURL *profilePhotoURL = [NSURL URLWithString:[[[user objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
 			[_userPhotoButton setImageWithURL:profilePhotoURL placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 			
