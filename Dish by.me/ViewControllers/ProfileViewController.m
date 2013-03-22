@@ -49,6 +49,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	[self.view addSubview:_tableView];
 	
 	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 85 )];
+	_userPhotoButton.enabled = NO;
 	
 	_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake( 0, -_tableView.bounds.size.height, self.view.frame.size.width, _tableView.bounds.size.height )];
 	_refreshHeaderView.delegate = self;
@@ -491,6 +492,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			// My profile
 			if( _user.userId == [[CurrentUser user] userId] )
 			{
+				_userPhotoButton.enabled = YES;
+				
 				nameButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[nameButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
 				nameButton.enabled = YES;
@@ -501,6 +504,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			}
 			else
 			{
+				_userPhotoButton.enabled = NO;
 				nameButton.enabled = NO;
 				bioButton.enabled = NO;
 			}
