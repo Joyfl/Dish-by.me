@@ -9,12 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
 #import "DishTileCell.h"
+#import "UserListCell.h"
 #import "EGORefreshTableHeaderView.h"
 #import "DMBarButtonItem.h"
+#import "User.h"
 
-@class User;
-
-@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishTileCellDelegate>
+@interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishTileCellDelegate, UserListCellDelegate>
 {
 	User *_user;
 	
@@ -44,8 +44,17 @@
 	NSMutableArray *_bookmarks;
 	BOOL _loadingBookmarks;
 	
+	NSMutableArray *_following;
+	BOOL _loadingFollowing;
+	
+	NSMutableArray *_followers;
+	BOOL _loadingFollowers;
+	
+	
 	// 0 : dishes
 	// 1 : bookmarks
+	// 2 : following
+	// 3 : followers
 	NSInteger _selectedTab;
 }
 

@@ -8,21 +8,24 @@
 
 #import "ProfileViewController.h"
 #import "Utils.h"
-#import "User.h"
 #import "Dish.h"
 #import "DishDetailViewController.h"
 #import "CurrentUser.h"
 #import "DMAPILoader.h"
 #import "DMBarButtonItem.h"
 #import "AppDelegate.h"
-#import "DishTileItem.h"
 #import "DMTextFieldViewController.h"
 #import "HTBlock.h"
 #import "UIButton+ActivityIndicatorView.h"
 
 #define isLastDishLoaded ( _dishes.count == _user.dishCount )
 #define isLastBookmarkLoaded ( _bookmarks.count == _user.bookmarkCount )
+#define isLastFollowingLoaded ( _following.count == _user.followingCount )
+#define isLastFollowerLoaded ( _followers.count == _user.followersCount )
+
 #define selectedDishArray ( _selectedTab == 0 ? _dishes : _bookmarks )
+#define selectedUserArray ( _selectedTab == 2 ? _following : _followers )
+
 #define userNameWithPlaceholder ( _user.name.length > 0 ? _user.name : NSLocalizedString( @"NO_NAME", nil ) )
 #define userBioWithPlaceholder ( _user.bio.length > 0 ? _user.bio : NSLocalizedString( @"NO_BIO", nil ) )
 
@@ -50,15 +53,17 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	[self.view addSubview:_tableView];
 	
 	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 85 )];
-	_userPhotoButton.enabled = NO;
+	_userPhotoButton.userInteractionEnabled = NO;
 	
 	_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake( 0, -_tableView.bounds.size.height, self.view.frame.size.width, _tableView.bounds.size.height )];
 	_refreshHeaderView.delegate = self;
 	_refreshHeaderView.backgroundColor = self.view.backgroundColor;
 	[_tableView addSubview:_refreshHeaderView];
 	
-	_dishes = [[NSMutableArray alloc] init];
-	_bookmarks = [[NSMutableArray alloc] init];
+	_dishes = [NSMutableArray array];
+	_bookmarks = [NSMutableArray array];
+	_following = [NSMutableArray array];
+	_followers = [NSMutableArray array];
 	
 	return self;
 }
@@ -96,13 +101,13 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 - (void)followButtonHandler
 {
 	_followButton.button.showsActivityIndicatorView = YES;
-	[self follow];
+	[self followUser:_user fromButton:_followButton.button atIndexPath:nil];
 }
 
 - (void)followingButtonHandler
 {
 	_followingButton.button.showsActivityIndicatorView = YES;
-	[self unfollow];
+	[self unfollowUser:_user fromButton:_followingButton.button atIndexPath:nil];
 }
 
 
@@ -133,8 +138,15 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)loadMoreDishes
 {
+	JLLog( @"loadMoreDishes" );
+	_loadingDishes = YES;
+	
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _dishes.count] };
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"loadMoreDishes success" );
+		
+		_loadingDishes = NO;
+		
 		NSArray *data = [response objectForKey:@"data"];
 		for( NSDictionary *d in data )
 		{
@@ -152,13 +164,21 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
+		_loadingDishes = NO;
 	}];
 }
 
 - (void)loadMoreBookmarks
 {
+	JLLog( @"loadMoreBookmarks" );
+	_loadingBookmarks = YES;
+	
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _bookmarks.count] };
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"loadMoreBookmarks success" );
+		
+		_loadingBookmarks = NO;
+		
 		NSArray *data = [response objectForKey:@"data"];
 		for( NSDictionary *d in data )
 		{
@@ -176,6 +196,73 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
+		_loadingBookmarks = NO;
+	}];
+}
+
+- (void)loadMoreFollowing
+{
+	JLLog( @"loadMoreFollowing" );
+	
+	_loadingFollowing = YES;
+	
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _following.count] };
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/following", _user.userId] method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"loadMoreFollowing success" );
+		
+		_loadingFollowing = NO;
+		
+		NSArray *data = [response objectForKey:@"data"];
+		for( NSDictionary *d in data )
+		{
+			User *dish = [User userFromDictionary:d];
+			[_following addObject:dish];
+		}
+		
+		if( _selectedTab == 2 )
+			[_tableView reloadData];
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+		_loadingFollowing = NO;
+	}];
+}
+
+- (void)loadMoreFollowers
+{
+	JLLog( @"loadMoreFollowers" );
+	
+	_loadingFollowers = YES;
+	
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _followers.count] };
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/followers", _user.userId] method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"loadMoreFollowers success" );
+		
+		_loadingFollowers = NO;
+		
+		NSArray *data = [response objectForKey:@"data"];
+		for( NSDictionary *d in data )
+		{
+			User *dish = [User userFromDictionary:d];
+			[_followers addObject:dish];
+		}
+		
+		if( _selectedTab == 3 )
+			[_tableView reloadData];
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+		_loadingFollowers = NO;
 	}];
 }
 
@@ -193,11 +280,14 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		_user.bookmarkCount = [[response objectForKey:@"bookmark_count"] integerValue];
 		_user.followingCount = [[response objectForKey:@"following_count"] integerValue];
 		_user.followersCount = [[response objectForKey:@"followers_count"] integerValue];
+		_user.following = [[response objectForKey:@"following"] boolValue];
 		
 		self.navigationItem.title = userNameWithPlaceholder;
 		
 		[self updateDishes];
 		[self updateBookmarks];
+		[self updateFollowing];
+		[self updateFollowers];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -211,6 +301,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)updateDishes
 {
+	_updating = YES;
+	
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:nil success:^(id response) {
 		[_dishes removeAllObjects];
 		
@@ -236,6 +328,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)updateBookmarks
 {
+	_updating = YES;
+	
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:nil success:^(id response) {
 		[_bookmarks removeAllObjects];
 		
@@ -256,6 +350,71 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)updateFollowing
+{
+	JLLog( @"updateFollowing" );
+	
+	_updating = YES;
+	
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _following.count] };
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/following", _user.userId] method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"updateFollowing success" );
+		
+		[_following removeAllObjects];
+		
+		NSArray *data = [response objectForKey:@"data"];
+		for( NSDictionary *d in data )
+		{
+			User *dish = [User userFromDictionary:d];
+			[_following addObject:dish];
+		}
+		
+		if( _selectedTab == 2 )
+			[_tableView reloadData];
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)updateFollowers
+{
+	JLLog( @"updateFollowers" );
+	
+	_updating = YES;
+	
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _followers.count] };
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/followers", _user.userId] method:@"GET" parameters:params success:^(id response) {
+		JLLog( @"updateFollowers success" );
+		
+		[_followers removeAllObjects];
+		
+		NSArray *data = [response objectForKey:@"data"];
+		for( NSDictionary *d in data )
+		{
+			User *dish = [User userFromDictionary:d];
+			[_followers addObject:dish];
+		}
+		
+		if( _selectedTab == 3 )
+			[_tableView reloadData];
+		
+		_updating = NO;
+		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+		_loadingFollowers = NO;
 	}];
 }
 
@@ -289,20 +448,28 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	}];
 }
 
-- (void)follow
+- (void)followUser:(User *)user fromButton:(UIButton *)button atIndexPath:(NSIndexPath *)indexPath
 {
 	JLLog( @"Follow" );
 	
-	NSString *api = [NSString stringWithFormat:@"/user/%d/follow", _user.userId];
+	NSString *api = [NSString stringWithFormat:@"/user/%d/follow", user.userId];
 	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Follow Succeed" );
 		
-		_user.following = YES;
-		_user.followersCount ++;
-		_followButton.button.showsActivityIndicatorView = NO;
-		[self updateFollowFollowingButton];
+		user.following = YES;
+		user.followersCount ++;
+		button.showsActivityIndicatorView = NO;
 		
-		[_tableView reloadData];
+		if( user.userId == _user.userId )
+		{
+			[self updateFollowFollowingButton];
+			[_tableView reloadData];
+		}
+		
+		if( indexPath )
+		{
+			[_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+		}
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -311,20 +478,28 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	}];
 }
 
-- (void)unfollow
+- (void)unfollowUser:(User *)user fromButton:(UIButton *)button atIndexPath:(NSIndexPath *)indexPath
 {
 	JLLog( @"Follow" );
 	
-	NSString *api = [NSString stringWithFormat:@"/user/%d/follow", _user.userId];
+	NSString *api = [NSString stringWithFormat:@"/user/%d/follow", user.userId];
 	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Unfollow Succeed" );
 		
-		_user.following = NO;
-		_user.followersCount --;
-		_followingButton.button.showsActivityIndicatorView = NO;
-		[self updateFollowFollowingButton];
+		user.following = NO;
+		user.followersCount --;
+		button.showsActivityIndicatorView = NO;
 		
-		[_tableView reloadData];
+		if( user.userId == _user.userId )
+		{
+			[self updateFollowFollowingButton];
+			[_tableView reloadData];
+		}
+		
+		if( indexPath )
+		{
+			[_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+		}
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -402,31 +577,43 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 #pragma mark -
 #pragma mark UITableView
 
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 2 + ( _selectedTab == 0 ? !isLastDishLoaded : !isLastBookmarkLoaded );
+	return 2 + ( _selectedTab == 0 ? !isLastDishLoaded :
+				_selectedTab == 1 ? !isLastBookmarkLoaded :
+				_selectedTab == 2 ? !isLastFollowingLoaded : !isLastFollowerLoaded );
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if( section == 0 ) return 1;
-	else if( section == 1 ) return ceil( selectedDishArray.count / 3.0 );
-	return 1;
+	else if( section == 2 ) return 1;
+	
+	if( _selectedTab < 2 )
+		return ceil( selectedDishArray.count / 3.0 );
+	return selectedUserArray.count;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	if( indexPath.section == 0 ) return 155;
 	else if( indexPath.section == 2 ) return 45;
-	else if( indexPath.row == ceil( selectedDishArray.count / 3.0 ) - 1 ) return 116;
-	return 102;
+	
+	if( _selectedTab < 2 )
+	{
+		if( indexPath.row == ceil( selectedDishArray.count / 3.0 ) - 1 )
+			return 116;
+		return 102;
+	}
+	
+	return 50;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *profileCellId = @"profileCell";
 	static NSString *dishCellId = @"dishCell";
+	static NSString *userCellId = @"userCell";
 	
 	//
 	// Profile
@@ -457,7 +644,6 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			nameButton.titleLabel.font = [UIFont systemFontOfSize:13];
 			nameButton.titleLabel.textAlignment = NSTextAlignmentLeft;
 			nameButton.adjustsImageWhenHighlighted = NO;
-			nameButton.adjustsImageWhenDisabled = NO;
 			[nameButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top.png"] forState:UIControlStateNormal];
 			[nameButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_top_selected.png"] forState:UIControlStateHighlighted];
 			[nameButton addTarget:self action:@selector(nameButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -477,7 +663,6 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			bioButton.titleLabel.font = [UIFont systemFontOfSize:13];
 			bioButton.titleLabel.textAlignment = NSTextAlignmentLeft;
 			bioButton.adjustsImageWhenHighlighted = NO;
-			bioButton.adjustsImageWhenDisabled = NO;
 			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_mid.png"] forState:UIControlStateNormal];
 			[bioButton setBackgroundImage:[UIImage imageNamed:@"profile_cell_mid_selected.png"] forState:UIControlStateHighlighted];
 			[bioButton addTarget:self action:@selector(bioButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -493,21 +678,21 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			// My profile
 			if( _user.userId == [[CurrentUser user] userId] )
 			{
-				_userPhotoButton.enabled = YES;
+				_userPhotoButton.userInteractionEnabled = YES;
 				
 				nameButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[nameButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
-				nameButton.enabled = YES;
+				nameButton.userInteractionEnabled = YES;
 				
 				bioButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[bioButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
-				bioButton.enabled = YES;
+				bioButton.userInteractionEnabled = YES;
 			}
 			else
 			{
-				_userPhotoButton.enabled = NO;
-				nameButton.enabled = NO;
-				bioButton.enabled = NO;
+				_userPhotoButton.userInteractionEnabled = NO;
+				nameButton.userInteractionEnabled = NO;
+				bioButton.userInteractionEnabled = NO;
 			}
 			
 			
@@ -650,31 +835,48 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	
 	else if( indexPath.section == 1 )
 	{
-		DishTileCell *cell = [_tableView dequeueReusableCellWithIdentifier:dishCellId];
-		
-		if( !cell )
+		if( _selectedTab < 2 )
 		{
-			cell = [[DishTileCell alloc] initWithReuseIdentifier:dishCellId];
-			cell.delegate = self;
+			DishTileCell *cell = [_tableView dequeueReusableCellWithIdentifier:dishCellId];
+			
+			if( !cell )
+			{
+				cell = [[DishTileCell alloc] initWithReuseIdentifier:dishCellId];
+				cell.delegate = self;
+			}
+			
+			for( NSInteger i = 0; i < 3; i++ )
+			{
+				DishTileItem *dishItem = [cell dishItemAt:i];
+				if( selectedDishArray.count > indexPath.row * 3 + i )
+				{
+					dishItem.hidden = NO;
+					
+					Dish *dish = [selectedDishArray objectAtIndex:indexPath.row * 3 + i];
+					dishItem.dish = dish;
+				}
+				else
+				{
+					dishItem.hidden = YES;
+				}
+			}
+			
+			return cell;
 		}
-		
-		for( NSInteger i = 0; i < 3; i++ )
+		else
 		{
-			DishTileItem *dishItem = [cell dishItemAt:i];
-			if( selectedDishArray.count > indexPath.row * 3 + i )
+			UserListCell *cell = [_tableView dequeueReusableCellWithIdentifier:userCellId];
+			
+			if( !cell )
 			{
-				dishItem.hidden = NO;
-				
-				Dish *dish = [selectedDishArray objectAtIndex:indexPath.row * 3 + i];
-				dishItem.dish = dish;
+				cell = [[UserListCell alloc] initWithReuseIdentifier:userCellId];
+				cell.delegate = self;
 			}
-			else
-			{
-				dishItem.hidden = YES;
-			}
+			
+			[cell setUser:[selectedUserArray objectAtIndex:indexPath.row] atIndexPath:indexPath];
+			
+			return cell;
 		}
-		
-		return cell;
 	}
 	
 	else
@@ -697,6 +899,12 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		
 		else if( !_loadingBookmarks && _selectedTab == 1 )
 			[self loadMoreBookmarks];
+		
+		else if( !_loadingFollowing && _selectedTab == 2 )
+			[self loadMoreFollowing];
+		
+		else if( !_loadingFollowers && _selectedTab == 3 )
+			[self loadMoreFollowers];
 		
 		return cell;
 	}
@@ -818,12 +1026,36 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 
 #pragma mark -
-#pragma mark DishListCellDelegate
+#pragma mark DishTileCellDelegate
 
 - (void)dishTileCell:(DishTileCell *)dishTileCell didSelectDishTileItem:(DishTileItem *)dishTileItem
 {
 	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:dishTileItem.dish];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
+}
+
+
+#pragma mark -
+#pragma mark UserListCellDelegate
+
+- (void)userListCell:(UserListCell *)userListCell didTouchProfilePhotoViewAtIndexPath:(NSIndexPath *)indexPath
+{
+	User *user = [selectedUserArray objectAtIndex:indexPath.row];
+	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+	[profileViewController loadUserId:user.userId];
+	[self.navigationController pushViewController:profileViewController animated:YES];
+}
+
+- (void)userListCell:(UserListCell *)userListCell didTouchFollowButtonAtIndexPath:(NSIndexPath *)indexPath
+{
+	User *user = [selectedUserArray objectAtIndex:indexPath.row];
+	[self followUser:user fromButton:userListCell.followButton atIndexPath:indexPath];
+}
+
+- (void)userListCell:(UserListCell *)userListCell didTouchFollowingButtonAtIndexPath:(NSIndexPath *)indexPath
+{
+	User *user = [selectedUserArray objectAtIndex:indexPath.row];
+	[self unfollowUser:user fromButton:userListCell.followButton atIndexPath:indexPath];
 }
 
 @end

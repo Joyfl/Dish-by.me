@@ -54,7 +54,7 @@
 
 - (BOOL)titleLabelHidden
 {
-	return self.titleEdgeInsets.top == NSIntegerMax;
+	return self.titleEdgeInsets.top == -NSIntegerMax;
 }
 
 - (void)setTitleLabelHidden:(BOOL)titleLabelHidden
@@ -62,7 +62,7 @@
 	if( titleLabelHidden )
 	{
 		objc_setAssociatedObject( self, "_originalTitleEdgeInsets", [NSValue valueWithUIEdgeInsets:self.titleEdgeInsets], OBJC_ASSOCIATION_RETAIN_NONATOMIC );
-		self.titleEdgeInsets = UIEdgeInsetsMake( NSIntegerMax, 0, 0, 0 );
+		self.titleEdgeInsets = UIEdgeInsetsMake( -NSIntegerMax, 0, 0, 0 );
 	}
 	else
 	{
@@ -72,15 +72,15 @@
 
 - (BOOL)imageViewHidden
 {
-	return self.imageEdgeInsets.top == NSIntegerMax;
+	return self.imageEdgeInsets.top == -NSIntegerMax;
 }
 
 - (void)setImageViewHidden:(BOOL)imageViewHidden
 {
 	if( imageViewHidden )
 	{
-		objc_setAssociatedObject( self, "_originalImageEdgeInsets", [NSValue valueWithUIEdgeInsets:self.titleEdgeInsets], OBJC_ASSOCIATION_RETAIN_NONATOMIC );
-		self.imageEdgeInsets = UIEdgeInsetsMake( 0, NSIntegerMax, 0, 0 );
+		objc_setAssociatedObject( self, "_originalImageEdgeInsets", [NSValue valueWithUIEdgeInsets:self.imageEdgeInsets], OBJC_ASSOCIATION_RETAIN_NONATOMIC );
+		self.imageEdgeInsets = UIEdgeInsetsMake( -NSIntegerMax, 0, 0, 0 );
 	}
 	else
 	{

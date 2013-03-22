@@ -160,7 +160,16 @@
 
 #pragma mark -
 
+#warning deprecated.
 - (void)loadImageFromURL:(NSURL *)url
+				 context:(id)context
+				 success:(void (^)(UIImage *image, __strong id context))success
+{
+	JLLog( @"This method is deprecated." );
+	return [DMAPILoader loadImageFromURL:url context:context success:success];
+}
+
++ (void)loadImageFromURL:(NSURL *)url
 				 context:(id)context
 				 success:(void (^)(UIImage *image, __strong id context))success
 {

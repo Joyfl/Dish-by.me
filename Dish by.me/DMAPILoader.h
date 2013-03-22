@@ -28,7 +28,7 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
 
-- (void)loadImageFromURL:(NSURL *)url
++ (void)loadImageFromURL:(NSURL *)url
 				 context:(id)context
 				 success:(void (^)(UIImage *image, __strong id context))success;
 
