@@ -14,6 +14,7 @@
 	UITextField *_emailInput;
 	UITextField *_passwordInput;
 	UIButton *_loginButton;
+	UIButton *_facebookButton;
 }
 
 @end

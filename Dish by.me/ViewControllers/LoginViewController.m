@@ -12,11 +12,11 @@
 #import "User.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "DMAPILoader.h"
-#import "UIViewController+Dim.h"
 #import "SignUpProfileViewController.h"
 #import "HTBlock.h"
 #import "AuthViewController.h"
 #import "UIButton+TouchAreaInsets.h"
+#import "UIButton+ActivityIndicatorView.h"
 
 @implementation LoginViewController
 
@@ -52,9 +52,9 @@
 	titleLabel.frame = CGRectOffset( titleLabel.frame, 160 - titleLabel.frame.size.width / 2, 30 );
 	[self.view addSubview:titleLabel];
 	
-	DMBookButton *facebookButton = [DMBookButton blueBookButtonWithPosition:CGPointMake( 30, 65 ) title:NSLocalizedString( @"LOGIN_WITH_FACEBOOK", nil )];
-	[facebookButton addTarget:self action:@selector(facebookButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:facebookButton];
+	_facebookButton = [DMBookButton blueBookButtonWithPosition:CGPointMake( 30, 65 ) title:NSLocalizedString( @"LOGIN_WITH_FACEBOOK", nil )];
+	[_facebookButton addTarget:self action:@selector(facebookButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:_facebookButton];
 	
 	UILabel *orLabel = [[UILabel alloc] init];
 	orLabel.text = NSLocalizedString( @"OR", nil );
@@ -65,7 +65,7 @@
 	orLabel.shadowColor = [UIColor whiteColor];
 	orLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[orLabel sizeToFit];
-	orLabel.frame = CGRectOffset( orLabel.frame, 160 - orLabel.frame.size.width / 2, facebookButton.frame.origin.y + facebookButton.frame.size.height + 15 );
+	orLabel.frame = CGRectOffset( orLabel.frame, 160 - orLabel.frame.size.width / 2, _facebookButton.frame.origin.y + _facebookButton.frame.size.height + 15 );
 	[self.view addSubview:orLabel];
 	
 	_emailInput = [self inputFieldAtYPosition:150 placeholder:NSLocalizedString( @"EMAIL", nil )];
@@ -172,7 +172,9 @@
 
 - (void)facebookButtonDidTouchUpInside
 {
-	[self dim];
+	[self setInputFieldsEnabled:NO];
+	_facebookButton.showsActivityIndicatorView = YES;
+	
 	[[FBSession activeSession] closeAndClearTokenInformation];
 	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
 		switch( status )
@@ -184,13 +186,16 @@
 			}
 				
 			case FBSessionStateClosedLoginFailed:
-				[self undim];
+				[self setInputFieldsEnabled:YES];
+				_facebookButton.showsActivityIndicatorView = NO;
+				
 				[[FBSession activeSession] closeAndClearTokenInformation];
 				JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
 				break;
 				
 			default:
-				[self undim];
+				[self setInputFieldsEnabled:YES];
+				_facebookButton.showsActivityIndicatorView = NO;
 				break;
 		}
 		
@@ -209,7 +214,7 @@
 }
 
 - (void)loginButtonDidTouchUpInside
-{
+{	
 	if( _emailInput.text.length == 0 )
 	{
 		[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
@@ -225,17 +230,16 @@
 	}
 	
 	[self backgroundDidTap];
+	_loginButton.showsActivityIndicatorView = YES;
 	[self loginWithParameters:@{ @"email": _emailInput.text, @"password": [Utils sha1:_passwordInput.text] }];
 }
 
 - (void)loginWithParameters:(NSDictionary *)parameters
 {
-	[self dim];
+	[self setInputFieldsEnabled:NO];
 	
 	[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:parameters success:^(id response) {
 		JLLog( @"Login complete" );
-		
-		[self undim];
 		
 		[CurrentUser user].loggedIn = YES;
 		[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
@@ -243,9 +247,25 @@
 		[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUserAndDismissViewController];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		[self undim];
+		_loginButton.showsActivityIndicatorView = NO;
+		_facebookButton.showsActivityIndicatorView = NO;
+		[self setInputFieldsEnabled:YES];
 		showErrorAlert();
 	}];
+}
+
+- (void)setInputFieldsEnabled:(BOOL)inputFieldsEnabled
+{
+	if( inputFieldsEnabled )
+	{
+		_emailInput.enabled = YES;
+		_passwordInput.enabled = YES;
+	}
+	else
+	{
+		_emailInput.enabled = NO;
+		_passwordInput.enabled = NO;
+	}
 }
 
 @end
