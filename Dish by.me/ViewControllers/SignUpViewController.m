@@ -8,7 +8,6 @@
 
 #import "SignUpViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIViewController+Dim.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "CurrentUser.h"
 #import "HTBlock.h"
@@ -16,6 +15,7 @@
 #import "LoginViewController.h"
 #import "AuthViewController.h"
 #import "UIButton+TouchAreaInsets.h"
+#import "UIButton+ActivityIndicatorView.h"
 
 @implementation SignUpViewController
 
@@ -51,9 +51,9 @@
 	titleLabel.frame = CGRectOffset( titleLabel.frame, 160 - titleLabel.frame.size.width / 2, 30 );
 	[self.view addSubview:titleLabel];
 	
-	DMBookButton *facebookButton = [DMBookButton blueBookButtonWithPosition:CGPointMake( 30, 65 ) title:NSLocalizedString( @"SIGNUP_WITH_FACEBOOK", nil )];
-	[facebookButton addTarget:self action:@selector(facebookButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:facebookButton];
+	_facebookButton = [DMBookButton blueBookButtonWithPosition:CGPointMake( 30, 65 ) title:NSLocalizedString( @"SIGNUP_WITH_FACEBOOK", nil )];
+	[_facebookButton addTarget:self action:@selector(facebookButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:_facebookButton];
 	
 	UILabel *orLabel = [[UILabel alloc] init];
 	orLabel.text = NSLocalizedString( @"OR", nil );
@@ -64,7 +64,7 @@
 	orLabel.shadowColor = [UIColor whiteColor];
 	orLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[orLabel sizeToFit];
-	orLabel.frame = CGRectOffset( orLabel.frame, 160 - orLabel.frame.size.width / 2, facebookButton.frame.origin.y + facebookButton.frame.size.height + 15 );
+	orLabel.frame = CGRectOffset( orLabel.frame, 160 - orLabel.frame.size.width / 2, _facebookButton.frame.origin.y + _facebookButton.frame.size.height + 15 );
 	[self.view addSubview:orLabel];
 	
 	_emailInput = [self inputFieldAtYPosition:150 placeholder:NSLocalizedString( @"EMAIL", nil )];
@@ -208,7 +208,9 @@
 
 - (void)facebookButtonDidTouchUpInside
 {
-	[self dim];
+	[self setInputFieldsEnabled:NO];
+	_facebookButton.showsActivityIndicatorView = YES;
+	
 	[[FBSession activeSession] closeAndClearTokenInformation];
 	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
 		switch( status )
@@ -220,12 +222,14 @@
 			}
 			
 			case FBSessionStateClosedLoginFailed:
-				[self undim];
+				[self setInputFieldsEnabled:YES];
+				_facebookButton.showsActivityIndicatorView = NO;
 				JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
 				break;
 				
 			default:
-				[self undim];
+				[self setInputFieldsEnabled:YES];
+				_facebookButton.showsActivityIndicatorView = NO;
 				break;
 		}
 		
@@ -274,18 +278,19 @@
 	}
 	
 	[self backgroundDidTap];
+	_signUpButton.showsActivityIndicatorView = YES;
 	[self signUpWithParameters:@{ @"email": _emailInput.text, @"password": [Utils sha1:_passwordInput.text] }];
 }
 
 - (void)signUpWithParameters:(NSDictionary *)parameters
 {
-	[self dim];
+	[self setInputFieldsEnabled:NO];
+	
 	[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:parameters success:^(id response) {
 		JLLog( @"SignUp complete" );
 		
 		// 회원가입이 완료되면 로그인
 		[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:parameters success:^(id response) {
-			[self undim];
 			
 			[CurrentUser user].loggedIn = YES;
 			[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
@@ -293,17 +298,32 @@
 			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WELCOME", nil ) message:NSLocalizedString( @"MESSAGE_SIGNUP_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 				
 				NSInteger userId = [[response objectForKey:@"id"] integerValue];
-				SignUpProfileViewController *signUpViewController = [[SignUpProfileViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
+				SignUpProfileViewController *signUpViewController = nil;
+				
+				// 페이스북으로 가입
+				if( [parameters objectForKey:@"facebook_token"] )
+				{
+					signUpViewController = [[SignUpProfileViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
+				}
+				else
+				{
+					signUpViewController = [[SignUpProfileViewController alloc] initWithUserId:userId];
+				}
 				[self.navigationController pushViewController:signUpViewController animated:YES];
 			}] show];
 			
 		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-			[self undim];
+			[self setInputFieldsEnabled:YES];
+			_signUpButton.showsActivityIndicatorView = NO;
+			_facebookButton.showsActivityIndicatorView = NO;
 			showErrorAlert();
 		}];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		[self undim];
+	
+		[self setInputFieldsEnabled:YES];
+		_signUpButton.showsActivityIndicatorView = NO;
+		_facebookButton.showsActivityIndicatorView = NO;
 		
 		// 이미 가입된 사용자
 		if( errorCode == 1400 )
@@ -311,6 +331,7 @@
 			// 이미 가입된 페이스북 사용자
 			if( [parameters objectForKey:@"facebook_token"] )
 			{
+				// 로그인할래요?
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP_WITH_FACEBOOK", nil ) cancelButtonTitle:NSLocalizedString( @"NO_THANKS", nil ) otherButtonTitles:@[NSLocalizedString( @"LOGIN", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 					
 					// 괜찮아요
@@ -318,9 +339,12 @@
 					{
 						[_emailInput becomeFirstResponder];
 					}
+					
+					// 페이스북 로그인
 					else
 					{
-						[self dim];
+						[self setInputFieldsEnabled:NO];
+						_facebookButton.showsActivityIndicatorView = NO;
 						
 						// 페이스북으로 로그인
 						[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:parameters success:^(id response) {
@@ -331,17 +355,22 @@
 							[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUserAndDismissViewController];
 							
 						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-							[self undim];
+							[self setInputFieldsEnabled:YES];
+							_signUpButton.showsActivityIndicatorView = NO;
+							_facebookButton.showsActivityIndicatorView = NO;
 							showErrorAlert();
 						}];
 					}
 				}] show];
 			}
+			
+			// 이미 가입된 일반 사용자
 			else
 			{
 				_emailInput.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
 				[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 				
+				// 사용중인 이메일 - 로그인할래요?
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP", nil ) cancelButtonTitle:NSLocalizedString( @"NO", nil ) otherButtonTitles:@[NSLocalizedString( @"PROBABLY", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 					
 					// 괜찮아요
@@ -362,6 +391,11 @@
 			showErrorAlert();
 		}
 	}];
+}
+
+- (void)setInputFieldsEnabled:(BOOL)inputFieldsEnabled
+{
+	_emailInput.enabled = _passwordInput.enabled = _passwordConfirmationInput.enabled = inputFieldsEnabled;
 }
 
 - (void)agreementLabelDidTap

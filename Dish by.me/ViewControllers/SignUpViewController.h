@@ -15,6 +15,7 @@
 	UITextField *_passwordInput;
 	UITextField *_passwordConfirmationInput;
 	DMBookButton *_signUpButton;
+	DMBookButton *_facebookButton;
 }
 
 @end
