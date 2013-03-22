@@ -18,6 +18,7 @@
 #import "DishTileItem.h"
 #import "DMTextFieldViewController.h"
 #import "HTBlock.h"
+#import "UIButton+ActivityIndicatorView.h"
 
 #define isLastDishLoaded ( _dishes.count == _user.dishCount )
 #define isLastBookmarkLoaded ( _bookmarks.count == _user.bookmarkCount )
@@ -94,13 +95,13 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)followButtonHandler
 {
-	_followButton.showsActivityIndicatorView = YES;
+	_followButton.button.showsActivityIndicatorView = YES;
 	[self follow];
 }
 
 - (void)followingButtonHandler
 {
-	_followingButton.showsActivityIndicatorView = YES;
+	_followingButton.button.showsActivityIndicatorView = YES;
 	[self unfollow];
 }
 
@@ -298,7 +299,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		
 		_user.following = YES;
 		_user.followersCount ++;
-		_followButton.showsActivityIndicatorView = NO;
+		_followButton.button.showsActivityIndicatorView = NO;
 		[self updateFollowFollowingButton];
 		
 		[_tableView reloadData];
@@ -320,7 +321,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		
 		_user.following = NO;
 		_user.followersCount --;
-		_followingButton.showsActivityIndicatorView = NO;
+		_followingButton.button.showsActivityIndicatorView = NO;
 		[self updateFollowFollowingButton];
 		
 		[_tableView reloadData];

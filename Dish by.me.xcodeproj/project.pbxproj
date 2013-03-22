@@ -201,6 +201,7 @@
 		037EF5FF16887B9200FA765D /* JLHTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5F816887B9200FA765D /* JLHTTPResponse.m */; };
 		037EF61E16887BBA00FA765D /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		038A529A1698863A001FDF75 /* DishListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 038A52991698863A001FDF75 /* DishListCell.m */; };
+		038DAF0F16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 038DAF0E16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m */; };
 		03927C2316F014D8001606A6 /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03927C2216F014D8001606A6 /* UIColor+Utils.m */; };
 		0392A52216F01DBB0045209E /* ForkListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0392A52116F01DBB0045209E /* ForkListViewController.m */; };
 		0392A53116F0464B0045209E /* UIActionSheet+HTBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0392A52A16F0464B0045209E /* UIActionSheet+HTBlock.m */; };
@@ -480,6 +481,8 @@
 		037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		038A52981698863A001FDF75 /* DishListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishListCell.h; path = Views/DishListCell.h; sourceTree = "<group>"; };
 		038A52991698863A001FDF75 /* DishListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishListCell.m; path = Views/DishListCell.m; sourceTree = "<group>"; };
+		038DAF0D16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+ActivityIndicatorView.h"; path = "Categories/UIButton+ActivityIndicatorView.h"; sourceTree = "<group>"; };
+		038DAF0E16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+ActivityIndicatorView.m"; path = "Categories/UIButton+ActivityIndicatorView.m"; sourceTree = "<group>"; };
 		03927C2116F014D8001606A6 /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Utils.h"; path = "Categories/UIColor+Utils.h"; sourceTree = "<group>"; };
 		03927C2216F014D8001606A6 /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Utils.m"; path = "Categories/UIColor+Utils.m"; sourceTree = "<group>"; };
 		0392A52016F01DBB0045209E /* ForkListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForkListViewController.h; sourceTree = "<group>"; };
@@ -1128,6 +1131,8 @@
 				03927C2216F014D8001606A6 /* UIColor+Utils.m */,
 				036752B516FB7EEC00D889E8 /* UIButton+TouchAreaInsets.h */,
 				036752B616FB7EEC00D889E8 /* UIButton+TouchAreaInsets.m */,
+				038DAF0D16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.h */,
+				038DAF0E16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1437,6 +1442,7 @@
 				036752B116FB3D7D00D889E8 /* SignUpViewController.m in Sources */,
 				036752B416FB3DD200D889E8 /* DMBookButton.m in Sources */,
 				036752B716FB7EEC00D889E8 /* UIButton+TouchAreaInsets.m in Sources */,
+				038DAF0F16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

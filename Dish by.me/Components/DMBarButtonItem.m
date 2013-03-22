@@ -95,45 +95,8 @@
 
 - (void)setTitle:(NSString *)title
 {
-	_originalTitle = title;
 	UIButton *button = (UIButton *)self.customView;
 	[button setTitle:title forState:UIControlStateNormal];
-}
-
-- (BOOL)showsActivityIndicatorView
-{
-	if( !_activityIndicatorView )
-	{
-		_activityIndicatorView = [[UIActivityIndicatorView alloc] init];
-		_activityIndicatorView.center = CGPointMake( self.button.frame.size.width / 2, self.button.frame.size.height / 2 );
-		[self.button addSubview:_activityIndicatorView];
-	}
-	
-	return _activityIndicatorView.isAnimating;
-}
-
-- (void)setShowsActivityIndicatorView:(BOOL)showsActivityIndicatorView
-{
-	if( !_activityIndicatorView )
-	{
-		_activityIndicatorView = [[UIActivityIndicatorView alloc] init];
-		_activityIndicatorView.center = CGPointMake( self.button.frame.size.width / 2, self.button.frame.size.height / 2 );
-		[self.button addSubview:_activityIndicatorView];
-	}
-	
-	if( showsActivityIndicatorView )
-	{
-		[self.button setTitle:nil forState:UIControlStateNormal];
-		self.button.userInteractionEnabled = NO;
-		[_activityIndicatorView startAnimating];
-	}
-	else
-	{
-		[self.button setTitle:_originalTitle forState:UIControlStateNormal];
-		self.button.titleLabel.hidden = NO;
-		self.button.userInteractionEnabled = YES;
-		[_activityIndicatorView stopAnimating];
-	}
 }
 
 @end
