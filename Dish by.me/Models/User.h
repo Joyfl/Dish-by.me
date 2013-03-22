@@ -22,6 +22,7 @@
 @property (nonatomic, assign) NSInteger followingCount;
 @property (nonatomic, assign) NSInteger followersCount;
 @property (nonatomic, assign) BOOL following;
+@property (nonatomic, assign) BOOL activated;
 
 + (id)userFromDictionary:(NSDictionary *)dictionary;
 - (id)dictionary;
