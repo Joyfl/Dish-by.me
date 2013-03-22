@@ -9,12 +9,12 @@
 #import "SignUpProfileViewController.h"
 #import "DMBarButtonItem.h"
 #import <QuartzCore/CALayer.h>
-#import "UIViewController+Dim.h"
 #import "HTBlock.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "AuthViewController.h"
 #import "CurrentUser.h"
 #import "DMBookButton.h"
+#import "UIButton+ActivityIndicatorView.h"
 
 @implementation SignUpProfileViewController
 
@@ -81,14 +81,15 @@
 	[_doneButton addTarget:self action:@selector(updateUserInfo) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_doneButton];
 	
+	// 페이스북으로 가입한 사용자들은 페이스북에서 정보 가져오기
 	if( _facebookAccessToken )
 	{
 		self.trackedViewName = @"SignUpStepTwoViewController (Facebook)";
 		
-		[self dim];
+		[self setControlsEnabled:NO];
 		
 		[[FBRequest requestForGraphPath:@"/me?fields=id,name,bio,picture.width(200).height(200)"] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
-			[self undim];
+			[self setControlsEnabled:YES];
 			
 			_nameInput.text = user.name;
 			_bioInput.text = [user objectForKey:@"bio"];
@@ -234,14 +235,12 @@
 	NSString *bio = _bioInput.text;
 	
 	[self.view endEditing:YES];
-	[self dim];
+	[self setControlsEnabled:NO];
 	
 	UIImage *profilePhoto = [_userPhotoButton imageForState:UIControlStateNormal];
 	
 	NSDictionary *params = @{ @"name": name, @"bio": bio };
-	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" image:profilePhoto parameters:params success:^(id response) {
-		[self undimAnimated:NO];
-		
+	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" image:profilePhoto parameters:params success:^(id response) {		
 		[CurrentUser user].photo = profilePhoto;
 		
 		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WOW", nil ) message:NSLocalizedString( @"MESSAGE_PROFILE_UPDATE_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
@@ -251,8 +250,14 @@
 		}] show];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		
+		[self setControlsEnabled:YES];
 	}];
+}
+
+- (void)setControlsEnabled:(BOOL)controlsEnabled
+{
+	_nameInput.enabled = _bioInput.enabled = controlsEnabled;
+	_doneButton.showsActivityIndicatorView = !controlsEnabled;
 }
 
 @end
