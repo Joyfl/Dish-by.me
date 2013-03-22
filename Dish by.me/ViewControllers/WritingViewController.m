@@ -14,6 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "DMAPILoader.h"
 #import "UIViewController+Dim.h"
+#import "UIButton+ActivityIndicatorView.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 
@@ -204,6 +205,7 @@ enum {
 	
 	[self backgroundDidTap];
 	[self dim];
+	[(DMBarButtonItem *)self.navigationItem.rightBarButtonItem button].showsActivityIndicatorView = YES;
 	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
 								   @{ @"name": _nameInput.text,
@@ -214,12 +216,12 @@ enum {
 	
 	[[DMAPILoader sharedLoader] api:@"/dish" method:@"POST" image:image parameters:params success:^(id response) {
 		JLLog( @"Success" );
-		[self undim];
 		[self dismissViewControllerAnimated:YES completion:nil];
 		[self.delegate writingViewControllerDidFinishUpload:self];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		[self undim];
+		[(DMBarButtonItem *)self.navigationItem.rightBarButtonItem button].showsActivityIndicatorView = NO;
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
