@@ -16,7 +16,6 @@
 	self = [super initWithFrame:frame];
 	
 	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 4, 4, 88, 88 )];
-	[_photoButton setBackgroundImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal];
 	[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self addSubview:_photoButton];
 	
@@ -29,6 +28,8 @@
 - (void)setDish:(Dish *)dish
 {
 	_dish = dish;
+	
+	[_photoButton setBackgroundImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal];
 	
 	if( _dish.croppedThumbnail )
 	{
