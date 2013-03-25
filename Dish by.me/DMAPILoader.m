@@ -9,6 +9,7 @@
 #import "DMAPILoader.h"
 #import "Utils.h"
 #import "CurrentUser.h"
+#import "AFImageCache.h"
 
 @implementation DMAPILoader
 
@@ -174,8 +175,19 @@
 				 success:(void (^)(UIImage *image, __strong id context))success
 {
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
+	
+	UIImage *cachedImage = [[AFImageCache sharedImageCache] cachedImageForRequest:request];
+	if( cachedImage )
+	{
+		if( success )
+			success( cachedImage, context );
+		return;
+	}
+	
 	AFImageRequestOperation *operation = [AFImageRequestOperation imageRequestOperationWithRequest:request success:^(UIImage *image) {
-		success( image, context );
+		[[AFImageCache sharedImageCache] cacheImage:image forRequest:request];
+		if( success )
+			success( image, context );
 	}];
 	[operation start];
 }
