@@ -48,10 +48,11 @@ enum {
 		self.navigationItem.title = NSLocalizedString( @"DO_FORK", @"포크하기" );
 	}
 	
-	DMBarButtonItem *cancelButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
+	
+	DMBarButtonItem *cancelButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
 	
-	DMBarButtonItem *uploadButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"UPLOAD", @"" ) target:self action:@selector(uploadButtonDidTouchUpInside)];
+	DMBarButtonItem *uploadButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"UPLOAD", @"" ) target:self action:@selector(uploadButtonDidTouchUpInside)];
 	uploadButton.enabled = NO;
 	self.navigationItem.rightBarButtonItem = uploadButton;
 	

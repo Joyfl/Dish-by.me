@@ -35,7 +35,6 @@
 
 @protocol UserListCellDelegate
 
-- (void)userListCell:(UserListCell *)userListCell didTouchProfilePhotoViewAtIndexPath:(NSIndexPath *)indexPath;
 - (void)userListCell:(UserListCell *)userListCell didTouchFollowButtonAtIndexPath:(NSIndexPath *)indexPath;
 - (void)userListCell:(UserListCell *)userListCell didTouchFollowingButtonAtIndexPath:(NSIndexPath *)indexPath;
 

@@ -39,8 +39,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
     self = [super init];
 	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	
-	_followButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"FOLLOW", nil ) target:self action:@selector(followButtonHandler)];
-	_followingButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"FOLLOWING", nil ) target:self action:@selector(followingButtonHandler)];
+	_followButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FOLLOW", nil ) target:self action:@selector(followButtonHandler)];
+	_followingButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FOLLOWING", nil ) target:self action:@selector(followingButtonHandler)];
 	_followingButton.button.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 8 );
 	[_followingButton.button setImage:[UIImage imageNamed:@"icon_checkmark.png"] forState:UIControlStateNormal];
 	[_followingButton updateFrame];

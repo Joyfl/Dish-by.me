@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JLHTTPLoader.h"
 #import "EGORefreshTableHeaderView.h"
 #import "DishListCell.h"
 #import "GAITrackedViewController.h"

@@ -22,7 +22,7 @@
 	
 	[DMBarButtonItem setBackButtonToViewController:self];
 	self.navigationItem.title = title;
-	self.navigationItem.rightBarButtonItem = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"SAVE", nil ) target:self action:@selector(saveButtonHandler)];
+	self.navigationItem.rightBarButtonItem = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"SAVE", nil ) target:self action:@selector(saveButtonHandler)];
 	
 	self.textField = [[UITextField alloc] initWithFrame:CGRectMake( 10, 10, 300, 30 )];
 	self.textField.delegate = self;

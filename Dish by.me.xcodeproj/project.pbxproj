@@ -201,13 +201,6 @@
 		037D402E17000ECF00B55C61 /* textfield_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 037D3F8A17000ECF00B55C61 /* textfield_bg@2x.png */; };
 		037D402F17000ECF00B55C61 /* tool_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 037D3F8C17000ECF00B55C61 /* tool_bar.png */; };
 		037D403017000ECF00B55C61 /* tool_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 037D3F8D17000ECF00B55C61 /* tool_bar@2x.png */; };
-		037EF5F916887B9200FA765D /* JLHTTPCacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5EC16887B9200FA765D /* JLHTTPCacheManager.m */; };
-		037EF5FA16887B9200FA765D /* JLHTTPFormEncodedRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5EE16887B9200FA765D /* JLHTTPFormEncodedRequest.m */; };
-		037EF5FB16887B9200FA765D /* JLHTTPGETRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5F016887B9200FA765D /* JLHTTPGETRequest.m */; };
-		037EF5FC16887B9200FA765D /* JLHTTPLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5F216887B9200FA765D /* JLHTTPLoader.m */; };
-		037EF5FD16887B9200FA765D /* JLHTTPMultipartRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5F416887B9200FA765D /* JLHTTPMultipartRequest.m */; };
-		037EF5FE16887B9200FA765D /* JLHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5F616887B9200FA765D /* JLHTTPRequest.m */; };
-		037EF5FF16887B9200FA765D /* JLHTTPResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF5F816887B9200FA765D /* JLHTTPResponse.m */; };
 		037EF61E16887BBA00FA765D /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		038A529A1698863A001FDF75 /* DishListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 038A52991698863A001FDF75 /* DishListCell.m */; };
 		038DAF0F16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 038DAF0E16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m */; };
@@ -483,20 +476,6 @@
 		037D3F8A17000ECF00B55C61 /* textfield_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textfield_bg@2x.png"; sourceTree = "<group>"; };
 		037D3F8C17000ECF00B55C61 /* tool_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tool_bar.png; sourceTree = "<group>"; };
 		037D3F8D17000ECF00B55C61 /* tool_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool_bar@2x.png"; sourceTree = "<group>"; };
-		037EF5EB16887B9200FA765D /* JLHTTPCacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHTTPCacheManager.h; sourceTree = "<group>"; };
-		037EF5EC16887B9200FA765D /* JLHTTPCacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLHTTPCacheManager.m; sourceTree = "<group>"; };
-		037EF5ED16887B9200FA765D /* JLHTTPFormEncodedRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHTTPFormEncodedRequest.h; sourceTree = "<group>"; };
-		037EF5EE16887B9200FA765D /* JLHTTPFormEncodedRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLHTTPFormEncodedRequest.m; sourceTree = "<group>"; };
-		037EF5EF16887B9200FA765D /* JLHTTPGETRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHTTPGETRequest.h; sourceTree = "<group>"; };
-		037EF5F016887B9200FA765D /* JLHTTPGETRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLHTTPGETRequest.m; sourceTree = "<group>"; };
-		037EF5F116887B9200FA765D /* JLHTTPLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHTTPLoader.h; sourceTree = "<group>"; };
-		037EF5F216887B9200FA765D /* JLHTTPLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLHTTPLoader.m; sourceTree = "<group>"; };
-		037EF5F316887B9200FA765D /* JLHTTPMultipartRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHTTPMultipartRequest.h; sourceTree = "<group>"; };
-		037EF5F416887B9200FA765D /* JLHTTPMultipartRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLHTTPMultipartRequest.m; sourceTree = "<group>"; };
-		037EF5F516887B9200FA765D /* JLHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHTTPRequest.h; sourceTree = "<group>"; };
-		037EF5F616887B9200FA765D /* JLHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLHTTPRequest.m; sourceTree = "<group>"; };
-		037EF5F716887B9200FA765D /* JLHTTPResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLHTTPResponse.h; sourceTree = "<group>"; };
-		037EF5F816887B9200FA765D /* JLHTTPResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLHTTPResponse.m; sourceTree = "<group>"; };
 		037EF60116887BBA00FA765D /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
 		037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		038A52981698863A001FDF75 /* DishListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishListCell.h; path = Views/DishListCell.h; sourceTree = "<group>"; };
@@ -918,30 +897,8 @@
 				03F67F3D16D8E33200AB0600 /* AFNetworking */,
 				03E7602C16D6BA7B004916B0 /* JLFoldableView */,
 				037EF60016887BBA00FA765D /* EGOTableViewPullRefresh */,
-				037EF5EA16887B9200FA765D /* JLHTTPRequest */,
 			);
 			path = Libraries;
-			sourceTree = "<group>";
-		};
-		037EF5EA16887B9200FA765D /* JLHTTPRequest */ = {
-			isa = PBXGroup;
-			children = (
-				037EF5EB16887B9200FA765D /* JLHTTPCacheManager.h */,
-				037EF5EC16887B9200FA765D /* JLHTTPCacheManager.m */,
-				037EF5ED16887B9200FA765D /* JLHTTPFormEncodedRequest.h */,
-				037EF5EE16887B9200FA765D /* JLHTTPFormEncodedRequest.m */,
-				037EF5EF16887B9200FA765D /* JLHTTPGETRequest.h */,
-				037EF5F016887B9200FA765D /* JLHTTPGETRequest.m */,
-				037EF5F116887B9200FA765D /* JLHTTPLoader.h */,
-				037EF5F216887B9200FA765D /* JLHTTPLoader.m */,
-				037EF5F316887B9200FA765D /* JLHTTPMultipartRequest.h */,
-				037EF5F416887B9200FA765D /* JLHTTPMultipartRequest.m */,
-				037EF5F516887B9200FA765D /* JLHTTPRequest.h */,
-				037EF5F616887B9200FA765D /* JLHTTPRequest.m */,
-				037EF5F716887B9200FA765D /* JLHTTPResponse.h */,
-				037EF5F816887B9200FA765D /* JLHTTPResponse.m */,
-			);
-			path = JLHTTPRequest;
 			sourceTree = "<group>";
 		};
 		037EF60016887BBA00FA765D /* EGOTableViewPullRefresh */ = {
@@ -1443,13 +1400,6 @@
 				031AAB4C160F42CB007B42B3 /* CameraOverlayViewController.m in Sources */,
 				033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */,
 				034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */,
-				037EF5F916887B9200FA765D /* JLHTTPCacheManager.m in Sources */,
-				037EF5FA16887B9200FA765D /* JLHTTPFormEncodedRequest.m in Sources */,
-				037EF5FB16887B9200FA765D /* JLHTTPGETRequest.m in Sources */,
-				037EF5FC16887B9200FA765D /* JLHTTPLoader.m in Sources */,
-				037EF5FD16887B9200FA765D /* JLHTTPMultipartRequest.m in Sources */,
-				037EF5FE16887B9200FA765D /* JLHTTPRequest.m in Sources */,
-				037EF5FF16887B9200FA765D /* JLHTTPResponse.m in Sources */,
 				037EF61E16887BBA00FA765D /* EGORefreshTableHeaderView.m in Sources */,
 				038A529A1698863A001FDF75 /* DishListCell.m in Sources */,
 				03677999169DE68700F26BBA /* BookmarkButton.m in Sources */,

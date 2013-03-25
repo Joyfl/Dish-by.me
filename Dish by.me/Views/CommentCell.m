@@ -9,7 +9,6 @@
 #import "CommentCell.h"
 #import "Comment.h"
 #import "Utils.h"
-#import "JLHTTPLoader.h"
 
 @implementation CommentCell
 
@@ -77,10 +76,10 @@
 	else
 	{
 		[_profileImageButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-		[JLHTTPLoader loadAsyncFromURL:_comment.userPhotoURL withObject:_indexPath completion:^(id indexPath, NSData *data)
-		{
+		
+		[DMAPILoader loadImageFromURLString:_comment.userPhotoURL context:_indexPath success:^(UIImage *image, id indexPath) {
 			if( !_comment ) return;
-			_comment.userPhoto = [UIImage imageWithData:data];
+			_comment.userPhoto = image;
 			
 			if( [_indexPath isEqual:indexPath] )
 				[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];

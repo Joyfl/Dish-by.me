@@ -11,13 +11,6 @@
 
 @implementation DMBarButtonItem
 
-#warning Deprecated
-- (id)initWithType:(NSInteger)type title:(NSString *)title target:(id)target action:(SEL)action
-{
-	JLLog( @"This method is deprecated." );
-	return [DMBarButtonItem barButtonItemWithTitle:title target:target action:action];
-}
-
 + (id)barButtonItemWithTitle:(NSString *)title target:(id)target action:(SEL)action
 {
 	UIButton *button = [[UIButton alloc] init];

@@ -7,7 +7,6 @@
 //
 
 #import "JLLogger.h"
-#import "JLHTTPLoader.h"
 
 #define LOG_PATH [(NSString *)[NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES ) objectAtIndex:0] stringByAppendingPathComponent:@"log.txt"]
 

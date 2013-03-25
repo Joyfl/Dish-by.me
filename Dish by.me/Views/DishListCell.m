@@ -7,7 +7,6 @@
 //
 
 #import "DishListCell.h"
-#import "JLHTTPLoader.h"
 #import "Utils.h"
 #import <QuartzCore/CALayer.h>
 #import "CurrentUser.h"
@@ -106,8 +105,7 @@ static const NSInteger PhotoViewMaxLength = 292;
 	}
 	else
 	{
-		[JLHTTPLoader loadAsyncFromURL:_dish.thumbnailURL withObject:_indexPath completion:^(id indexPath, NSData *data){
-			UIImage *thumbnail = [UIImage imageWithData:data];
+		[DMAPILoader loadImageFromURLString:_dish.thumbnailURL context:_indexPath success:^(UIImage *thumbnail, id indexPath) {
 			_dish.thumbnail = thumbnail;
 			
 			// Square
@@ -130,9 +128,9 @@ static const NSInteger PhotoViewMaxLength = 292;
 				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
 			}
 			
-			 if( [_indexPath isEqual:indexPath] )
-				  _photoView.image = _dish.croppedThumbnail;
-		 }];
+			if( [_indexPath isEqual:indexPath] )
+				_photoView.image = _dish.croppedThumbnail;
+		}];
 	}
 	
 	

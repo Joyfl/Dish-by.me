@@ -11,12 +11,6 @@
 
 @implementation Utils
 
-#warning deprecated.
-+ (id)parseJSON:(NSString *)jsonString
-{
-	return [self parseJSONString:jsonString];
-}
-
 + (id)parseJSONString:(NSString *)jsonString
 {
 	NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];

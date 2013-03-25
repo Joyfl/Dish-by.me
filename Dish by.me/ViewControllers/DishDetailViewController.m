@@ -111,7 +111,7 @@ enum {
 //		}
 //		else
 		{
-			DMBarButtonItem *forkButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
+			DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 			self.navigationItem.rightBarButtonItem = forkButton;
 		}
 		

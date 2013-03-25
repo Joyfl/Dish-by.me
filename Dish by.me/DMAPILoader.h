@@ -28,6 +28,10 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
 
++ (void)loadImageFromURLString:(NSString *)urlString
+					   context:(id)context
+					   success:(void (^)(UIImage *image, __strong id context))success;
+
 + (void)loadImageFromURL:(NSURL *)url
 				 context:(id)context
 				 success:(void (^)(UIImage *image, __strong id context))success;

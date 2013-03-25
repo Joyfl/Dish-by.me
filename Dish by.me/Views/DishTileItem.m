@@ -7,7 +7,6 @@
 //
 
 #import "DishTileItem.h"
-#import "JLHTTPLoader.h"
 
 @implementation DishTileItem
 
@@ -37,8 +36,7 @@
 	}
 	else
 	{
-		[JLHTTPLoader loadAsyncFromURL:_dish.thumbnailURL withObject:nil completion:^(id object, NSData *data){
-			UIImage *thumbnail = [UIImage imageWithData:data];
+		[DMAPILoader loadImageFromURLString:_dish.thumbnailURL context:nil success:^(UIImage *thumbnail, id context) {
 			_dish.thumbnail = thumbnail;
 			
 			// Square
