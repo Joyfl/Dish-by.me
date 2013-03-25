@@ -234,7 +234,7 @@ enum {
 	if( [sender respondsToSelector:@selector(object)] && [[sender object] isEqual:_recipeView.recipeView] )
 		return;
 	
-	[_tableView setContentOffset:CGPointMake( 0, 300 ) animated:YES];
+	[_tableView setContentOffset:CGPointMake( 0, _photoButton.frame.size.height - 40 ) animated:YES];
 	
 	[UIView animateWithDuration:0.25 animations:^{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 64 - 216 );
@@ -243,8 +243,7 @@ enum {
 
 - (void)backgroundDidTap
 {
-	[_nameInput resignFirstResponder];
-	[_messageInput resignFirstResponder];
+	[self.view endEditing:YES];
 	
 	[UIView animateWithDuration:0.25 animations:^{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 64 );
@@ -253,6 +252,7 @@ enum {
 
 - (void)photoButtonDidTouchUpInside
 {
+	[self backgroundDidTap];		
 	[self presentActionSheet];
 }
 
