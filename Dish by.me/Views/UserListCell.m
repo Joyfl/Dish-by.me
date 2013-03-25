@@ -22,9 +22,8 @@
 	
 	_profileImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	_profileImageButton.frame = CGRectMake( 10, 10, 33, 33 );
-	_profileImageButton.adjustsImageWhenHighlighted = NO;
+	_profileImageButton.userInteractionEnabled = NO;
 	[_profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
-	[_profileImageButton addTarget:self action:@selector(profileImageButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.contentView addSubview:_profileImageButton];
 	
 	_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 170, 20 )];
@@ -50,7 +49,9 @@
 	[_followButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
 	_followButton.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 10 );
 	[_followButton setBackgroundImage:[UIImage imageNamed:@"button_follow.png"] forState:UIControlStateNormal];
+	[_followButton setBackgroundImage:[UIImage imageNamed:@"button_follow_selected.png"] forState:UIControlStateHighlighted];
 	[_followButton addTarget:self action:@selector(followButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	_followButton.adjustsImageWhenHighlighted = NO;
 	_followButton.activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
 	[self.contentView addSubview:_followButton];
 	
@@ -59,7 +60,6 @@
 
 - (void)setUser:(User *)user atIndexPath:(NSIndexPath *)indexPath
 {
-	NSLog( @"setUser" );
 	_user = user;
 	_indexPath = indexPath;
 	
@@ -114,11 +114,6 @@
 	
 	[_bioLabel sizeToFit];
 	_bioLabel.frame = CGRectMake( 53, 27, _bioLabel.frame.size.width, _nameLabel.frame.size.height );
-}
-
-- (void)profileImageButtonDidTouchUpInside
-{
-	[self.delegate userListCell:self didTouchProfilePhotoViewAtIndexPath:_indexPath];
 }
 
 - (void)followButtonDidTouchUpInside

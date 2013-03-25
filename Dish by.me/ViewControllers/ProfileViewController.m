@@ -101,13 +101,44 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 - (void)followButtonHandler
 {
 	_followButton.button.showsActivityIndicatorView = YES;
-	[self followUser:_user fromButton:_followButton.button atIndexPath:nil];
+	[self followUser:_user success:^{
+		
+		_user.following = YES;
+		_user.followersCount ++;
+		[_followers addObject:[CurrentUser user]];
+		
+		_followButton.button.showsActivityIndicatorView = NO;
+		
+		[self updateFollowFollowingButton];
+		[_tableView reloadData];
+		
+	} failure:^(NSInteger errorCode) {
+		
+	}];
 }
 
 - (void)followingButtonHandler
 {
 	_followingButton.button.showsActivityIndicatorView = YES;
-	[self unfollowUser:_user fromButton:_followingButton.button atIndexPath:nil];
+	[self unfollowUser:_user success:^{
+		
+		_user.following = NO;
+		_user.followersCount --;
+		for( User *follower in _followers )
+		{
+			if( follower.userId == [CurrentUser user].userId )
+			{
+				[_followers removeObject:follower];
+				break;
+			}
+		}
+		
+		_followButton.button.showsActivityIndicatorView = NO;
+		
+		[self updateFollowFollowingButton];
+		[_tableView reloadData];
+		
+	} failure:nil];
 }
 
 
@@ -448,7 +479,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	}];
 }
 
-- (void)followUser:(User *)user fromButton:(UIButton *)button atIndexPath:(NSIndexPath *)indexPath
+- (void)followUser:(User *)user success:(void (^)(void))success failure:(void (^)(NSInteger errorCode))failure
 {
 	JLLog( @"Follow" );
 	
@@ -456,29 +487,20 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Follow Succeed" );
 		
-		user.following = YES;
-		user.followersCount ++;
-		button.showsActivityIndicatorView = NO;
-		
-		if( user.userId == _user.userId )
-		{
-			[self updateFollowFollowingButton];
-			[_tableView reloadData];
-		}
-		
-		if( indexPath )
-		{
-			[_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-		}
+		if( success )
+			success();
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
+		
+		if( failure )
+			failure( errorCode );
 	}];
 }
 
-- (void)unfollowUser:(User *)user fromButton:(UIButton *)button atIndexPath:(NSIndexPath *)indexPath
+- (void)unfollowUser:(User *)user success:(void (^)(void))success failure:(void (^)(NSInteger errorCode))failure
 {
 	JLLog( @"Follow" );
 	
@@ -486,25 +508,16 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Unfollow Succeed" );
 		
-		user.following = NO;
-		user.followersCount --;
-		button.showsActivityIndicatorView = NO;
-		
-		if( user.userId == _user.userId )
-		{
-			[self updateFollowFollowingButton];
-			[_tableView reloadData];
-		}
-		
-		if( indexPath )
-		{
-			[_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-		}
+		if( success )
+			success();
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
+		
+		if( failure )
+			failure( errorCode );
 	}];
 }
 
@@ -912,6 +925,14 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	return nil;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	User *user = [selectedUserArray objectAtIndex:indexPath.row];
+	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+	[profileViewController loadUserId:user.userId];
+	[self.navigationController pushViewController:profileViewController animated:YES];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
@@ -1038,24 +1059,53 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 #pragma mark -
 #pragma mark UserListCellDelegate
 
-- (void)userListCell:(UserListCell *)userListCell didTouchProfilePhotoViewAtIndexPath:(NSIndexPath *)indexPath
-{
-	User *user = [selectedUserArray objectAtIndex:indexPath.row];
-	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
-	[profileViewController loadUserId:user.userId];
-	[self.navigationController pushViewController:profileViewController animated:YES];
-}
-
 - (void)userListCell:(UserListCell *)userListCell didTouchFollowButtonAtIndexPath:(NSIndexPath *)indexPath
 {
 	User *user = [selectedUserArray objectAtIndex:indexPath.row];
-	[self followUser:user fromButton:userListCell.followButton atIndexPath:indexPath];
+	[self followUser:user success:^{
+		
+		user.following = YES;
+		
+		userListCell.followButton.showsActivityIndicatorView = NO;
+		[userListCell setUser:user atIndexPath:indexPath];
+		
+		if( _user.userId == [CurrentUser user].userId )
+		{
+			_user.followingCount ++;
+			[_following addObject:user];
+			[_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+		}
+		
+	} failure:^(NSInteger errorCode) {
+		
+	}];
 }
 
 - (void)userListCell:(UserListCell *)userListCell didTouchFollowingButtonAtIndexPath:(NSIndexPath *)indexPath
 {
 	User *user = [selectedUserArray objectAtIndex:indexPath.row];
-	[self unfollowUser:user fromButton:userListCell.followButton atIndexPath:indexPath];
+	[self unfollowUser:user success:^{
+		
+		user.following = NO;
+		
+		userListCell.followButton.showsActivityIndicatorView = NO;
+		[userListCell setUser:user atIndexPath:indexPath];
+		
+		if( _user.userId == [CurrentUser user].userId )
+		{
+			_user.followingCount --;
+			for( User *following in _following )
+			{
+				if( following.userId == user.userId )
+				{
+					[_following removeObject:following];
+					break;
+				}
+			}
+			[_tableView reloadData];
+		}
+		
+	} failure:nil];
 }
 
 @end
