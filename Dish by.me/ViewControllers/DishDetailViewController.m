@@ -481,16 +481,16 @@ enum {
 		else if( _dish.thumbnail )
 		{
 			_photoView.image = _dish.thumbnail;
-			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
+			[DMAPILoader loadImageFromURLString:_dish.photoURL context:nil success:^(UIImage *image, id context) {
 				_photoView.image = _dish.photo = image;
 			}];
 		}
 		else
 		{
 			_photoView.image = [UIImage imageNamed:@"placeholder.png"];
-			[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.thumbnailURL] context:nil success:^(UIImage *image, id context) {
+			[DMAPILoader loadImageFromURLString:_dish.thumbnailURL context:nil success:^(UIImage *image, id context) {
 				_photoView.image = _dish.thumbnail = image;
-				[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_dish.photoURL] context:nil success:^(UIImage *image, id context) {
+				[DMAPILoader loadImageFromURLString:_dish.photoURL context:nil success:^(UIImage *image, id context) {
 					_photoView.image = _dish.photo = image;
 				}];
 			}];

@@ -117,14 +117,16 @@ static const NSInteger PhotoViewMaxLength = 292;
 			// Landscape
 			else if( thumbnail.size.width > thumbnail.size.height )
 			{
-				CGRect rect = CGRectMake( ( thumbnail.size.width - thumbnail.size.height ) / 2, 0, thumbnail.size.height, thumbnail.size.height );
+				CGFloat scale = [UIScreen mainScreen].scale;
+				CGRect rect = CGRectMake( ( thumbnail.size.width * scale - thumbnail.size.height * scale ) / 2, 0, thumbnail.size.height * scale, thumbnail.size.height * scale );
 				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
 			}
 			
 			// Portrait
 			else
 			{
-				CGRect rect = CGRectMake( 0, ( thumbnail.size.height - thumbnail.size.width ) / 2, thumbnail.size.width, thumbnail.size.width );
+				CGFloat scale = [UIScreen mainScreen].scale;
+				CGRect rect = CGRectMake( 0, ( thumbnail.size.height * scale - thumbnail.size.width * scale ) / 2, thumbnail.size.width * scale, thumbnail.size.width * scale );
 				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
 			}
 			

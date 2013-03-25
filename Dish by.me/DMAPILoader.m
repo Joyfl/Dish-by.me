@@ -173,7 +173,6 @@
 				 success:(void (^)(UIImage *image, __strong id context))success
 {
 	NSURLRequest *request = [NSURLRequest requestWithURL:url];
-	
 	UIImage *cachedImage = [[AFImageCache sharedImageCache] cachedImageForRequest:request];
 	if( cachedImage )
 	{

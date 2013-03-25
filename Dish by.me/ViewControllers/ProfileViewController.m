@@ -559,7 +559,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	else
 	{
 		[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-		[[DMAPILoader sharedLoader] loadImageFromURL:[NSURL URLWithString:_user.photoURL] context:nil success:^(UIImage *image, id context) {
+		[DMAPILoader loadImageFromURLString:_user.photoURL context:nil success:^(UIImage *image, id context) {
 			[_userPhotoButton setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
 			if( _user.userId == [CurrentUser user].userId )
 				[CurrentUser user].photo = image;
