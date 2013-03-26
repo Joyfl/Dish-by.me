@@ -110,10 +110,10 @@
 - (void)layoutContentView
 {
 	[_nameLabel sizeToFit];
-	_nameLabel.frame = CGRectMake( 53, 8, _nameLabel.frame.size.width, _nameLabel.frame.size.height );
+	_nameLabel.frame = CGRectMake( 53, 8, 170, _nameLabel.frame.size.height );
 	
 	[_bioLabel sizeToFit];
-	_bioLabel.frame = CGRectMake( 53, 27, _bioLabel.frame.size.width, _nameLabel.frame.size.height );
+	_bioLabel.frame = CGRectMake( 53, 27, 170, _nameLabel.frame.size.height );
 }
 
 - (void)followButtonDidTouchUpInside
