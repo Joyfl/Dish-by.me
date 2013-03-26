@@ -662,7 +662,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			[nameButton addTarget:self action:@selector(nameButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:nameButton];
 			
-			_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 8, 9, 165, 30 )];
+			_nameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 8, 10, 165, 30 )];
 			_nameLabel.textColor = [UIColor colorWithHex:0x6B6663 alpha:1];
 			_nameLabel.font = [UIFont systemFontOfSize:13];
 			_nameLabel.backgroundColor = [UIColor clearColor];
@@ -681,7 +681,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			[bioButton addTarget:self action:@selector(bioButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:bioButton];
 			
-			_bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 8, 9, 165, 30 )];
+			_bioLabel = [[UILabel alloc] initWithFrame:CGRectMake( 8, 8, 165, 30 )];
 			_bioLabel.textColor = [UIColor colorWithHex:0x6B6663 alpha:1];
 			_bioLabel.font = [UIFont systemFontOfSize:13];
 			_bioLabel.backgroundColor = [UIColor clearColor];

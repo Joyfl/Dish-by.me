@@ -217,6 +217,7 @@ enum {
 	
 	[[DMAPILoader sharedLoader] api:@"/dish" method:@"POST" image:image parameters:params success:^(id response) {
 		JLLog( @"Success" );
+		[self undim];
 		[self dismissViewControllerAnimated:YES completion:nil];
 		[self.delegate writingViewControllerDidFinishUpload:self];
 		
