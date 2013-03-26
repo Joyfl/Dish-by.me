@@ -56,7 +56,7 @@
 	[self.view addSubview:borderView];
 	
 	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 35, 76, 76, 76 )];
-	[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+	[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
 	[_userPhotoButton addTarget:self action:@selector(userPhotoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_userPhotoButton];
 	
