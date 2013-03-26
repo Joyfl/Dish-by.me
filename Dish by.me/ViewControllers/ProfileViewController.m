@@ -927,10 +927,13 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	User *user = [selectedUserArray objectAtIndex:indexPath.row];
-	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
-	[profileViewController loadUserId:user.userId];
-	[self.navigationController pushViewController:profileViewController animated:YES];
+	if( indexPath.section == 1 )
+	{
+		User *user = [selectedUserArray objectAtIndex:indexPath.row];
+		ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+		[profileViewController loadUserId:user.userId];
+		[self.navigationController pushViewController:profileViewController animated:YES];
+	}
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
