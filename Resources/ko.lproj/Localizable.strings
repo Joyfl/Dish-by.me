@@ -59,6 +59,7 @@
 "MORE_COMMENTS" = "이전 댓글 보기";
 "LEAVE_A_COMMENT" = "댓글 남기기";
 "SEND" = "전송";
+"SENDING" = "전송중";
 "LOGIN_TO_COMMENT" = "댓글을 남기려면 로그인해주세요.";
 
 // ForkListView

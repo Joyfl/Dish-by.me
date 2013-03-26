@@ -299,7 +299,7 @@ enum {
 	comment.userPhoto = [CurrentUser user].photo;
 	comment.message = _commentInput.text;
 	comment.createdTime = [NSDate date];
-	comment.relativeCreatedTime = NSLocalizedString( @"JUST_NOW", @"방금" );
+	comment.relativeCreatedTime = NSLocalizedString( @"SENDING", @"전송중" );
 	comment.sending = YES;
 	[comment calculateMessageHeight];
 	[_comments addObject:comment];
