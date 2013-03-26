@@ -186,6 +186,11 @@ enum {
 							[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" parameters:params success:^(id response) {
 								[self undim];
 								JLLog( @"response : %@", response );
+								
+								[_sharingSettings setObject:[NSNumber numberWithBool:on] forKey:@"facebook"];
+								[[NSUserDefaults standardUserDefaults] setObject:_sharingSettings forKey:DMUserDefaultsKeySharingSettings];
+								[[NSUserDefaults standardUserDefaults] synchronize];
+								
 							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 								[self undim];
 								showErrorAlert();
@@ -203,13 +208,10 @@ enum {
 					}
 				}];
 			}
-			
-			
-			
-			
-			[_sharingSettings setObject:[NSNumber numberWithBool:on] forKey:@"facebook"];
-			[[NSUserDefaults standardUserDefaults] setObject:_sharingSettings forKey:DMUserDefaultsKeySharingSettings];
-			[[NSUserDefaults standardUserDefaults] synchronize];
+			else
+			{
+				
+			}
 		}
 	}
 }

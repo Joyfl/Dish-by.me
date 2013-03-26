@@ -50,5 +50,6 @@
 }
 
 - (id)initWithDish:(Dish *)dish;
+- (id)initWithDishId:(NSInteger)dishId dishName:(NSString *)dishName;
 
 @end

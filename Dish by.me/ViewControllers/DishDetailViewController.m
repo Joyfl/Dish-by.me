@@ -148,6 +148,7 @@ enum {
 	NSString *api = [NSString stringWithFormat:@"/dish/%d", dishId];
 	[[DMAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
 		_dish = [Dish dishFromDictionary:response];
+		self.navigationItem.title = _dish.dishName;
 		
 		[_tableView reloadData];
 		[self loadComments];

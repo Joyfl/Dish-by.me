@@ -36,14 +36,28 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string></string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb115946051893330</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>net.joyfl.Dish-by-me</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>dishbyme</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1319</string>
+	<string>1329</string>
 	<key>FacebookAppID</key>
 	<string>115946051893330</string>
 	<key>LSRequiresIPhoneOS</key>

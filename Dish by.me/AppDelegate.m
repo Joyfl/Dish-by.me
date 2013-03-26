@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import "DMNavigationController.h"
 #import "DishListViewController.h"
+#import "DishDetailViewController.h"
 #import "SearchViewController.h"
 #import "ProfileViewController.h"
 #import "SettingsViewController.h"
@@ -126,6 +127,19 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+	if( [url.absoluteString hasPrefix:@"dishbyme://"] )
+	{
+		JLLog( @"Launch from URL : %@", url );
+		NSInteger dishId = [[url.absoluteString substringFromIndex:11] integerValue];
+		if( dishId )
+		{
+			DishDetailViewController *detailViewController = [[DishDetailViewController alloc] initWithDishId:dishId dishName:nil];
+			[self.dishListViewController.navigationController pushViewController:detailViewController animated:NO];
+		}
+		
+		return YES;
+	}
+	
 	return [[FBSession activeSession] handleOpenURL:url];
 }
 
