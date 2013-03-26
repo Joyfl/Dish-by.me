@@ -75,7 +75,7 @@
 	}
 	else
 	{
-		[_profileImageButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		[_profileImageButton setBackgroundImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
 		
 		[DMAPILoader loadImageFromURLString:_comment.userPhotoURL context:_indexPath success:^(UIImage *image, id indexPath) {
 			if( !_comment ) return;

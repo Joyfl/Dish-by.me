@@ -33,6 +33,8 @@
 		0349EA5A16D90C930057BD12 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5916D90C930057BD12 /* MobileCoreServices.framework */; };
 		034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 034A0A0E1656779700C7DA93 /* DishTileCell.m */; };
 		03549A9B17003D8000EFCB14 /* AFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 03549A9A17003D8000EFCB14 /* AFImageCache.m */; };
+		03549A9E1701BCAC00EFCB14 /* profile_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 03549A9C1701BCAC00EFCB14 /* profile_placeholder.png */; };
+		03549A9F1701BCAC00EFCB14 /* profile_placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03549A9D1701BCAC00EFCB14 /* profile_placeholder@2x.png */; };
 		036752AD16FB33B800D889E8 /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752AB16FB33B800D889E8 /* AuthViewController.m */; };
 		036752B116FB3D7D00D889E8 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752B016FB3D7D00D889E8 /* SignUpViewController.m */; };
 		036752B416FB3DD200D889E8 /* DMBookButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752B316FB3DD200D889E8 /* DMBookButton.m */; };
@@ -303,6 +305,8 @@
 		034A0A0E1656779700C7DA93 /* DishTileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishTileCell.m; path = Views/DishTileCell.m; sourceTree = "<group>"; };
 		03549A9917003D8000EFCB14 /* AFImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFImageCache.h; sourceTree = "<group>"; };
 		03549A9A17003D8000EFCB14 /* AFImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageCache.m; sourceTree = "<group>"; };
+		03549A9C1701BCAC00EFCB14 /* profile_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_placeholder.png; sourceTree = "<group>"; };
+		03549A9D1701BCAC00EFCB14 /* profile_placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "profile_placeholder@2x.png"; sourceTree = "<group>"; };
 		036752AA16FB33B800D889E8 /* AuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthViewController.h; sourceTree = "<group>"; };
 		036752AB16FB33B800D889E8 /* AuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthViewController.m; sourceTree = "<group>"; };
 		036752AF16FB3D7D00D889E8 /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
@@ -744,6 +748,8 @@
 				037D3F3E17000ECF00B55C61 /* profile */,
 				037D3F6517000ECF00B55C61 /* profile_thumbnail_border.png */,
 				037D3F6617000ECF00B55C61 /* profile_thumbnail_border@2x.png */,
+				03549A9C1701BCAC00EFCB14 /* profile_placeholder.png */,
+				03549A9D1701BCAC00EFCB14 /* profile_placeholder@2x.png */,
 				037D3F6717000ECF00B55C61 /* recipe */,
 				037D3F7417000ECF00B55C61 /* ribbon.png */,
 				037D3F7517000ECF00B55C61 /* ribbon@2x.png */,
@@ -1352,6 +1358,8 @@
 				037D402E17000ECF00B55C61 /* textfield_bg@2x.png in Resources */,
 				037D402F17000ECF00B55C61 /* tool_bar.png in Resources */,
 				037D403017000ECF00B55C61 /* tool_bar@2x.png in Resources */,
+				03549A9E1701BCAC00EFCB14 /* profile_placeholder.png in Resources */,
+				03549A9F1701BCAC00EFCB14 /* profile_placeholder@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

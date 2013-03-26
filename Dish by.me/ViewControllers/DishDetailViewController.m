@@ -511,7 +511,7 @@ enum {
 			UIButton *profileImageButton = [[UIButton alloc] initWithFrame:CGRectMake( 14, 1, 25, 25 )];
 			profileImageButton.adjustsImageWhenHighlighted = NO;
 			[profileImageButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
-			[profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_dish.userPhotoURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+			[profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_dish.userPhotoURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
 			[profileImageButton addTarget:self action:@selector(profileImageButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:profileImageButton];
 			
