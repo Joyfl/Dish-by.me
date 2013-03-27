@@ -15,6 +15,7 @@
 	UIView *_searchBar;
 	UITextField *_searchInput;
 	UITableView *_tableView;
+	UILabel *_messageLabel;
 	UIView *_dimView;
 	
 	NSMutableArray *_dishes;

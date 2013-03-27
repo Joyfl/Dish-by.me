@@ -50,6 +50,17 @@
 	_tableView.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	[self.view addSubview:_tableView];
 	
+	_messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, UIScreenWidth, 0 )];
+	_messageLabel.font = [UIFont boldSystemFontOfSize:15];
+	_messageLabel.numberOfLines = 0;
+	_messageLabel.textAlignment = NSTextAlignmentCenter;
+	_messageLabel.backgroundColor = [UIColor clearColor];
+	_messageLabel.textColor = [UIColor colorWithHex:0x717374 alpha:1];
+	_messageLabel.shadowColor = [UIColor whiteColor];
+	_messageLabel.shadowOffset = CGSizeMake( 0, 1 );
+	_messageLabel.hidden = YES;
+	[_tableView addSubview:_messageLabel];
+	
 	_dimView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 45, 320, UIScreenHeight )];
 	_dimView.userInteractionEnabled = YES;
 	_dimView.backgroundColor = [UIColor blackColor];
@@ -92,6 +103,18 @@
 		
 		_searching = NO;
 		[_tableView reloadData];
+		
+		if( data.count == 0 )
+		{
+			_messageLabel.text = NSLocalizedString( @"NO_SEARCH_RESULT", nil );
+			_messageLabel.hidden = NO;
+			[_messageLabel sizeToFit];
+			_messageLabel.frame = CGRectMake( 0, 147, 320, _messageLabel.frame.size.height );
+		}
+		else
+		{
+			_messageLabel.hidden = YES;
+		}
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		_searching = NO;

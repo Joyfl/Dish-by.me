@@ -68,6 +68,7 @@
 // SearchView
 "SEARCH_INPUT" = "요리 검색";
 "SEARCH" = "검색";
+"NO_SEARCH_RESULT" = "검색결과가 없습니다.";
 
 // WritingView
 "NEW_DISH" = "새 요리";
