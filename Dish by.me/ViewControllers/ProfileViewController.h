@@ -36,6 +36,8 @@
 	
 	UIImageView *_arrowView;
 	
+	UILabel *_messageLabel;
+	
 	BOOL _updating;
 	
 	NSMutableArray *_dishes;

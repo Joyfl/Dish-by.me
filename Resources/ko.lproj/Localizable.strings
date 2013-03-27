@@ -90,6 +90,10 @@
 "BOOKMARKS" = "북마크";
 "FOLLOWING" = "팔로잉";
 "FOLLOWERS" = "팔로워";
+"NO_DISHES" = "%@님은 아직 등록한 요리가 없어요 :)";
+"NO_BOOKMARKS" = "@님은 아직 북마크한 요리가 없어요 :)";
+"NO_FOLLOWING" = "%@님이 팔로잉한 사용자는 아직 없어요 :)";
+"NO_FOLLOWERS" = "%@님을 팔로우하는 사용자는 아직 없어요 :)";
 
 // SettingsView
 "SHARE_SETTINGS" = "공유 설정";

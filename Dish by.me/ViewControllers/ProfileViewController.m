@@ -60,6 +60,17 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	_refreshHeaderView.backgroundColor = self.view.backgroundColor;
 	[_tableView addSubview:_refreshHeaderView];
 	
+	_messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 236, UIScreenWidth, 0 )];
+	_messageLabel.font = [UIFont boldSystemFontOfSize:15];
+	_messageLabel.numberOfLines = 0;
+	_messageLabel.textAlignment = NSTextAlignmentCenter;
+	_messageLabel.backgroundColor = [UIColor clearColor];
+	_messageLabel.textColor = [UIColor colorWithHex:0x717374 alpha:1];
+	_messageLabel.shadowColor = [UIColor whiteColor];
+	_messageLabel.shadowOffset = CGSizeMake( 0, 1 );
+	_messageLabel.hidden = YES;
+	[_tableView addSubview:_messageLabel];
+	
 	_dishes = [NSMutableArray array];
 	_bookmarks = [NSMutableArray array];
 	_following = [NSMutableArray array];
@@ -602,6 +613,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	if( section == 0 ) return 1;
 	else if( section == 2 ) return 1;
 	
+	[self updateMessageLabelText];
+	
 	if( _selectedTab < 2 )
 		return ceil( selectedDishArray.count / 3.0 );
 	return selectedUserArray.count;
@@ -1046,6 +1059,35 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 {
 	_selectedTab = button.tag;
 	[_tableView reloadData];
+}
+
+- (void)updateMessageLabelText
+{
+	if( _selectedTab == 0 && _dishes.count == 0 && isLastDishLoaded && !_loadingDishes )
+	{
+		_messageLabel.text = [NSString stringWithFormat:NSLocalizedString( @"NO_DISHES", nil ), _user.name];
+	}
+	else if( _selectedTab == 1 && _bookmarks.count == 0 && isLastBookmarkLoaded && !_loadingBookmarks )
+	{
+		_messageLabel.text = [NSString stringWithFormat:NSLocalizedString( @"NO_BOOKMARKS", nil ), _user.name];
+	}
+	else if( _selectedTab == 2 && _following.count == 0 && isLastFollowingLoaded && !_loadingFollowing )
+	{
+		_messageLabel.text = [NSString stringWithFormat:NSLocalizedString( @"NO_FOLLOWING", nil ), _user.name];
+	}
+	else if( _selectedTab == 3 && _followers.count == 0 && isLastFollowerLoaded && !_loadingFollowers )
+	{
+		_messageLabel.text = [NSString stringWithFormat:NSLocalizedString( @"NO_FOLLOWERS", nil ), _user.name];
+	}
+	else
+	{
+		_messageLabel.hidden = YES;
+		return;
+	}
+	
+	_messageLabel.hidden = NO;
+	[_messageLabel sizeToFit];
+	_messageLabel.frame = CGRectMake( 0, 236, 320, _messageLabel.frame.size.height );
 }
 
 

@@ -14,11 +14,9 @@
 #import "ProfileViewController.h"
 #import "SettingsViewController.h"
 #import "WritingViewController.h"
-#import "CameraOverlayViewController.h"
 #import "CurrentUser.h"
 #import "User.h"
 #import "GAI.h"
-#import "JLHangulUtils.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "HTBlock.h"
 
@@ -92,8 +90,6 @@
 	{
 		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:self.tabBarController delegate:self];
 	}
-	
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"prefs:root=General"]];
 	
     return YES;
 }
