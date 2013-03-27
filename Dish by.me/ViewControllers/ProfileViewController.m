@@ -144,7 +144,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			}
 		}
 		
-		_followButton.button.showsActivityIndicatorView = NO;
+		_followingButton.button.showsActivityIndicatorView = NO;
 		
 		[self updateFollowFollowingButton];
 		[_tableView reloadData];
