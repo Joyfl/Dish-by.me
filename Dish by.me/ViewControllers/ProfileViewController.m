@@ -1063,6 +1063,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)updateMessageLabelText
 {
+	if( !_user.name ) return;
+	
 	if( _selectedTab == 0 && _dishes.count == 0 && isLastDishLoaded && !_loadingDishes )
 	{
 		_messageLabel.text = [NSString stringWithFormat:NSLocalizedString( @"NO_DISHES", nil ), _user.name];
