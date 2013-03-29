@@ -1004,8 +1004,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
 				UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
 			
-			_user.thumbnail = image;
-			_user.photo = image;
+			_user.thumbnail = [CurrentUser user].thumbnail = image;
+			_user.photo = [CurrentUser user].photo = image;
 			[self uploadUserPhoto:image];
 			[_tableView reloadData];
 
