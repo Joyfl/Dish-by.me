@@ -217,7 +217,23 @@
 		{
 			case FBSessionStateOpen:
 			{
-				[self signUpWithParameters:@{ @"facebook_token": [[FBSession activeSession] accessToken] }];
+				[[FBSession activeSession] reauthorizeWithPublishPermissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone completionHandler:^(FBSession *session, NSError *error) {
+					
+					if( error )
+					{
+						JLLog( @"Reauthorize Error : %@", error );
+						return;
+					}
+					
+					JLLog( @"Reauthorize with publish permissions complete." );
+					[self signUpWithParameters:@{ @"facebook_token": [[FBSession activeSession] accessToken] }];
+				}];
+				break;
+			}
+				
+			case FBSessionStateOpenTokenExtended:
+			{
+				JLLog( @"FBSessionStateOpenTokenExtended" );
 				break;
 			}
 			
@@ -235,13 +251,11 @@
 		
 		if( error )
 		{
+			JLLog( @"Facebook Error : %@", error );
+			
 			if( error.code == 2 )
 			{
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_FACEBOOK_NOT_ALLOWED", nil ) delegate:nil cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil] show];
-			}
-			else
-			{
-				JLLog( @"Facebook Error : %@", error );
 			}
 		}
 	}];

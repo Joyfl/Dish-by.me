@@ -181,7 +181,23 @@
 		{
 			case FBSessionStateOpen:
 			{
-				[self loginWithParameters:@{ @"facebook_token": [[FBSession activeSession] accessToken] }];
+				[[FBSession activeSession] reauthorizeWithPublishPermissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone completionHandler:^(FBSession *session, NSError *error) {
+					
+					if( error )
+					{
+						JLLog( @"Reauthorize Error : %@", error );
+						return;
+					}
+					
+					JLLog( @"Reauthorize with publish permissions complete." );
+					[self loginWithParameters:@{ @"facebook_token": [[FBSession activeSession] accessToken] }];
+				}];
+				break;
+			}
+				
+			case FBSessionStateOpenTokenExtended:
+			{
+				JLLog( @"FBSessionStateOpenTokenExtended" );
 				break;
 			}
 				
