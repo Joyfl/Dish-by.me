@@ -226,7 +226,14 @@
 					}
 					
 					JLLog( @"Reauthorize with publish permissions complete." );
-					[self signUpWithParameters:@{ @"facebook_token": [[FBSession activeSession] accessToken] }];
+					
+					[[FBRequest requestForGraphPath:@"/me?fields=id,email,name,bio,picture.width(200).height(200)"] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
+						
+						_facebookUserInfo = user;
+						_emailInput.text = [user objectForKey:@"email"];
+						[self setInputFieldsEnabled:YES];
+						_facebookButton.showsActivityIndicatorView = NO;
+					}];
 				}];
 				break;
 			}
@@ -293,18 +300,24 @@
 	
 	[self backgroundDidTap];
 	_signUpButton.showsActivityIndicatorView = YES;
-	[self signUpWithParameters:@{ @"email": _emailInput.text, @"password": [Utils sha1:_passwordInput.text] }];
+	[self signUpWithEmail:_emailInput.text password:[Utils sha1:_passwordInput.text]];
 }
 
-- (void)signUpWithParameters:(NSDictionary *)parameters
+- (void)signUpWithEmail:(NSString *)email password:(NSString *)password
 {
 	[self setInputFieldsEnabled:NO];
 	
-	[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:parameters success:^(id response) {
+	NSMutableDictionary *params = [NSMutableDictionary dictionary];
+	[params setObject:email forKey:@"email"];
+	[params setObject:password forKey:@"password"];
+	if( _facebookUserInfo )
+		[params setObject:[[FBSession activeSession] accessToken] forKey:@"facebook_token"];
+	
+	[[DMAPILoader sharedLoader] api:@"/user" method:@"POST" parameters:params success:^(id response) {
 		JLLog( @"SignUp complete" );
 		
 		// 회원가입이 완료되면 로그인
-		[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:parameters success:^(id response) {
+		[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
 			
 			[CurrentUser user].loggedIn = YES;
 			[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
@@ -315,9 +328,9 @@
 				SignUpProfileViewController *signUpViewController = nil;
 				
 				// 페이스북으로 가입
-				if( [parameters objectForKey:@"facebook_token"] )
+				if( _facebookUserInfo )
 				{
-					signUpViewController = [[SignUpProfileViewController alloc] initWithUserId:userId facebookAccessToken:[[FBSession activeSession] accessToken]];
+					signUpViewController = [[SignUpProfileViewController alloc] initWithUserId:userId facebookUserInfo:_facebookUserInfo];
 				}
 				else
 				{
@@ -342,63 +355,24 @@
 		// 이미 가입된 사용자
 		if( errorCode == 1400 )
 		{
-			// 이미 가입된 페이스북 사용자
-			if( [parameters objectForKey:@"facebook_token"] )
-			{
-				// 로그인할래요?
-				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP_WITH_FACEBOOK", nil ) cancelButtonTitle:NSLocalizedString( @"NO_THANKS", nil ) otherButtonTitles:@[NSLocalizedString( @"LOGIN", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
-					
-					// 괜찮아요
-					if( buttonIndex == 0 )
-					{
-						[_emailInput becomeFirstResponder];
-					}
-					
-					// 페이스북 로그인
-					else
-					{
-						[self setInputFieldsEnabled:NO];
-						_facebookButton.showsActivityIndicatorView = NO;
-						
-						// 페이스북으로 로그인
-						[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:parameters success:^(id response) {
-							
-							[CurrentUser user].loggedIn = YES;
-							[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
-							
-							[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUserAndDismissViewController];
-							
-						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-							[self setInputFieldsEnabled:YES];
-							_signUpButton.showsActivityIndicatorView = NO;
-							_facebookButton.showsActivityIndicatorView = NO;
-							showErrorAlert();
-						}];
-					}
-				}] show];
-			}
+			_emailInput.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
+			[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 			
-			// 이미 가입된 일반 사용자
-			else
-			{
-				_emailInput.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
-				[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+			// 사용중인 이메일 - 로그인할래요?
+			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:[NSString stringWithFormat:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP", nil ), email] cancelButtonTitle:NSLocalizedString( @"NO", nil ) otherButtonTitles:@[NSLocalizedString( @"PROBABLY", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 				
-				// 사용중인 이메일 - 로그인할래요?
-				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_ALREADY_SIGNED_UP", nil ) cancelButtonTitle:NSLocalizedString( @"NO", nil ) otherButtonTitles:@[NSLocalizedString( @"PROBABLY", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
-					
-					// 괜찮아요
-					if( buttonIndex == 0 )
-					{
-						[_emailInput becomeFirstResponder];
-					}
-					else
-					{
-						LoginViewController *loginViewController = [[LoginViewController alloc] init];
-						[self.navigationController pushViewController:loginViewController animated:YES];
-					}
-				}] show];
-			}
+				// 괜찮아요
+				if( buttonIndex == 0 )
+				{
+					[_emailInput becomeFirstResponder];
+				}
+				else
+				{
+					LoginViewController *loginViewController = [[LoginViewController alloc] init];
+					loginViewController.emailInput.text = email;
+					[self.navigationController pushViewController:loginViewController animated:YES];
+				}
+			}] show];
 		}
 		else
 		{

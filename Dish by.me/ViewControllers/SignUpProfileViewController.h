@@ -12,7 +12,7 @@
 @interface SignUpProfileViewController : GAITrackedViewController <UITextFieldDelegate>
 {
 	NSInteger _userId;
-	NSString *_facebookAccessToken;
+	NSDictionary *_facebookUserInfo;
 	
 	UIButton *_userPhotoButton;
 	UITextField *_nameInput;
@@ -22,6 +22,6 @@
 }
 
 - (id)initWithUserId:(NSInteger)userId;
-- (id)initWithUserId:(NSInteger)userId facebookAccessToken:(NSString *)facebookAccessToken;
+- (id)initWithUserId:(NSInteger)userId facebookUserInfo:(NSDictionary *)facebookUserInfo;
 
 @end

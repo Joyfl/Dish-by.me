@@ -18,9 +18,9 @@
 
 @implementation SignUpProfileViewController
 
-- (id)initWithUserId:(NSInteger)userId facebookAccessToken:(NSString *)facebookAccessToken
+- (id)initWithUserId:(NSInteger)userId facebookUserInfo:(NSDictionary *)facebookUserInfo
 {
-	_facebookAccessToken = facebookAccessToken;
+	_facebookUserInfo = facebookUserInfo;
 	return [self initWithUserId:userId];
 }
 
@@ -82,25 +82,19 @@
 	[self.view addSubview:_doneButton];
 	
 	// 페이스북으로 가입한 사용자들은 페이스북에서 정보 가져오기
-	if( _facebookAccessToken )
+	if( _facebookUserInfo )
 	{
 		self.trackedViewName = @"SignUpStepTwoViewController (Facebook)";
 		
-		[self setControlsEnabled:NO];
+		_nameInput.text = [_facebookUserInfo objectForKey:@"name"];
+		_bioInput.text = [_facebookUserInfo objectForKey:@"bio"];
 		
-		[[FBRequest requestForGraphPath:@"/me?fields=id,name,bio,picture.width(200).height(200)"] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
-			[self setControlsEnabled:YES];
-			
-			_nameInput.text = user.name;
-			_bioInput.text = [user objectForKey:@"bio"];
-			
-			[self inputFieldEditingChanged:_nameInput];
-			
-			NSURL *profilePhotoURL = [NSURL URLWithString:[[[user objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
-			[_userPhotoButton setImageWithURL:profilePhotoURL placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-			
-			[_nameInput becomeFirstResponder];
-		}];
+		[self inputFieldEditingChanged:_nameInput];
+		
+		NSURL *profilePhotoURL = [NSURL URLWithString:[[[_facebookUserInfo objectForKey:@"picture"] objectForKey:@"data"] objectForKey:@"url"]];
+		[_userPhotoButton setImageWithURL:profilePhotoURL placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		
+		[_nameInput becomeFirstResponder];
 	}
 	else
 	{

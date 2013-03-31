@@ -12,9 +12,8 @@
 // Messages
 "MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관 및 개인정보취급방침에 동의합니다";
 "MESSAGE_SIGNUP_COMPLETE" = "회원가입이 완료되었습니다!\n프로필을 완성해주세요.";
-"MESSAGE_ALREADY_SIGNED_UP" = "누군가가 이미 사용중인 이메일이에요.\n혹시 가입했던 적이 있나요?";
+"MESSAGE_ALREADY_SIGNED_UP" = "누군가가 이미 %@ 이메일을 사용하고 있어요.\n혹시 가입했던 적이 있나요?";
 "MESSAGE_PROFILE_UPDATE_COMPLETE" = "프로필이 예쁘게 만들어졌어요!\n가입한 계정으로 로그인할게요 :D";
-"MESSAGE_ALREADY_SIGNED_UP_WITH_FACEBOOK" = "이미 페이스북으로 가입이 되어있어요.\n로그인할까요?";
 "MESSAGE_LOGIN_FAILED" = "로그인에 실패했어요. 이메일과 비밀번호를 확인해주세요.";
 "MESSAGE_FACEBOOK_NOT_ALLOWED" = "페이스북 연동에 실패했어요.\n[설정] > [Facebook]에 가서\nDish by.me를 허용해주세요.";
 
@@ -26,7 +25,7 @@
 
 // Auth
 "SIGNUP" = "가입하기";
-"SIGNUP_WITH_FACEBOOK" = "페이스북으로 가입하기";
+"SIGNUP_WITH_FACEBOOK" = "페이스북에서 정보 가져오기";
 "LOGIN" = "로그인";
 "LOGIN_WITH_FACEBOOK" = "페이스북으로 로그인";
 "LOOK_AROUND" = "둘러보기";

@@ -11,10 +11,11 @@
 
 @interface LoginViewController : GAITrackedViewController <UITextFieldDelegate>
 {
-	UITextField *_emailInput;
 	UITextField *_passwordInput;
 	UIButton *_loginButton;
 	UIButton *_facebookButton;
 }
+
+@property (nonatomic, strong) UITextField *emailInput;
 
 @end

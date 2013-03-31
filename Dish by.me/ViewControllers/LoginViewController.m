@@ -68,13 +68,13 @@
 	orLabel.frame = CGRectOffset( orLabel.frame, 160 - orLabel.frame.size.width / 2, _facebookButton.frame.origin.y + _facebookButton.frame.size.height + 15 );
 	[self.view addSubview:orLabel];
 	
-	_emailInput = [self inputFieldAtYPosition:150 placeholder:NSLocalizedString( @"EMAIL", nil )];
-	_emailInput.keyboardType = UIKeyboardTypeEmailAddress;
-	_emailInput.returnKeyType = UIReturnKeyNext;
-	[_emailInput addTarget:self action:@selector(inputFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
-	[self.view addSubview:_emailInput];
+	self.emailInput = [self inputFieldAtYPosition:150 placeholder:NSLocalizedString( @"EMAIL", nil )];
+	self.emailInput.keyboardType = UIKeyboardTypeEmailAddress;
+	self.emailInput.returnKeyType = UIReturnKeyNext;
+	[self.emailInput addTarget:self action:@selector(inputFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
+	[self.view addSubview:self.emailInput];
 	
-	_passwordInput = [self inputFieldAtYPosition:_emailInput.frame.origin.y + 40 placeholder:NSLocalizedString( @"PASSWORD", nil )];
+	_passwordInput = [self inputFieldAtYPosition:self.emailInput.frame.origin.y + 40 placeholder:NSLocalizedString( @"PASSWORD", nil )];
 	_passwordInput.secureTextEntry = YES;
 	_passwordInput.returnKeyType = UIReturnKeyGo;
 	[_passwordInput addTarget:self action:@selector(inputFieldEditingChanged:) forControlEvents:UIControlEventEditingChanged];
@@ -124,21 +124,21 @@
 
 - (void)inputFieldEditingChanged:(UITextField *)inputField
 {
-	_emailInput.textColor = [UIColor colorWithHex:0xADA8A3 alpha:1];
+	self.emailInput.textColor = [UIColor colorWithHex:0xADA8A3 alpha:1];
 	
 	if( inputField.text.length == 0 )
 	{
 		[inputField setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 	}
 	
-	_loginButton.enabled = _emailInput.text.length > 0 && _passwordInput.text.length > 0;
+	_loginButton.enabled = self.emailInput.text.length > 0 && _passwordInput.text.length > 0;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
 	if( textField.text.length > 0 )
 	{
-		if( textField == _emailInput )
+		if( textField == self.emailInput )
 		{
 			[_passwordInput becomeFirstResponder];
 		}
@@ -231,10 +231,10 @@
 
 - (void)loginButtonDidTouchUpInside
 {	
-	if( _emailInput.text.length == 0 )
+	if( self.emailInput.text.length == 0 )
 	{
-		[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
-		[_emailInput becomeFirstResponder];
+		[self.emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+		[self.emailInput becomeFirstResponder];
 		return;
 	}
 	
@@ -247,7 +247,7 @@
 	
 	[self backgroundDidTap];
 	_loginButton.showsActivityIndicatorView = YES;
-	[self loginWithParameters:@{ @"email": _emailInput.text, @"password": [Utils sha1:_passwordInput.text] }];
+	[self loginWithParameters:@{ @"email": self.emailInput.text, @"password": [Utils sha1:_passwordInput.text] }];
 }
 
 - (void)loginWithParameters:(NSDictionary *)parameters
@@ -274,12 +274,12 @@
 {
 	if( inputFieldsEnabled )
 	{
-		_emailInput.enabled = YES;
+		self.emailInput.enabled = YES;
 		_passwordInput.enabled = YES;
 	}
 	else
 	{
-		_emailInput.enabled = NO;
+		self.emailInput.enabled = NO;
 		_passwordInput.enabled = NO;
 	}
 }
