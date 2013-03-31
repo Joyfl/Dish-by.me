@@ -34,9 +34,9 @@
 	paperView.image = [[UIImage imageNamed:@"book_paper.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 10, 10, 10, 10 )];
 	[self.view addSubview:paperView];
 	
-	UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake( 30, 35, 9, 15 )];
+	UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake( 28, 33, 12, 18 )];
 	backButton.touchAreaInsets = UIEdgeInsetsMake( 15, 15, 15, 15 );
-	[backButton setBackgroundImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
+	[backButton setBackgroundImage:[UIImage imageNamed:@"book_button_back.png"] forState:UIControlStateNormal];
 	[backButton addTarget:self action:@selector(backButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:backButton];
 	
