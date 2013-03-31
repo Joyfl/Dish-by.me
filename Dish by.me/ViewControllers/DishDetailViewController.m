@@ -571,21 +571,21 @@ enum {
 				forkedFromLabel.activeLinkAttributes = @{ (NSString *)kTTTBackgroundFillColorAttributeName: (id)[UIColor lightGrayColor].CGColor, (NSString *)kTTTBackgroundCornerRadiusAttributeName: @3 };
 				
 				NSString *text = nil;
+				NSString *dishNameWithQuote = [NSString stringWithFormat:@"'%@'", _dish.forkedFromName];
 				if( [LANGUAGE isEqualToString:@"ko"] )
 				{
 					NSArray *hangul = [JLHangulUtils separateHangul:[_dish.forkedFromName substringFromIndex:_dish.forkedFromName.length - 1]];
-					text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), [[hangul objectAtIndex:2] length] ? @"을" : @"를"];
+					text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), dishNameWithQuote, [[hangul objectAtIndex:2] length] ? @"을" : @"를"];
 				}
 				else
 				{
-					text = NSLocalizedString( @"FORKED_FROM_S", @"" );
+					text = [NSString stringWithFormat:NSLocalizedString( @"FORKED_FROM_S", @"" ), dishNameWithQuote, @""];
 				}
 				
 				__block NSRange dishNameRange;
 				[forkedFromLabel setText:text afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
-					dishNameRange = [mutableAttributedString.string rangeOfString:@"$[DISH]"];
+					dishNameRange = [mutableAttributedString.string rangeOfString:dishNameWithQuote];
 					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(__bridge id)[UIColor colorWithHex:0x4A4746 alpha:1].CGColor range:dishNameRange];
-					[mutableAttributedString replaceCharactersInRange:dishNameRange withString:_dish.forkedFromName];
 					return mutableAttributedString;
 				}];
 				

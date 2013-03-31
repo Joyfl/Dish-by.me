@@ -53,7 +53,7 @@
 // DishDetailView
 "EDIT" = "수정";
 "FORK" = "포크";
-"FORKED_FROM_S" = "$[DISH]%@ 포크했습니다.";
+"FORKED_FROM_S" = "%1$@%2$@ 포크했습니다.";
 "N_BOOKMAKRED" = "%d명이 이 요리를 북마크했습니다.";
 "SHOW_RECIPE" = "레시피 보기";
 "MORE_COMMENTS" = "이전 댓글 보기";
