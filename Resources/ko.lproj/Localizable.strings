@@ -76,8 +76,18 @@
 "FROM_LIBRARY" = "라이브러리에서 선택";
 "INPUT_DISH_NAME" = "요리 이름";
 "INPUT_MESSAGE" = "내용";
-"WRITE_RECIPE" = "레시피 작성";
+"WRITE_RECIPE" = "레시피 작성하기";
 "UPLOAD" = "업로드";
+
+// Recipe
+"HOW_MANY_SERVINGS" = "몇 인분 기준인가요?";
+"HOW_MANY_MINUTES" = "몇 분 걸리나요?";
+"INGREDIENT" = "재료";
+"AMOUNT" = "양";
+"ADD_INGREDIENT" = "재료 추가하기";
+"" = "";
+"" = "";
+"" = "";
 
 // ProfileView
 "FOLLOW" = "팔로우";

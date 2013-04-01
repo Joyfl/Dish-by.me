@@ -11,6 +11,7 @@
 @interface IngredientCell : UITableViewCell
 
 @property (nonatomic, strong) UITextField *ingredientInput;
+@property (nonatomic, strong) UITextField *amountInput;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 
