@@ -178,20 +178,18 @@
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:addCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			UIImageView *plusView = [[UIImageView alloc] initWithFrame:CGRectMake( 6, 8, 20, 20 )];
-			plusView.image = [UIImage imageNamed:@"recipe_button_plus.png"];
-			[cell.contentView addSubview:plusView];
-			
-			UILabel *addLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 220, 0 )];
-			addLabel.text = NSLocalizedString( @"ADD_INGREDIENT", nil );
-			addLabel.font = [UIFont boldSystemFontOfSize:13];
-			addLabel.textColor = [UIColor colorWithHex:0x958675 alpha:1];
-			addLabel.backgroundColor = [UIColor clearColor];
-			addLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.7];
-			addLabel.shadowOffset = CGSizeMake( 0, 1 );
-			[addLabel sizeToFit];
-			addLabel.frame = CGRectMake( 32, 9, addLabel.frame.size.width, addLabel.frame.size.height );
-			[cell.contentView addSubview:addLabel];
+			UIButton *addButton = [[UIButton alloc] initWithFrame:cell.contentView.frame];
+			[addButton setImage:[UIImage imageNamed:@"recipe_button_plus.png"] forState:UIControlStateNormal];
+			[addButton setTitle:NSLocalizedString( @"ADD_INGREDIENT", nil ) forState:UIControlStateNormal];
+			[addButton setTitleColor:[UIColor colorWithHex:0x958675 alpha:1] forState:UIControlStateNormal];
+			[addButton setTitleColor:[UIColor colorWithHex:0x3E3931 alpha:1] forState:UIControlStateHighlighted];
+			[addButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.7] forState:UIControlStateNormal];
+			addButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			addButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+			addButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+			addButton.contentEdgeInsets = UIEdgeInsetsMake( 0, 5, 5, 5 );
+			addButton.titleEdgeInsets = UIEdgeInsetsMake( 0, 5, 0, 0 );
+			[cell.contentView addSubview:addButton];
 			
 			UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 5, 38, 255, 5 )];
 			lineView.image = [UIImage imageNamed:@"recipe_line.png"];
