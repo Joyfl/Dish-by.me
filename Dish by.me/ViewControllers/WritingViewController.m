@@ -15,6 +15,7 @@
 #import "DMAPILoader.h"
 #import "UIViewController+Dim.h"
 #import "UIButton+ActivityIndicatorView.h"
+#import "RecipeEditorView.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 
@@ -66,12 +67,13 @@ enum {
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self.view addSubview:_tableView];
 	
-	_recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"WRITE_RECIPE", @"" ) recipe:@"\n\n\n\n" closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside)];
+//	_recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"WRITE_RECIPE", @"" ) recipe:@"\n\n\n\n" closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside)];
+	_recipeView = [[RecipeEditorView alloc] init];
 	_recipeView.recipeView.text = @"";
 	_recipeView.recipeView.editable = YES;
 	
 	_recipeViewOriginalFrame = _recipeView.frame;
-	_recipeViewOriginalFrame.origin.y = ( 200 - _recipeViewOriginalFrame.size.height ) / 2;
+	_recipeViewOriginalFrame.origin.y = 20;
 	_recipeView.frame = CGRectMake( 7, -_recipeViewOriginalFrame.size.height, _recipeViewOriginalFrame.size.width, _recipeViewOriginalFrame.size.height );
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
@@ -261,6 +263,7 @@ enum {
 {
 	[self dim];
 	
+	[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
 	[[[UIApplication sharedApplication] keyWindow] addSubview:_recipeView];
 	
 	[UIView animateWithDuration:0.25 animations:^{
@@ -281,7 +284,8 @@ enum {
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 64 );
 		
 	} completion:^(BOOL finished) {
-		[[[UIApplication sharedApplication] keyWindow] addSubview:_recipeView];
+		[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
+		[_recipeView removeFromSuperview];
 	}];
 }
 

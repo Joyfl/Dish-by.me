@@ -32,7 +32,7 @@
 	[[GAI sharedInstance] trackerWithTrackingId:@"UA-38348585-3"];
 	
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
 	
 	self.tabBarController = [[UITabBarController alloc] init];

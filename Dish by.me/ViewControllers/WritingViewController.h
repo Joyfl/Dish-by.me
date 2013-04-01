@@ -10,6 +10,7 @@
 #import "GAITrackedViewController.h"
 
 @class RecipeView;
+@class RecipeEditorView;
 
 @protocol WritingViewControllerDelegate;
 
@@ -22,7 +23,7 @@
 	UITextField *_nameInput;
 	UITextView *_messageInput;
 	
-	RecipeView *_recipeView;
+	RecipeEditorView *_recipeView;
 	CGRect _recipeViewOriginalFrame;
 	
 	NSInteger _originalDishId;
