@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface IngredientCell : UITableViewCell
+{
+	UIImageView *_minusView;
+}
 
 @property (nonatomic, strong) UITextField *ingredientInput;
 @property (nonatomic, strong) UITextField *amountInput;

@@ -37,6 +37,7 @@
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 21, 59, 255, 330 )];
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
+	_tableView.editing = YES;
 	_tableView.backgroundColor = [UIColor clearColor];
 	[self addSubview:_tableView];
 	
@@ -131,7 +132,7 @@
 			UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 255, 30 )];
 			titleLabel.text = NSLocalizedString( @"INGREDIENT", nil );
 			titleLabel.font = [UIFont boldSystemFontOfSize:14];
-			titleLabel.textColor = [UIColor colorWithHex:0x8E7F6F alpha:1];
+			titleLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 			titleLabel.backgroundColor = [UIColor clearColor];
 			titleLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.9];
 			titleLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -182,9 +183,11 @@
 	}
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	NSLog( @"Touch" );
+	if( indexPath.section == 1 )
+		return YES;
+	return NO;
 }
 
 @end
