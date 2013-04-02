@@ -82,14 +82,16 @@
 	[cameraButton addTarget:self action:@selector(cameraButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.tabBarController.tabBar addSubview:cameraButton];
 	
-	if( [CurrentUser user].loggedIn )
-	{
-		[self.profileViewController loadUserId:[CurrentUser user].userId];
-	}
-	else
-	{
-		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:self.tabBarController delegate:self];
-	}
+//	if( [CurrentUser user].loggedIn )
+//	{
+//		[self.profileViewController loadUserId:[CurrentUser user].userId];
+//	}
+//	else
+//	{
+//		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:self.tabBarController delegate:self];
+//	}
+	
+	[self cameraButtonDidTouchUpInside];
 	
     return YES;
 }
@@ -169,16 +171,16 @@
 
 - (void)cameraButtonDidTouchUpInside
 {
-	if( [CurrentUser user].loggedIn )
+//	if( [CurrentUser user].loggedIn )
 	{
 		WritingViewController *writingViewController = [[WritingViewController alloc] init];
 		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
 		[self.tabBarController presentViewController:navController animated:YES completion:nil];
 	}
-	else
-	{
-		[self presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_UPLOAD", nil )];
-	}
+//	else
+//	{
+//		[self presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_UPLOAD", nil )];
+//	}
 }
 
 - (void)presentNeedLoginActionSheetWithTitle:(NSString *)title

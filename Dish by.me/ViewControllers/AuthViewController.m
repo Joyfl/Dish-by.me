@@ -11,7 +11,7 @@
 #import "LoginViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "DMBookButton.h"
-#import "UIViewController+Dim.h"
+#import "UIResponder+Dim.h"
 #import "CurrentUser.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "DMNavigationController.h"

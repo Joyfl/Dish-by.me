@@ -6,10 +6,10 @@
 //  Copyright (c) 2013년 Joyfl. All rights reserved.
 //
 
-#import "UIViewController+Dim.h"
+#import "UIResponder+Dim.h"
 #import <objc/runtime.h>
 
-@implementation UIViewController (Dim)
+@implementation UIResponder (Dim)
 
 - (UIImageView *)dimView
 {

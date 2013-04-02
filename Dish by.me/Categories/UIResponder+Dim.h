@@ -1,5 +1,5 @@
 //
-//  UIView+UIView_Dim.h
+//  UIResponder+Dim.h
 //  Dish by.me
 //
 //  Created by 전수열 on 13. 2. 25..
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIViewController (Dim)
+@interface UIResponder (Dim)
 
 - (void)dim;
 - (void)dimAnimated:(BOOL)animated;

@@ -8,6 +8,7 @@
 
 #import "RecipeInfoEditorView.h"
 #import "IngredientCell.h"
+#import "UIButton+TouchAreaInsets.h"
 #import <QuartzCore/QuartzCore.h>
 
 #define tableViewX _tableView.frame.origin.x
@@ -33,6 +34,11 @@
 	[titleLabel sizeToFit];
 	titleLabel.frame = CGRectOffset( titleLabel.frame, 20, 22 );
 	[self addSubview:titleLabel];
+	
+	self.checkButton = [[UIButton alloc] initWithFrame:CGRectMake( 270, 24, 20, 20 )];
+	self.checkButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
+	[self.checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
+	[self addSubview:self.checkButton];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 21, 59, 255, 330 )];
 	_tableView.dataSource = self;

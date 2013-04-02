@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
+#import "RecipeEditorView.h"
 
 @class RecipeView;
-@class RecipeEditorView;
 
 @protocol WritingViewControllerDelegate;
 
-@interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, RecipeEditorViewDelegate>
 {
 	UITableView *_tableView;
 	
@@ -22,9 +22,9 @@
 	UIImageView *_borderView;
 	UITextField *_nameInput;
 	UITextView *_messageInput;
+	UIButton *_recipeButton;
 	
 	RecipeEditorView *_recipeView;
-	CGRect _recipeViewOriginalFrame;
 	
 	NSInteger _originalDishId;
 	NSInteger _photoHeight;

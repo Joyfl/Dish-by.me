@@ -8,6 +8,7 @@
 
 #import "RecipeEditorView.h"
 #import "RecipeInfoEditorView.h"
+#import "UIResponder+Dim.h"
 
 @implementation RecipeEditorView
 
@@ -19,9 +20,51 @@
 	[self addSubview:_scrollView];
 	
 	RecipeInfoEditorView *info = [[RecipeInfoEditorView alloc] init];
+	info.frame = CGRectMake( 6, 0, 308, 451 );
+	[info.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 	[_scrollView addSubview:info];
 	
 	return self;
+}
+
+- (void)presentAfterDelay:(NSTimeInterval)delay
+{
+	NSTimeInterval duration = 0.4;
+	
+	[self dimWithDuration:duration completion:nil];
+	
+	self.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
+	
+	[UIView animateWithDuration:duration delay:delay options:0 animations:^{
+		[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+		[[[UIApplication sharedApplication] keyWindow] addSubview:self];
+		
+		self.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
+	} completion:nil];
+}
+
+- (void)dismiss
+{
+	NSTimeInterval duration = 0.4;
+	
+	if( [self.delegate respondsToSelector:@selector(recipeEditorViewWillDismiss:)] )
+		[self.delegate recipeEditorViewWillDismiss:self];
+	
+	[self endEditing:YES];
+	[self undimWithDuration:duration completion:nil];
+	
+	[UIView animateWithDuration:duration animations:^{
+		self.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
+		
+	} completion:^(BOOL finished) {
+		[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
+		[self removeFromSuperview];
+	}];
+	
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_MSEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		[self.delegate recipeEditorViewDidDismiss:self];
+	});
 }
 
 @end

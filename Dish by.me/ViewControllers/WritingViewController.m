@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "DMAPILoader.h"
-#import "UIViewController+Dim.h"
+#import "UIResponder+Dim.h"
 #import "UIButton+ActivityIndicatorView.h"
 #import "RecipeEditorView.h"
 
@@ -67,14 +67,9 @@ enum {
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self.view addSubview:_tableView];
 	
-//	_recipeView = [[RecipeView alloc] initWithTitle:NSLocalizedString( @"WRITE_RECIPE", @"" ) recipe:@"\n\n\n\n" closeButtonTarget:self closeButtonAction:@selector(closeButtonDidTouchUpInside)];
 	_recipeView = [[RecipeEditorView alloc] init];
-	_recipeView.recipeView.text = @"";
-	_recipeView.recipeView.editable = YES;
-	
-	_recipeViewOriginalFrame = _recipeView.frame;
-	_recipeViewOriginalFrame.origin.y = 20;
-	_recipeView.frame = CGRectMake( 7, -_recipeViewOriginalFrame.size.height, _recipeViewOriginalFrame.size.width, _recipeViewOriginalFrame.size.height );
+	_recipeView.delegate = self;
+	_recipeView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
 	
@@ -173,16 +168,24 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:recipeCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			UIButton *recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 50 )];
-			[recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-			[recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
-			[recipeButton setTitle:NSLocalizedString( @"WRITE_RECIPE", @"" ) forState:UIControlStateNormal];
-			[recipeButton setTitleColor:[UIColor colorWithHex:0x5B5046 alpha:1] forState:UIControlStateNormal];
-			[recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
-			recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-			recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
-			recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
-			[cell.contentView addSubview:recipeButton];
+			UIView *recipeButtonContainer = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 50 )];
+			[cell.contentView addSubview:recipeButtonContainer];
+			
+			_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 50 )];
+			[_recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[_recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
+			[_recipeButton setTitle:NSLocalizedString( @"WRITE_RECIPE", @"" ) forState:UIControlStateNormal];
+			[_recipeButton setTitleColor:[UIColor colorWithHex:0x5B5046 alpha:1] forState:UIControlStateNormal];
+			[_recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
+			_recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			_recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
+			_recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+			[recipeButtonContainer addSubview:_recipeButton];
+			
+			CALayer *maskLayer = [CALayer layer];
+			maskLayer.bounds = CGRectMake( 0, 0, 640, 100 );
+			maskLayer.contents = (id)[UIImage imageNamed:@"placeholder"].CGImage;
+			recipeButtonContainer.layer.mask = maskLayer;
 			
 			UIImageView *recipeBottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
 			recipeBottomLine.frame = CGRectMake( 0, 38, 320, 15 );
@@ -261,31 +264,17 @@ enum {
 
 - (void)recipeButtonDidTouchUpInside
 {
-	[self dim];
-	
-	[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
-	[[[UIApplication sharedApplication] keyWindow] addSubview:_recipeView];
-	
 	[UIView animateWithDuration:0.25 animations:^{
-		_recipeView.frame = _recipeViewOriginalFrame;
-	} completion:^(BOOL finished) {
-		[_recipeView.recipeView becomeFirstResponder];
+		_recipeButton.frame = CGRectMake( 0, 50, 320, 50 );
 	}];
+	
+	[_recipeView presentAfterDelay:0.1];
 }
 
-- (void)closeButtonDidTouchUpInside
+- (void)recipeEditorViewDidDismiss:(RecipeEditorView *)recipeEditorView
 {
-	[self undim];
-	
-	[_recipeView.recipeView resignFirstResponder];
-	
 	[UIView animateWithDuration:0.25 animations:^{
-		_recipeView.frame = CGRectMake( 7, -_recipeView.frame.size.height, _recipeView.frame.size.width, _recipeView.frame.size.height );
-		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 64 );
-		
-	} completion:^(BOOL finished) {
-		[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
-		[_recipeView removeFromSuperview];
+		_recipeButton.frame = CGRectMake( 0, 0, 320, 50 );
 	}];
 }
 

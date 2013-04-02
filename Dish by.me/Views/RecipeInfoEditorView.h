@@ -16,4 +16,6 @@
 	UITextField *_minutesInput;
 }
 
+@property (nonatomic) UIButton *checkButton;
+
 @end

@@ -9,7 +9,7 @@
 #import "SettingsViewController.h"
 #import "CurrentUser.h"
 #import <FacebookSDK/FacebookSDK.h>
-#import "UIViewController+Dim.h"
+#import "UIResponder+Dim.h"
 #import "AuthViewController.h"
 #import "AppDelegate.h"
 

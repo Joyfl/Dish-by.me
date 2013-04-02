@@ -8,11 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol RecipeEditorViewDelegate;
+
 @interface RecipeEditorView : UIView
 {
 	UIScrollView *_scrollView;
 }
 
+@property (nonatomic, weak) id<RecipeEditorViewDelegate> delegate;
 @property (nonatomic, strong) UITextView *recipeView;
+
+- (void)presentAfterDelay:(NSTimeInterval)delay;
+- (void)dismiss;
+
+@end
+
+
+@protocol RecipeEditorViewDelegate <NSObject>
+
+@optional
+- (void)recipeEditorViewWillDismiss:(RecipeEditorView *)recipeEditorView;
+- (void)recipeEditorViewDidDismiss:(RecipeEditorView *)recipeEditorView;
 
 @end
