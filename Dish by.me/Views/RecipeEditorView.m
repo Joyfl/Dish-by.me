@@ -8,6 +8,7 @@
 
 #import "RecipeEditorView.h"
 #import "RecipeInfoEditorView.h"
+#import "RecipeContentEditorView.h"
 #import "UIResponder+Dim.h"
 
 @implementation RecipeEditorView
@@ -17,12 +18,20 @@
 	self = [super initWithFrame:CGRectMake( 0, 0, UIScreenWidth, 451 )];
 	
 	_scrollView = [[UIScrollView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	_scrollView.pagingEnabled = YES;
 	[self addSubview:_scrollView];
 	
 	RecipeInfoEditorView *info = [[RecipeInfoEditorView alloc] init];
 	info.frame = CGRectMake( 6, 0, 308, 451 );
 	[info.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 	[_scrollView addSubview:info];
+	
+	RecipeContentEditorView *content = [[RecipeContentEditorView alloc] init];
+	content.frame = CGRectMake( 326, 0, 308, 451 );
+	[content.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+	[_scrollView addSubview:content];
+	
+	_scrollView.contentSize = CGSizeMake( 640, 451 );
 	
 	return self;
 }

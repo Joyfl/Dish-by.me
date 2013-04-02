@@ -45,6 +45,7 @@
 	_tableView.delegate = self;
 	_tableView.editing = YES;
 	_tableView.backgroundColor = [UIColor clearColor];
+	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self addSubview:_tableView];
 	
 	return self;

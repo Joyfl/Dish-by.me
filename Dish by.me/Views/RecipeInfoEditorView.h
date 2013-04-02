@@ -10,7 +10,6 @@
 
 @interface RecipeInfoEditorView : UIView <UITableViewDataSource, UITableViewDelegate>
 {
-	UIButton *_checkButton;
 	UITableView *_tableView;
 	UITextField *_servingsInput;
 	UITextField *_minutesInput;
