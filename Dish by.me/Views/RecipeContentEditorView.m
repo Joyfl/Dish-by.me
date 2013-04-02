@@ -15,7 +15,7 @@
 - (id)init
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
-	self.userInteractionEnabled = YES;
+	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)]];
 	
 	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_recipe.png"]];
 	[self addSubview:bgView];
@@ -39,12 +39,12 @@
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 14, 59, 280, 330 )];
 	[self addSubview:_scrollView];
 	
-	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 19, 18, 241, 186-100 )];
+	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 19, 18, 241, 186 )];
 	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 //	[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[_scrollView addSubview:_photoButton];
 	
-	_borderView = [[UIImageView alloc] initWithFrame:CGRectMake( 12, 11, 255, 200-100 )];
+	_borderView = [[UIImageView alloc] initWithFrame:CGRectMake( 12, 11, 255, 200 )];
 	_borderView.image = [[UIImage imageNamed:@"dish_tile_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )];
 	[_scrollView addSubview:_borderView];
 	
@@ -79,9 +79,29 @@
 	_scrollView.contentSize = CGSizeMake( 280, _contentInput.frame.origin.y + _contentInput.frame.size.height + 13 );
 }
 
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+	[UIView animateWithDuration:0.5 animations:^{
+		CGRect frame = _scrollView.frame;
+		frame.size.height = (UIScreenHeight - 100) / 2;
+		_scrollView.frame = frame;
+	}];
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
 	[self layoutScrollViewContent];
+}
+
+- (void)backgroundDidTap
+{
+	[self endEditing:YES];
+	CGRect frame = _scrollView.frame;
+	frame.size.height = 330;
+	_scrollView.frame = frame;
+	[UIView animateWithDuration:0.5 animations:^{
+		
+	}];
 }
 
 @end

@@ -11,6 +11,7 @@
 
 @interface RecipeContentEditorView : UIView <UITextViewDelegate>
 {
+	UIImageView *_bgView;
 	UIScrollView *_scrollView;
 	UIButton *_photoButton;
 	UIImageView *_borderView;
