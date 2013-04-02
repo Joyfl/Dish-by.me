@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Recipe.h"
 
 @interface RecipeInfoEditorView : UIView <UITableViewDataSource, UITableViewDelegate>
 {
@@ -15,6 +16,9 @@
 	UITextField *_minutesInput;
 }
 
+@property (nonatomic) Recipe *recipe;
 @property (nonatomic) UIButton *checkButton;
+
+- (id)initWithRecipe:(Recipe *)recipe;
 
 @end

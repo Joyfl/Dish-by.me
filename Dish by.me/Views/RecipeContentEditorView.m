@@ -12,10 +12,12 @@
 
 @implementation RecipeContentEditorView
 
-- (id)init
+- (id)initWithRecipe:(RecipeContent *)content
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
 	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)]];
+	
+	_content = content;
 	
 	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_recipe.png"]];
 	[self addSubview:bgView];
@@ -55,8 +57,9 @@
 	_contentInput.delegate = self;
 	_contentInput.editable = YES;
 	_contentInput.font = [UIFont boldSystemFontOfSize:12];
-	_contentInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
+	_contentInput.text = _content.content;
 	_contentInput.placeholder = NSLocalizedString( @"INPUT_CONTENT", nil );
+	_contentInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 	_contentInput.placeholderColor = [UIColor colorWithHex:0x958675 alpha:1];
 	_contentInput.backgroundColor = [UIColor clearColor];
 	_contentInput.contentInset = UIEdgeInsetsZero;
@@ -91,6 +94,7 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
 	[self layoutScrollViewContent];
+	_content.content = textView.text;
 }
 
 - (void)backgroundDidTap

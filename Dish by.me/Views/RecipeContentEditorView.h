@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "UIPlaceHolderTextView.h"
+#import "RecipeContent.h"
 
 @interface RecipeContentEditorView : UIView <UITextViewDelegate>
 {
@@ -19,6 +20,9 @@
 	UIPlaceHolderTextView *_contentInput;
 }
 
+@property (nonatomic) RecipeContent *content;
 @property (nonatomic) UIButton *checkButton;
+
+- (id)initWithRecipeContent:(RecipeContent *)content;
 
 @end

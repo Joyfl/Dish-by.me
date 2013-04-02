@@ -269,6 +269,9 @@
 		03DD16FE1709A3220064D022 /* IngredientCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16FD1709A3220064D022 /* IngredientCell.m */; };
 		03DD1701170A6D1F0064D022 /* RecipeContentEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD1700170A6D1F0064D022 /* RecipeContentEditorView.m */; };
 		03DD1704170A76B50064D022 /* UIPlaceholderTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD1703170A76B50064D022 /* UIPlaceholderTextView.m */; };
+		03DD1707170AC5480064D022 /* Recipe.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD1706170AC5480064D022 /* Recipe.m */; };
+		03DD170A170AC5AC0064D022 /* Ingredient.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD1709170AC5AC0064D022 /* Ingredient.m */; };
+		03DD170D170AC5D90064D022 /* RecipeContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD170C170AC5D90064D022 /* RecipeContent.m */; };
 		03E1976C16F8B4C40039EBF3 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 03E1976B16F8B4C30039EBF3 /* libz.dylib */; };
 		03E7603116D6BA7B004916B0 /* JLFoldableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E7602E16D6BA7B004916B0 /* JLFoldableView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		03E7603216D6BA7B004916B0 /* UIView+Screenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E7603016D6BA7B004916B0 /* UIView+Screenshot.m */; };
@@ -610,6 +613,12 @@
 		03DD1700170A6D1F0064D022 /* RecipeContentEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecipeContentEditorView.m; path = Views/RecipeContentEditorView.m; sourceTree = "<group>"; };
 		03DD1702170A76B50064D022 /* UIPlaceholderTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPlaceholderTextView.h; sourceTree = "<group>"; };
 		03DD1703170A76B50064D022 /* UIPlaceholderTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPlaceholderTextView.m; sourceTree = "<group>"; };
+		03DD1705170AC5480064D022 /* Recipe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Recipe.h; path = Models/Recipe.h; sourceTree = "<group>"; };
+		03DD1706170AC5480064D022 /* Recipe.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Recipe.m; path = Models/Recipe.m; sourceTree = "<group>"; };
+		03DD1708170AC5AC0064D022 /* Ingredient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ingredient.h; path = Models/Ingredient.h; sourceTree = "<group>"; };
+		03DD1709170AC5AC0064D022 /* Ingredient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Ingredient.m; path = Models/Ingredient.m; sourceTree = "<group>"; };
+		03DD170B170AC5D90064D022 /* RecipeContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecipeContent.h; path = Models/RecipeContent.h; sourceTree = "<group>"; };
+		03DD170C170AC5D90064D022 /* RecipeContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecipeContent.m; path = Models/RecipeContent.m; sourceTree = "<group>"; };
 		03E1976B16F8B4C30039EBF3 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		03E7602D16D6BA7B004916B0 /* JLFoldableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLFoldableView.h; sourceTree = "<group>"; };
 		03E7602E16D6BA7B004916B0 /* JLFoldableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLFoldableView.m; sourceTree = "<group>"; };
@@ -903,6 +912,12 @@
 				031AAB36160F23A1007B42B3 /* User.m */,
 				033BA84716F69D9200926F51 /* CurrentUser.h */,
 				033BA84816F69D9200926F51 /* CurrentUser.m */,
+				03DD1705170AC5480064D022 /* Recipe.h */,
+				03DD1706170AC5480064D022 /* Recipe.m */,
+				03DD1708170AC5AC0064D022 /* Ingredient.h */,
+				03DD1709170AC5AC0064D022 /* Ingredient.m */,
+				03DD170B170AC5D90064D022 /* RecipeContent.h */,
+				03DD170C170AC5D90064D022 /* RecipeContent.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1571,6 +1586,9 @@
 				03DD16FE1709A3220064D022 /* IngredientCell.m in Sources */,
 				03DD1701170A6D1F0064D022 /* RecipeContentEditorView.m in Sources */,
 				03DD1704170A76B50064D022 /* UIPlaceholderTextView.m in Sources */,
+				03DD1707170AC5480064D022 /* Recipe.m in Sources */,
+				03DD170A170AC5AC0064D022 /* Ingredient.m in Sources */,
+				03DD170D170AC5D90064D022 /* RecipeContent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

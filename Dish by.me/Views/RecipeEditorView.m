@@ -13,35 +13,38 @@
 
 @implementation RecipeEditorView
 
-- (id)init
+- (id)initWithRecipe:(Recipe *)recipe
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, UIScreenWidth, 451 )];
+	
+	_recipe = recipe;
+	if( _recipe )
+		_recipe = [[Recipe alloc] init];
 	
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 8, 0, 304, 451 )];
 	_scrollView.pagingEnabled = YES;
 	_scrollView.clipsToBounds = NO;
 	[self addSubview:_scrollView];
 	
-	RecipeInfoEditorView *info = [[RecipeInfoEditorView alloc] init];
-	info.frame = CGRectMake( 0, 0, 304, 451 );
-	[info.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-	[_scrollView addSubview:info];
+	_infoEditorView = [[RecipeInfoEditorView alloc] initWithRecipe:_recipe];
+	_infoEditorView.frame = CGRectMake( 0, 0, 304, 451 );
+	[_infoEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+	[_scrollView addSubview:_infoEditorView];
 	
-	NSInteger count = 5;
-	for( NSInteger i = 0; i < count; i++ )
+	_contentEditorViews = [NSMutableArray array];
+	for( NSInteger i = 0; i < _recipe.contents.count; i++ )
 	{
-		RecipeContentEditorView *content = [[RecipeContentEditorView alloc] init];
-		content.frame = CGRectMake( -2 + 304 * (i+1), 0, 308, 451 );
-		[content.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
-		[_scrollView addSubview:content];
+		RecipeContentEditorView *contentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
+		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 308, 451 );
+		[contentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+		[_scrollView addSubview:contentEditorView];
+		[_contentEditorViews addObject:contentEditorView];
 	}
 	
-	_scrollView.contentSize = CGSizeMake( 304 * (count+1), 451 );
+	_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), 451 );
 	
 	return self;
 }
-
-
 
 - (void)presentAfterDelay:(NSTimeInterval)delay
 {
@@ -56,7 +59,10 @@
 		[[[UIApplication sharedApplication] keyWindow] addSubview:self];
 		
 		self.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
-	} completion:nil];
+		
+	} completion:^(BOOL finished) {
+		[self animateRecipes];
+	}];
 }
 
 - (void)dismiss
@@ -81,6 +87,11 @@
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		[self.delegate recipeEditorViewDidDismiss:self];
 	});
+}
+
+- (void)animateRecipes
+{
+	
 }
 
 @end

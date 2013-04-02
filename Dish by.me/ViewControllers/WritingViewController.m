@@ -16,6 +16,7 @@
 #import "UIResponder+Dim.h"
 #import "UIButton+ActivityIndicatorView.h"
 #import "RecipeEditorView.h"
+#import "Recipe.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 
@@ -67,7 +68,7 @@ enum {
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self.view addSubview:_tableView];
 	
-	_recipeView = [[RecipeEditorView alloc] init];
+	_recipeView = [[RecipeEditorView alloc] initWithRecipe:nil];
 	_recipeView.delegate = self;
 	_recipeView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
 	

@@ -7,17 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Recipe.h"
+#import "RecipeInfoEditorView.h"
 
 @protocol RecipeEditorViewDelegate;
 
 @interface RecipeEditorView : UIView
 {
 	UIScrollView *_scrollView;
+	RecipeInfoEditorView *_infoEditorView;
+	NSMutableArray *_contentEditorViews;
 }
 
 @property (nonatomic, weak) id<RecipeEditorViewDelegate> delegate;
-@property (nonatomic, strong) UITextView *recipeView;
+@property (nonatomic, strong) UITextView *recipeView; // 없애기
+@property (nonatomic) Recipe *recipe;
 
+- (id)initWithRecipe:(Recipe *)recipe;
 - (void)presentAfterDelay:(NSTimeInterval)delay;
 - (void)dismiss;
 
