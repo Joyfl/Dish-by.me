@@ -52,10 +52,10 @@
 		// AccessToken is expired
 		if( errorCode == 2000 )
 		{
-			JLLog( @"AccessToken is expired" );
+			JLLog( @"AccessToken is expired: %@", [CurrentUser user].accessToken );
 			
 			[self extendAccessToken:^(id response) {
-				JLLog( @"AccessToken is extended" );
+				JLLog( @"AccessToken is extended: %@", [response objectForKey:@"access_token"] );
 				
 				[[CurrentUser user] setAccessToken:[response objectForKey:@"access_token"]];
 				[self api:api method:method parameters:parameters success:success failure:failure];

@@ -10,4 +10,26 @@
 
 @implementation Recipe
 
+- (id)init
+{
+	self = [super init];
+	_ingredients = [NSMutableArray array];
+	_contents = [NSMutableArray array];
+	
+	for( int i = 0; i < 10; i++ )
+	{
+		Ingredient *ingredient = [[Ingredient alloc] init];
+		ingredient.name = [NSString stringWithFormat:@"ingredient %d\n", i];
+		ingredient.amount = [NSString stringWithFormat:@"amount %d\n", i];
+		[_ingredients addObject:ingredient];
+		
+		RecipeContent *content = [[RecipeContent alloc] init];
+		content.photo = nil;
+		content.content = [NSString stringWithFormat:@"content %d\n", i];
+		[_contents addObject:content];
+	}
+	
+	return self;
+}
+
 @end

@@ -17,17 +17,16 @@
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, UIScreenWidth, 451 )];
 	
-	_recipe = recipe;
-	if( _recipe )
-		_recipe = [[Recipe alloc] init];
+	_recipe = recipe ? recipe : [[Recipe alloc] init];
 	
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 8, 0, 304, 451 )];
 	_scrollView.pagingEnabled = YES;
 	_scrollView.clipsToBounds = NO;
+	_scrollView.showsHorizontalScrollIndicator = NO;
 	[self addSubview:_scrollView];
 	
 	_infoEditorView = [[RecipeInfoEditorView alloc] initWithRecipe:_recipe];
-	_infoEditorView.frame = CGRectMake( 0, 0, 304, 451 );
+	_infoEditorView.frame = CGRectMake( -2, 0, 304, 451 );
 	[_infoEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 	[_scrollView addSubview:_infoEditorView];
 	

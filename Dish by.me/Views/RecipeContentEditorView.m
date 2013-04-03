@@ -12,7 +12,7 @@
 
 @implementation RecipeContentEditorView
 
-- (id)initWithRecipe:(RecipeContent *)content
+- (id)initWithRecipeContent:(RecipeContent *)content
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
 	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)]];

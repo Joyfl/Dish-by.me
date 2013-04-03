@@ -68,7 +68,7 @@
 		return 1;
 	
 	if( section == 1 )
-		return 3;
+		return _recipe.ingredients.count;
 	
 	return 1;
 }
