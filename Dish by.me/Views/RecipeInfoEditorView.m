@@ -19,11 +19,15 @@
 - (id)initWithRecipe:(Recipe *)recipe
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
-	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)]];
+	
+	UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
+	recognizer.delegate = self;
+	[self addGestureRecognizer:recognizer];
 	
 	_recipe = recipe;
 	
 	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_recipe.png"]];
+	bgView.userInteractionEnabled = YES;
 	[self addSubview:bgView];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 245, 0 )];
@@ -51,6 +55,11 @@
 	[self addSubview:_tableView];
 	
 	return self;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+	return ![[touch.view.class description] isEqualToString:@"UITableViewCellEditControl"];
 }
 
 - (void)backgroundDidTap

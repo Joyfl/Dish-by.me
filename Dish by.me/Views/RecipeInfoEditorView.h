@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Recipe.h"
 
-@interface RecipeInfoEditorView : UIView <UITableViewDataSource, UITableViewDelegate>
+@interface RecipeInfoEditorView : UIView <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 {
 	UITableView *_tableView;
 	UITextField *_servingsInput;
