@@ -16,11 +16,11 @@
 	self = [super initWithStyle:UITableViewCellStyleDefault	reuseIdentifier:reuseIdentifier];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	_minusView = [[UIImageView alloc] initWithFrame:CGRectMake( 6, 8, 20, 20 )];
+	_minusView = [[UIImageView alloc] initWithFrame:CGRectMake( 15, 8, 20, 20 )];
 	_minusView.image = [UIImage imageNamed:@"recipe_button_minus.png"];
 	_minusView.layer.shouldRasterize = YES;
 	
-	_ingredientInput = [[UITextField alloc] initWithFrame:CGRectMake( 0, 10, 154, 20 )];
+	_ingredientInput = [[UITextField alloc] initWithFrame:CGRectMake( 9, 10, 154, 20 )];
 	_ingredientInput.placeholder = NSLocalizedString( @"INGREDIENT", nil );
 	_ingredientInput.font = [UIFont boldSystemFontOfSize:13];
 	_ingredientInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
@@ -32,11 +32,11 @@
 	_ingredientInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
 	[self.contentView addSubview:_ingredientInput];
 	
-	UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 163, 8, 4, 20 )];
+	UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 170, 8, 4, 20 )];
 	separatorLineView.image = [UIImage imageNamed:@"recipe_line_thin_vertical.png"];
 	[self.contentView addSubview:separatorLineView];
 	
-	_amountInput = [[UITextField alloc] initWithFrame:CGRectMake( 167 + 5, 10, 59 - 5, 20 )];
+	_amountInput = [[UITextField alloc] initWithFrame:CGRectMake( 179, 10, 54, 20 )];
 	_amountInput.placeholder = NSLocalizedString( @"AMOUNT", nil );
 	_amountInput.font = [UIFont boldSystemFontOfSize:13];
 	_amountInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
@@ -49,7 +49,7 @@
 	_amountInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
 	[self.contentView addSubview:_amountInput];
 	
-	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( -27, 37, 255, 4 )];
+	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( -18, 37, 255, 4 )];
 	lineView.image = [UIImage imageNamed:@"recipe_line_thin.png"];
 	[self.contentView addSubview:lineView];
 	

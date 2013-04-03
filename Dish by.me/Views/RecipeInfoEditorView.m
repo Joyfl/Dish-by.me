@@ -11,7 +11,7 @@
 #import "UIButton+TouchAreaInsets.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define tableViewX _tableView.frame.origin.x
+#define tableViewX _tableView.frame.origin.x + 2
 #define tableViewY _tableView.frame.origin.y
 
 @implementation RecipeInfoEditorView
@@ -42,7 +42,7 @@
 	[self.checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
 	[self addSubview:self.checkButton];
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 21, 59, 255, 330 )];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, 330 )];
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
 	_tableView.editing = YES;
@@ -156,7 +156,7 @@
 			titleLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.9];
 			titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 			[titleLabel sizeToFit];
-			titleLabel.frame = CGRectMake( ( 255 - titleLabel.frame.size.width ) / 2, 118 - tableViewY, titleLabel.frame.size.width, titleLabel.frame.size.height );
+			titleLabel.frame = CGRectMake( ( _tableView.frame.size.width - titleLabel.frame.size.width ) / 2, 118 - tableViewY, titleLabel.frame.size.width, titleLabel.frame.size.height );
 			[cell.contentView addSubview:titleLabel];
 			
 			UIImageView *leftDecoView = [[UIImageView alloc] initWithFrame:CGRectMake( titleLabel.frame.origin.x - 23, 125 - tableViewY, 15, 7 )];
@@ -205,11 +205,11 @@
 			addButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 			addButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 			addButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-			addButton.contentEdgeInsets = UIEdgeInsetsMake( 0, 5, 5, 5 );
+			addButton.contentEdgeInsets = UIEdgeInsetsMake( 0, 15, 5, 5 );
 			addButton.titleEdgeInsets = UIEdgeInsetsMake( 0, 5, 0, 0 );
 			[cell.contentView addSubview:addButton];
 			
-			UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 5, 38, 255, 5 )];
+			UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 38, 255, 5 )];
 			lineView.image = [UIImage imageNamed:@"recipe_line.png"];
 			[cell.contentView addSubview:lineView];
 		}
