@@ -9,14 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "Recipe.h"
 #import "RecipeInfoEditorView.h"
+#import "RecipeContentEditorView.h"
 
 @protocol RecipeEditorViewDelegate;
 
-@interface RecipeEditorView : UIView
+@interface RecipeEditorView : UIView <UIScrollViewDelegate>
 {
 	UIScrollView *_scrollView;
 	RecipeInfoEditorView *_infoEditorView;
 	NSMutableArray *_contentEditorViews;
+	RecipeContentEditorView *_newContentEditorView;
 }
 
 @property (nonatomic, weak) id<RecipeEditorViewDelegate> delegate;

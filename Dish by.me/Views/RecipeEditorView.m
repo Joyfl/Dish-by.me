@@ -7,9 +7,8 @@
 //
 
 #import "RecipeEditorView.h"
-#import "RecipeInfoEditorView.h"
-#import "RecipeContentEditorView.h"
 #import "UIResponder+Dim.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation RecipeEditorView
 
@@ -20,6 +19,7 @@
 	_recipe = recipe ? recipe : [[Recipe alloc] init];
 	
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 8, 0, 304, 451 )];
+	_scrollView.delegate = self;
 	_scrollView.pagingEnabled = YES;
 	_scrollView.clipsToBounds = NO;
 	_scrollView.showsHorizontalScrollIndicator = NO;
@@ -41,6 +41,11 @@
 	}
 	
 	_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), 451 );
+	
+	_newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:nil];
+	_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
+	_newContentEditorView.layer.anchorPoint = CGPointMake( 0, 0.5 );
+	[self addSubview:_newContentEditorView];
 	
 	return self;
 }
@@ -91,6 +96,84 @@
 - (void)animateRecipes
 {
 	
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+	CGFloat offset = scrollView.contentOffset.x;
+	RecipeContentEditorView *lastView = [_contentEditorViews lastObject];
+	
+	// 추가되기 전 : _newContentEditorView
+	if( scrollView.scrollEnabled )
+	{
+		CGRect lastViewFrame = [scrollView convertRect:lastView.frame toView:self];
+		_newContentEditorView.frame = CGRectOffset( lastViewFrame, 304, 0 );
+		
+		if( offset >= _scrollView.contentSize.width - 304 )
+		{
+			CGFloat angle = M_PI * (offset - 304 * (_contentEditorViews.count + 1) ) / 608.0;
+			CATransform3D transform = CATransform3DMakeRotation( angle, 0, 1, 0 );
+			transform.m34 = -1 / 500.0;
+			transform.m14 = -angle / 500;
+			_newContentEditorView.layer.transform = transform;
+		}
+	}
+	
+	// 추가되는 중 : lastView
+	else
+	{
+		CGFloat angle = M_PI * (offset - 304 * (_contentEditorViews.count) ) / 608.0;
+		CATransform3D transform = CATransform3DMakeRotation( angle, 0, 1, 0 );
+		transform.m34 = -1 / 500.0;
+		transform.m14 = -angle / 500;
+		lastView.layer.transform = transform;
+	}
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+	CGFloat offset = scrollView.contentOffset.x;
+	if( offset >= _scrollView.contentSize.width - 304 + 60 )
+	{
+		JLLog( @"Added RecipeContentEditorView" );
+		
+		scrollView.scrollEnabled = NO;
+		
+		RecipeContent *newContent = [[RecipeContent alloc] init];
+		[_recipe.contents addObject:newContent];
+		
+		RecipeContentEditorView *newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:newContent];
+		[newContentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+		newContentEditorView.layer.anchorPoint = CGPointMake( 0, 0.5 );
+		newContentEditorView.layer.transform = _newContentEditorView.layer.transform;
+		newContentEditorView.frame = CGRectMake( 304 * _recipe.contents.count, 0, 304, 451 );
+		_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), 451 );
+		[_scrollView addSubview:newContentEditorView];
+		
+		[_contentEditorViews addObject:newContentEditorView];
+		
+		_newContentEditorView.layer.transform = CATransform3DIdentity;
+		_newContentEditorView.frame = CGRectMake( UIScreenWidth, 0, 304, 451 );
+	}
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+	if( !scrollView.scrollEnabled )
+	{
+		scrollView.scrollEnabled = NO;
+		
+		RecipeContentEditorView *lastAddedContentEditorView = [_contentEditorViews lastObject];
+		[scrollView setContentOffset:lastAddedContentEditorView.frame.origin animated:YES];
+	}
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+	if( !scrollView.scrollEnabled )
+	{
+		scrollView.scrollEnabled = YES;
+	}
 }
 
 @end

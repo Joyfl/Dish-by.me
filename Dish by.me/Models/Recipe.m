@@ -16,7 +16,7 @@
 	self.ingredients = [NSMutableArray array];
 	self.contents = [NSMutableArray array];
 	
-	for( int i = 0; i < 10; i++ )
+	for( int i = 0; i < 1; i++ )
 	{
 		Ingredient *ingredient = [[Ingredient alloc] init];
 		ingredient.name = [NSString stringWithFormat:@"ingredient %d", i];
