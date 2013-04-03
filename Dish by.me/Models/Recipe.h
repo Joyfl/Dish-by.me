@@ -14,7 +14,7 @@
 
 @property (nonatomic, assign) NSInteger servings;
 @property (nonatomic, assign) NSInteger minutes;
-@property (nonatomic, assign) NSMutableArray *ingredients;
-@property (nonatomic, assign) NSMutableArray *contents;
+@property (nonatomic, strong) NSMutableArray *ingredients;
+@property (nonatomic, strong) NSMutableArray *contents;
 
 @end

@@ -13,19 +13,19 @@
 - (id)init
 {
 	self = [super init];
-	_ingredients = [NSMutableArray array];
-	_contents = [NSMutableArray array];
+	self.ingredients = [NSMutableArray array];
+	self.contents = [NSMutableArray array];
 	
 	for( int i = 0; i < 10; i++ )
 	{
 		Ingredient *ingredient = [[Ingredient alloc] init];
-		ingredient.name = [NSString stringWithFormat:@"ingredient %d\n", i];
-		ingredient.amount = [NSString stringWithFormat:@"amount %d\n", i];
+		ingredient.name = [NSString stringWithFormat:@"ingredient %d", i];
+		ingredient.amount = [NSString stringWithFormat:@"amount %d", i];
 		[_ingredients addObject:ingredient];
 		
 		RecipeContent *content = [[RecipeContent alloc] init];
 		content.photo = nil;
-		content.content = [NSString stringWithFormat:@"content %d\n", i];
+		content.content = [NSString stringWithFormat:@"content %d", i];
 		[_contents addObject:content];
 	}
 	
