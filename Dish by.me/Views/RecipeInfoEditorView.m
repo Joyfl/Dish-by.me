@@ -19,7 +19,7 @@
 - (id)initWithRecipe:(Recipe *)recipe
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
-	self.userInteractionEnabled = YES;
+	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)]];
 	
 	_recipe = recipe;
 	
@@ -51,6 +51,14 @@
 	[self addSubview:_tableView];
 	
 	return self;
+}
+
+- (void)backgroundDidTap
+{
+	[self endEditing:YES];
+	CGRect frame = _tableView.frame;
+	frame.size.height = 330;
+	_tableView.frame = frame;
 }
 
 
@@ -173,10 +181,9 @@
 		if( !cell )
 		{
 			cell = [[IngredientCell alloc] initWithReuseIdentifier:ingredientCellId];
-			cell.backgroundColor = [UIColor clearColor];
-			
-			
 		}
+		
+		[cell setIngredient:[_recipe.ingredients objectAtIndex:indexPath.row] atIndexPath:indexPath];
 		
 		return cell;
 	}

@@ -103,9 +103,6 @@
 	CGRect frame = _scrollView.frame;
 	frame.size.height = 330;
 	_scrollView.frame = frame;
-	[UIView animateWithDuration:0.5 animations:^{
-		
-	}];
 }
 
 @end

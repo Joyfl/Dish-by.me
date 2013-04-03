@@ -7,15 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Ingredient.h"
 
 @interface IngredientCell : UITableViewCell
 {
 	UIImageView *_minusView;
 }
 
-@property (nonatomic, strong) UITextField *ingredientInput;
-@property (nonatomic, strong) UITextField *amountInput;
+@property (nonatomic, readonly) Ingredient *ingredient;
+@property (nonatomic, readonly) UITextField *ingredientInput;
+@property (nonatomic, readonly) UITextField *amountInput;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
+- (void)setIngredient:(Ingredient *)ingredient atIndexPath:(NSIndexPath *)indexPath;
 
 @end

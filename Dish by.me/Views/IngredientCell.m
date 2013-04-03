@@ -20,34 +20,34 @@
 	_minusView.image = [UIImage imageNamed:@"recipe_button_minus.png"];
 	_minusView.layer.shouldRasterize = YES;
 	
-	self.ingredientInput = [[UITextField alloc] initWithFrame:CGRectMake( 0, 10, 154, 20 )];
-	self.ingredientInput.placeholder = NSLocalizedString( @"INGREDIENT", nil );
-	self.ingredientInput.font = [UIFont boldSystemFontOfSize:13];
-	self.ingredientInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
-	[self.ingredientInput setValue:[UIColor colorWithHex:0x958675 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
-	self.ingredientInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-	self.ingredientInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-	self.ingredientInput.layer.shadowOpacity = 0.7;
-	self.ingredientInput.layer.shadowRadius = 0;
-	self.ingredientInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
-	[self.contentView addSubview:self.ingredientInput];
+	_ingredientInput = [[UITextField alloc] initWithFrame:CGRectMake( 0, 10, 154, 20 )];
+	_ingredientInput.placeholder = NSLocalizedString( @"INGREDIENT", nil );
+	_ingredientInput.font = [UIFont boldSystemFontOfSize:13];
+	_ingredientInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
+	[_ingredientInput setValue:[UIColor colorWithHex:0x958675 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
+	_ingredientInput.layer.shadowColor = [UIColor whiteColor].CGColor;
+	_ingredientInput.layer.shadowOffset = CGSizeMake( 0, 1 );
+	_ingredientInput.layer.shadowOpacity = 0.7;
+	_ingredientInput.layer.shadowRadius = 0;
+	_ingredientInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+	[self.contentView addSubview:_ingredientInput];
 	
 	UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 163, 8, 4, 20 )];
 	separatorLineView.image = [UIImage imageNamed:@"recipe_line_thin_vertical.png"];
 	[self.contentView addSubview:separatorLineView];
 	
-	self.amountInput = [[UITextField alloc] initWithFrame:CGRectMake( 167 + 5, 10, 59 - 5, 20 )];
-	self.amountInput.placeholder = NSLocalizedString( @"AMOUNT", nil );
-	self.amountInput.font = [UIFont boldSystemFontOfSize:13];
-	self.amountInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
-	[self.amountInput setValue:[UIColor colorWithHex:0x958675 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
-	self.amountInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-	self.amountInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-	self.amountInput.layer.shadowOpacity = 0.7;
-	self.amountInput.layer.shadowRadius = 0;
-	self.amountInput.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-	self.amountInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
-	[self.contentView addSubview:self.amountInput];
+	_amountInput = [[UITextField alloc] initWithFrame:CGRectMake( 167 + 5, 10, 59 - 5, 20 )];
+	_amountInput.placeholder = NSLocalizedString( @"AMOUNT", nil );
+	_amountInput.font = [UIFont boldSystemFontOfSize:13];
+	_amountInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
+	[_amountInput setValue:[UIColor colorWithHex:0x958675 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
+	_amountInput.layer.shadowColor = [UIColor whiteColor].CGColor;
+	_amountInput.layer.shadowOffset = CGSizeMake( 0, 1 );
+	_amountInput.layer.shadowOpacity = 0.7;
+	_amountInput.layer.shadowRadius = 0;
+	_amountInput.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+	_amountInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+	[self.contentView addSubview:_amountInput];
 	
 	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( -27, 37, 255, 4 )];
 	lineView.image = [UIImage imageNamed:@"recipe_line_thin.png"];
@@ -58,9 +58,6 @@
 
 - (void)updateEditControl
 {
-	if( _minusView.superview )
-		return;
-	
 	for( UIView *subview in self.subviews )
 	{
 		if( [NSStringFromClass( subview.class ) isEqualToString:@"UITableViewCellEditControl"] )
@@ -95,6 +92,14 @@
 		CGAffineTransform transform = CGAffineTransformMakeRotation( angle );
 		_minusView.transform = transform;
 	}];
+}
+
+- (void)setIngredient:(Ingredient *)ingredient atIndexPath:(NSIndexPath *)indexPath
+{
+	_ingredient = ingredient;
+	_ingredientInput.text = _ingredient.name;
+	_amountInput.text = _ingredient.amount;
+	[self updateEditControl];
 }
 
 @end
