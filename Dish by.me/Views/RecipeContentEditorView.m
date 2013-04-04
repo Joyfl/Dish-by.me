@@ -43,7 +43,6 @@
 	
 	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 19, 18, 241, 186 )];
 	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-//	[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[_photoButton addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 	[_scrollView addSubview:_photoButton];
 	
@@ -54,7 +53,7 @@
 	_lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"recipe_line_thin.png"]];
 	[_scrollView addSubview:_lineView];
 	
-	_contentInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 0, 0, 250, 0 )];
+	_contentInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 0, 0, 250, 100 )];
 	_contentInput.delegate = self;
 	_contentInput.editable = YES;
 	_contentInput.font = [UIFont boldSystemFontOfSize:12];
@@ -78,14 +77,18 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-	[self layoutScrollViewContent];
+	if( [keyPath isEqualToString:@"frame"] )
+	{
+		_content.photo = [_photoButton imageForState:UIControlStateNormal];
+		[self layoutScrollViewContent];
+	}
 }
 
 - (void)layoutScrollViewContent
 {
 	_borderView.frame = CGRectInset( _photoButton.frame, -7, -7 );
 	_lineView.frame = CGRectMake( 12, _photoButton.frame.origin.y + _photoButton.frame.size.height + 13, 255, 4 );
-	_contentInput.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, _contentInput.contentSize.height );
+	_contentInput.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, MAX( _contentInput.contentSize.height, 100 ) );
 	_scrollView.contentSize = CGSizeMake( 280, _contentInput.frame.origin.y + _contentInput.frame.size.height + 13 );
 }
 

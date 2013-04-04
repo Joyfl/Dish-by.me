@@ -226,10 +226,10 @@
 			if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
 				UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
 			
+			[photoButton setImage:image forState:UIControlStateNormal];
 			CGRect frame = photoButton.frame;
 			frame.size.height = floorf( 241 * image.size.height / image.size.width );
 			photoButton.frame = frame;
-			[photoButton setBackgroundImage:image forState:UIControlStateNormal];
 		}];
 		
 		[self presentViewController:picker animated:YES completion:nil];
