@@ -190,6 +190,7 @@
 		if( !cell )
 		{
 			cell = [[IngredientCell alloc] initWithReuseIdentifier:ingredientCellId];
+			[cell.ingredientInput addTarget:self action:@selector(ingredientInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
 		}
 		
 		[cell setIngredient:[_recipe.ingredients objectAtIndex:indexPath.row] atIndexPath:indexPath];
@@ -242,6 +243,15 @@
 	[tableView beginUpdates];
 	[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	[tableView endUpdates];
+}
+
+- (void)ingredientInputDidBeginEditing
+{
+	[UIView animateWithDuration:0.5 animations:^{
+		CGRect frame = _tableView.frame;
+		frame.size.height = (UIScreenHeight - 120) / 2;
+		_tableView.frame = frame;
+	}];
 }
 
 - (void)addButtonDidTouchUpInside

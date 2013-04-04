@@ -107,6 +107,8 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+	[scrollView endEditing:YES];
+	
 	CGFloat offset = scrollView.contentOffset.x;
 	RecipeContentEditorView *lastView = [_contentEditorViews lastObject];
 	
