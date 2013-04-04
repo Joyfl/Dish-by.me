@@ -27,7 +27,7 @@
 	[self.view addSubview:_scrollView];
 	
 	_infoEditorView = [[RecipeInfoEditorView alloc] initWithRecipe:_recipe];
-	_infoEditorView.frame = CGRectMake( -2, 0, 304, 451 );
+	_infoEditorView.frame = CGRectMake( -2, 0, 302, 451 );
 	[_infoEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 	[_scrollView addSubview:_infoEditorView];
 	
@@ -35,8 +35,9 @@
 	for( NSInteger i = 0; i < _recipe.contents.count; i++ )
 	{
 		RecipeContentEditorView *contentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
-		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, 451 );
+		contentEditorView.frame = CGRectMake( 302 * ( i + 1 ), 0, 304, 451 );
 		[contentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+		[contentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 		[_scrollView addSubview:contentEditorView];
 		[_contentEditorViews addObject:contentEditorView];
 	}
@@ -100,6 +101,10 @@
 	
 }
 
+
+#pragma mark -
+#pragma mark UIScrollViewDelegate
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 	CGFloat offset = scrollView.contentOffset.x;
@@ -146,6 +151,7 @@
 		
 		RecipeContentEditorView *newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:newContent];
 		[newContentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+		[newContentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 		newContentEditorView.layer.anchorPoint = CGPointMake( 0, 0.5 );
 		newContentEditorView.layer.transform = _newContentEditorView.layer.transform;
 		newContentEditorView.frame = CGRectMake( 304 * _recipe.contents.count, 0, 304, 451 );
@@ -176,6 +182,58 @@
 	{
 		scrollView.scrollEnabled = YES;
 	}
+}
+
+
+#pragma mark -
+#pragma mark RecipeContentEditorView
+
+- (void)photoButtonDidTouchUpInside:(UIButton *)photoButton
+{
+	[[[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", @"" ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"TAKE_A_PHOTO", @"" ), NSLocalizedString( @"FROM_LIBRARY", @"" )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+		
+		UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+		
+		if( buttonIndex == 0 ) // Camera
+		{
+			@try
+			{
+				picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+			}
+			@catch( NSException *exception )
+			{
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_NO_SUPPORT_CAMERA", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
+				return;
+			}
+			
+			picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+		}
+		else if( buttonIndex == 1 ) // Album
+		{
+			picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+		}
+		else
+		{
+			return;
+		}
+		
+		[picker setFinishBlock:^(UIImagePickerController *picker, NSDictionary *info) {
+			[picker dismissViewControllerAnimated:YES completion:nil];
+			
+			UIImage *image = [Utils scaleAndRotateImage:[info objectForKey:@"UIImagePickerControllerOriginalImage"]];
+			
+			// 카메라로 찍은 경우 앨범에 저장
+			if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
+				UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
+			
+			CGRect frame = photoButton.frame;
+			frame.size.height = floorf( 241 * image.size.height / image.size.width );
+			photoButton.frame = frame;
+			[photoButton setBackgroundImage:image forState:UIControlStateNormal];
+		}];
+		
+		[self presentViewController:picker animated:YES completion:nil];
+	}] showInView:self.view];
 }
 
 @end

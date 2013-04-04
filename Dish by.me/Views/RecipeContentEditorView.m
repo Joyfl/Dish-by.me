@@ -44,9 +44,10 @@
 	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 19, 18, 241, 186 )];
 	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 //	[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[_photoButton addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 	[_scrollView addSubview:_photoButton];
 	
-	_borderView = [[UIImageView alloc] initWithFrame:CGRectMake( 12, 11, 255, 200 )];
+	_borderView = [[UIImageView alloc] init]; //WithFrame:CGRectMake( 12, 11, 255, 200 )];
 	_borderView.image = [[UIImage imageNamed:@"dish_tile_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )];
 	[_scrollView addSubview:_borderView];
 	
@@ -75,8 +76,14 @@
 	return self;
 }
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+	[self layoutScrollViewContent];
+}
+
 - (void)layoutScrollViewContent
 {
+	_borderView.frame = CGRectInset( _photoButton.frame, -7, -7 );
 	_lineView.frame = CGRectMake( 12, _photoButton.frame.origin.y + _photoButton.frame.size.height + 13, 255, 4 );
 	_contentInput.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, _contentInput.contentSize.height );
 	_scrollView.contentSize = CGSizeMake( 280, _contentInput.frame.origin.y + _contentInput.frame.size.height + 13 );

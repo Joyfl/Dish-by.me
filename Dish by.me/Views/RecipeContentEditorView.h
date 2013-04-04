@@ -10,11 +10,12 @@
 #import "UIPlaceHolderTextView.h"
 #import "RecipeContent.h"
 
-@interface RecipeContentEditorView : UIView <UITextViewDelegate>
+@class RecipeEditorViewController;
+
+@interface RecipeContentEditorView : UIView <UIImagePickerControllerDelegate, UITextViewDelegate>
 {
 	UIImageView *_bgView;
 	UIScrollView *_scrollView;
-	UIButton *_photoButton;
 	UIImageView *_borderView;
 	UIImageView *_lineView;
 	UIPlaceHolderTextView *_contentInput;
@@ -22,6 +23,8 @@
 
 @property (nonatomic) RecipeContent *content;
 @property (nonatomic) UIButton *checkButton;
+@property (nonatomic) UIButton *photoButton;
+@property (nonatomic, weak) RecipeEditorViewController *recipeEditorViewController;
 
 - (id)initWithRecipeContent:(RecipeContent *)content;
 
