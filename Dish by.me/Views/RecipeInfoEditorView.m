@@ -120,7 +120,7 @@
 			[cell.contentView addSubview:knifeIconView];
 			
 			_servingsInput = [[UITextField alloc] initWithFrame:CGRectMake( 47 - tableViewX, 72 - tableViewY, 100, 30 )];
-			_servingsInput.text = [NSString stringWithFormat:@"%d", _recipe.servings];
+			_servingsInput.text = _recipe.servings ? [NSString stringWithFormat:@"%d", _recipe.servings] : nil;
 			_servingsInput.placeholder = NSLocalizedString( @"HOW_MANY_SERVINGS", nil );
 			_servingsInput.font = [UIFont boldSystemFontOfSize:12];
 			_servingsInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
@@ -141,7 +141,7 @@
 			[cell.contentView addSubview:clockIconView];
 			
 			_minutesInput = [[UITextField alloc] initWithFrame:CGRectMake( 188 - tableViewX, 72 - tableViewY, 100, 30 )];
-			_minutesInput.text = [NSString stringWithFormat:@"%d", _recipe.minutes];
+			_minutesInput.text = _recipe.minutes ? [NSString stringWithFormat:@"%d", _recipe.minutes] : nil;
 			_minutesInput.placeholder = NSLocalizedString( @"HOW_MANY_MINUTES", nil );
 			_minutesInput.font = [UIFont boldSystemFontOfSize:12];
 			_minutesInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
