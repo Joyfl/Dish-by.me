@@ -27,15 +27,15 @@
 	[self.view addSubview:_scrollView];
 	
 	_infoEditorView = [[RecipeInfoEditorView alloc] initWithRecipe:_recipe];
-	_infoEditorView.frame = CGRectMake( -2, 0, 302, 451 );
+	_infoEditorView.frame = CGRectMake( -2, 0, 304, 451 );
 	[_infoEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 	[_scrollView addSubview:_infoEditorView];
 	
 	_contentEditorViews = [NSMutableArray array];
-	for( NSInteger i = 0; i < _recipe.contents.count; i++ )
+	for( NSInteger i = 0; i < _recipe.contents.count ; i++ )
 	{
 		RecipeContentEditorView *contentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
-		contentEditorView.frame = CGRectMake( 302 * ( i + 1 ), 0, 304, 451 );
+		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, 451 );
 		[contentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 		[contentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 		[_scrollView addSubview:contentEditorView];
@@ -154,7 +154,7 @@
 		[newContentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 		newContentEditorView.layer.anchorPoint = CGPointMake( 0, 0.5 );
 		newContentEditorView.layer.transform = _newContentEditorView.layer.transform;
-		newContentEditorView.frame = CGRectMake( 304 * _recipe.contents.count, 0, 304, 451 );
+		newContentEditorView.frame = CGRectMake( -2 + 304 * _recipe.contents.count, 0, 304, 451 );
 		_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), 451 );
 		[_scrollView addSubview:newContentEditorView];
 		
