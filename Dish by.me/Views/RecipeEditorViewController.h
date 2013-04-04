@@ -10,10 +10,11 @@
 #import "Recipe.h"
 #import "RecipeInfoEditorView.h"
 #import "RecipeContentEditorView.h"
+#import "GAI.h"
 
 @protocol RecipeEditorViewDelegate;
 
-@interface RecipeEditorView : UIView <UIScrollViewDelegate>
+@interface RecipeEditorViewController : GAITrackedViewController <UIScrollViewDelegate>
 {
 	UIScrollView *_scrollView;
 	RecipeInfoEditorView *_infoEditorView;
@@ -35,7 +36,7 @@
 @protocol RecipeEditorViewDelegate <NSObject>
 
 @optional
-- (void)recipeEditorViewWillDismiss:(RecipeEditorView *)recipeEditorView;
-- (void)recipeEditorViewDidDismiss:(RecipeEditorView *)recipeEditorView;
+- (void)recipeEditorViewWillDismiss:(RecipeEditorViewController *)recipeEditorView;
+- (void)recipeEditorViewDidDismiss:(RecipeEditorViewController *)recipeEditorView;
 
 @end

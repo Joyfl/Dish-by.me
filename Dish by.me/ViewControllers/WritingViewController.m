@@ -15,7 +15,7 @@
 #import "DMAPILoader.h"
 #import "UIResponder+Dim.h"
 #import "UIButton+ActivityIndicatorView.h"
-#import "RecipeEditorView.h"
+#import "RecipeEditorViewController.h"
 #import "Recipe.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
@@ -68,9 +68,9 @@ enum {
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self.view addSubview:_tableView];
 	
-	_recipeView = [[RecipeEditorView alloc] initWithRecipe:nil];
+	_recipeView = [[RecipeEditorViewController alloc] initWithRecipe:nil];
 	_recipeView.delegate = self;
-	_recipeView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
+	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
 	
@@ -272,7 +272,7 @@ enum {
 	[_recipeView presentAfterDelay:0.1];
 }
 
-- (void)recipeEditorViewDidDismiss:(RecipeEditorView *)recipeEditorView
+- (void)recipeEditorViewDidDismiss:(RecipeEditorViewController *)recipeEditorView
 {
 	[UIView animateWithDuration:0.25 animations:^{
 		_recipeButton.frame = CGRectMake( 0, 0, 320, 50 );

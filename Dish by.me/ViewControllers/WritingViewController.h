@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
-#import "RecipeEditorView.h"
+#import "RecipeEditorViewController.h"
 
 @class RecipeView;
 
@@ -24,7 +24,7 @@
 	UITextView *_messageInput;
 	UIButton *_recipeButton;
 	
-	RecipeEditorView *_recipeView;
+	RecipeEditorViewController *_recipeView;
 	
 	NSInteger _originalDishId;
 	NSInteger _photoHeight;

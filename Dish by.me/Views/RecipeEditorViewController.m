@@ -6,15 +6,16 @@
 //  Copyright (c) 2013년 Joyfl. All rights reserved.
 //
 
-#import "RecipeEditorView.h"
+#import "RecipeEditorViewController.h"
 #import "UIResponder+Dim.h"
 #import <QuartzCore/QuartzCore.h>
 
-@implementation RecipeEditorView
+@implementation RecipeEditorViewController
 
 - (id)initWithRecipe:(Recipe *)recipe
 {
-	self = [super initWithFrame:CGRectMake( 0, 0, UIScreenWidth, 451 )];
+	self = [super init];
+	self.trackedViewName = [self.class description];
 	
 	_recipe = recipe ? recipe : [[Recipe alloc] init];
 	
@@ -23,7 +24,7 @@
 	_scrollView.pagingEnabled = YES;
 	_scrollView.clipsToBounds = NO;
 	_scrollView.showsHorizontalScrollIndicator = NO;
-	[self addSubview:_scrollView];
+	[self.view addSubview:_scrollView];
 	
 	_infoEditorView = [[RecipeInfoEditorView alloc] initWithRecipe:_recipe];
 	_infoEditorView.frame = CGRectMake( -2, 0, 304, 451 );
@@ -45,7 +46,7 @@
 	_newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:nil];
 	_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
 	_newContentEditorView.layer.anchorPoint = CGPointMake( 0, 0.5 );
-	[self addSubview:_newContentEditorView];
+	[self.view addSubview:_newContentEditorView];
 	
 	return self;
 }
@@ -56,16 +57,17 @@
 	
 	[self dimWithDuration:duration completion:nil];
 	
-	self.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
+	self.view.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
 	
 	[UIView animateWithDuration:duration delay:delay options:0 animations:^{
 		[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
-		[[[UIApplication sharedApplication] keyWindow] addSubview:self];
+		[[[UIApplication sharedApplication] keyWindow] addSubview:self.view];
 		
-		self.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
+		self.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 + 10 );
 		
 	} completion:^(BOOL finished) {
 		[self animateRecipes];
+		[[[UIApplication sharedApplication] keyWindow] addSubview:self.view];
 	}];
 }
 
@@ -76,15 +78,15 @@
 	if( [self.delegate respondsToSelector:@selector(recipeEditorViewWillDismiss:)] )
 		[self.delegate recipeEditorViewWillDismiss:self];
 	
-	[self endEditing:YES];
+	[self.view endEditing:YES];
 	[self undimWithDuration:duration completion:nil];
 	
 	[UIView animateWithDuration:duration animations:^{
-		self.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
+		self.view.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
 		
 	} completion:^(BOOL finished) {
 		[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
-		[self removeFromSuperview];
+		[self.view removeFromSuperview];
 	}];
 	
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_MSEC));
@@ -106,7 +108,7 @@
 	// 추가되기 전 : _newContentEditorView
 	if( scrollView.scrollEnabled )
 	{
-		CGRect lastViewFrame = [scrollView convertRect:lastView.frame toView:self];
+		CGRect lastViewFrame = [scrollView convertRect:lastView.frame toView:self.view];
 		_newContentEditorView.frame = CGRectOffset( lastViewFrame, 304, 0 );
 		
 		if( offset >= _scrollView.contentSize.width - 304 )
