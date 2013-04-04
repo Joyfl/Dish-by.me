@@ -216,6 +216,7 @@
 			addButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
 			addButton.contentEdgeInsets = UIEdgeInsetsMake( 0, 15, 5, 5 );
 			addButton.titleEdgeInsets = UIEdgeInsetsMake( 0, 5, 0, 0 );
+			[addButton addTarget:self action:@selector(addButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:addButton];
 			
 			UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 38, 255, 5 )];
@@ -232,6 +233,18 @@
 	if( indexPath.section == 1 )
 		return YES;
 	return NO;
+}
+
+- (void)addButtonDidTouchUpInside
+{
+	Ingredient *ingredient = [[Ingredient alloc] init];
+	[_recipe.ingredients addObject:ingredient];
+	
+	[_tableView beginUpdates];
+	[_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_recipe.ingredients.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[_tableView endUpdates];
+	
+	[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
 @end
