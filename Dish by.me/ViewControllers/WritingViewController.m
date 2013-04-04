@@ -265,6 +265,8 @@ enum {
 
 - (void)recipeButtonDidTouchUpInside
 {
+	[self backgroundDidTap];
+	
 	[UIView animateWithDuration:0.25 animations:^{
 		_recipeButton.frame = CGRectMake( 0, 50, 320, 50 );
 	}];
