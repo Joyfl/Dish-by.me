@@ -34,7 +34,7 @@
 	for( NSInteger i = 0; i < _recipe.contents.count; i++ )
 	{
 		RecipeContentEditorView *contentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
-		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 308, 451 );
+		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, 451 );
 		[contentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 		[_scrollView addSubview:contentEditorView];
 		[_contentEditorViews addObject:contentEditorView];
