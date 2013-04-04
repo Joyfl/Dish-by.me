@@ -235,13 +235,22 @@
 	return NO;
 }
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	[_recipe.ingredients removeObjectAtIndex:indexPath.row];
+	
+	[tableView beginUpdates];
+	[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+	[tableView endUpdates];
+}
+
 - (void)addButtonDidTouchUpInside
 {
 	Ingredient *ingredient = [[Ingredient alloc] init];
 	[_recipe.ingredients addObject:ingredient];
 	
 	[_tableView beginUpdates];
-	[_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_recipe.ingredients.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationAutomatic];
+	[_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_recipe.ingredients.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
 	[_tableView endUpdates];
 	
 	[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionNone animated:YES];
