@@ -613,7 +613,7 @@ enum {
 			//
 			// Recipe
 			//
-			if( _dish.recipe.length > 0 )
+			if( ![_dish.recipe isEqual:[NSNull null]] && _dish.recipe.length > 0 )
 			{
 				UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
 				dotLineView.frame = CGRectMake( 8, messageBoxBottomY + 18, 304, 2 );
