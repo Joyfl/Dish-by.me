@@ -15,12 +15,19 @@
 - (id)initWithRecipeContent:(RecipeContent *)content
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
+	self.layer.anchorPoint = CGPointMake( 0, 0.5 );
 	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)]];
 	
 	_content = content;
 	
 	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_recipe.png"]];
 	[self addSubview:bgView];
+	
+	self.grabButton = [[UIButton alloc] initWithFrame:CGRectMake( 17, 24, 20, 20 )];
+	self.grabButton.adjustsImageWhenHighlighted = NO;
+	self.grabButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
+	[self.grabButton setBackgroundImage:[UIImage imageNamed:@"recipe_reorder_control.png"] forState:UIControlStateNormal];
+	[self addSubview:self.grabButton];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 245, 0 )];
 	titleLabel.text = NSLocalizedString( @"WRITE_RECIPE", nil );
@@ -30,7 +37,7 @@
 	titleLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.9];
 	titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[titleLabel sizeToFit];
-	titleLabel.frame = CGRectOffset( titleLabel.frame, 20, 22 );
+	titleLabel.frame = CGRectOffset( titleLabel.frame, 46, 22 );
 	[self addSubview:titleLabel];
 	
 	self.checkButton = [[UIButton alloc] initWithFrame:CGRectMake( 270, 24, 20, 20 )];
@@ -46,7 +53,7 @@
 	[_photoButton addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
 	[_scrollView addSubview:_photoButton];
 	
-	_borderView = [[UIImageView alloc] init]; //WithFrame:CGRectMake( 12, 11, 255, 200 )];
+	_borderView = [[UIImageView alloc] init];
 	_borderView.image = [[UIImage imageNamed:@"dish_tile_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )];
 	[_scrollView addSubview:_borderView];
 	
@@ -91,6 +98,10 @@
 	_contentInput.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, MAX( _contentInput.contentSize.height, 100 ) );
 	_scrollView.contentSize = CGSizeMake( 280, _contentInput.frame.origin.y + _contentInput.frame.size.height + 13 );
 }
+
+
+#pragma mark -
+#pragma mark UITextViewDelegate
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {

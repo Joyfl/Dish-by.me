@@ -20,6 +20,7 @@
 	RecipeInfoEditorView *_infoEditorView;
 	NSMutableArray *_contentEditorViews;
 	RecipeContentEditorView *_newContentEditorView;
+	NSTimer *_pagingTimer;
 }
 
 @property (nonatomic, weak) id<RecipeEditorViewDelegate> delegate;

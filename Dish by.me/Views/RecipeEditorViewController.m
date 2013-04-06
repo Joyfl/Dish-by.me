@@ -36,6 +36,10 @@
 	{
 		RecipeContentEditorView *contentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
 		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, 451 );
+		contentEditorView.originalLocation = contentEditorView.frame.origin;
+		[contentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDown:touchEvent:) forControlEvents:UIControlEventTouchDown];
+		[contentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDrag:touchEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
+		[contentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 		[contentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 		[contentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 		[_scrollView addSubview:contentEditorView];
@@ -46,7 +50,6 @@
 	
 	_newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:nil];
 	_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
-	_newContentEditorView.layer.anchorPoint = CGPointMake( 0, 0.5 );
 	[self.view addSubview:_newContentEditorView];
 	
 	return self;
@@ -152,11 +155,14 @@
 		[_recipe.contents addObject:newContent];
 		
 		RecipeContentEditorView *newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:newContent];
+		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDown:touchEvent:) forControlEvents:UIControlEventTouchDown];
+		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDrag:touchEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
+		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 		[newContentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 		[newContentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-		newContentEditorView.layer.anchorPoint = CGPointMake( 0, 0.5 );
 		newContentEditorView.layer.transform = _newContentEditorView.layer.transform;
 		newContentEditorView.frame = CGRectMake( -2 + 304 * _recipe.contents.count, 0, 304, 451 );
+		newContentEditorView.originalLocation = newContentEditorView.frame.origin;
 		_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), 451 );
 		[_scrollView addSubview:newContentEditorView];
 		
@@ -189,6 +195,85 @@
 
 #pragma mark -
 #pragma mark RecipeContentEditorView
+
+- (void)grabButtonDidTouchDown:(UIButton *)grabButton touchEvent:(UIEvent *)touchEvent
+{
+	RecipeContentEditorView *editorView = (RecipeContentEditorView *)grabButton.superview;
+	[[UIApplication sharedApplication].keyWindow addSubview:editorView];
+	
+	CGPoint point = [touchEvent.allTouches.anyObject locationInView:[UIApplication sharedApplication].keyWindow];
+	editorView.center = CGPointMake( point.x - 27, editorView.center.y + self.view.frame.origin.y );
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		editorView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 1.02, 1.02 );
+		editorView.alpha = 0.9;
+	}];
+}
+
+- (void)grabButtonDidTouchDrag:(UIButton *)grabButton touchEvent:(UIEvent *)touchEvent
+{
+	RecipeContentEditorView *editorView = (RecipeContentEditorView *)grabButton.superview;
+	
+	CGPoint point = [touchEvent.allTouches.anyObject locationInView:[UIApplication sharedApplication].keyWindow];
+	editorView.center = CGPointMake( point.x - 27, editorView.center.y );
+	if( point.x < 20 )
+	{
+		if( !_pagingTimer )
+		{
+			_pagingTimer = [NSTimer timerWithTimeInterval:0.7 target:self selector:@selector(prevPage) userInfo:nil repeats:NO];
+			[[NSRunLoop mainRunLoop] addTimer:_pagingTimer forMode:NSDefaultRunLoopMode];
+		}
+	}
+	else if( point.x > 300 )
+	{
+		if( !_pagingTimer )
+		{
+			_pagingTimer = [NSTimer timerWithTimeInterval:0.7 target:self selector:@selector(nextPage) userInfo:nil repeats:NO];
+			[[NSRunLoop mainRunLoop] addTimer:_pagingTimer forMode:NSDefaultRunLoopMode];
+		}
+	}
+	else
+	{
+		[_pagingTimer invalidate];
+		_pagingTimer = nil;
+	}
+}
+
+- (void)grabButtonDidTouchUp:(UIButton *)grabButton
+{
+	RecipeContentEditorView *editorView = (RecipeContentEditorView *)grabButton.superview;
+	editorView.center = [[UIApplication sharedApplication].keyWindow convertPoint:editorView.center toView:_scrollView];
+	[_scrollView addSubview:editorView];
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		editorView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 1, 1 );
+		editorView.alpha = 1;
+		
+		CGRect frame = editorView.frame;
+		frame.origin = editorView.originalLocation;
+		editorView.frame = frame;
+	}];
+}
+
+- (void)prevPage
+{
+	if( _scrollView.contentOffset.x > 304 )
+	{
+		[_scrollView setContentOffset:CGPointMake( _scrollView.contentOffset.x - 304, _scrollView.contentOffset.y ) animated:YES];
+		[_pagingTimer invalidate];
+		_pagingTimer = nil;
+	}
+}
+
+- (void)nextPage
+{
+	if( _scrollView.contentOffset.x < _scrollView.contentSize.width - 304 )
+	{
+		[_scrollView setContentOffset:CGPointMake( _scrollView.contentOffset.x + 304, _scrollView.contentOffset.y ) animated:YES];
+		[_pagingTimer invalidate];
+		_pagingTimer = nil;
+	}
+}
 
 - (void)photoButtonDidTouchUpInside:(UIButton *)photoButton
 {

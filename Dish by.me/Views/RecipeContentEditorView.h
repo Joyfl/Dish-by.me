@@ -22,6 +22,8 @@
 }
 
 @property (nonatomic) RecipeContent *content;
+@property (nonatomic, assign) CGPoint originalLocation;
+@property (nonatomic) UIButton *grabButton;
 @property (nonatomic) UIButton *checkButton;
 @property (nonatomic) UIButton *photoButton;
 @property (nonatomic, weak) RecipeEditorViewController *recipeEditorViewController;
