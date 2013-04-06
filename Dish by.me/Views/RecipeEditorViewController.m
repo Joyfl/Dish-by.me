@@ -198,15 +198,15 @@
 
 - (void)grabButtonDidTouchDown:(UIButton *)grabButton touchEvent:(UIEvent *)touchEvent
 {
-	RecipeContentEditorView *editorView = (RecipeContentEditorView *)grabButton.superview;
-	[[UIApplication sharedApplication].keyWindow addSubview:editorView];
+	_currentDraggingContentEditorView = (RecipeContentEditorView *)grabButton.superview;
+	[[UIApplication sharedApplication].keyWindow addSubview:_currentDraggingContentEditorView];
 	
 	CGPoint point = [touchEvent.allTouches.anyObject locationInView:[UIApplication sharedApplication].keyWindow];
-	editorView.center = CGPointMake( point.x - 27, editorView.center.y + self.view.frame.origin.y );
+	_currentDraggingContentEditorView.center = CGPointMake( point.x - 27, _currentDraggingContentEditorView.center.y + self.view.frame.origin.y );
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		editorView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 1.02, 1.02 );
-		editorView.alpha = 0.9;
+		_currentDraggingContentEditorView.transform = CGAffineTransformScale( CGAffineTransformIdentity, 1.02, 1.02 );
+		_currentDraggingContentEditorView.alpha = 0.9;
 	}];
 }
 
@@ -241,6 +241,9 @@
 
 - (void)grabButtonDidTouchUp:(UIButton *)grabButton
 {
+	[_pagingTimer invalidate];
+	_pagingTimer = nil;
+	
 	RecipeContentEditorView *editorView = (RecipeContentEditorView *)grabButton.superview;
 	editorView.center = [[UIApplication sharedApplication].keyWindow convertPoint:editorView.center toView:_scrollView];
 	[_scrollView addSubview:editorView];
@@ -257,22 +260,70 @@
 
 - (void)prevPage
 {
-	if( _scrollView.contentOffset.x > 304 )
+	[_pagingTimer invalidate];
+	_pagingTimer = nil;
+	
+	NSInteger currentDraggingEditorViewIndex = [_contentEditorViews indexOfObject:_currentDraggingContentEditorView];
+	if( currentDraggingEditorViewIndex == 0 )
 	{
-		[_scrollView setContentOffset:CGPointMake( _scrollView.contentOffset.x - 304, _scrollView.contentOffset.y ) animated:YES];
-		[_pagingTimer invalidate];
-		_pagingTimer = nil;
+		return;
 	}
+	
+	// 스크롤뷰 스크롤
+	[_scrollView setContentOffset:CGPointMake( _scrollView.contentOffset.x - 304, _scrollView.contentOffset.y ) animated:YES];
+	
+	// 레시피 전환 애니메이션
+	NSInteger targetEditorViewIndex = currentDraggingEditorViewIndex - 1;
+	RecipeContentEditorView *targetEditorView = [_contentEditorViews objectAtIndex:targetEditorViewIndex];
+	_currentDraggingContentEditorView.originalLocation = targetEditorView.frame.origin;
+	
+	[UIView animateWithDuration:0.25 delay:0.5 options:0 animations:^{
+		CGRect frame = targetEditorView.frame;
+		frame.origin.x += 304;
+		targetEditorView.frame = frame;
+		targetEditorView.originalLocation = frame.origin;
+	} completion:nil];
+	
+	// 실제 데이터 교환
+	[_contentEditorViews exchangeObjectAtIndex:currentDraggingEditorViewIndex withObjectAtIndex:targetEditorViewIndex];
+	
+	// 계속 제자리에 올려놓고 있으면 쭉 넘어가게
+	_pagingTimer = [NSTimer timerWithTimeInterval:0.7 target:self selector:@selector(prevPage) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_pagingTimer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)nextPage
 {
-	if( _scrollView.contentOffset.x < _scrollView.contentSize.width - 304 )
+	[_pagingTimer invalidate];
+	_pagingTimer = nil;
+	
+	NSInteger currentDraggingEditorViewIndex = [_contentEditorViews indexOfObject:_currentDraggingContentEditorView];
+	if( currentDraggingEditorViewIndex == _contentEditorViews.count - 1 )
 	{
-		[_scrollView setContentOffset:CGPointMake( _scrollView.contentOffset.x + 304, _scrollView.contentOffset.y ) animated:YES];
-		[_pagingTimer invalidate];
-		_pagingTimer = nil;
+		return;
 	}
+	
+	// 스크롤뷰 스크롤
+	[_scrollView setContentOffset:CGPointMake( _scrollView.contentOffset.x + 304, _scrollView.contentOffset.y ) animated:YES];
+	
+	// 레시피 전환 애니메이션
+	NSInteger targetEditorViewIndex = currentDraggingEditorViewIndex + 1;
+	RecipeContentEditorView *targetEditorView = [_contentEditorViews objectAtIndex:targetEditorViewIndex];
+	_currentDraggingContentEditorView.originalLocation = targetEditorView.frame.origin;
+	
+	[UIView animateWithDuration:0.25 delay:0.5 options:0 animations:^{
+		CGRect frame = targetEditorView.frame;
+		frame.origin.x -= 304;
+		targetEditorView.frame = frame;
+		targetEditorView.originalLocation = frame.origin;
+	} completion:nil];
+	
+	// 실제 데이터 교환
+	[_contentEditorViews exchangeObjectAtIndex:currentDraggingEditorViewIndex withObjectAtIndex:targetEditorViewIndex];
+	
+	// 계속 제자리에 올려놓고 있으면 쭉 넘어가게
+	_pagingTimer = [NSTimer timerWithTimeInterval:0.7 target:self selector:@selector(nextPage) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_pagingTimer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)photoButtonDidTouchUpInside:(UIButton *)photoButton

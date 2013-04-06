@@ -20,6 +20,7 @@
 	RecipeInfoEditorView *_infoEditorView;
 	NSMutableArray *_contentEditorViews;
 	RecipeContentEditorView *_newContentEditorView;
+	RecipeContentEditorView *_currentDraggingContentEditorView;
 	NSTimer *_pagingTimer;
 }
 
