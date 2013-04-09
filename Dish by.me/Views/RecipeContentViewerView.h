@@ -7,16 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "UIPlaceHolderTextView.h"
 #import "RecipeContent.h"
 
-@interface RecipeContentViewerView : UIView <UIImagePickerControllerDelegate, UITextViewDelegate>
+@interface RecipeContentViewerView : UIView
 {
 	UIImageView *_bgView;
 	UIScrollView *_scrollView;
 	UIImageView *_borderView;
 	UIImageView *_lineView;
-	UIPlaceHolderTextView *_contentInput;
+	UITextView *_textView;
 }
 
 @property (nonatomic) RecipeContent *content;

@@ -16,7 +16,6 @@
 {
 	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
 	self.layer.anchorPoint = CGPointMake( 0, 0.5 );
-	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)]];
 	
 	_content = content;
 	
@@ -24,7 +23,7 @@
 	[self addSubview:bgView];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 245, 0 )];
-	titleLabel.text = NSLocalizedString( @"WRITE_RECIPE", nil );
+	titleLabel.text = NSLocalizedString( @"SHOW_RECIPE", nil );
 	titleLabel.font = [UIFont systemFontOfSize:15];
 	titleLabel.textColor = [UIColor colorWithHex:0x5B5046 alpha:1];
 	titleLabel.backgroundColor = [UIColor clearColor];
@@ -43,8 +42,20 @@
 	[self addSubview:_scrollView];
 	
 	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 19, 18, 241, 186 )];
-	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-	[_photoButton addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+	_photoButton.adjustsImageWhenHighlighted = NO;
+	if( content.photo )
+	{
+		[_photoButton setBackgroundImage:content.photo forState:UIControlStateNormal];
+	}
+	else
+	{
+		[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		[DMAPILoader loadImageFromURLString:content.photoURL context:nil success:^(UIImage *image, id context) {
+			content.photo = image;
+			[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
+			[self layoutScrollViewContent];
+		}];
+	}
 	[_scrollView addSubview:_photoButton];
 	
 	_borderView = [[UIImageView alloc] init];
@@ -54,70 +65,31 @@
 	_lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"recipe_line_thin.png"]];
 	[_scrollView addSubview:_lineView];
 	
-	_contentInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 0, 0, 250, 100 )];
-	_contentInput.delegate = self;
-	_contentInput.editable = YES;
-	_contentInput.font = [UIFont boldSystemFontOfSize:12];
-	_contentInput.text = _content.description;
-	_contentInput.placeholder = NSLocalizedString( @"INPUT_CONTENT", nil );
-	_contentInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
-	_contentInput.placeholderColor = [UIColor colorWithHex:0x958675 alpha:1];
-	_contentInput.backgroundColor = [UIColor clearColor];
-	_contentInput.contentInset = UIEdgeInsetsZero;
-	_contentInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-	_contentInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-	_contentInput.layer.shadowOpacity = 0.7;
-	_contentInput.layer.shadowRadius = 0;
-	_contentInput.scrollEnabled = NO;
-	[_scrollView addSubview:_contentInput];
+	_textView = [[UITextView alloc] initWithFrame:CGRectMake( 0, 0, 250, 0 )];
+	_textView.font = [UIFont boldSystemFontOfSize:12];
+	_textView.editable = NO;
+	_textView.text = _content.description;
+	_textView.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
+	_textView.backgroundColor = [UIColor clearColor];
+	_textView.contentInset = UIEdgeInsetsZero;
+	_textView.layer.shadowColor = [UIColor whiteColor].CGColor;
+	_textView.layer.shadowOffset = CGSizeMake( 0, 1 );
+	_textView.layer.shadowOpacity = 0.7;
+	_textView.layer.shadowRadius = 0;
+	_textView.scrollEnabled = NO;
+	[_scrollView addSubview:_textView];
 	
 	[self layoutScrollViewContent];
 	
 	return self;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-	if( [keyPath isEqualToString:@"frame"] )
-	{
-		_content.photo = [_photoButton imageForState:UIControlStateNormal];
-		[self layoutScrollViewContent];
-	}
-}
-
 - (void)layoutScrollViewContent
 {
 	_borderView.frame = CGRectInset( _photoButton.frame, -7, -7 );
 	_lineView.frame = CGRectMake( 12, _photoButton.frame.origin.y + _photoButton.frame.size.height + 13, 255, 4 );
-	_contentInput.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, MAX( _contentInput.contentSize.height, 100 ) );
-	_scrollView.contentSize = CGSizeMake( 280, _contentInput.frame.origin.y + _contentInput.frame.size.height + 13 );
-}
-
-
-#pragma mark -
-#pragma mark UITextViewDelegate
-
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-	[UIView animateWithDuration:0.5 animations:^{
-		CGRect frame = _scrollView.frame;
-		frame.size.height = (UIScreenHeight - 120) / 2;
-		_scrollView.frame = frame;
-	}];
-}
-
-- (void)textViewDidChange:(UITextView *)textView
-{
-	[self layoutScrollViewContent];
-	_content.description = textView.text;
-}
-
-- (void)backgroundDidTap
-{
-	[self endEditing:YES];
-	CGRect frame = _scrollView.frame;
-	frame.size.height = 330;
-	_scrollView.frame = frame;
+	_textView.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, _textView.contentSize.height );
+	_scrollView.contentSize = CGSizeMake( 280, _textView.frame.origin.y + _textView.frame.size.height + 13 );
 }
 
 @end

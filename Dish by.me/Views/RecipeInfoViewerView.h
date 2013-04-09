@@ -12,8 +12,8 @@
 @interface RecipeInfoViewerView : UIView <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 {
 	UITableView *_tableView;
-	UITextField *_servingsInput;
-	UITextField *_minutesInput;
+	UILabel *_servingsLabel;
+	UILabel *_minutesLabel;
 }
 
 @property (nonatomic) Recipe *recipe;

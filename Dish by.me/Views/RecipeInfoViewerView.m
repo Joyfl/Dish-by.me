@@ -27,7 +27,7 @@
 	[self addSubview:bgView];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 245, 0 )];
-	titleLabel.text = NSLocalizedString( @"WRITE_RECIPE", nil );
+	titleLabel.text = NSLocalizedString( @"SHOW_RECIPE", nil );
 	titleLabel.font = [UIFont systemFontOfSize:15];
 	titleLabel.textColor = [UIColor colorWithHex:0x5B5046 alpha:1];
 	titleLabel.backgroundColor = [UIColor clearColor];
@@ -92,18 +92,17 @@
 			knifeIconView.image = [UIImage imageNamed:@"recipe_icon_knife.png"];
 			[cell.contentView addSubview:knifeIconView];
 			
-			_servingsInput = [[UITextField alloc] initWithFrame:CGRectMake( 47 - tableViewX, 72 - tableViewY, 100, 30 )];
-			_servingsInput.text = _recipe.servings ? [NSString stringWithFormat:@"%d", _recipe.servings] : nil;
-			_servingsInput.placeholder = NSLocalizedString( @"HOW_MANY_SERVINGS", nil );
-			_servingsInput.font = [UIFont boldSystemFontOfSize:12];
-			_servingsInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
-			[_servingsInput setValue:[UIColor colorWithHex:0x958675 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
-			_servingsInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-			_servingsInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-			_servingsInput.layer.shadowOpacity = 0.7;
-			_servingsInput.layer.shadowRadius = 0;
-			_servingsInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
-			[cell.contentView addSubview:_servingsInput];
+			_servingsLabel = [[UILabel alloc] initWithFrame:CGRectMake( 47 - tableViewX, 72 - tableViewY, 100, 30 )];
+			_servingsLabel.text = [NSString stringWithFormat:@"%d", _recipe.servings];
+			[_servingsLabel sizeToFit];
+			_servingsLabel.font = [UIFont boldSystemFontOfSize:12];
+			_servingsLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
+			_servingsLabel.backgroundColor = [UIColor clearColor];
+			_servingsLabel.layer.shadowColor = [UIColor whiteColor].CGColor;
+			_servingsLabel.layer.shadowOffset = CGSizeMake( 0, 1 );
+			_servingsLabel.layer.shadowOpacity = 0.7;
+			_servingsLabel.layer.shadowRadius = 0;
+			[cell.contentView addSubview:_servingsLabel];
 			
 			UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 152 - tableViewX, 70 - tableViewY, 4, 20 )];
 			separatorLineView.image = [UIImage imageNamed:@"recipe_line_thin_vertical.png"];
@@ -113,18 +112,17 @@
 			clockIconView.image = [UIImage imageNamed:@"recipe_icon_clock.png"];
 			[cell.contentView addSubview:clockIconView];
 			
-			_minutesInput = [[UITextField alloc] initWithFrame:CGRectMake( 188 - tableViewX, 72 - tableViewY, 100, 30 )];
-			_minutesInput.text = _recipe.minutes ? [NSString stringWithFormat:@"%d", _recipe.minutes] : nil;
-			_minutesInput.placeholder = NSLocalizedString( @"HOW_MANY_MINUTES", nil );
-			_minutesInput.font = [UIFont boldSystemFontOfSize:12];
-			_minutesInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
-			[_minutesInput setValue:[UIColor colorWithHex:0x958675 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
-			_minutesInput.layer.shadowColor = [UIColor whiteColor].CGColor;
-			_minutesInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-			_minutesInput.layer.shadowOpacity = 0.7;
-			_minutesInput.layer.shadowRadius = 0;
-			_minutesInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
-			[cell.contentView addSubview:_minutesInput];
+			_minutesLabel = [[UILabel alloc] initWithFrame:CGRectMake( 188 - tableViewX, 72 - tableViewY, 100, 30 )];
+			_minutesLabel.text = [NSString stringWithFormat:@"%d", _recipe.minutes];
+			[_minutesLabel sizeToFit];
+			_minutesLabel.font = [UIFont boldSystemFontOfSize:12];
+			_minutesLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
+			_minutesLabel.backgroundColor = [UIColor clearColor];
+			_minutesLabel.layer.shadowColor = [UIColor whiteColor].CGColor;
+			_minutesLabel.layer.shadowOffset = CGSizeMake( 0, 1 );
+			_minutesLabel.layer.shadowOpacity = 0.7;
+			_minutesLabel.layer.shadowRadius = 0;
+			[cell.contentView addSubview:_minutesLabel];
 			
 			UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 26 - tableViewX, 100 - tableViewY, 255, 4 )];
 			lineView.image = [UIImage imageNamed:@"recipe_line_thin.png"];
