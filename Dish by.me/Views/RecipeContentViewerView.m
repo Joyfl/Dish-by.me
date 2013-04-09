@@ -33,10 +33,10 @@
 	titleLabel.frame = CGRectOffset( titleLabel.frame, 20, 22 );
 	[self addSubview:titleLabel];
 	
-	self.checkButton = [[UIButton alloc] initWithFrame:CGRectMake( 270, 24, 20, 20 )];
-	self.checkButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
-	[self.checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
-	[self addSubview:self.checkButton];
+	_checkButton = [[UIButton alloc] initWithFrame:CGRectMake( 270, 24, 20, 20 )];
+	_checkButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
+	[_checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
+	[self addSubview:_checkButton];
 	
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 14, 59, 280, 330 )];
 	[self addSubview:_scrollView];

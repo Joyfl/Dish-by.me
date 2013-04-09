@@ -33,7 +33,7 @@
 @protocol RecipeViewerViewControllerDelegate <NSObject>
 
 @optional
-- (void)recipeViewerViewWillDismiss:(RecipeViewerViewController *)recipeViewerViewController;
-- (void)recipeViewerViewDidDismiss:(RecipeViewerViewController *)recipeViewerViewController;
+- (void)recipeViewerViewControllerWillDismiss:(RecipeViewerViewController *)recipeViewerViewController;
+- (void)recipeViewerViewControllerDidDismiss:(RecipeViewerViewController *)recipeViewerViewController;
 
 @end

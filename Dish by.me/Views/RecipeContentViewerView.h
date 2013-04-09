@@ -19,8 +19,8 @@
 }
 
 @property (nonatomic) RecipeContent *content;
-@property (nonatomic) UIButton *checkButton;
-@property (nonatomic) UIButton *photoButton;
+@property (nonatomic, readonly) UIButton *checkButton;
+@property (nonatomic, readonly) UIButton *photoButton;
 
 - (id)initWithRecipeContent:(RecipeContent *)content;
 

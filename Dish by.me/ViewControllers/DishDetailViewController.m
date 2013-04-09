@@ -878,7 +878,7 @@ enum {
 	[recipeView presentAfterDelay:0.1];
 }
 
-- (void)recipeViewerViewDidDismiss:(RecipeViewerViewController *)recipeViewerViewController
+- (void)recipeViewerViewControllerDidDismiss:(RecipeViewerViewController *)recipeViewerViewController
 {
 	[UIView animateWithDuration:0.25 animations:^{
 		_recipeButton.frame = CGRectMake( 0, 0, 320, 50 );

@@ -27,7 +27,9 @@
 	
 	_infoViewerView = [[RecipeInfoViewerView alloc] initWithRecipe:_recipe];
 	_infoViewerView.frame = CGRectMake( -2, 0, 304, 451 );
-	[_infoViewerView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+	
+	// 그냥 addTarget:action: 하면 EXC_BAD_ACCESS 에러남 ㅡㅡ;;
+	[_infoViewerView.checkButton addTargetBlock:^(id sender) { [self dismiss]; } forControlEvents:UIControlEventTouchUpInside];
 	[_scrollView addSubview:_infoViewerView];
 	
 	_contentViewerViews = [NSMutableArray array];
@@ -35,7 +37,9 @@
 	{
 		RecipeContentViewerView *contentViewerView = [[RecipeContentViewerView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
 		contentViewerView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, 451 );
-		[contentViewerView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+		
+		// 그냥 addTarget:action: 하면 EXC_BAD_ACCESS 에러남 ㅡㅡ;;
+		[contentViewerView.checkButton addTargetBlock:^(id sender) { [self dismiss]; } forControlEvents:UIControlEventTouchUpInside];
 		[_scrollView addSubview:contentViewerView];
 		[_contentViewerViews addObject:contentViewerView];
 	}
@@ -69,8 +73,8 @@
 {
 	NSTimeInterval duration = 0.4;
 	
-	if( [self.delegate respondsToSelector:@selector(recipeViewerViewWillDismiss:)] )
-		[self.delegate recipeViewerViewWillDismiss:self];
+	if( [self.delegate respondsToSelector:@selector(recipeViewerViewControllerWillDismiss:)] )
+		[self.delegate recipeViewerViewControllerWillDismiss:self];
 	
 	[self.view endEditing:YES];
 	[self undimWithDuration:duration completion:nil];
@@ -85,7 +89,7 @@
 	
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_MSEC));
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-		[self.delegate recipeViewerViewDidDismiss:self];
+		[self.delegate recipeViewerViewControllerDidDismiss:self];
 	});
 }
 
