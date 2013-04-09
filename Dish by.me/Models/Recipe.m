@@ -40,20 +40,6 @@
 	self = [super init];
 	self.ingredients = [NSMutableArray array];
 	self.contents = [NSMutableArray array];
-	
-	for( int i = 0; i < 3; i++ )
-	{
-		Ingredient *ingredient = [[Ingredient alloc] init];
-		ingredient.name = [NSString stringWithFormat:@"ingredient %d", i];
-		ingredient.amount = [NSString stringWithFormat:@"amount %d", i];
-		[_ingredients addObject:ingredient];
-		
-		RecipeContent *content = [[RecipeContent alloc] init];
-		content.photo = nil;
-		content.description = [NSString stringWithFormat:@"description %d", i];
-		[_contents addObject:content];
-	}
-	
 	return self;
 }
 

@@ -7,24 +7,20 @@
 //
 
 #import "Recipe.h"
-#import "RecipeInfoEditorView.h"
-#import "RecipeContentEditorView.h"
+#import "RecipeInfoViewerView.h"
+#import "RecipeContentViewerView.h"
 #import "GAI.h"
 
 @protocol RecipeViewerViewControllerDelegate;
 
-@interface RecipeViewerViewController : GAITrackedViewController <UIScrollViewDelegate>
+@interface RecipeViewerViewController : GAITrackedViewController
 {
 	UIScrollView *_scrollView;
-	RecipeInfoEditorView *_infoEditorView;
-	NSMutableArray *_contentEditorViews;
-	RecipeContentEditorView *_newContentEditorView;
-	RecipeContentEditorView *_currentDraggingContentEditorView;
-	NSTimer *_pagingTimer;
+	RecipeInfoViewerView *_infoViewerView;
+	NSMutableArray *_contentViewerViews;
 }
 
 @property (nonatomic, weak) id<RecipeViewerViewControllerDelegate> delegate;
-@property (nonatomic, strong) UITextView *recipeView; // 없애기
 @property (nonatomic) Recipe *recipe;
 
 - (id)initWithRecipe:(Recipe *)recipe;
