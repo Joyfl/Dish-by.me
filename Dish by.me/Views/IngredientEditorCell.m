@@ -6,10 +6,10 @@
 //  Copyright (c) 2013년 Joyfl. All rights reserved.
 //
 
-#import "IngredientCell.h"
+#import "IngredientEditorCell.h"
 #import <QuartzCore/QuartzCore.h>
 
-@implementation IngredientCell
+@implementation IngredientEditorCell
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {

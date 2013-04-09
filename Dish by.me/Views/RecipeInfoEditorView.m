@@ -7,7 +7,7 @@
 //
 
 #import "RecipeInfoEditorView.h"
-#import "IngredientCell.h"
+#import "IngredientEditorCell.h"
 #import "UIButton+TouchAreaInsets.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -186,10 +186,10 @@
 	
 	else if( indexPath.section == 1 )
 	{
-		IngredientCell *cell = [tableView dequeueReusableCellWithIdentifier:ingredientCellId];
+		IngredientEditorCell *cell = [tableView dequeueReusableCellWithIdentifier:ingredientCellId];
 		if( !cell )
 		{
-			cell = [[IngredientCell alloc] initWithReuseIdentifier:ingredientCellId];
+			cell = [[IngredientEditorCell alloc] initWithReuseIdentifier:ingredientCellId];
 			[cell.ingredientInput addTarget:self action:@selector(ingredientInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
 		}
 		

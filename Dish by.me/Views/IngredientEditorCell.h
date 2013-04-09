@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Ingredient.h"
 
-@interface IngredientCell : UITableViewCell
+@interface IngredientEditorCell : UITableViewCell
 {
 	UIImageView *_minusView;
 }
