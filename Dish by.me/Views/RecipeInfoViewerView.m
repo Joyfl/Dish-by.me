@@ -94,7 +94,6 @@
 			
 			_servingsLabel = [[UILabel alloc] initWithFrame:CGRectMake( 47 - tableViewX, 72 - tableViewY, 100, 30 )];
 			_servingsLabel.text = [NSString stringWithFormat:@"%d", _recipe.servings];
-			[_servingsLabel sizeToFit];
 			_servingsLabel.font = [UIFont boldSystemFontOfSize:12];
 			_servingsLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 			_servingsLabel.backgroundColor = [UIColor clearColor];
@@ -102,6 +101,7 @@
 			_servingsLabel.layer.shadowOffset = CGSizeMake( 0, 1 );
 			_servingsLabel.layer.shadowOpacity = 0.7;
 			_servingsLabel.layer.shadowRadius = 0;
+			[_servingsLabel sizeToFit];
 			[cell.contentView addSubview:_servingsLabel];
 			
 			UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 152 - tableViewX, 70 - tableViewY, 4, 20 )];
@@ -114,7 +114,6 @@
 			
 			_minutesLabel = [[UILabel alloc] initWithFrame:CGRectMake( 188 - tableViewX, 72 - tableViewY, 100, 30 )];
 			_minutesLabel.text = [NSString stringWithFormat:@"%d", _recipe.minutes];
-			[_minutesLabel sizeToFit];
 			_minutesLabel.font = [UIFont boldSystemFontOfSize:12];
 			_minutesLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 			_minutesLabel.backgroundColor = [UIColor clearColor];
@@ -122,6 +121,7 @@
 			_minutesLabel.layer.shadowOffset = CGSizeMake( 0, 1 );
 			_minutesLabel.layer.shadowOpacity = 0.7;
 			_minutesLabel.layer.shadowRadius = 0;
+			[_minutesLabel sizeToFit];
 			[cell.contentView addSubview:_minutesLabel];
 			
 			UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 26 - tableViewX, 100 - tableViewY, 255, 4 )];
