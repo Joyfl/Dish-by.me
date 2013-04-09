@@ -14,7 +14,7 @@
 
 @protocol WritingViewControllerDelegate;
 
-@interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, RecipeEditorViewDelegate>
+@interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextViewDelegate, RecipeEditorViewDelegate>
 {
 	UITableView *_tableView;
 	

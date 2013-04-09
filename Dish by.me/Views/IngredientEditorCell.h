@@ -15,6 +15,7 @@
 }
 
 @property (nonatomic, readonly) Ingredient *ingredient;
+@property (nonatomic, readonly) NSIndexPath *indexPath;
 @property (nonatomic, readonly) UITextField *ingredientInput;
 @property (nonatomic, readonly) UITextField *amountInput;
 

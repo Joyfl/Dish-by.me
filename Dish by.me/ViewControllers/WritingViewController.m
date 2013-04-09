@@ -72,7 +72,7 @@ enum {
 	_recipeView.delegate = self;
 	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
+//	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
 	
 	_photoHeight = PhotoButtonMaxWidth;
 	
@@ -129,7 +129,7 @@ enum {
 			_nameInput.font = [UIFont boldSystemFontOfSize:15];
 			_nameInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 			_nameInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
-			[_nameInput addTarget:self action:@selector(textDidBeginEditting:) forControlEvents:UIControlEventEditingDidBegin];
+			[_nameInput addTarget:self action:@selector(textViewDidBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
 			[cell.contentView addSubview:_nameInput];
 		}
 		
@@ -152,6 +152,7 @@ enum {
 			[cell.contentView addSubview:messageBoxView];
 			
 			_messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 70 )];
+			_messageInput.delegate = self;
 			_messageInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 			_messageInput.backgroundColor = [UIColor clearColor];
 			_messageInput.font = [UIFont boldSystemFontOfSize:15];
@@ -236,11 +237,8 @@ enum {
 	}];
 }
 
-- (void)textDidBeginEditting:(id)sender
+- (void)textViewDidBeginEditing:(id)sender
 {
-	if( [sender respondsToSelector:@selector(object)] && [[sender object] isEqual:_recipeView.recipeView] )
-		return;
-	
 	[_tableView setContentOffset:CGPointMake( 0, _photoButton.frame.size.height - 40 ) animated:YES];
 	
 	[UIView animateWithDuration:0.25 animations:^{

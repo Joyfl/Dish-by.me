@@ -20,7 +20,7 @@
 	_minusView.image = [UIImage imageNamed:@"recipe_button_minus.png"];
 	_minusView.layer.shouldRasterize = YES;
 	
-	_ingredientInput = [[UITextField alloc] initWithFrame:CGRectMake( 9, 10, 154, 20 )];
+	_ingredientInput = [[UITextField alloc] initWithFrame:CGRectMake( 9, -3, 154, 43 )];
 	_ingredientInput.placeholder = NSLocalizedString( @"INGREDIENT", nil );
 	_ingredientInput.font = [UIFont boldSystemFontOfSize:13];
 	_ingredientInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
@@ -29,14 +29,14 @@
 	_ingredientInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	_ingredientInput.layer.shadowOpacity = 0.7;
 	_ingredientInput.layer.shadowRadius = 0;
-	_ingredientInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+	_ingredientInput.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	[self.contentView addSubview:_ingredientInput];
 	
 	UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 170, 8, 4, 20 )];
 	separatorLineView.image = [UIImage imageNamed:@"recipe_line_thin_vertical.png"];
 	[self.contentView addSubview:separatorLineView];
 	
-	_amountInput = [[UITextField alloc] initWithFrame:CGRectMake( 179, 10, 54, 20 )];
+	_amountInput = [[UITextField alloc] initWithFrame:CGRectMake( 179, -3, 54, 43 )];
 	_amountInput.placeholder = NSLocalizedString( @"AMOUNT", nil );
 	_amountInput.font = [UIFont boldSystemFontOfSize:13];
 	_amountInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
@@ -46,7 +46,7 @@
 	_amountInput.layer.shadowOpacity = 0.7;
 	_amountInput.layer.shadowRadius = 0;
 	_amountInput.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-	_amountInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+	_amountInput.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 	[self.contentView addSubview:_amountInput];
 	
 	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( -18, 37, 255, 4 )];
@@ -97,6 +97,7 @@
 - (void)setIngredient:(Ingredient *)ingredient atIndexPath:(NSIndexPath *)indexPath
 {
 	_ingredient = ingredient;
+	_indexPath = indexPath;
 	_ingredientInput.text = _ingredient.name;
 	_amountInput.text = _ingredient.amount;
 	[self updateEditControl];

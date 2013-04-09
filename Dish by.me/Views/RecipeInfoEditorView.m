@@ -18,7 +18,7 @@
 
 - (id)initWithRecipe:(Recipe *)recipe
 {
-	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
+	self = [super initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
 	
 	UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
 	recognizer.delegate = self;
@@ -26,7 +26,8 @@
 	
 	_recipe = recipe;
 	
-	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_recipe.png"]];
+	UIImageView *bgView = [[UIImageView alloc] initWithFrame:self.frame];
+	bgView.image = [[UIImage imageNamed:@"bg_recipe.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 70, 0, 70, 0 )];
 	bgView.userInteractionEnabled = YES;
 	[self addSubview:bgView];
 	
@@ -46,7 +47,7 @@
 	[self.checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
 	[self addSubview:self.checkButton];
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, 330 )];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, UIScreenHeight - 150 )];
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
 	_tableView.editing = YES;
@@ -66,7 +67,7 @@
 {
 	[self endEditing:YES];
 	CGRect frame = _tableView.frame;
-	frame.size.height = 330;
+	frame.size.height = UIScreenHeight - 150;
 	_tableView.frame = frame;
 }
 
@@ -190,7 +191,8 @@
 		if( !cell )
 		{
 			cell = [[IngredientEditorCell alloc] initWithReuseIdentifier:ingredientCellId];
-			[cell.ingredientInput addTarget:self action:@selector(ingredientInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
+			[cell.ingredientInput addTarget:self action:@selector(ingredientCellInputDidBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
+			[cell.amountInput addTarget:self action:@selector(ingredientCellInputDidBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
 		}
 		
 		[cell setIngredient:[_recipe.ingredients objectAtIndex:indexPath.row] atIndexPath:indexPath];
@@ -245,13 +247,16 @@
 	[tableView endUpdates];
 }
 
-- (void)ingredientInputDidBeginEditing
+- (void)ingredientCellInputDidBeginEditing:(UITextField *)input
 {
 	[UIView animateWithDuration:0.5 animations:^{
 		CGRect frame = _tableView.frame;
-		frame.size.height = (UIScreenHeight - 120) / 2;
+		frame.size.height = UIScreenHeight - 294;
 		_tableView.frame = frame;
 	}];
+	
+	IngredientEditorCell *cell = (IngredientEditorCell *)input.superview.superview;
+	[_tableView scrollToRowAtIndexPath:cell.indexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
 
 - (void)addButtonDidTouchUpInside
