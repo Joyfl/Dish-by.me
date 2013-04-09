@@ -252,9 +252,11 @@
 
 - (void)loginWithParameters:(NSDictionary *)parameters
 {
+	JLLog( @"Login parameters : %@", parameters );
+	
 	[self setInputFieldsEnabled:NO];
 	
-	[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:parameters success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"POST" parameters:parameters success:^(id response) {
 		JLLog( @"Login complete" );
 		
 		[CurrentUser user].loggedIn = YES;
