@@ -18,11 +18,12 @@
 
 - (id)initWithRecipe:(Recipe *)recipe
 {
-	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
+	self = [super initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
 	
 	_recipe = recipe;
 	
-	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_recipe.png"]];
+	UIImageView *bgView = [[UIImageView alloc] initWithFrame:self.frame];
+	bgView.image = [[UIImage imageNamed:@"bg_recipe.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 70, 0, 70, 0 )];
 	bgView.userInteractionEnabled = YES;
 	[self addSubview:bgView];
 	
@@ -42,7 +43,7 @@
 	[_checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
 	[self addSubview:_checkButton];
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, 330 )];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, UIScreenHeight - 150 )];
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
 	_tableView.backgroundColor = [UIColor clearColor];

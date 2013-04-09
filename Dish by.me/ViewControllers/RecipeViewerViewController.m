@@ -19,14 +19,14 @@
 	
 	_recipe = recipe ? recipe : [[Recipe alloc] init];
 	
-	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 8, 0, 304, 451 )];
+	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 8, 0, 304, UIScreenHeight - 30 )];
 	_scrollView.pagingEnabled = YES;
 	_scrollView.clipsToBounds = NO;
 	_scrollView.showsHorizontalScrollIndicator = NO;
 	[self.view addSubview:_scrollView];
 	
 	_infoViewerView = [[RecipeInfoViewerView alloc] initWithRecipe:_recipe];
-	_infoViewerView.frame = CGRectMake( -2, 0, 304, 451 );
+	_infoViewerView.frame = CGRectMake( -2, 0, 304, UIScreenHeight - 30 );
 	
 	// 그냥 addTarget:action: 하면 EXC_BAD_ACCESS 에러남 ㅡㅡ;;
 	[_infoViewerView.checkButton addTargetBlock:^(id sender) { [self dismiss]; } forControlEvents:UIControlEventTouchUpInside];
@@ -36,7 +36,7 @@
 	for( NSInteger i = 0; i < _recipe.contents.count ; i++ )
 	{
 		RecipeContentViewerView *contentViewerView = [[RecipeContentViewerView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
-		contentViewerView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, 451 );
+		contentViewerView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, UIScreenHeight - 30 );
 		
 		// 그냥 addTarget:action: 하면 EXC_BAD_ACCESS 에러남 ㅡㅡ;;
 		[contentViewerView.checkButton addTargetBlock:^(id sender) { [self dismiss]; } forControlEvents:UIControlEventTouchUpInside];
@@ -44,7 +44,7 @@
 		[_contentViewerViews addObject:contentViewerView];
 	}
 	
-	_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), 451 );
+	_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
 	
 	return self;
 }

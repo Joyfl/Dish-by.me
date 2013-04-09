@@ -14,12 +14,14 @@
 
 - (id)initWithRecipeContent:(RecipeContent *)content
 {
-	self = [super initWithFrame:CGRectMake( 0, 0, 308, 451 )];
+	self = [super initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
 	self.layer.anchorPoint = CGPointMake( 0, 0.5 );
 	
 	_content = content;
 	
-	UIImageView *bgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bg_recipe.png"]];
+	UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectOffset( self.frame, -154, 0 )];
+	bgView.image = [[UIImage imageNamed:@"bg_recipe.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 70, 0, 70, 0 )];
+	bgView.userInteractionEnabled = YES;
 	[self addSubview:bgView];
 	
 	UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 245, 0 )];
@@ -38,7 +40,7 @@
 	[_checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
 	[self addSubview:_checkButton];
 	
-	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 14, 59, 280, 330 )];
+	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 14, 59, 280, UIScreenHeight - 150 )];
 	[self addSubview:_scrollView];
 	
 	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 19, 18, 241, 186 )];
