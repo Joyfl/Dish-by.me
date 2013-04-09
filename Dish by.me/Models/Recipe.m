@@ -40,6 +40,12 @@
 	self = [super init];
 	self.ingredients = [NSMutableArray array];
 	self.contents = [NSMutableArray array];
+	for( int i = 0; i < 3; i ++ )
+	{
+		RecipeContent *content = [[RecipeContent alloc] init];
+		content.description = [NSString stringWithFormat:@"Description %d", i];
+		[self.contents addObject:content];
+	}
 	return self;
 }
 

@@ -14,12 +14,12 @@
 
 - (id)initWithRecipeContent:(RecipeContent *)content
 {
-	self = [super initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
+	self = [super init];
 	self.layer.anchorPoint = CGPointMake( 0, 0.5 );
 	
 	_content = content;
 	
-	UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectOffset( self.frame, -154, 0 )];
+	UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
 	bgView.image = [[UIImage imageNamed:@"bg_recipe.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 70, 0, 70, 0 )];
 	bgView.userInteractionEnabled = YES;
 	[self addSubview:bgView];

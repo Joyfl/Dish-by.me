@@ -124,7 +124,7 @@
 		
 		if( offset >= _scrollView.contentSize.width - 304 )
 		{
-			CGFloat angle = M_PI * (offset - 304 * (_contentEditorViews.count + 1) ) / 608.0;
+			CGFloat angle = M_PI * ( offset - 304 * (_contentEditorViews.count + 1) ) / 608.0;
 			CATransform3D transform = CATransform3DMakeRotation( angle, 0, 1, 0 );
 			transform.m34 = -1 / 500.0;
 			transform.m14 = -angle / 500;
@@ -135,7 +135,7 @@
 	// 추가되는 중 : lastView
 	else
 	{
-		CGFloat angle = M_PI * (offset - 304 * (_contentEditorViews.count) ) / 608.0;
+		CGFloat angle = M_PI * ( offset - 304 * _contentEditorViews.count ) / 608.0;
 		CATransform3D transform = CATransform3DMakeRotation( angle, 0, 1, 0 );
 		transform.m34 = -1 / 500.0;
 		transform.m14 = -angle / 500;
@@ -146,7 +146,7 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
 	CGFloat offset = scrollView.contentOffset.x;
-	if( offset >= _scrollView.contentSize.width - 304 + 60 )
+	if( offset > _scrollView.contentSize.width - 304 + 60 )
 	{
 		JLLog( @"Added RecipeContentEditorView" );
 		
@@ -156,21 +156,21 @@
 		[_recipe.contents addObject:newContent];
 		
 		RecipeContentEditorView *newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:newContent];
+		newContentEditorView.layer.transform = _newContentEditorView.layer.transform;
+		newContentEditorView.frame = CGRectMake( -2 + 304 * _recipe.contents.count, 0, 304, UIScreenHeight - 30 );
+		newContentEditorView.originalLocation = newContentEditorView.frame.origin;
 		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDown:touchEvent:) forControlEvents:UIControlEventTouchDown];
 		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDrag:touchEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
 		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 		[newContentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 		[newContentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-		newContentEditorView.layer.transform = _newContentEditorView.layer.transform;
-		newContentEditorView.frame = CGRectMake( -2 + 304 * _recipe.contents.count, 0, 304, UIScreenHeight - 30 );
-		newContentEditorView.originalLocation = newContentEditorView.frame.origin;
 		_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
 		[_scrollView addSubview:newContentEditorView];
 		
 		[_contentEditorViews addObject:newContentEditorView];
 		
 		_newContentEditorView.layer.transform = CATransform3DIdentity;
-		_newContentEditorView.frame = CGRectMake( UIScreenWidth, 0, 304, UIScreenHeight - 30 );
+		_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
 	}
 }
 
@@ -181,7 +181,7 @@
 		scrollView.scrollEnabled = NO;
 		
 		RecipeContentEditorView *lastAddedContentEditorView = [_contentEditorViews lastObject];
-		[scrollView setContentOffset:lastAddedContentEditorView.frame.origin animated:YES];
+		[scrollView setContentOffset:CGPointMake( lastAddedContentEditorView.frame.origin.x + 2, 0 ) animated:YES];
 	}
 }
 
@@ -190,6 +190,9 @@
 	if( !scrollView.scrollEnabled )
 	{
 		scrollView.scrollEnabled = YES;
+		
+		RecipeContentEditorView *lastAddedContentEditorView = [_contentEditorViews lastObject];
+		lastAddedContentEditorView.layer.transform = CATransform3DIdentity;
 	}
 }
 
