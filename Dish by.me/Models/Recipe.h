@@ -17,4 +17,6 @@
 @property (nonatomic, strong) NSMutableArray *ingredients;
 @property (nonatomic, strong) NSMutableArray *contents;
 
++ (id)recipeFromDictionary:(NSDictionary *)dictionary;
+
 @end

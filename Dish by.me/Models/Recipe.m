@@ -7,8 +7,33 @@
 //
 
 #import "Recipe.h"
+#import "Ingredient.h"
+#import "RecipeContent.h"
 
 @implementation Recipe
+
++ (id)recipeFromDictionary:(NSDictionary *)dictionary
+{
+	Recipe *recipe = [[Recipe alloc] init];
+	recipe.servings = [[dictionary objectForKey:@"servings"] integerValue];
+	recipe.minutes = [[dictionary objectForKey:@"minutes"] integerValue];
+	
+	NSArray *ingredients = [dictionary objectForKey:@"ingredients"];
+	for( NSDictionary *ingredientDictionary in ingredients )
+	{
+		Ingredient *ingredient = [Ingredient ingredientFromDictionary:ingredientDictionary];
+		[recipe.ingredients addObject:ingredient];
+	}
+	
+	NSArray *contents = [dictionary objectForKey:@"contents"];
+	for( NSDictionary *contentDictionary in contents )
+	{
+		RecipeContent *content = [RecipeContent recipeContentFromDictionary:contentDictionary];
+		[recipe.contents addObject:content];
+	}
+	
+	return recipe;
+}
 
 - (id)init
 {
@@ -25,7 +50,7 @@
 		
 		RecipeContent *content = [[RecipeContent alloc] init];
 		content.photo = nil;
-		content.content = [NSString stringWithFormat:@"content %d", i];
+		content.description = [NSString stringWithFormat:@"description %d", i];
 		[_contents addObject:content];
 	}
 	

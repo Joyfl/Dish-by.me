@@ -64,7 +64,7 @@
 	_contentInput.delegate = self;
 	_contentInput.editable = YES;
 	_contentInput.font = [UIFont boldSystemFontOfSize:12];
-	_contentInput.text = _content.content;
+	_contentInput.text = _content.description;
 	_contentInput.placeholder = NSLocalizedString( @"INPUT_CONTENT", nil );
 	_contentInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 	_contentInput.placeholderColor = [UIColor colorWithHex:0x958675 alpha:1];
@@ -115,7 +115,7 @@
 - (void)textViewDidChange:(UITextView *)textView
 {
 	[self layoutScrollViewContent];
-	_content.content = textView.text;
+	_content.description = textView.text;
 }
 
 - (void)backgroundDidTap

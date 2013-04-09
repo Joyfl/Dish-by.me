@@ -10,4 +10,12 @@
 
 @implementation RecipeContent
 
++ (id)recipeContentFromDictionary:(NSDictionary *)dictionary
+{
+	RecipeContent *content = [[RecipeContent alloc] init];
+	content.photoURL = [dictionary objectForKey:@"photo_url"];
+	content.description = [dictionary objectForKey:@"description"];
+	return content;
+}
+
 @end

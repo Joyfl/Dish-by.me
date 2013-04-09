@@ -10,4 +10,12 @@
 
 @implementation Ingredient
 
++ (id)ingredientFromDictionary:(NSDictionary *)dictionary
+{
+	Ingredient *ingredient = [[Ingredient alloc] init];
+	ingredient.name = [dictionary objectForKey:@"name"];
+	ingredient.amount = [dictionary objectForKey:@"amount"];
+	return ingredient;
+}
+
 @end

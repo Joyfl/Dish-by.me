@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class Recipe;
+
 @interface Dish : NSObject
 
 @property (nonatomic, assign) NSInteger dishId;
@@ -17,7 +19,7 @@
 @property (nonatomic, strong) NSString *userPhotoURL;
 @property (nonatomic, strong) UIImage *userPhoto;
 @property (nonatomic, strong) NSString *description;
-@property (nonatomic, strong) NSString *recipe;
+@property (nonatomic, strong) Recipe *recipe;
 @property (nonatomic, assign) NSInteger photoWidth;
 @property (nonatomic, assign) NSInteger photoHeight;
 @property (nonatomic, strong) NSString *photoURL;

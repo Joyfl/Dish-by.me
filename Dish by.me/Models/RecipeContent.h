@@ -12,6 +12,8 @@
 
 @property (nonatomic, strong) NSString *photoURL;
 @property (nonatomic, strong) UIImage *photo;
-@property (nonatomic, strong) NSString *content;
+@property (nonatomic, strong) NSString *description;
+
++ (id)recipeContentFromDictionary:(NSDictionary *)dictionary;
 
 @end

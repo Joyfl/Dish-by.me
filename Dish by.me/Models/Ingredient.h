@@ -13,4 +13,6 @@
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *amount;
 
++ (id)ingredientFromDictionary:(NSDictionary *)dictionary;
+
 @end
