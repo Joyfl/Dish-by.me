@@ -15,10 +15,11 @@
 #import "WritingViewController.h"
 #import "JLLabelButton.h"
 #import "AuthViewController.h"
+#import "RecipeViewerViewController.h"
 
 @class Dish;
 
-@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate, AuthViewControllerDelegate>
+@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, RecipeViewerViewControllerDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate, AuthViewControllerDelegate>
 {
 	Dish *_dish;
 	NSMutableArray *_comments;
