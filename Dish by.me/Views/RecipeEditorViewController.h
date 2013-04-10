@@ -12,7 +12,7 @@
 #import "RecipeContentEditorView.h"
 #import "GAI.h"
 
-@protocol RecipeEditorViewDelegate;
+@protocol RecipeEditorViewControllerDelegate;
 
 @interface RecipeEditorViewController : GAITrackedViewController <UIScrollViewDelegate>
 {
@@ -24,8 +24,7 @@
 	NSTimer *_pagingTimer;
 }
 
-@property (nonatomic, weak) id<RecipeEditorViewDelegate> delegate;
-@property (nonatomic, strong) UITextView *recipeView; // 없애기
+@property (nonatomic, weak) id<RecipeEditorViewControllerDelegate> delegate;
 @property (nonatomic) Recipe *recipe;
 
 - (id)initWithRecipe:(Recipe *)recipe;
@@ -35,10 +34,10 @@
 @end
 
 
-@protocol RecipeEditorViewDelegate <NSObject>
+@protocol RecipeEditorViewControllerDelegate <NSObject>
 
 @optional
-- (void)recipeEditorViewWillDismiss:(RecipeEditorViewController *)recipeEditorView;
-- (void)recipeEditorViewDidDismiss:(RecipeEditorViewController *)recipeEditorView;
+- (void)recipeEditorViewControllerWillDismiss:(RecipeEditorViewController *)recipeEditorViewController;
+- (void)recipeEditorViewControllerDidDismiss:(RecipeEditorViewController *)recipeEditorViewController;
 
 @end

@@ -217,8 +217,8 @@ enum {
 	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
 								   @{ @"name": _nameInput.text,
-								   @"description": _messageInput.text,
-								   @"recipe": _recipeView.recipeView.text }];
+								   @"description": _messageInput.text/*,
+								   @"recipe": _recipeView.recipeView.text*/ }];
 	if( _originalDishId )
 		[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
 	
@@ -272,7 +272,7 @@ enum {
 	[_recipeView presentAfterDelay:0.1];
 }
 
-- (void)recipeEditorViewDidDismiss:(RecipeEditorViewController *)recipeEditorView
+- (void)recipeEditorViewControllerDidDismiss:(RecipeEditorViewController *)recipeEditorView
 {
 	[UIView animateWithDuration:0.25 animations:^{
 		_recipeButton.frame = CGRectMake( 0, 0, 320, 50 );

@@ -79,8 +79,8 @@
 {
 	NSTimeInterval duration = 0.4;
 	
-	if( [self.delegate respondsToSelector:@selector(recipeEditorViewWillDismiss:)] )
-		[self.delegate recipeEditorViewWillDismiss:self];
+	if( [self.delegate respondsToSelector:@selector(recipeEditorViewControllerWillDismiss:)] )
+		[self.delegate recipeEditorViewControllerWillDismiss:self];
 	
 	[self.view endEditing:YES];
 	[self undimWithDuration:duration completion:nil];
@@ -95,7 +95,7 @@
 	
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_MSEC));
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-		[self.delegate recipeEditorViewDidDismiss:self];
+		[self.delegate recipeEditorViewControllerDidDismiss:self];
 	});
 }
 
