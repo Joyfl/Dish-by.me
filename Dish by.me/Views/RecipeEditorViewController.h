@@ -25,7 +25,7 @@
 }
 
 @property (nonatomic, weak) id<RecipeEditorViewControllerDelegate> delegate;
-@property (nonatomic) Recipe *recipe;
+@property (nonatomic, readonly) Recipe *recipe;
 
 - (id)initWithRecipe:(Recipe *)recipe;
 - (void)presentAfterDelay:(NSTimeInterval)delay;

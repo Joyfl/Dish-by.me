@@ -71,10 +71,6 @@ enum {
 	_messageInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	_messageInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
 	
-	_recipeView = [[RecipeEditorViewController alloc] initWithRecipe:nil];
-	_recipeView.delegate = self;
-	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
-	
 	_photoHeight = PhotoButtonMaxWidth;
 	
 	return self;
@@ -86,6 +82,11 @@ enum {
 	self = [self init];
 	self.trackedViewName = @"WritingViewController (New)";
 	self.navigationItem.title = NSLocalizedString( @"NEW_DISH", @"새 요리" );
+	
+	_recipeView = [[RecipeEditorViewController alloc] initWithRecipe:nil];
+	_recipeView.delegate = self;
+	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
+	
 	return self;
 }
 
@@ -95,6 +96,9 @@ enum {
 	self = [self init];
 	self.trackedViewName = @"WritingViewController (Edit)";
 	self.navigationItem.title = NSLocalizedString( @"EDIT_DISH", @"요리 수정" );
+	self.navigationItem.rightBarButtonItem.enabled = YES;
+	
+	_editingDishId = dish.dishId;
 	
 	if( dish.photo )
 	{
@@ -115,7 +119,10 @@ enum {
 	
 	_nameInput.text = dish.dishName;
 	_messageInput.text = dish.description;
-	// recipe
+	
+	_recipeView = [[RecipeEditorViewController alloc] initWithRecipe:dish.recipe];
+	_recipeView.delegate = self;
+	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
 	
 	return self;
 }
@@ -126,7 +133,13 @@ enum {
 	self = [self init];
 	self.trackedViewName = @"WritingViewController (Fork)";
 	self.navigationItem.title = NSLocalizedString( @"DO_FORK", @"포크하기" );
+	
 	_originalDishId = dishId;
+	
+	_recipeView = [[RecipeEditorViewController alloc] initWithRecipe:nil];
+	_recipeView.delegate = self;
+	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
+	
 	return self;
 }
 
@@ -251,7 +264,6 @@ enum {
 	[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.servings] forKey:@"servings"];
 	[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.minutes] forKey:@"minutes"];
 	
-	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
 								   @{ @"name": _nameInput.text,
 								   @"description": _messageInput.text,
@@ -260,6 +272,13 @@ enum {
 								   @"ingredient_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count],
 								   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
 	
+	// 요리를 포크할 경우
+	if( _originalDishId )
+	{
+		[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
+	}
+	
+	// 재료 파라미터
 	for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
 	{
 		Ingredient *ingredient = [_recipeView.recipe.ingredients objectAtIndex:i];
@@ -267,21 +286,59 @@ enum {
 		[params setObject:ingredient.amount forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
 	}
 	
-	NSMutableArray *photos = [NSMutableArray arrayWithObject:image];
-	NSMutableArray *names = [NSMutableArray arrayWithObject:@"photo"];
+	// 사진, 레시피 파라미터
+	// recipe_photo_%d : 레시피 사진 또는 URL
+	// recipe_description_%d : 레시피 설명
+	NSMutableArray *photos = [NSMutableArray array];
+	NSMutableArray *names = [NSMutableArray array];
+	
+	if( _isPhotoChanged )
+	{
+		JLLog( @"새로운 사진이 등록되었음" );
+		[photos addObject:image];
+		[names addObject:@"photo"];
+	}
+	else
+	{
+		JLLog( @"새로운 사진이 등록되지 않았음" );
+	}
+	
 	for( NSInteger i = 0; i < _recipeView.recipe.contents.count; i++ )
 	{
 		RecipeContent *content = [_recipeView.recipe.contents objectAtIndex:i];
 		[params setObject:content.description forKey:[NSString stringWithFormat:@"recipe_description_%d", i]];
 		
-		[photos addObject:content.photo];
-		[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+		// 새로운 사진이 올라오지 않았을 경우 : photoURL을 POST 파라미터로 넘김
+		if( content.photoURL )
+		{
+			JLLog( @"%d번째 레시피에 새로운 사진이 등록되지 않았음", i );
+			[params setObject:content.photoURL forKey:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+		}
+		// 새로운 사진이 등록되었을 경우 : Multipart로 사진 바이너리 전송
+		else
+		{
+			JLLog( @"%d번째 레시피에 새로운 사진이 등록되었음", i );
+			[photos addObject:content.photo];
+			[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+		}
 	}
 	
-	if( _originalDishId )
-		[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
+	JLLog( @"params : %@", params );
 	
-	[[DMAPILoader sharedLoader] api:@"/dish" method:@"POST" images:photos forNames:names fileNames:names parameters:params success:^(id response) {
+	NSString *api = nil;
+	NSString *method = nil;
+	if( !_editingDishId )
+	{
+		api = @"/dish";
+		method = @"POST";
+	}
+	else
+	{
+		api = [NSString stringWithFormat:@"/dish/%d", _editingDishId];
+		method = @"PUT";
+	}
+	
+	[[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		[self undim];
 		[_recipeView removePhotoButtonObservers];
@@ -394,6 +451,8 @@ enum {
 	
 	[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
 	[self resizePhotoButton];
+	
+	_isPhotoChanged = YES;
 }
 
 - (void)resizePhotoButton

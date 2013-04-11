@@ -299,6 +299,8 @@
 	} completion:nil];
 	
 	// 실제 데이터 교환
+	JLLog( @"드래그중인 %d를 %d와 교환", currentDraggingEditorViewIndex, targetEditorViewIndex );
+	[_recipe.contents exchangeObjectAtIndex:currentDraggingEditorViewIndex withObjectAtIndex:targetEditorViewIndex];
 	[_contentEditorViews exchangeObjectAtIndex:currentDraggingEditorViewIndex withObjectAtIndex:targetEditorViewIndex];
 	
 	// 계속 제자리에 올려놓고 있으면 쭉 넘어가게
@@ -333,6 +335,8 @@
 	} completion:nil];
 	
 	// 실제 데이터 교환
+	JLLog( @"드래그중인 %d를 %d와 교환", currentDraggingEditorViewIndex, targetEditorViewIndex );
+	[_recipe.contents exchangeObjectAtIndex:currentDraggingEditorViewIndex withObjectAtIndex:targetEditorViewIndex];
 	[_contentEditorViews exchangeObjectAtIndex:currentDraggingEditorViewIndex withObjectAtIndex:targetEditorViewIndex];
 	
 	// 계속 제자리에 올려놓고 있으면 쭉 넘어가게
@@ -387,6 +391,9 @@
 			RecipeContentEditorView *contentEditorView = (RecipeContentEditorView *)photoButton.superview.superview;
 			if( contentEditorView.textView.text.length == 0 )
 				[contentEditorView.textView becomeFirstResponder];
+			
+			// 새로운 사진을 선택했을 경우에는 photoURL을 nil로 만들어 사진 바이너리를 업로드시키도록 함
+			contentEditorView.content.photoURL = nil;
 		}];
 		
 		[self presentViewController:picker animated:YES completion:nil];

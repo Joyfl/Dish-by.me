@@ -27,6 +27,8 @@
 	
 	RecipeEditorViewController *_recipeView;
 	
+	NSInteger _editingDishId; // 요리 수정일 경우 수정중인 dish id
+	BOOL _isPhotoChanged; // 새 사진이 등록되었는지
 	NSInteger _originalDishId;
 	NSInteger _photoHeight;
 }

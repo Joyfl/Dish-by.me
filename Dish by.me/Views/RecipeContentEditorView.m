@@ -53,6 +53,19 @@
 	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 19, 18, 241, 186 )];
 	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 	[_photoButton addObserver:self forKeyPath:@"frame" options:NSKeyValueObservingOptionNew context:nil];
+	if( content.photo )
+	{
+		[_photoButton setBackgroundImage:content.photo forState:UIControlStateNormal];
+	}
+	else
+	{
+		[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		[DMAPILoader loadImageFromURLString:content.photoURL context:nil success:^(UIImage *image, id context) {
+			content.photo = image;
+			[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
+			[self layoutScrollViewContent];
+		}];
+	}
 	[_scrollView addSubview:_photoButton];
 	
 	_borderView = [[UIImageView alloc] init];
