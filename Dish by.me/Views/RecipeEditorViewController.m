@@ -104,6 +104,16 @@
 	
 }
 
+- (void)removePhotoButtonObservers
+{
+	for( RecipeContentEditorView *editorView in _contentEditorViews )
+	{
+		[editorView.photoButton removeObserver:editorView forKeyPath:@"frame"];
+	}
+	
+	[_newContentEditorView.photoButton removeObserver:_newContentEditorView forKeyPath:@"frame"];
+}
+
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate

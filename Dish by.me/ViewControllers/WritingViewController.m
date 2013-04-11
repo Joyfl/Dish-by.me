@@ -72,8 +72,6 @@ enum {
 	_recipeView.delegate = self;
 	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
 	
-//	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidBeginEditting:) name:UITextViewTextDidBeginEditingNotification object:nil];
-	
 	_photoHeight = PhotoButtonMaxWidth;
 	
 	return self;
@@ -204,6 +202,7 @@ enum {
 
 - (void)cancelButtonDidTouchUpInside
 {
+	[_recipeView removePhotoButtonObservers];
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -252,6 +251,7 @@ enum {
 	[[DMAPILoader sharedLoader] api:@"/dish" method:@"POST" images:photos forNames:names fileNames:names parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		[self undim];
+		[_recipeView removePhotoButtonObservers];
 		[self dismissViewControllerAnimated:YES completion:nil];
 		[self.delegate writingViewControllerDidFinishUpload:self];
 		

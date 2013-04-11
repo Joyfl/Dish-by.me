@@ -30,6 +30,7 @@
 - (id)initWithRecipe:(Recipe *)recipe;
 - (void)presentAfterDelay:(NSTimeInterval)delay;
 - (void)dismiss;
+- (void)removePhotoButtonObservers;
 
 @end
 
