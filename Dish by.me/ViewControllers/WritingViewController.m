@@ -28,28 +28,11 @@ enum {
 	kRowRecipe,
 };
 
+// Private
 - (id)init
-{
-	return [self initWithOriginalDishId:0];
-}
-
-- (id)initWithOriginalDishId:(NSInteger)dishId
 {
 	self = [super init];
 	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
-	
-	_originalDishId = dishId;
-	if( !dishId )
-	{
-		self.trackedViewName = @"WritingViewController (New)";
-		self.navigationItem.title = NSLocalizedString( @"NEW_DISH", @"새 요리" );
-	}
-	else
-	{
-		self.trackedViewName = @"WritingViewController (Fork)";
-		self.navigationItem.title = NSLocalizedString( @"DO_FORK", @"포크하기" );
-	}
-	
 	
 	DMBarButtonItem *cancelButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"CANCEL", @"" ) target:self action:@selector(cancelButtonDidTouchUpInside)];
 	self.navigationItem.leftBarButtonItem = cancelButton;
@@ -68,12 +51,82 @@ enum {
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self.view addSubview:_tableView];
 	
+	_photoButton = [[UIButton alloc] init];
+	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+	[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	
+	_nameInput = [[UITextField alloc] init];
+	_nameInput.placeholder = NSLocalizedString( @"INPUT_DISH_NAME", @"" );
+	_nameInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+	_nameInput.font = [UIFont boldSystemFontOfSize:15];
+	_nameInput.layer.shadowOffset = CGSizeMake( 0, 1 );
+	_nameInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
+	[_nameInput addTarget:self action:@selector(textViewDidBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
+	
+	_messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 70 )];
+	_messageInput.delegate = self;
+	_messageInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+	_messageInput.backgroundColor = [UIColor clearColor];
+	_messageInput.font = [UIFont boldSystemFontOfSize:15];
+	_messageInput.layer.shadowOffset = CGSizeMake( 0, 1 );
+	_messageInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
+	
 	_recipeView = [[RecipeEditorViewController alloc] initWithRecipe:nil];
 	_recipeView.delegate = self;
 	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
 	
 	_photoHeight = PhotoButtonMaxWidth;
 	
+	return self;
+}
+
+// 새 요리
+- (id)initWithNewDish
+{
+	self = [self init];
+	self.trackedViewName = @"WritingViewController (New)";
+	self.navigationItem.title = NSLocalizedString( @"NEW_DISH", @"새 요리" );
+	return self;
+}
+
+// 수정
+- (id)initWithDish:(Dish *)dish
+{
+	self = [self init];
+	self.trackedViewName = @"WritingViewController (Edit)";
+	self.navigationItem.title = NSLocalizedString( @"EDIT_DISH", @"요리 수정" );
+	
+	if( dish.photo )
+	{
+		[_photoButton setBackgroundImage:dish.photo forState:UIControlStateNormal];
+		[self resizePhotoButton];
+	}
+	else
+	{
+		if( dish.photoURL )
+		{
+			[DMAPILoader loadImageFromURLString:dish.photoURL context:nil success:^(UIImage *image, id context) {
+				dish.photo = image;
+				[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
+				[self resizePhotoButton];
+			}];
+		}
+	}
+	
+	_nameInput.text = dish.dishName;
+	_messageInput.text = dish.description;
+	// recipe
+	
+	return self;
+}
+
+// 포크
+- (id)initWithOriginalDishId:(NSInteger)dishId
+{
+	self = [self init];
+	self.trackedViewName = @"WritingViewController (Fork)";
+	self.navigationItem.title = NSLocalizedString( @"DO_FORK", @"포크하기" );
+	_originalDishId = dishId;
 	return self;
 }
 
@@ -112,22 +165,10 @@ enum {
 		{
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:photoCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-			
-			_photoButton = [[UIButton alloc] init];
-			[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-			[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:_photoButton];
 			
 			_borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_writing_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 45, 12 )]];
 			[cell.contentView addSubview:_borderView];
-			
-			_nameInput = [[UITextField alloc] init];
-			_nameInput.placeholder = NSLocalizedString( @"INPUT_DISH_NAME", @"" );
-			_nameInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
-			_nameInput.font = [UIFont boldSystemFontOfSize:15];
-			_nameInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-			_nameInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
-			[_nameInput addTarget:self action:@selector(textViewDidBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
 			[cell.contentView addSubview:_nameInput];
 		}
 		
@@ -148,14 +189,6 @@ enum {
 			UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
 			messageBoxView.frame = CGRectMake( 9, 0, 304, 100 );
 			[cell.contentView addSubview:messageBoxView];
-			
-			_messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 70 )];
-			_messageInput.delegate = self;
-			_messageInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
-			_messageInput.backgroundColor = [UIColor clearColor];
-			_messageInput.font = [UIFont boldSystemFontOfSize:15];
-			_messageInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-			_messageInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
 			[cell.contentView addSubview:_messageInput];
 		}
 	}
@@ -359,8 +392,14 @@ enum {
 	
 	self.navigationItem.rightBarButtonItem.enabled = YES;
 	
-	_photoHeight = PhotoButtonMaxWidth * image.size.height / image.size.width;
 	[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
+	[self resizePhotoButton];
+}
+
+- (void)resizePhotoButton
+{
+	UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
+	_photoHeight = PhotoButtonMaxWidth * image.size.height / image.size.width;
 	[_tableView reloadData];
 }
 

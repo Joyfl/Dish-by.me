@@ -103,12 +103,12 @@ enum {
 {
 	if( [CurrentUser user].loggedIn )
 	{
-//		if( _dish.userId == [UserManager manager].userId )
-//		{
-//			DMBarButtonItem *editButton = [[DMBarButtonItem alloc] initWithType:DMBarButtonItemTypeNormal title:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
-//			self.navigationItem.rightBarButtonItem = editButton;
-//		}
-//		else
+		if( _dish.userId == [CurrentUser user].userId )
+		{
+			DMBarButtonItem *editButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
+			self.navigationItem.rightBarButtonItem = editButton;
+		}
+		else
 		{
 			DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 			self.navigationItem.rightBarButtonItem = forkButton;
@@ -836,7 +836,10 @@ enum {
 
 - (void)editButtonDidTouchUpInside
 {
-	
+	WritingViewController *writingViewController = [[WritingViewController alloc] initWithDish:_dish];
+	writingViewController.delegate = self;
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
+	[self.navigationController presentViewController:navController animated:YES completion:NO];
 }
 
 - (void)forkButtonDidTouchUpInside

@@ -171,7 +171,7 @@
 {
 	if( [CurrentUser user].loggedIn )
 	{
-		WritingViewController *writingViewController = [[WritingViewController alloc] init];
+		WritingViewController *writingViewController = [[WritingViewController alloc] initWithNewDish];
 		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
 		[self.tabBarController presentViewController:navController animated:YES completion:nil];
 	}

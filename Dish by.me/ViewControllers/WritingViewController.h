@@ -10,6 +10,7 @@
 #import "GAITrackedViewController.h"
 #import "RecipeEditorViewController.h"
 
+@class Dish;
 @class RecipeView;
 
 @protocol WritingViewControllerDelegate;
@@ -32,6 +33,8 @@
 
 @property (nonatomic, weak) id<WritingViewControllerDelegate> delegate;
 
+- (id)initWithNewDish;
+- (id)initWithDish:(Dish *)dish;
 - (id)initWithOriginalDishId:(NSInteger)dishId;
 
 @end
