@@ -372,6 +372,11 @@
 			CGRect frame = photoButton.frame;
 			frame.size.height = floorf( 241 * image.size.height / image.size.width );
 			photoButton.frame = frame;
+			
+			// 텍스트가 입력되지 않았으면 사진 선택 후 텍스트뷰 포커싱
+			RecipeContentEditorView *contentEditorView = (RecipeContentEditorView *)photoButton.superview.superview;
+			if( contentEditorView.textView.text.length == 0 )
+				[contentEditorView.textView becomeFirstResponder];
 		}];
 		
 		[self presentViewController:picker animated:YES completion:nil];

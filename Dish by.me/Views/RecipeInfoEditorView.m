@@ -131,6 +131,7 @@
 			_servingsInput.layer.shadowOpacity = 0.7;
 			_servingsInput.layer.shadowRadius = 0;
 			_servingsInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+			[_servingsInput becomeFirstResponder];
 			[cell.contentView addSubview:_servingsInput];
 			
 			UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 152 - tableViewX, 70 - tableViewY, 4, 20 )];
@@ -264,9 +265,14 @@
 	Ingredient *ingredient = [[Ingredient alloc] init];
 	[_recipe.ingredients addObject:ingredient];
 	
+	NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:_recipe.ingredients.count - 1 inSection:1];
+	
 	[_tableView beginUpdates];
-	[_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:_recipe.ingredients.count - 1 inSection:1]] withRowAnimation:UITableViewRowAnimationFade];
+	[_tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationFade];
 	[_tableView endUpdates];
+	
+	IngredientEditorCell *cell = (IngredientEditorCell *)[_tableView cellForRowAtIndexPath:newIndexPath];
+	[cell.ingredientInput becomeFirstResponder];
 	
 	[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 }
