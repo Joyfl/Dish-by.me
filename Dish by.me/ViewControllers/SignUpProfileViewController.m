@@ -234,7 +234,7 @@
 	UIImage *profilePhoto = [_userPhotoButton imageForState:UIControlStateNormal];
 	
 	NSDictionary *params = @{ @"name": name, @"bio": bio };
-	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" image:profilePhoto parameters:params success:^(id response) {		
+	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" image:profilePhoto forName:@"photo" fileName:@"photo" parameters:params success:^(id response) {		
 		[CurrentUser user].photo = profilePhoto;
 		
 		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WOW", nil ) message:NSLocalizedString( @"MESSAGE_PROFILE_UPDATE_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {

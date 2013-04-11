@@ -80,6 +80,8 @@
 - (void)api:(NSString *)api
 	 method:(NSString *)method
 	  image:(UIImage *)image
+	forName:(NSString *)name
+   fileName:(NSString *)fileName
  parameters:(NSDictionary *)parameters
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
@@ -91,7 +93,7 @@
 	}
 	
 	NSURLRequest *request = [_client multipartFormRequestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-		[formData appendPartWithFileData:UIImageJPEGRepresentation( image, 1 ) name:@"photo" fileName:@"photo" mimeType:@"image/jpeg"];
+		[formData appendPartWithFileData:UIImageJPEGRepresentation( image, 1 ) name:name fileName:fileName mimeType:@"image/jpeg"];
 	}];
 	
 	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -107,7 +109,67 @@
 				JLLog( @"AccessToken is extended" );
 				
 				[[CurrentUser user] setAccessToken:[response objectForKey:@"access_token"]];
-				[self api:api method:method image:image parameters:parameters success:success failure:failure];
+				[self api:api method:method image:image forName:name fileName:fileName parameters:parameters success:success failure:failure];
+				
+			} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+				JLLog( @"statusCode : %d", statusCode );
+				JLLog( @"errorCode : %d", errorCode );
+				JLLog( @"message : %@", message );
+			}];
+			return;
+		}
+		
+		JLLog( @"URL : %@", operation.request.URL );
+		failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
+	}];
+}
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+	 images:(NSArray *)images
+   forNames:(NSArray *)names
+  fileNames:(NSArray *)fileNames
+ parameters:(NSDictionary *)parameters
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
+{
+	if( !images || images.count == 0 )
+	{
+		[self api:api method:method parameters:parameters success:success failure:failure];
+		return;
+	}
+	
+	if( images.count != names.count || names.count != fileNames.count )
+	{
+		JLLog( @"Must be image.count == names.count == fileNames.count" );
+		return;
+	}
+	
+	NSURLRequest *request = [_client multipartFormRequestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+		
+		for( NSInteger i = 0; i < images.count; i++ )
+		{
+			UIImage *image = [images objectAtIndex:i];
+			NSString *name = [names objectAtIndex:i];
+			NSString *fileName = [fileNames objectAtIndex:i];
+			[formData appendPartWithFileData:UIImageJPEGRepresentation( image, 1 ) name:name fileName:fileName mimeType:@"image/jpeg"];
+		}
+	}];
+	
+	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
+		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
+		
+		// AccessToken is expired
+		if( errorCode == 2000 )
+		{
+			JLLog( @"AccessToken is expired" );
+			
+			[self extendAccessToken:^(id response) {
+				JLLog( @"AccessToken is extended" );
+				
+				[[CurrentUser user] setAccessToken:[response objectForKey:@"access_token"]];
+				[self api:api method:method images:images forNames:names fileNames:fileNames parameters:parameters success:success failure:failure];
 				
 			} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 				JLLog( @"statusCode : %d", statusCode );

@@ -24,6 +24,17 @@
 - (void)api:(NSString *)api
 	 method:(NSString *)method
 	  image:(UIImage *)image
+	forName:(NSString *)name
+   fileName:(NSString *)fileName
+ parameters:(NSDictionary *)parameters
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+	 images:(NSArray *)images
+   forNames:(NSArray *)names
+  fileNames:(NSArray *)fileNames
  parameters:(NSDictionary *)parameters
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;

@@ -546,7 +546,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)uploadUserPhoto:(UIImage *)photo
 {
-	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" image:photo parameters:nil success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" image:photo forName:@"photo" fileName:@"photo" parameters:nil success:^(id response) {
 		JLLog( @"Succeed" );
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {

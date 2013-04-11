@@ -215,14 +215,41 @@ enum {
 	[self dim];
 	[(DMBarButtonItem *)self.navigationItem.rightBarButtonItem button].showsActivityIndicatorView = YES;
 	
+	NSMutableDictionary *recipe = [NSMutableDictionary dictionary];
+	[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.servings] forKey:@"servings"];
+	[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.minutes] forKey:@"minutes"];
+	
+	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
 								   @{ @"name": _nameInput.text,
-								   @"description": _messageInput.text/*,
-								   @"recipe": _recipeView.recipeView.text*/ }];
+								   @"description": _messageInput.text,
+								   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
+								   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
+								   @"ingredient_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count],
+								   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
+	
+	for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
+	{
+		Ingredient *ingredient = [_recipeView.recipe.ingredients objectAtIndex:i];
+		[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
+		[params setObject:ingredient.amount forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
+	}
+	
+	NSMutableArray *photos = [NSMutableArray arrayWithObject:image];
+	NSMutableArray *names = [NSMutableArray arrayWithObject:@"photo"];
+	for( NSInteger i = 0; i < _recipeView.recipe.contents.count; i++ )
+	{
+		RecipeContent *content = [_recipeView.recipe.contents objectAtIndex:i];
+		[params setObject:content.description forKey:[NSString stringWithFormat:@"recipe_description_%d", i]];
+		
+		[photos addObject:content.photo];
+		[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+	}
+	
 	if( _originalDishId )
 		[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
 	
-	[[DMAPILoader sharedLoader] api:@"/dish" method:@"POST" image:image parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/dish" method:@"POST" images:photos forNames:names fileNames:names parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		[self undim];
 		[self dismissViewControllerAnimated:YES completion:nil];

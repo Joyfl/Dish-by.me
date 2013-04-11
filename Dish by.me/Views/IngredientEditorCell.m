@@ -30,6 +30,7 @@
 	_ingredientInput.layer.shadowOpacity = 0.7;
 	_ingredientInput.layer.shadowRadius = 0;
 	_ingredientInput.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	[_ingredientInput addTarget:self action:@selector(ingredientInputDidChange) forControlEvents:UIControlEventEditingChanged];
 	[self.contentView addSubview:_ingredientInput];
 	
 	UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 170, 8, 4, 20 )];
@@ -47,6 +48,7 @@
 	_amountInput.layer.shadowRadius = 0;
 	_amountInput.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
 	_amountInput.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	[_amountInput addTarget:self action:@selector(amountInputDidChange) forControlEvents:UIControlEventEditingChanged];
 	[self.contentView addSubview:_amountInput];
 	
 	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( -18, 37, 255, 4 )];
@@ -101,6 +103,16 @@
 	_ingredientInput.text = _ingredient.name;
 	_amountInput.text = _ingredient.amount;
 	[self updateEditControl];
+}
+
+- (void)ingredientInputDidChange
+{
+	_ingredient.name = _ingredientInput.text;
+}
+
+- (void)amountInputDidChange
+{
+	_ingredient.amount = _amountInput.text;
 }
 
 @end
