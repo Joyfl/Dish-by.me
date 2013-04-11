@@ -27,5 +27,6 @@
 @property (nonatomic, readonly) UITextView *textView;
 
 - (id)initWithRecipeContent:(RecipeContent *)content;
+- (void)setPhotoButtonImage:(UIImage *)image;
 
 @end

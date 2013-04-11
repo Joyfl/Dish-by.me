@@ -248,7 +248,6 @@ enum {
 
 - (void)cancelButtonDidTouchUpInside
 {
-	[_recipeView removePhotoButtonObservers];
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -341,7 +340,6 @@ enum {
 	[[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params success:^(id response) {
 		JLLog( @"Success" );
 		[self undim];
-		[_recipeView removePhotoButtonObservers];
 		[self dismissViewControllerAnimated:YES completion:nil];
 		[self.delegate writingViewControllerDidFinishUpload:self];
 		

@@ -104,16 +104,6 @@
 	
 }
 
-- (void)removePhotoButtonObservers
-{
-	for( RecipeContentEditorView *editorView in _contentEditorViews )
-	{
-		[editorView.photoButton removeObserver:editorView forKeyPath:@"frame"];
-	}
-	
-	[_newContentEditorView.photoButton removeObserver:_newContentEditorView forKeyPath:@"frame"];
-}
-
 
 #pragma mark -
 #pragma mark UIScrollViewDelegate
@@ -382,18 +372,15 @@
 			if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
 				UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
 			
-			[photoButton setImage:image forState:UIControlStateNormal];
-			CGRect frame = photoButton.frame;
-			frame.size.height = floorf( 241 * image.size.height / image.size.width );
-			photoButton.frame = frame;
-			
-			// 텍스트가 입력되지 않았으면 사진 선택 후 텍스트뷰 포커싱
 			RecipeContentEditorView *contentEditorView = (RecipeContentEditorView *)photoButton.superview.superview;
-			if( contentEditorView.textView.text.length == 0 )
-				[contentEditorView.textView becomeFirstResponder];
+			[contentEditorView setPhotoButtonImage:image];
 			
 			// 새로운 사진을 선택했을 경우에는 photoURL을 nil로 만들어 사진 바이너리를 업로드시키도록 함
 			contentEditorView.content.photoURL = nil;
+			
+			// 텍스트가 입력되지 않았으면 사진 선택 후 텍스트뷰 포커싱
+			if( contentEditorView.textView.text.length == 0 )
+				[contentEditorView.textView becomeFirstResponder];
 		}];
 		
 		[self presentViewController:picker animated:YES completion:nil];

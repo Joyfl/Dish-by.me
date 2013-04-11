@@ -47,15 +47,14 @@
 	_photoButton.adjustsImageWhenHighlighted = NO;
 	if( content.photo )
 	{
-		[_photoButton setBackgroundImage:content.photo forState:UIControlStateNormal];
+		[self setPhotoButtonImage:content.photo];
 	}
 	else
 	{
 		[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 		[DMAPILoader loadImageFromURLString:content.photoURL context:nil success:^(UIImage *image, id context) {
 			content.photo = image;
-			[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
-			[self layoutScrollViewContent];
+			[self setPhotoButtonImage:image];
 		}];
 	}
 	[_scrollView addSubview:_photoButton];
@@ -84,6 +83,17 @@
 	[self layoutScrollViewContent];
 	
 	return self;
+}
+
+- (void)setPhotoButtonImage:(UIImage *)image
+{
+	[_photoButton setImage:image forState:UIControlStateNormal];
+	
+	CGRect frame = _photoButton.frame;
+	frame.size.height = floorf( 241 * image.size.height / image.size.width );
+	_photoButton.frame = frame;
+	
+	[self layoutScrollViewContent];
 }
 
 - (void)layoutScrollViewContent
