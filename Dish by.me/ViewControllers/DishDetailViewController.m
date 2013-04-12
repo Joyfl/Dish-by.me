@@ -144,9 +144,14 @@ enum {
 
 - (void)loadDishId:(NSInteger)dishId
 {
+	JLLog( @"%d번 Dish 로드 시작", dishId );
+	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d", dishId];
 	[[DMAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
+		JLLog( @"%d번 Dish 로드 완료", dishId );
+		
 		_dish = [Dish dishFromDictionary:response];
+		
 		self.navigationItem.title = _dish.dishName;
 		
 		[_tableView reloadData];
@@ -161,10 +166,11 @@ enum {
 
 - (void)loadComments
 {
+	JLLog( @"댓글 로드 시작" );
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/comments", _dish.dishId];
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _commentOffset] };
 	[[DMAPILoader sharedLoader] api:api method:@"GET" parameters:params success:^(id response) {
-		JLLog( @"Success" );
+		JLLog( @"댓글 로드 완료" );
 		
 		NSArray *data = [response objectForKey:@"data"];
 		
@@ -538,36 +544,31 @@ enum {
 			//
 			// Message
 			//
-			UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
-			messageBoxView.userInteractionEnabled = YES;
-			[cell.contentView addSubview:messageBoxView];
+			_messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
+			_messageBoxView.userInteractionEnabled = YES;
+			[cell.contentView addSubview:_messageBoxView];
 			
-			UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 12, 15, 280, 20 )];
-			messageLabel.text = _dish.description;
-			messageLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
-			messageLabel.font = [UIFont boldSystemFontOfSize:14];
-			messageLabel.shadowOffset = CGSizeMake( 0, 1 );
-			messageLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
-			messageLabel.backgroundColor = [UIColor clearColor];
-			messageLabel.numberOfLines = 0;
-			[messageLabel sizeToFit];
-			[messageBoxView addSubview:messageLabel];
+			_messageLabel = [[UILabel alloc] init];
+			_messageLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+			_messageLabel.font = [UIFont boldSystemFontOfSize:14];
+			_messageLabel.shadowOffset = CGSizeMake( 0, 1 );
+			_messageLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+			_messageLabel.backgroundColor = [UIColor clearColor];
+			_messageLabel.numberOfLines = 0;
+			[_messageBoxView addSubview:_messageLabel];
 			
-			messageBoxView.frame = CGRectMake( 8, 30, 304, 66 + messageLabel.frame.size.height );
-			
-			UIImageView *messageBoxDotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_dot_line.png"]];
-			messageBoxDotLineView.frame = CGRectMake( 9, 24 + messageLabel.frame.size.height, 285, 2 );
-			[messageBoxView addSubview:messageBoxDotLineView];
+			_messageBoxDotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"message_box_dot_line.png"]];
+			[_messageBoxView addSubview:_messageBoxDotLineView];
 			
 			if( _dish.forkedFromId )
 			{
-				TTTAttributedLabel *forkedFromLabel = [[TTTAttributedLabel alloc] initWithFrame:CGRectMake( 12, messageBoxDotLineView.frame.origin.y + 4, 280, 30 )];
-				forkedFromLabel.delegate = self;
-				forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
-				forkedFromLabel.backgroundColor = [UIColor clearColor];
-				forkedFromLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
-				forkedFromLabel.linkAttributes = @{ (NSString *)kCTUnderlineStyleAttributeName: @NO };
-				forkedFromLabel.activeLinkAttributes = @{ (NSString *)kTTTBackgroundFillColorAttributeName: (id)[UIColor lightGrayColor].CGColor, (NSString *)kTTTBackgroundCornerRadiusAttributeName: @3 };
+				_forkedFromLabel = [[TTTAttributedLabel alloc] init];
+				_forkedFromLabel.delegate = self;
+				_forkedFromLabel.font = [UIFont boldSystemFontOfSize:14];
+				_forkedFromLabel.backgroundColor = [UIColor clearColor];
+				_forkedFromLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+				_forkedFromLabel.linkAttributes = @{ (NSString *)kCTUnderlineStyleAttributeName: @NO };
+				_forkedFromLabel.activeLinkAttributes = @{ (NSString *)kTTTBackgroundFillColorAttributeName: (id)[UIColor lightGrayColor].CGColor, (NSString *)kTTTBackgroundCornerRadiusAttributeName: @3 };
 				
 				NSString *text = nil;
 				NSString *dishNameWithQuote = [NSString stringWithFormat:@"'%@'", _dish.forkedFromName];
@@ -582,19 +583,17 @@ enum {
 				}
 				
 				__block NSRange dishNameRange;
-				[forkedFromLabel setText:text afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
+				[_forkedFromLabel setText:text afterInheritingLabelAttributesAndConfiguringWithBlock:^NSMutableAttributedString *(NSMutableAttributedString *mutableAttributedString) {
 					dishNameRange = [mutableAttributedString.string rangeOfString:dishNameWithQuote];
 					[mutableAttributedString addAttribute:(NSString *)kCTForegroundColorAttributeName value:(__bridge id)[UIColor colorWithHex:0x4A4746 alpha:1].CGColor range:dishNameRange];
 					return mutableAttributedString;
 				}];
 				
-				[forkedFromLabel addLinkToURL:nil withRange:dishNameRange];
-				[messageBoxView addSubview:forkedFromLabel];
+				[_forkedFromLabel addLinkToURL:nil withRange:dishNameRange];
+				[_messageBoxView addSubview:_forkedFromLabel];
 			}
 			
-			// (NSInteger)log10f : 자리수
-			CGFloat forkedButtonWidth = _dish.forkCount == 0 ? 35 : 30 + ((NSInteger)log10f( _dish.forkCount ) + 1) * 5;
-			_forkCountButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 297 - forkedButtonWidth, messageBoxDotLineView.frame.origin.y + 9, forkedButtonWidth, 20 )];
+			_forkCountButton = [[JLLabelButton alloc] init];
 			_forkCountButton.titleLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:14];
 			_forkCountButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 			_forkCountButton.titleLabel.textAlignment = NSTextAlignmentRight;
@@ -604,22 +603,18 @@ enum {
 			_forkCountButton.titleEdgeInsets = UIEdgeInsetsMake( -2, 0, 0, -8 );
 			_forkCountButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 0, 0, 5 );
 			[_forkCountButton addTarget:self action:@selector(forkCountButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-			[messageBoxView addSubview:_forkCountButton];
-			
-			NSInteger messageBoxBottomY = messageBoxView.frame.origin.y + messageBoxView.frame.size.height;
-			NSInteger recipeButtonBottomY = messageBoxBottomY + 8;
+			[_messageBoxView addSubview:_forkCountButton];
 			
 			//
 			// Recipe
 			//
 			if( _dish.recipe )
 			{
-				UIImageView *dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
-				dotLineView.frame = CGRectMake( 8, messageBoxBottomY + 18, 304, 2 );
-				[cell.contentView addSubview:dotLineView];
+				_dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
+				[cell.contentView addSubview:_dotLineView];
 				
-				UIView *recipeButtonContainer = [[UIView alloc] initWithFrame:CGRectMake( 0, messageBoxBottomY + 36, 320, 50 )];
-				[cell.contentView addSubview:recipeButtonContainer];
+				_recipeButtonContainer = [[UIView alloc] init];
+				[cell.contentView addSubview:_recipeButtonContainer];
 				
 				_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 50 )];
 				[_recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -630,24 +625,21 @@ enum {
 				_recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 				_recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
 				_recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
-				[recipeButtonContainer addSubview:_recipeButton];
+				[_recipeButtonContainer addSubview:_recipeButton];
 				
 				CALayer *maskLayer = [CALayer layer];
 				maskLayer.bounds = CGRectMake( 0, 0, 640, 100 );
 				maskLayer.contents = (id)[UIImage imageNamed:@"placeholder"].CGImage;
-				recipeButtonContainer.layer.mask = maskLayer;
-				
-				recipeButtonBottomY = messageBoxBottomY + 74;
+				_recipeButtonContainer.layer.mask = maskLayer;
 			}
 			
-			UIImageView *recipeBottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
-			recipeBottomLine.frame = CGRectMake( 0, recipeButtonBottomY, 320, 15 );
-			[cell.contentView addSubview:recipeBottomLine];
+			_recipeBottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
+			[cell.contentView addSubview:_recipeBottomLine];
 			
 			//
 			// Bookmark
 			//
-			_bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 28, recipeButtonBottomY + 35, 180, 12 )];
+			_bookmarkLabel = [[UILabel alloc] init];
 			_bookmarkLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 			_bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
 			_bookmarkLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
@@ -655,23 +647,47 @@ enum {
 			_bookmarkLabel.backgroundColor= [UIColor clearColor];
 			[cell.contentView addSubview:_bookmarkLabel];
 			
-			_bookmarkIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 10, recipeButtonBottomY + 33, 13, 17 )];
+			_bookmarkIconView = [[UIImageView alloc] init];
 			[cell.contentView addSubview:_bookmarkIconView];
 			
 			_bookmarkButton = [[BookmarkButton alloc] init];
 			_bookmarkButton.delegate = self;
 			_bookmarkButton.parentView = cell.contentView;
-			_bookmarkButton.position = CGPointMake( 320, recipeButtonBottomY + 30 );
-			
-			_contentRowHeight = recipeButtonBottomY + 65;
-			[_tableView reloadData]; // _contentRowHeight가 설정된 후 cellRow를 다시 잡아줌
 		}
 		
 		_timeLabel.text = _dish.relativeCreatedTime;
 		[_timeLabel sizeToFit];
 		_timeLabel.frame = CGRectMake( 307 - _timeLabel.frame.size.width, 8, _timeLabel.frame.size.width, 10 );
 		
+		_messageLabel.frame = CGRectMake( 12, 15, 280, 0 );
+		_messageLabel.text = _dish.description;
+		[_messageLabel sizeToFit];
+		_messageBoxView.frame = CGRectMake( 8, 30, 304, 66 + _messageLabel.frame.size.height );
+		_messageBoxDotLineView.frame = CGRectMake( 9, 24 + _messageLabel.frame.size.height, 285, 2 );
+		
+		_forkedFromLabel.frame = CGRectMake( 12, _messageBoxDotLineView.frame.origin.y + 4, 280, 30 );
+		
+		// (NSInteger)log10f : 자리수
+		CGFloat forkedButtonWidth = _dish.forkCount == 0 ? 35 : 30 + ((NSInteger)log10f( _dish.forkCount ) + 1) * 5;
+		_forkCountButton.frame = CGRectMake( 297 - forkedButtonWidth, _messageBoxDotLineView.frame.origin.y + 9, forkedButtonWidth, 20 );
 		[_forkCountButton setTitle:[NSString stringWithFormat:@"%d", _dish.forkCount] forState:UIControlStateNormal];
+		
+		NSInteger messageBoxBottomY = _messageBoxView.frame.origin.y + _messageBoxView.frame.size.height;
+		NSInteger recipeButtonBottomY = messageBoxBottomY + 8;
+		
+		_dotLineView.frame = CGRectMake( 8, messageBoxBottomY + 18, 304, 2 );
+		
+		if( _dish.recipe )
+		{
+			_recipeButtonContainer.frame = CGRectMake( 0, messageBoxBottomY + 36, 320, 50 );
+			recipeButtonBottomY = messageBoxBottomY + 74;
+		}
+		
+		_recipeBottomLine.frame = CGRectMake( 0, recipeButtonBottomY, 320, 15 );
+		
+		_bookmarkLabel.frame = CGRectMake( 28, recipeButtonBottomY + 35, 180, 12 );
+		_bookmarkIconView.frame = CGRectMake( 10, recipeButtonBottomY + 33, 13, 17 );
+		_bookmarkButton.position = CGPointMake( 320, recipeButtonBottomY + 30 );
 		
 		if( _dish.bookmarked )
 			_bookmarkButton.buttonX = 10;
@@ -680,6 +696,8 @@ enum {
 
 		_bookmarkButton.hidden = ![CurrentUser user].loggedIn;
 		[self updateBookmarkUI];
+		
+		_contentRowHeight = recipeButtonBottomY + 65;
 		
 		return cell;
 	}
@@ -1005,6 +1023,7 @@ enum {
 
 - (void)writingViewControllerDidFinishUpload:(WritingViewController *)writingViewController
 {
+	JLLog( @"업로드 완료. Dish 재로드" );
 	[self loadDishId:_dish.dishId];
 }
 

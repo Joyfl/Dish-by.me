@@ -37,9 +37,21 @@
 	
 	UIImageView *_photoView;
 	UIImageView *_borderView;
+	
 	UILabel *_timeLabel;
+	
+	UIImageView *_messageBoxView;
+	UILabel *_messageLabel;
+	UIImageView *_messageBoxDotLineView;
+	
+	TTTAttributedLabel *_forkedFromLabel;
 	JLLabelButton *_forkCountButton;
+	
+	UIImageView *_dotLineView;
+	UIView *_recipeButtonContainer;
 	UIButton *_recipeButton;
+	UIImageView *_recipeBottomLine;
+	
 	UIImageView *_bookmarkIconView;
 	UILabel *_bookmarkLabel;
 	BookmarkButton *_bookmarkButton;
