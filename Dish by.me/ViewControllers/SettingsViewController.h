@@ -13,7 +13,6 @@
 @interface SettingsViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, DMSwitchCellDelegate>
 {
 	UITableView *_tableView;
-	NSMutableDictionary *_sharingSettings;
 }
 
 @end

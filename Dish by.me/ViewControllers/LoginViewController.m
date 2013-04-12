@@ -175,23 +175,16 @@
 	[self setInputFieldsEnabled:NO];
 	_facebookButton.showsActivityIndicatorView = YES;
 	
-	[[FBSession activeSession] closeAndClearTokenInformation];
-	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+	FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
+	[FBSession setActiveSession:session];
+	[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+		
 		switch( status )
 		{
 			case FBSessionStateOpen:
 			{
-				[[FBSession activeSession] reauthorizeWithPublishPermissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone completionHandler:^(FBSession *session, NSError *error) {
-					
-					if( error )
-					{
-						JLLog( @"Reauthorize Error : %@", error );
-						return;
-					}
-					
-					JLLog( @"Reauthorize with publish permissions complete." );
-					[self loginWithParameters:@{ @"facebook_token": [[FBSession activeSession] accessToken] }];
-				}];
+				JLLog( @"openWithCompletionHandler with publish permissions complete." );
+				[self loginWithParameters:@{ @"facebook_token": [[FBSession activeSession] accessToken] }];
 				break;
 			}
 				

@@ -211,29 +211,22 @@
 	[self setInputFieldsEnabled:NO];
 	_facebookButton.showsActivityIndicatorView = YES;
 	
-	[[FBSession activeSession] closeAndClearTokenInformation];
-	[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+	FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
+	[FBSession setActiveSession:session];
+	[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+		
 		switch( status )
 		{
 			case FBSessionStateOpen:
 			{
-				[[FBSession activeSession] reauthorizeWithPublishPermissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone completionHandler:^(FBSession *session, NSError *error) {
+				JLLog( @"openWithCompletionHandler with publish permissions complete." );
+				
+				[[FBRequest requestForGraphPath:@"/me?fields=id,email,name,bio,picture.width(200).height(200)"] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
 					
-					if( error )
-					{
-						JLLog( @"Reauthorize Error : %@", error );
-						return;
-					}
-					
-					JLLog( @"Reauthorize with publish permissions complete." );
-					
-					[[FBRequest requestForGraphPath:@"/me?fields=id,email,name,bio,picture.width(200).height(200)"] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
-						
-						_facebookUserInfo = user;
-						_emailInput.text = [user objectForKey:@"email"];
-						[self setInputFieldsEnabled:YES];
-						_facebookButton.showsActivityIndicatorView = NO;
-					}];
+					_facebookUserInfo = user;
+					_emailInput.text = [user objectForKey:@"email"];
+					[self setInputFieldsEnabled:YES];
+					_facebookButton.showsActivityIndicatorView = NO;
 				}];
 				break;
 			}
@@ -243,7 +236,7 @@
 				JLLog( @"FBSessionStateOpenTokenExtended" );
 				break;
 			}
-			
+				
 			case FBSessionStateClosedLoginFailed:
 				[self setInputFieldsEnabled:YES];
 				_facebookButton.showsActivityIndicatorView = NO;
@@ -265,7 +258,8 @@
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_FACEBOOK_NOT_ALLOWED", nil ) delegate:nil cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil] show];
 			}
 		}
-	}];
+		
+	}
 }
 
 - (void)signUpButtonDidTouchUpInside

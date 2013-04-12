@@ -32,8 +32,6 @@ enum {
 	_tableView.backgroundView.hidden = YES;
 	[self.view addSubview:_tableView];
 	
-	_sharingSettings = [NSMutableDictionary dictionaryWithDictionary:[[NSUserDefaults standardUserDefaults] dictionaryForKey:DMUserDefaultsKeySharingSettings]];
-	
     return self;
 }
 
@@ -106,7 +104,7 @@ enum {
 			{
 				cell.textLabel.text = @"Facebook";
 				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-				cell.on = [[_sharingSettings objectForKey:@"facebook"] boolValue];
+				cell.on = [[NSUserDefaults standardUserDefaults] boolForKey:DMUserDefaultsKeyShareToFacebook];
 			}
 		}
 		
@@ -187,8 +185,7 @@ enum {
 								[self undim];
 								JLLog( @"response : %@", response );
 								
-								[_sharingSettings setObject:[NSNumber numberWithBool:on] forKey:@"facebook"];
-								[[NSUserDefaults standardUserDefaults] setObject:_sharingSettings forKey:DMUserDefaultsKeySharingSettings];
+								[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:on] forKey:DMUserDefaultsKeyShareToFacebook];
 								[[NSUserDefaults standardUserDefaults] synchronize];
 								
 							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
