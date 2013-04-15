@@ -151,10 +151,15 @@ enum {
 	
 	else if( indexPath.section == kSectionLogout )
 	{
-		[[CurrentUser user] logout];
-		
-		AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-		[AuthViewController presentAuthViewControllerFromViewController:appDelegate.tabBarController delegate:appDelegate];
+		[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"REALLY_LOGOUT", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"LOGOUT", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+			if( buttonIndex == 0 )
+			{
+				[[CurrentUser user] logout];
+				
+				AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+				[AuthViewController presentAuthViewControllerFromViewController:appDelegate.tabBarController delegate:appDelegate];
+			}
+		}] showInView:self.tabBarController.view];
 	}
 	
 	[tableView reloadData];

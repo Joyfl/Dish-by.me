@@ -109,6 +109,7 @@
 "SHARE_SETTINGS" = "공유 설정";
 "PUSH_NOTIFICATIONS_SETTINGS" = "푸시 알림 설정";
 "LOGOUT" = "로그아웃";
+"REALLY_LOGOUT" = "로그아웃 하시겠습니까?";
 "LOGOUT_SUCCEED" = "로그아웃되었습니다.";
 
 // Date

@@ -258,8 +258,7 @@
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_FACEBOOK_NOT_ALLOWED", nil ) delegate:nil cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil] show];
 			}
 		}
-		
-	}
+	}];
 }
 
 - (void)signUpButtonDidTouchUpInside

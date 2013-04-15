@@ -406,7 +406,7 @@ enum {
 			return 1;
 			
 		case kSectionMoreComments:
-			return !_loadedAllComments;
+			return _comments.count == 0 ? 0 : !_loadedAllComments;
 			
 		case kSectionComment:
 			if( isFirstCommentLoaded )
@@ -698,7 +698,7 @@ enum {
 		[self updateBookmarkUI];
 		
 		_contentRowHeight = recipeButtonBottomY + 65;
-		
+		[_tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
 		return cell;
 	}
 	
@@ -893,7 +893,7 @@ enum {
 	RecipeViewerViewController *recipeView = [[RecipeViewerViewController alloc] initWithRecipe:_dish.recipe];
 	recipeView.delegate = self;
 	[UIView animateWithDuration:0.25 animations:^{
-		_recipeButton.frame = CGRectMake( 0, 50, 320, 50 );
+		_recipeButton.frame = CGRectMake( 0, 0, 320, 50 );
 	}];
 	
 	[recipeView presentAfterDelay:0.1];
