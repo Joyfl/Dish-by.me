@@ -106,10 +106,12 @@
 "NO_FOLLOWERS" = "%@님을 팔로우하는 사용자는 아직 없어요 :)";
 
 // SettingsView
+"SETTINGS" = "설정";
 "SHARE_SETTINGS" = "공유 설정";
 "FACEBOOK" = "페이스북";
 "SHARE_ACTIVITIES" = "활동 공유";
 "DISCONNECT" = "연동 해제";
+"REALLY_DISCONNECT" = "계정 연동을 해제하시려구요?";
 "PUSH_NOTIFICATIONS_SETTINGS" = "푸시 알림 설정";
 "LOGOUT" = "로그아웃";
 "REALLY_LOGOUT" = "로그아웃 하시겠습니까?";

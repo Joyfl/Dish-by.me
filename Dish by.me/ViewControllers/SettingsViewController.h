@@ -9,12 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
 #import "DMSwitchCell.h"
+#import "Settings.h"
 
 @interface SettingsViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, DMSwitchCellDelegate>
 {
 	UITableView *_tableView;
 	UIActivityIndicatorView *_loadingIndicatorView;
-	NSMutableDictionary *_settings;
+	Settings *_settings;
 }
 
 - (void)loadSettings;

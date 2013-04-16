@@ -46,12 +46,12 @@
 	NSURLRequest *request = [_client requestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters]];
 	
 	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-		if( error )
-		{
-			JLLog( @"%@", error );
-			return;
-		}
-		
+//		if( error )
+//		{
+//			JLLog( @"%@", error );
+//			return;
+//		}
+//		
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
 		

@@ -8,13 +8,14 @@
 
 #import "GAITrackedViewController.h"
 #import "DMSwitchCell.h"
+#import "Settings.h"
 
 @interface FacebookSettingsViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, DMSwitchCellDelegate>
 {
 	UITableView *_tableView;
-	NSMutableDictionary *_facebookSettings;
+	Settings *_settings;
 }
 
-- (id)initWithFacebookSettings:(NSMutableDictionary *)facebookSettings;
+- (id)initWithSettings:(Settings *)settings;
 
 @end

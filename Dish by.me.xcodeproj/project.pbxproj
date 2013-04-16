@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		03087E89171D100D0050BDAB /* FacebookSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03087E88171D100D0050BDAB /* FacebookSettingsViewController.m */; };
+		03087E8F171DAAD10050BDAB /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 03087E8E171DAAD10050BDAB /* Settings.m */; };
 		0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0314A11316E775AC00DAF40A /* TTTAttributedLabel.m */; };
 		0314A11716E776AC00DAF40A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0314A11516E7769F00DAF40A /* CoreText.framework */; };
 		0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0314A11916E7950E00DAF40A /* JLHangulUtils.m */; };
@@ -296,6 +297,8 @@
 /* Begin PBXFileReference section */
 		03087E87171D100D0050BDAB /* FacebookSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookSettingsViewController.h; sourceTree = "<group>"; };
 		03087E88171D100D0050BDAB /* FacebookSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookSettingsViewController.m; sourceTree = "<group>"; };
+		03087E8D171DAAD10050BDAB /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = Models/Settings.h; sourceTree = "<group>"; };
+		03087E8E171DAAD10050BDAB /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Settings.m; path = Models/Settings.m; sourceTree = "<group>"; };
 		0314A11216E775AC00DAF40A /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		0314A11316E775AC00DAF40A /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		0314A11516E7769F00DAF40A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -943,6 +946,8 @@
 				03DD1709170AC5AC0064D022 /* Ingredient.m */,
 				03DD170B170AC5D90064D022 /* RecipeContent.h */,
 				03DD170C170AC5D90064D022 /* RecipeContent.m */,
+				03087E8D171DAAD10050BDAB /* Settings.h */,
+				03087E8E171DAAD10050BDAB /* Settings.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1619,6 +1624,7 @@
 				0377B1F317146F2100D7F75F /* RecipeContentViewerView.m in Sources */,
 				0377B1F617147D2000D7F75F /* IngredientViewerCell.m in Sources */,
 				03087E89171D100D0050BDAB /* FacebookSettingsViewController.m in Sources */,
+				03087E8F171DAAD10050BDAB /* Settings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

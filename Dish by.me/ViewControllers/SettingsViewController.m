@@ -37,6 +37,7 @@ enum {
     self = [super init];
 	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	self.trackedViewName = [[self class] description];
+	self.navigationItem.title = NSLocalizedString( @"SETTINGS", nil );
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStyleGrouped];
 	_tableView.dataSource = self;
@@ -54,6 +55,11 @@ enum {
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+	[_tableView reloadData];
+}
+
 
 #pragma mark -
 
@@ -66,7 +72,7 @@ enum {
 	[[DMAPILoader sharedLoader] api:@"/settings" method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"설정 로드 완료 : %@", response );
 		
-		_settings = [NSMutableDictionary dictionaryWithDictionary:response];
+		_settings = [[Settings alloc] initWithDictionary:response];
 		
 		[_loadingIndicatorView removeFromSuperview];
 		_tableView.hidden = NO;
@@ -141,7 +147,7 @@ enum {
 		if( indexPath.row == kRowFacebook )
 		{
 			cell.textLabel.text = NSLocalizedString( @"FACEBOOK", nil );
-			cell.detailTextLabel.text = [_settings objectForKey:@"facebook"] ? [[_settings objectForKey:@"facebook"] objectForKey:@"name"] : nil;
+			cell.detailTextLabel.text = _settings.facebook ? _settings.facebook.name : nil;
 		}
 		
 		return cell;
@@ -180,7 +186,7 @@ enum {
 			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
 		
-		cell.textLabel.text = @"로그아웃";
+		cell.textLabel.text = NSLocalizedString( @"LOGOUT", nil );
 		
 		return cell;
 	}
@@ -197,9 +203,9 @@ enum {
 		if( indexPath.section == kRowFacebook )
 		{
 			// 연동되어있을 경우
-			if( [_settings objectForKey:@"facebook"] )
+			if( _settings.facebook )
 			{
-				FacebookSettingsViewController *facebookSettingsViewController = [[FacebookSettingsViewController alloc] initWithFacebookSettings:[_settings objectForKey:@"facebook"]];
+				FacebookSettingsViewController *facebookSettingsViewController = [[FacebookSettingsViewController alloc] initWithSettings:_settings];
 				[self.navigationController pushViewController:facebookSettingsViewController animated:YES];
 			}
 			else
@@ -218,10 +224,10 @@ enum {
 								[self undim];
 								JLLog( @"response : %@", response );
 								
-								[_settings setObject:[NSMutableDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"og"] forKey:@"facebook"];
+								_settings.facebook = [[FacebookSettings alloc] initWithDictionary:response];
 								[_tableView reloadData];
 								
-								FacebookSettingsViewController *facebookSettingsViewController = [[FacebookSettingsViewController alloc] initWithFacebookSettings:[_settings objectForKey:@"facebook"]];
+								FacebookSettingsViewController *facebookSettingsViewController = [[FacebookSettingsViewController alloc] initWithSettings:_settings];
 								[self.navigationController pushViewController:facebookSettingsViewController animated:YES];
 								
 							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
