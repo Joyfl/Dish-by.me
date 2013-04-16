@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03087E89171D100D0050BDAB /* FacebookSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03087E88171D100D0050BDAB /* FacebookSettingsViewController.m */; };
 		0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0314A11316E775AC00DAF40A /* TTTAttributedLabel.m */; };
 		0314A11716E776AC00DAF40A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0314A11516E7769F00DAF40A /* CoreText.framework */; };
 		0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0314A11916E7950E00DAF40A /* JLHangulUtils.m */; };
@@ -293,6 +294,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03087E87171D100D0050BDAB /* FacebookSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookSettingsViewController.h; sourceTree = "<group>"; };
+		03087E88171D100D0050BDAB /* FacebookSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookSettingsViewController.m; sourceTree = "<group>"; };
 		0314A11216E775AC00DAF40A /* TTTAttributedLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTAttributedLabel.h; sourceTree = "<group>"; };
 		0314A11316E775AC00DAF40A /* TTTAttributedLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTAttributedLabel.m; sourceTree = "<group>"; };
 		0314A11516E7769F00DAF40A /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
@@ -751,6 +754,8 @@
 				03178846160C76DB0041DAD7 /* ProfileViewController.m */,
 				03178849160C76DB0041DAD7 /* SettingsViewController.h */,
 				0317884A160C76DB0041DAD7 /* SettingsViewController.m */,
+				03087E87171D100D0050BDAB /* FacebookSettingsViewController.h */,
+				03087E88171D100D0050BDAB /* FacebookSettingsViewController.m */,
 				031AAB4A160F42CB007B42B3 /* CameraOverlayViewController.h */,
 				031AAB4B160F42CB007B42B3 /* CameraOverlayViewController.m */,
 				031AAB3B160F3B4F007B42B3 /* WritingViewController.h */,
@@ -1613,6 +1618,7 @@
 				0377B1F017146F0300D7F75F /* RecipeInfoViewerView.m in Sources */,
 				0377B1F317146F2100D7F75F /* RecipeContentViewerView.m in Sources */,
 				0377B1F617147D2000D7F75F /* IngredientViewerCell.m in Sources */,
+				03087E89171D100D0050BDAB /* FacebookSettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -48,6 +48,18 @@
 	self.followersCount = [[dictionary objectForKey:@"followers_count"] integerValue];
 }
 
+- (void)setLoggedIn:(BOOL)loggedIn
+{
+	_loggedIn = loggedIn;
+	[self save];
+}
+
+- (void)setAccessToken:(NSString *)accessToken
+{
+	_accessToken = accessToken;
+	[self save];
+}
+
 - (void)save
 {
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[self dictionary]];

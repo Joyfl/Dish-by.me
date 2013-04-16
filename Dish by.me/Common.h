@@ -14,7 +14,7 @@
 #define API_ROOT_URL	@"http://dev.dishby.me/api"
 
 #define DMUserDefaultsKeyCurrentUser @"DMUserDefaultsKeyCurrentUser"
-#define DMUserDefaultsKeyShareToFacebook @"DMUserDefaultsKeyShareToFacebook"
+#define DMUserDefaultsKeySettings @"DMUserDefaultsKeySettings"
 
 #define showErrorAlert() [[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Status Code : %d\nError Code : %d\nMessage : %@", statusCode, errorCode, message] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 #define alert( title, msg ) [[[UIAlertView alloc] initWithTitle:title message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
