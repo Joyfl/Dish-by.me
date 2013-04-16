@@ -107,6 +107,9 @@
 
 // SettingsView
 "SETTINGS" = "설정";
+"ACCOUNT_SETTINGS" = "계정 설정";
+"CHANGE_EMAIL" = "이메일 변경";
+"CHANGE_PASSWORD" = "비밀번호 변경";
 "SHARE_SETTINGS" = "공유 설정";
 "FACEBOOK" = "페이스북";
 "SHARE_ACTIVITIES" = "활동 공유";

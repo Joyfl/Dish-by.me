@@ -1020,10 +1020,11 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)nameButtonDidTouchUpInside
 {
-	DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"NAME", nil ) completion:^(DMTextFieldViewController *textFieldViewController, NSString *text) {
+	DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"NAME", nil ) shouldComplete:^BOOL(DMTextFieldViewController *textFieldViewController, NSString *text) {
 		_user.name = text;
 		[self editUserInfo:@{ @"name": text }];
 		self.navigationItem.title = userNameWithPlaceholder;
+		return YES;
 	}];
 	textFieldViewController.trackedViewName = @"DMTextFieldViewController (Name)";
 	textFieldViewController.textField.text = _user.name;
@@ -1033,10 +1034,11 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)bioButtonDidTouchUpInside
 {
-	DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"BIO", nil ) completion:^(DMTextFieldViewController *textFieldViewController, NSString *text) {
+	DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"BIO", nil ) shouldComplete:^BOOL(DMTextFieldViewController *textFieldViewController, NSString *text) {
 		_user.bio = text;
 		[self editUserInfo:@{ @"bio": text }];
 		[_tableView reloadData];
+		return YES;
 	}];
 	textFieldViewController.trackedViewName = @"DMTextFieldViewController (Bio)";
 	textFieldViewController.textField.text = _user.bio;

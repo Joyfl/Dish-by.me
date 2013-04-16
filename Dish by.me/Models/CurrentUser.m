@@ -29,6 +29,7 @@
 	{
 		[self updateToDictionary:userInfo];
 		self.loggedIn = [[userInfo objectForKey:@"logged_in"] boolValue];
+		self.email = [userInfo objectForKey:@"email"];
 		self.accessToken = [userInfo objectForKey:@"access_token"];
 	}
 	
@@ -54,6 +55,12 @@
 	[self save];
 }
 
+- (void)setEmail:(NSString *)email
+{
+	_email = email;
+	[self save];
+}
+
 - (void)setAccessToken:(NSString *)accessToken
 {
 	_accessToken = accessToken;
@@ -64,6 +71,7 @@
 {
 	NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[self dictionary]];
 	[userInfo setObject:[NSNumber numberWithBool:self.loggedIn] forKey:@"logged_in"];
+	if( self.email ) [userInfo setObject:self.email forKey:@"email"];
 	if( self.accessToken ) [userInfo setObject:self.accessToken forKey:@"access_token"];
 	
 	[[NSUserDefaults standardUserDefaults] setObject:userInfo forKey:DMUserDefaultsKeyCurrentUser];
@@ -73,6 +81,7 @@
 - (void)logout
 {
 	self.loggedIn = NO;
+	self.email = nil;
 	self.accessToken = nil;
 	self.userId = 0;
 	self.name = nil;

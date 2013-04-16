@@ -313,6 +313,7 @@
 		[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
 			
 			[CurrentUser user].loggedIn = YES;
+			[CurrentUser user].email = [[response objectForKey:@"user"] objectForKey:@"email"];
 			[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
 			
 			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WELCOME", nil ) message:NSLocalizedString( @"MESSAGE_SIGNUP_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {

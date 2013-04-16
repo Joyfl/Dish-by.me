@@ -12,6 +12,7 @@
 @interface CurrentUser : User
 
 @property (nonatomic, assign) BOOL loggedIn;
+@property (nonatomic, strong) NSString *email;
 @property (nonatomic, strong) NSString *accessToken;
 
 + (CurrentUser *)user;

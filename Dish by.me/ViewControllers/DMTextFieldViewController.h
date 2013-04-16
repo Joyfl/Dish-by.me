@@ -10,11 +10,11 @@
 
 @interface DMTextFieldViewController : GAITrackedViewController <UITextFieldDelegate>
 {
-	void (^_completion)(DMTextFieldViewController *textFieldViewController, NSString *text);
+	BOOL (^_shouldComplete)(DMTextFieldViewController *textFieldViewController, NSString *text);
 }
 
 @property (nonatomic, strong) UITextField *textField;
 
-- (id)initWithTitle:(NSString *)title completion:(void (^)(DMTextFieldViewController *textFieldViewController, NSString *text))completion;
+- (id)initWithTitle:(NSString *)title shouldComplete:(BOOL (^)(DMTextFieldViewController *textFieldViewController, NSString *text))completion;
 
 @end

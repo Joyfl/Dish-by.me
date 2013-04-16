@@ -13,12 +13,13 @@
 
 - (id)init
 {
-	return [self initWithTitle:nil completion:nil];
+	return [self initWithTitle:nil shouldComplete:nil];
 }
 
-- (id)initWithTitle:(NSString *)title completion:(void (^)(DMTextFieldViewController *textFieldViewController, NSString *text))completion
+- (id)initWithTitle:(NSString *)title shouldComplete:(BOOL (^)(DMTextFieldViewController *textFieldViewController, NSString *text))shouldComplete
 {
 	self = [super init];
+	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	
 	[DMBarButtonItem setBackButtonToViewController:self];
 	self.navigationItem.title = title;
@@ -31,14 +32,15 @@
 	[self.textField becomeFirstResponder];
 	[self.view addSubview:self.textField];
 	
-	_completion = completion;
+	_shouldComplete = shouldComplete;
 	
 	return self;
 }
 
 - (void)saveButtonHandler
 {
-	if( _completion ) _completion( self, self.textField.text );
+	if( _shouldComplete && !_shouldComplete( self, self.textField.text ) )
+		return;
 	[self.navigationController popViewControllerAnimated:YES];
 }
 

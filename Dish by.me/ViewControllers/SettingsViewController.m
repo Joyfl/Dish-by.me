@@ -13,14 +13,21 @@
 #import "AuthViewController.h"
 #import "AppDelegate.h"
 #import "FacebookSettingsViewController.h"
+#import "DMTextFieldViewController.h"
 
 @implementation SettingsViewController
 
 enum {
+	kSectionAccountSettings,
 	kSectionShareSettings,
 	kSectionNotifications,
 	kSectionLogout,
 	sectionCount
+};
+
+enum {
+	kRowChangeEmail,
+	kRowChangePassword,
 };
 
 enum {
@@ -94,6 +101,9 @@ enum {
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+	if( section == kSectionAccountSettings )
+		return 2;
+	
 	if( section == kSectionShareSettings )
 		return shareSettingsRowCount;
 	
@@ -107,7 +117,10 @@ enum {
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{	
+{
+	if( section == kSectionAccountSettings )
+		return NSLocalizedString( @"ACCOUNT_SETTINGS", @"계정 설정" );
+		
 	if( section == kSectionShareSettings )
 		return NSLocalizedString( @"SHARE_SETTINGS", @"공유 설정" );
 	
@@ -129,13 +142,42 @@ enum {
 	static NSString *switchCellId = @"switchCellId";
 	static NSString *cellId = @"cellId";
 	
-	if( indexPath.section == kSectionShareSettings )
+	if( indexPath.section == kSectionAccountSettings )
 	{
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:switchCellId];
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 		
 		if( !cell )
 		{
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:switchCellId];
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			cell.textLabel.font = [UIFont systemFontOfSize:16];
+			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
+			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+		}
+		
+		if( indexPath.row == kRowChangeEmail )
+		{
+			cell.textLabel.text = NSLocalizedString( @"CHANGE_EMAIL", nil );
+			cell.detailTextLabel.text = [CurrentUser user].email;
+		}
+		else if( indexPath.row == kRowChangePassword )
+		{
+			cell.textLabel.text = NSLocalizedString( @"CHANGE_PASSWORD", nil );
+			cell.detailTextLabel.text = nil;
+		}
+		
+		return cell;
+	}
+	
+	else if( indexPath.section == kSectionShareSettings )
+	{
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+		
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
 			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			cell.textLabel.font = [UIFont systemFontOfSize:16];
 			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
@@ -198,9 +240,63 @@ enum {
 {
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
+	if( indexPath.section == kSectionAccountSettings )
+	{
+		if( indexPath.row == kRowChangeEmail )
+		{
+			DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"CHANGE_EMAIL", nil ) shouldComplete:^BOOL(DMTextFieldViewController *textFieldViewController, NSString *text) {
+				
+				[textFieldViewController dim];
+				
+				NSDictionary *params = @{ @"email": text };
+				[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" parameters:params success:^(id response) {
+					
+					[CurrentUser user].email = text;
+					[_tableView reloadData];
+					[textFieldViewController.navigationController popViewControllerAnimated:YES];
+					[textFieldViewController undim];
+					
+				} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+					showErrorAlert();
+					[textFieldViewController undim];
+				}];
+				
+				return NO;
+			}];
+			textFieldViewController.trackedViewName = @"DMTextFieldViewController (Email)";
+			textFieldViewController.textField.placeholder = [CurrentUser user].email;
+			[self.navigationController pushViewController:textFieldViewController animated:YES];
+		}
+		
+		else if( indexPath.row == kRowChangePassword )
+		{
+			DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"CHANGE_PASSWORD", nil ) shouldComplete:^BOOL(DMTextFieldViewController *textFieldViewController, NSString *text) {
+				
+				[textFieldViewController dim];
+				
+				NSDictionary *params = @{ @"password": [Utils sha1:text] };
+				[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" parameters:params success:^(id response) {
+					
+					[textFieldViewController.navigationController popViewControllerAnimated:YES];
+					[textFieldViewController undim];
+					
+				} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+					showErrorAlert();
+					[textFieldViewController undim];
+				}];
+				
+				return NO;
+			}];
+			textFieldViewController.trackedViewName = @"DMTextFieldViewController (Password)";
+			textFieldViewController.textField.secureTextEntry = YES;
+			textFieldViewController.textField.placeholder = @"********";
+			[self.navigationController pushViewController:textFieldViewController animated:YES];
+		}
+	}
+	
 	if( indexPath.section == kSectionShareSettings )
 	{
-		if( indexPath.section == kRowFacebook )
+		if( indexPath.row == kRowFacebook )
 		{
 			// 연동되어있을 경우
 			if( _settings.facebook )
@@ -262,8 +358,6 @@ enum {
 			}
 		}] showInView:self.tabBarController.view];
 	}
-	
-	[tableView reloadData];
 }
 
 

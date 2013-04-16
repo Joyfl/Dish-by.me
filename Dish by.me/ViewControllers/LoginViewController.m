@@ -253,6 +253,7 @@
 		JLLog( @"Login complete" );
 		
 		[CurrentUser user].loggedIn = YES;
+		[CurrentUser user].email = [[response objectForKey:@"user"] objectForKey:@"email"];
 		[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
 		
 		[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUserAndDismissViewController];
