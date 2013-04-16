@@ -64,6 +64,8 @@ enum {
 	_tableView.hidden = YES;
 	
 	[[DMAPILoader sharedLoader] api:@"/settings" method:@"GET" parameters:nil success:^(id response) {
+		JLLog( @"설정 로드 완료 : %@", response );
+		
 		_settings = [NSMutableDictionary dictionaryWithDictionary:response];
 		
 		[_loadingIndicatorView removeFromSuperview];
@@ -138,8 +140,8 @@ enum {
 		
 		if( indexPath.row == kRowFacebook )
 		{
-			cell.textLabel.text = @"Facebook";
-			cell.detailTextLabel.text = [_settings objectForKey:@"facebook_activated"] ? @"연결됨" : nil;
+			cell.textLabel.text = NSLocalizedString( @"FACEBOOK", nil );
+			cell.detailTextLabel.text = [_settings objectForKey:@"facebook"] ? [[_settings objectForKey:@"facebook"] objectForKey:@"name"] : nil;
 		}
 		
 		return cell;
@@ -194,8 +196,51 @@ enum {
 	{
 		if( indexPath.section == kRowFacebook )
 		{
-			FacebookSettingsViewController *facebookSettingsViewController = [[FacebookSettingsViewController alloc] initWithSettings:_settings];
-			[self.navigationController pushViewController:facebookSettingsViewController animated:YES];
+			// 연동되어있을 경우
+			if( [_settings objectForKey:@"facebook"] )
+			{
+				FacebookSettingsViewController *facebookSettingsViewController = [[FacebookSettingsViewController alloc] initWithFacebookSettings:[_settings objectForKey:@"facebook"]];
+				[self.navigationController pushViewController:facebookSettingsViewController animated:YES];
+			}
+			else
+			{
+				[self dim];
+				FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
+				[FBSession setActiveSession:session];
+				[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+					JLLog( @"status : %d", status );
+					switch( status )
+					{
+						case FBSessionStateOpen:
+						{
+							NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
+							[[DMAPILoader sharedLoader] api:@"/setting/facebook" method:@"PUT" parameters:params success:^(id response) {
+								[self undim];
+								JLLog( @"response : %@", response );
+								
+								[_settings setObject:[NSMutableDictionary dictionaryWithObject:[NSNumber numberWithBool:YES] forKey:@"og"] forKey:@"facebook"];
+								[_tableView reloadData];
+								
+								FacebookSettingsViewController *facebookSettingsViewController = [[FacebookSettingsViewController alloc] initWithFacebookSettings:[_settings objectForKey:@"facebook"]];
+								[self.navigationController pushViewController:facebookSettingsViewController animated:YES];
+								
+							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+								[self undim];
+								showErrorAlert();
+							}];
+							break;
+						}
+							
+						case FBSessionStateClosedLoginFailed:
+							[self undim];
+							JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
+							break;
+							
+						default:
+							break;
+					}
+				}];
+			}
 		}
 	}
 	

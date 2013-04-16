@@ -13,13 +13,14 @@
 
 @implementation FacebookSettingsViewController
 
-- (id)initWithSettings:(NSMutableDictionary *)settings
+- (id)initWithFacebookSettings:(NSMutableDictionary *)facebookSettings
 {
 	self = [super init];
 	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	self.trackedViewName = [[self class] description];
+	self.navigationItem.title = NSLocalizedString( @"FACEBOOK", nil );
 	
-	_settings = settings;
+	_facebookSettings = facebookSettings;
 	
 	[DMBarButtonItem setBackButtonToViewController:self];
 	
@@ -40,39 +41,76 @@
 
 #pragma mark -
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	return 2;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+	return 1;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *cellId = @"cellId";
-	DMSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-	if( !cell )
+	static NSString *switchCellId = @"switchCellId";
+	static NSString *disconnectCellId = @"disconnectCellId";
+	
+	if( indexPath.section == 0 )
 	{
-		cell = [[DMSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-		cell.delegate = self;
-		cell.textLabel.font = [UIFont systemFontOfSize:16];
-		cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
-		cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-		cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
-		cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+		DMSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:switchCellId];
+		if( !cell )
+		{
+			cell = [[DMSwitchCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:switchCellId];
+			cell.delegate = self;
+			cell.textLabel.font = [UIFont systemFontOfSize:16];
+			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
+			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+		}
+		
+		cell.indexPath = indexPath;
+		
+		if( indexPath.row == 0 )
+		{
+			cell.textLabel.text = NSLocalizedString( @"SHARE_ACTIVITIES", nil );
+			cell.on = [[_facebookSettings objectForKey:@"og"] boolValue];
+		}
+		
+		return cell;
 	}
 	
-	cell.indexPath = indexPath;
-	
-	if( indexPath.row == 0 )
-	{
-		cell.textLabel.text = @"페이스북 로그인";
-	}
+	// 연동 해제
 	else
 	{
-		cell.textLabel.text = @"페이스북 활동 공유";
-		cell.on = [[_settings objectForKey:@"facebook_activated"] boolValue];
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:disconnectCellId];
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:disconnectCellId];
+			cell.textLabel.font = [UIFont systemFontOfSize:16];
+			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
+			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+			cell.textLabel.textAlignment = NSTextAlignmentCenter;
+			cell.textLabel.text = NSLocalizedString( @"DISCONNECT", nil );
+		}
+		
+		return cell;
 	}
 	
-	return cell;
+	return nil;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	
+	if( indexPath.section == 1 )
+	{
+		
+	}
 }
 
 
@@ -82,47 +120,9 @@
 {
 	if( indexPath.row == 0 )
 	{
-		if( on )
-		{
-//			[self dim];
-//			FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
-//			[FBSession setActiveSession:session];
-//			[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-//				JLLog( @"status : %d", status );
-//				switch( status )
-//				{
-//					case FBSessionStateOpen:
-//					{
-//						NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
-//						[[DMAPILoader sharedLoader] api:@"/settings" method:@"PUT" parameters:params success:^(id response) {
-//							[self undim];
-//							JLLog( @"response : %@", response );
-//							
-//							[_settings setObject:[NSNumber numberWithBool:on] forKey:@"facebookToken"];
-//							
-//						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-//							[self undim];
-//							showErrorAlert();
-//						}];
-//						break;
-//					}
-//						
-//					case FBSessionStateClosedLoginFailed:
-//						[self undim];
-//						JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
-//						break;
-//						
-//					default:
-//						break;
-//				}
-//			}];
-		}
-	}
-	else
-	{
 		NSDictionary *params = @{ @"facebook_activated": [NSNumber numberWithBool:on] };
 		[[DMAPILoader sharedLoader] api:@"/settings" method:@"PUT" parameters:params success:^(id response) {
-			[_settings setObject:[NSNumber numberWithBool:on] forKey:@"facebook_activated"];
+			[_facebookSettings setObject:[NSNumber numberWithBool:on] forKey:@"facebook_activated"];
 			
 		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 			showErrorAlert();

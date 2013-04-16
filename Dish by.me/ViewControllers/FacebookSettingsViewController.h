@@ -12,9 +12,9 @@
 @interface FacebookSettingsViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, DMSwitchCellDelegate>
 {
 	UITableView *_tableView;
-	NSMutableDictionary *_settings;
+	NSMutableDictionary *_facebookSettings;
 }
 
-- (id)initWithSettings:(NSMutableDictionary *)settings;
+- (id)initWithFacebookSettings:(NSMutableDictionary *)facebookSettings;
 
 @end

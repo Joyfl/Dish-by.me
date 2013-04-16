@@ -13,6 +13,7 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
 	_switchView = [[UISwitch alloc] init];
 	[_switchView addTarget:self action:@selector(switchValueChanged) forControlEvents:UIControlEventValueChanged];
