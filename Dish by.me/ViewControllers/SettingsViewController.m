@@ -12,18 +12,30 @@
 #import "UIResponder+Dim.h"
 #import "AuthViewController.h"
 #import "AppDelegate.h"
+#import "FacebookSettingsViewController.h"
 
 @implementation SettingsViewController
 
 enum {
 	kSectionShareSettings,
 	kSectionNotifications,
-	kSectionLogout
+	kSectionLogout,
+	sectionCount
+};
+
+enum {
+	kRowFacebook,
+	shareSettingsRowCount
+};
+
+enum {
+	notificationSettingsRowCount
 };
 
 - (id)init
 {
     self = [super init];
+	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	self.trackedViewName = [[self class] description];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStyleGrouped];
@@ -32,7 +44,35 @@ enum {
 	_tableView.backgroundView.hidden = YES;
 	[self.view addSubview:_tableView];
 	
+	_loadingIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+	_loadingIndicatorView.center = CGPointMake( UIScreenWidth / 2, 20 );
+	[_loadingIndicatorView startAnimating];
+	[self.view addSubview:_loadingIndicatorView];
+	
+	[self loadSettings];
+	
     return self;
+}
+
+
+#pragma mark -
+
+- (void)loadSettings
+{
+	JLLog( @"Load Settings" );
+	
+	_tableView.hidden = YES;
+	
+	[[DMAPILoader sharedLoader] api:@"/settings" method:@"GET" parameters:nil success:^(id response) {
+		_settings = [NSMutableDictionary dictionaryWithDictionary:response];
+		
+		[_loadingIndicatorView removeFromSuperview];
+		_tableView.hidden = NO;
+		[_tableView reloadData];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		
+	}];
 }
 
 
@@ -41,16 +81,16 @@ enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 3;
+	return sectionCount;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if( section == kSectionShareSettings )
-		return 1;
+		return shareSettingsRowCount;
 	
 	else if( section == kSectionNotifications )
-		return 5;
+		return notificationSettingsRowCount;
 	
 	else if( section == kSectionLogout )
 		return 1;
@@ -81,7 +121,31 @@ enum {
 	static NSString *switchCellId = @"switchCellId";
 	static NSString *cellId = @"cellId";
 	
-	if( indexPath.section < 2 )
+	if( indexPath.section == kSectionShareSettings )
+	{
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:switchCellId];
+		
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:switchCellId];
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+			cell.textLabel.font = [UIFont systemFontOfSize:16];
+			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
+			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
+			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+		}
+		
+		if( indexPath.row == kRowFacebook )
+		{
+			cell.textLabel.text = @"Facebook";
+			cell.detailTextLabel.text = [_settings objectForKey:@"facebook_activated"] ? @"연결됨" : nil;
+		}
+		
+		return cell;
+	}
+	
+	else if( indexPath.section == kSectionNotifications )
 	{
 		DMSwitchCell *cell = [tableView dequeueReusableCellWithIdentifier:switchCellId];
 		
@@ -96,22 +160,7 @@ enum {
 			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
 		
-		cell.indexPath = indexPath;
-		
-		if( indexPath.section == kSectionShareSettings )
-		{
-			if( indexPath.row == 0 )
-			{
-				cell.textLabel.text = @"Facebook";
-				cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-				cell.on = [[NSUserDefaults standardUserDefaults] boolForKey:DMUserDefaultsKeyShareToFacebook];
-			}
-		}
-		
-		else if( indexPath.section == kSectionNotifications )
-		{
-			cell.textLabel.text = @"댓글";
-		}
+		cell.textLabel.text = @"댓글";
 		
 		return cell;
 	}
@@ -143,9 +192,10 @@ enum {
 	
 	if( indexPath.section == kSectionShareSettings )
 	{
-		if( indexPath.section == 0 )
+		if( indexPath.section == kRowFacebook )
 		{
-			
+			FacebookSettingsViewController *facebookSettingsViewController = [[FacebookSettingsViewController alloc] initWithSettings:_settings];
+			[self.navigationController pushViewController:facebookSettingsViewController animated:YES];
 		}
 	}
 	
@@ -166,51 +216,7 @@ enum {
 
 - (void)switchCell:(DMSwitchCell *)switchCell valueChanged:(BOOL)on atIndexPath:(NSIndexPath *)indexPath
 {
-	if( indexPath.section == kSectionShareSettings )
-	{
-		// Facebook
-		if( indexPath.row == 0 )
-		{
-			if( on == YES )
-			{
-				[self dim];
-				[FBSession openActiveSessionWithReadPermissions:nil allowLoginUI:YES completionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
-					JLLog( @"status : %d", status );
-					switch( status )
-					{
-						case FBSessionStateOpen:
-						{
-							NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
-							[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" parameters:params success:^(id response) {
-								[self undim];
-								JLLog( @"response : %@", response );
-								
-								[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:on] forKey:DMUserDefaultsKeyShareToFacebook];
-								[[NSUserDefaults standardUserDefaults] synchronize];
-								
-							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-								[self undim];
-								showErrorAlert();
-							}];
-							break;
-						}
-							
-						case FBSessionStateClosedLoginFailed:
-							[self undim];
-							JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
-							break;
-							
-						default:
-							break;
-					}
-				}];
-			}
-			else
-			{
-				
-			}
-		}
-	}
+	
 }
 
 

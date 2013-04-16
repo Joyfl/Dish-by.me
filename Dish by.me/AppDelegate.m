@@ -203,6 +203,7 @@
 	JLLog( @"loginViewControllerDidSucceedLogin (userId : %d)", [CurrentUser user].userId );
 	[self.dishListViewController updateDishes];
 	[self.profileViewController loadUserId:[CurrentUser user].userId];
+	[self.settingsViewController loadSettings];
 }
 
 @end
