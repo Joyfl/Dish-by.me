@@ -25,6 +25,7 @@ enum {
 	sectionCount
 };
 
+// 계정 
 enum {
 	kRowChangeEmail,
 	kRowChangePassword,
@@ -36,6 +37,10 @@ enum {
 };
 
 enum {
+	kRowFollow,
+	kRowBookmark,
+	kRowComment,
+	kRowFork,
 	notificationSettingsRowCount
 };
 
@@ -210,7 +215,31 @@ enum {
 			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
 		
-		cell.textLabel.text = @"댓글";
+		cell.indexPath = indexPath;
+		
+		if( indexPath.row == kRowFollow )
+		{
+			cell.textLabel.text = NSLocalizedString( @"FOLLOW", nil );
+			cell.on = _settings.notifications.follow;
+		}
+		
+		else if( indexPath.row == kRowBookmark )
+		{
+			cell.textLabel.text = NSLocalizedString( @"BOOKMARK", nil );
+			cell.on = _settings.notifications.bookmark;
+		}
+		
+		else if( indexPath.row == kRowComment )
+		{
+			cell.textLabel.text = NSLocalizedString( @"COMMENT", nil );
+			cell.on = _settings.notifications.comment;
+		}
+		
+		else if( indexPath.row == kRowFork )
+		{
+			cell.textLabel.text = NSLocalizedString( @"FORK", nil );
+			cell.on = _settings.notifications.fork;
+		}
 		
 		return cell;
 	}
@@ -221,7 +250,7 @@ enum {
 		if( !cell )
 		{
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-			cell.textLabel.font = [UIFont systemFontOfSize:16];
+			cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
 			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
 			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
 			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
@@ -229,6 +258,7 @@ enum {
 		}
 		
 		cell.textLabel.text = NSLocalizedString( @"LOGOUT", nil );
+		cell.detailTextLabel.text = nil;
 		
 		return cell;
 	}
@@ -366,7 +396,38 @@ enum {
 
 - (void)switchCell:(DMSwitchCell *)switchCell valueChanged:(BOOL)on atIndexPath:(NSIndexPath *)indexPath
 {
-	
+	if( indexPath.section == kSectionNotifications )
+	{
+		NSDictionary *params = nil;
+		
+		if( indexPath.row == kRowFollow )
+		{
+			params = @{ @"follow": [NSNumber numberWithBool:on] };
+		}
+		
+		else if( indexPath.row == kRowBookmark )
+		{
+			params = @{ @"bookmark": [NSNumber numberWithBool:on] };
+		}
+		
+		else if( indexPath.row == kRowComment )
+		{
+			params = @{ @"comment": [NSNumber numberWithBool:on] };
+		}
+		
+		else if( indexPath.row == kRowFork )
+		{
+			params = @{ @"fork": [NSNumber numberWithBool:on] };
+		}
+		
+		[[DMAPILoader sharedLoader] api:@"/setting/notifications" method:@"PUT" parameters:params success:^(id response) {
+			
+			JLLog( @"response : %@", response );
+			
+		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+			showErrorAlert();
+		}];
+	}
 }
 
 

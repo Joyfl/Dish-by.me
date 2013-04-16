@@ -18,9 +18,24 @@
 @end
 
 
+
+@interface NotificationSettings : NSObject
+
+@property (nonatomic, assign) BOOL follow;
+@property (nonatomic, assign) BOOL bookmark;
+@property (nonatomic, assign) BOOL comment;
+@property (nonatomic, assign) BOOL fork;
+
+- (id)initWithDictionary:(NSDictionary *)dictionary;
+
+@end
+
+
+
 @interface Settings : NSObject
 
 @property (nonatomic, strong) FacebookSettings *facebook;
+@property (nonatomic, strong) NotificationSettings *notifications;
 
 - (id)initWithDictionary:(NSDictionary *)dictionary;
 

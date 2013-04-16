@@ -1717,7 +1717,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Su Yeol Jeon (E92TEKJ8BD)";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Su Yeol Jeon (E92TEKJ8BD)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1733,8 +1733,7 @@
 					"\"$(SRCROOT)/Libraries/TestFlight\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "CF965E8E-BC7C-4542-88E5-F59898D30CCF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CF965E8E-BC7C-4542-88E5-F59898D30CCF";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A95B0DE8-5D50-4D92-B288-6FA64E33A7C3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1743,7 +1742,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Su Yeol Jeon (E92TEKJ8BD)";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Su Yeol Jeon (E92TEKJ8BD)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1759,8 +1758,7 @@
 					"\"$(SRCROOT)/Libraries/TestFlight\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "CF965E8E-BC7C-4542-88E5-F59898D30CCF";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CF965E8E-BC7C-4542-88E5-F59898D30CCF";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A95B0DE8-5D50-4D92-B288-6FA64E33A7C3";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

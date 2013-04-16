@@ -21,12 +21,30 @@
 @end
 
 
+
+@implementation NotificationSettings
+
+- (id)initWithDictionary:(NSDictionary *)dictionary
+{
+	self = [super init];
+	_follow = [[dictionary objectForKey:@"follow"] boolValue];
+	_bookmark = [[dictionary objectForKey:@"bookmark"] boolValue];
+	_comment = [[dictionary objectForKey:@"comment"] boolValue];
+	_fork = [[dictionary objectForKey:@"fork"] boolValue];
+	return self;
+}
+
+@end
+
+
+
 @implementation Settings
 
 - (id)initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super init];
 	self.facebook = [dictionary objectForKey:@"facebook"] ? [[FacebookSettings alloc] initWithDictionary:[dictionary objectForKey:@"facebook"]] : nil;
+	self.notifications = [[NotificationSettings alloc] initWithDictionary:[dictionary objectForKey:@"notifications"]];
 	return self;
 }
 
