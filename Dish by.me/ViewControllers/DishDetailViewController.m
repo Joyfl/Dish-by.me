@@ -653,6 +653,8 @@ enum {
 			_bookmarkButton = [[BookmarkButton alloc] init];
 			_bookmarkButton.delegate = self;
 			_bookmarkButton.parentView = cell.contentView;
+			
+			[_tableView reloadData];
 		}
 		
 		_timeLabel.text = _dish.relativeCreatedTime;
@@ -698,7 +700,7 @@ enum {
 		[self updateBookmarkUI];
 		
 		_contentRowHeight = recipeButtonBottomY + 65;
-		[_tableView performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+		
 		return cell;
 	}
 	
@@ -893,7 +895,7 @@ enum {
 	RecipeViewerViewController *recipeView = [[RecipeViewerViewController alloc] initWithRecipe:_dish.recipe];
 	recipeView.delegate = self;
 	[UIView animateWithDuration:0.25 animations:^{
-		_recipeButton.frame = CGRectMake( 0, 0, 320, 50 );
+		_recipeButton.frame = CGRectMake( 0, 50, 320, 50 );
 	}];
 	
 	[recipeView presentAfterDelay:0.1];
