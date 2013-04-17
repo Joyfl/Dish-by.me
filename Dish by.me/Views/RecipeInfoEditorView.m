@@ -317,7 +317,7 @@
 		input.frame = frame;
 	}
 	
-	label.frame = CGRectMake( input.frame.origin.x + input.frame.size.width - 3, input.frame.origin.y - 1, label.frame.size.width, label.frame.size.height );
+	label.frame = CGRectMake( input.frame.origin.x + input.frame.size.width - 3, input.frame.origin.y, label.frame.size.width, label.frame.size.height );
 }
 
 - (void)ingredientCellInputDidBeginEditing:(UITextField *)input
