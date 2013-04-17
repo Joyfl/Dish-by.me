@@ -158,8 +158,10 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)loadUserId:(NSInteger)userId
 {
-	_dishes = [[NSMutableArray alloc] init];
-	_bookmarks = [[NSMutableArray alloc] init];
+	[_dishes removeAllObjects];
+	[_bookmarks removeAllObjects];
+	[_following removeAllObjects];
+	[_followers removeAllObjects];
 	[_tableView reloadData];
 	
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
