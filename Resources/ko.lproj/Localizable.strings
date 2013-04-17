@@ -86,6 +86,8 @@
 "AMOUNT" = "양";
 "N_SERVINGS" = "%d인분";
 "N_MINUTES" = "%d분";
+"SERVINGS" = "인분";
+"MINUTES" = "분";
 "ADD_INGREDIENT" = "재료 추가하기";
 "INPUT_CONTENT" = "내용 입력하기";
 

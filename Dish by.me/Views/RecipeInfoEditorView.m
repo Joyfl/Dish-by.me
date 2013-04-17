@@ -120,40 +120,70 @@
 			knifeIconView.image = [UIImage imageNamed:@"recipe_icon_knife.png"];
 			[cell.contentView addSubview:knifeIconView];
 			
-			_servingsInput = [[UITextField alloc] initWithFrame:CGRectMake( 47 - tableViewX, 72 - tableViewY, 100, 30 )];
+			_servingsInput = [[UITextField alloc] initWithFrame:CGRectMake( 47 - tableViewX, 72 - tableViewY, 98, 30 )];
 			_servingsInput.text = _recipe.servings ? [NSString stringWithFormat:@"%d", _recipe.servings] : nil;
 			_servingsInput.placeholder = NSLocalizedString( @"HOW_MANY_SERVINGS", nil );
 			_servingsInput.font = [UIFont boldSystemFontOfSize:12];
 			_servingsInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 			[_servingsInput setValue:[UIColor colorWithHex:0x958675 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
+			_servingsInput.keyboardType = UIKeyboardTypeNumberPad;
 			_servingsInput.layer.shadowColor = [UIColor whiteColor].CGColor;
 			_servingsInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 			_servingsInput.layer.shadowOpacity = 0.7;
 			_servingsInput.layer.shadowRadius = 0;
 			_servingsInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+			[_servingsInput addTarget:self action:@selector(inputEdittingChange:) forControlEvents:UIControlEventEditingChanged];
 			[_servingsInput becomeFirstResponder];
 			[cell.contentView addSubview:_servingsInput];
 			
-			UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 152 - tableViewX, 70 - tableViewY, 4, 20 )];
+			_servingsLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 0, 12 )];
+			_servingsLabel.text = NSLocalizedString( @"SERVINGS", nil );
+			_servingsLabel.font = [UIFont boldSystemFontOfSize:12];
+			_servingsLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
+			_servingsLabel.shadowColor = [UIColor whiteColor];
+			_servingsLabel.shadowOffset = CGSizeMake( 0, 1 );
+			_servingsLabel.backgroundColor = [UIColor clearColor];
+			_servingsLabel.hidden = YES;
+			_servingsLabel.userInteractionEnabled = YES;
+			[_servingsLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:_servingsInput action:@selector(becomeFirstResponder)]];
+			[_servingsLabel sizeToFit];
+			[cell.contentView addSubview:_servingsLabel];
+			
+			UIImageView *separatorLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 149 - tableViewX, 70 - tableViewY, 4, 20 )];
 			separatorLineView.image = [UIImage imageNamed:@"recipe_line_thin_vertical.png"];
 			[cell.contentView addSubview:separatorLineView];
 			
-			UIImageView *clockIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 161 - tableViewX, 70 - tableViewY, 20, 20 )];
+			UIImageView *clockIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 158 - tableViewX, 70 - tableViewY, 20, 20 )];
 			clockIconView.image = [UIImage imageNamed:@"recipe_icon_clock.png"];
 			[cell.contentView addSubview:clockIconView];
 			
-			_minutesInput = [[UITextField alloc] initWithFrame:CGRectMake( 188 - tableViewX, 72 - tableViewY, 100, 30 )];
+			_minutesInput = [[UITextField alloc] initWithFrame:CGRectMake( 185 - tableViewX, 72 - tableViewY, 98, 30 )];
 			_minutesInput.text = _recipe.minutes ? [NSString stringWithFormat:@"%d", _recipe.minutes] : nil;
 			_minutesInput.placeholder = NSLocalizedString( @"HOW_MANY_MINUTES", nil );
 			_minutesInput.font = [UIFont boldSystemFontOfSize:12];
 			_minutesInput.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 			[_minutesInput setValue:[UIColor colorWithHex:0x958675 alpha:1] forKeyPath:@"_placeholderLabel.textColor"];
+			_minutesInput.keyboardType = UIKeyboardTypeNumberPad;
 			_minutesInput.layer.shadowColor = [UIColor whiteColor].CGColor;
 			_minutesInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 			_minutesInput.layer.shadowOpacity = 0.7;
 			_minutesInput.layer.shadowRadius = 0;
 			_minutesInput.contentVerticalAlignment = UIControlContentVerticalAlignmentTop;
+			[_minutesInput addTarget:self action:@selector(inputEdittingChange:) forControlEvents:UIControlEventEditingChanged];
 			[cell.contentView addSubview:_minutesInput];
+			
+			_minutesLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 0, 0, 12 )];
+			_minutesLabel.text = NSLocalizedString( @"MINUTES", nil );
+			_minutesLabel.font = [UIFont boldSystemFontOfSize:12];
+			_minutesLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
+			_minutesLabel.shadowColor = [UIColor whiteColor];
+			_minutesLabel.shadowOffset = CGSizeMake( 0, 1 );
+			_minutesLabel.backgroundColor = [UIColor clearColor];
+			_minutesLabel.hidden = YES;
+			_minutesLabel.userInteractionEnabled = YES;
+			[_minutesLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:_minutesInput action:@selector(becomeFirstResponder)]];
+			[_minutesLabel sizeToFit];
+			[cell.contentView addSubview:_minutesLabel];
 			
 			UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 26 - tableViewX, 100 - tableViewY, 255, 4 )];
 			lineView.image = [UIImage imageNamed:@"recipe_line_thin.png"];
@@ -246,6 +276,48 @@
 	[tableView beginUpdates];
 	[tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 	[tableView endUpdates];
+}
+
+- (void)inputEdittingChange:(UITextField *)input
+{
+	UILabel *label;
+	NSString *placeholder;
+	
+	if( input == _servingsInput )
+	{
+		label = _servingsLabel;
+		placeholder = NSLocalizedString( @"HOW_MANY_SERVINGS", nil );
+	}
+	else
+	{
+		label = _minutesLabel;
+		placeholder = NSLocalizedString( @"HOW_MANY_MINUTES", nil );
+	}
+	
+	if( input.text.length == 0 )
+	{
+		label.hidden = YES;
+		input.placeholder = placeholder;
+		CGRect frame = input.frame;
+		frame.size.width = 98;
+		input.frame = frame;
+		return;
+	}
+	
+	label.hidden = NO;
+	input.placeholder = nil;
+	
+	[input sizeToFit];
+	
+	NSInteger maxWidth = 98 - label.frame.size.width;
+	if( input.frame.size.width >=  maxWidth)
+	{
+		CGRect frame = input.frame;
+		frame.size.width = maxWidth;
+		input.frame = frame;
+	}
+	
+	label.frame = CGRectMake( input.frame.origin.x + input.frame.size.width - 3, input.frame.origin.y - 1, label.frame.size.width, label.frame.size.height );
 }
 
 - (void)ingredientCellInputDidBeginEditing:(UITextField *)input

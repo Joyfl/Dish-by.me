@@ -13,7 +13,9 @@
 {
 	UITableView *_tableView;
 	UITextField *_servingsInput;
+	UILabel *_servingsLabel;
 	UITextField *_minutesInput;
+	UILabel *_minutesLabel;
 }
 
 @property (nonatomic) Recipe *recipe;
