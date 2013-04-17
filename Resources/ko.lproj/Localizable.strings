@@ -84,10 +84,10 @@
 "HOW_MANY_MINUTES" = "몇 분 걸리나요?";
 "INGREDIENT" = "재료";
 "AMOUNT" = "양";
+"N_SERVINGS" = "%d인분";
+"N_MINUTES" = "%d분";
 "ADD_INGREDIENT" = "재료 추가하기";
 "INPUT_CONTENT" = "내용 입력하기";
-"" = "";
-"" = "";
 
 // ProfileView
 "FOLLOW" = "팔로우";

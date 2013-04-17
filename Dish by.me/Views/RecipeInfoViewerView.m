@@ -94,7 +94,7 @@
 			[cell.contentView addSubview:knifeIconView];
 			
 			_servingsLabel = [[UILabel alloc] initWithFrame:CGRectMake( 47 - tableViewX, 72 - tableViewY, 100, 30 )];
-			_servingsLabel.text = [NSString stringWithFormat:@"%d", _recipe.servings];
+			_servingsLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_SERVINGS", nil ), _recipe.servings];
 			_servingsLabel.font = [UIFont boldSystemFontOfSize:12];
 			_servingsLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 			_servingsLabel.backgroundColor = [UIColor clearColor];
@@ -114,7 +114,7 @@
 			[cell.contentView addSubview:clockIconView];
 			
 			_minutesLabel = [[UILabel alloc] initWithFrame:CGRectMake( 188 - tableViewX, 72 - tableViewY, 100, 30 )];
-			_minutesLabel.text = [NSString stringWithFormat:@"%d", _recipe.minutes];
+			_minutesLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_MINUTES", nil ), _recipe.minutes];
 			_minutesLabel.font = [UIFont boldSystemFontOfSize:12];
 			_minutesLabel.textColor = [UIColor colorWithHex:0x4A433C alpha:1];
 			_minutesLabel.backgroundColor = [UIColor clearColor];
