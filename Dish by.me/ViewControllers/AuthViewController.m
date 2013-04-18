@@ -18,31 +18,6 @@
 
 @implementation AuthViewController
 
-+ (void)presentAuthViewControllerWithoutClosingCoverFromViewController:(UIViewController *)viewController delegate:(id<AuthViewControllerDelegate>)delegate
-{
-	AuthViewController *authViewController = [[AuthViewController alloc] init];
-	authViewController.delegate = delegate;
-	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:authViewController];
-	navController.navigationBarHidden = YES;
-	
-	[viewController presentViewController:navController animated:NO completion:nil];
-	[authViewController openBookCover];
-}
-
-+ (void)presentAuthViewControllerFromViewController:(UIViewController *)viewController delegate:(id<AuthViewControllerDelegate>)delegate
-{
-	AuthViewController *authViewController = [[AuthViewController alloc] init];
-	authViewController.delegate = delegate;
-	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:authViewController];
-	navController.navigationBarHidden = YES;
-	
-	[authViewController closeBookCoverCompletion:^(UIImageView *coverView) {
-		[viewController presentViewController:navController animated:NO completion:nil];
-		[coverView removeFromSuperview];
-		[authViewController openBookCover];
-	}];
-}
-
 - (id)init
 {
 	self = [super init];
@@ -75,6 +50,33 @@
 	return self;
 }
 
+
+#pragma mark -
+
+- (void)presentWithoutClosingCoverFromViewController:(UIViewController *)viewController delegate:(id<AuthViewControllerDelegate>)delegate
+{
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:self];
+	navController.navigationBarHidden = YES;
+	
+	[viewController presentViewController:navController animated:NO completion:nil];
+	[self openBookCover];
+}
+
+- (void)presentFromViewController:(UIViewController *)viewController delegate:(id<AuthViewControllerDelegate>)delegate
+{
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:self];
+	navController.navigationBarHidden = YES;
+	
+	[self closeBookCoverCompletion:^(UIImageView *coverView) {
+		[viewController presentViewController:navController animated:NO completion:nil];
+		[coverView removeFromSuperview];
+		[self openBookCover];
+	}];
+}
+
+
+#pragma mark -
+
 - (void)signUpButtonDidTouchUpInside
 {
 	SignUpViewController *signUpViewController = [[SignUpViewController alloc] init];
@@ -105,10 +107,10 @@
 		[[CurrentUser user] updateToDictionary:response];
 		[[CurrentUser user] save];
 		
+		[self dismissViewControllerAnimated:YES completion:nil];
+		
 		AuthViewController *authViewController = [self.navigationController.viewControllers objectAtIndex:0];
 		[authViewController.delegate authViewControllerDidSucceedLogin:authViewController];
-		
-		[self dismissViewControllerAnimated:YES completion:nil];
 		
 		[[FBSession activeSession] closeAndClearTokenInformation];
 		

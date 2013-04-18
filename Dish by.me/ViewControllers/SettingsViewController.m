@@ -387,7 +387,7 @@ enum {
 				[[CurrentUser user] logout];
 				
 				AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-				[AuthViewController presentAuthViewControllerFromViewController:appDelegate.tabBarController delegate:appDelegate];
+				[appDelegate presentAuthViewControllerWithClosingAnimation:YES];
 			}
 		}] showInView:self.tabBarController.view];
 	}

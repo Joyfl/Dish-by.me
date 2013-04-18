@@ -22,6 +22,7 @@
 #import "ProfileViewController.h"
 #import "JLHangulUtils.h"
 #import "ForkListViewController.h"
+#import "AppDelegate.h"
 
 #define photoHeight !_dish ? 298 : 298 * _dish.photoHeight / _dish.photoWidth
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
@@ -950,7 +951,7 @@ enum {
 	}
 	else
 	{
-		[AuthViewController presentAuthViewControllerFromViewController:self delegate:self];
+		[(AppDelegate *)[UIApplication sharedApplication].delegate presentAuthViewControllerWithClosingAnimation:YES];
 	}
 }
 

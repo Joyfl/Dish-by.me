@@ -26,6 +26,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+	JLLog( @"Application launching option : %@", launchOptions );
+	
 	[GAI sharedInstance].trackUncaughtExceptions = YES;
 	[GAI sharedInstance].dispatchInterval = 20;
 //	[GAI sharedInstance].debug = YES;
@@ -88,10 +90,15 @@
 	}
 	else
 	{
-		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:self.tabBarController delegate:self];
+		[self presentAuthViewControllerWithClosingAnimation:NO];
 	}
 	
 	[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+	
+	if( launchOptions )
+	{
+		[self application:application didReceiveRemoteNotification:[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]];
+	}
 	
     return YES;
 }
@@ -143,16 +150,68 @@
 	JLLog( @"Remote Notification 등록 실패 : %@", error );
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+	JLLog( @"Received Remote Notification" );
+	NSURL *url = [NSURL URLWithString:[userInfo objectForKey:@"url"]];
+	[application openURL:url];
+}
+
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
 	if( [url.absoluteString hasPrefix:@"dishbyme://"] )
 	{
-		JLLog( @"Launch from URL : %@", url );
-		NSInteger dishId = [[url.absoluteString substringFromIndex:11] integerValue];
-		if( dishId )
+		JLLog( @"Launch from URL : %@ (source : %@)", url, sourceApplication );
+		
+		NSArray *components = [[url.absoluteString substringFromIndex:11] componentsSeparatedByString:@"?"];
+		NSString *method = [components objectAtIndex:0];
+		NSMutableDictionary *parameters = nil;
+		if( components.count > 1 )
 		{
-			DishDetailViewController *detailViewController = [[DishDetailViewController alloc] initWithDishId:dishId dishName:nil];
-			[self.dishListViewController.navigationController pushViewController:detailViewController animated:NO];
+			parameters = [NSMutableDictionary dictionary];
+			
+			NSArray *params = [[components objectAtIndex:1] componentsSeparatedByString:@"&"];
+			for( NSString *param in params )
+			{
+				NSArray *keyAndObject = [param componentsSeparatedByString:@"="];
+				NSString *key = [keyAndObject objectAtIndex:0];
+				NSString *object = [keyAndObject objectAtIndex:1];
+				[parameters setObject:object forKey:key];
+			}
+		}
+		
+		JLLog( @"method : %@", method );
+		JLLog( @"parameters : %@", parameters );
+		
+		if( [method isEqualToString:@"user"] )
+		{
+			NSInteger userId = [[parameters objectForKey:@"user_id"] integerValue];
+			if( userId )
+			{
+				ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+				[profileViewController loadUserId:userId];
+				[(UINavigationController *)self.tabBarController.selectedViewController pushViewController:profileViewController animated:YES];
+				
+				if( self.authViewController )
+				{
+					[self.authViewController dismissViewControllerAnimated:YES completion:nil];
+				}
+			}
+		}
+		
+		else if( [method isEqualToString:@"dish"] )
+		{
+			NSInteger dishId = [[parameters objectForKey:@"dish_id"] integerValue];
+			if( dishId )
+			{
+				DishDetailViewController *detailViewController = [[DishDetailViewController alloc] initWithDishId:dishId dishName:nil];
+				[(UINavigationController *)self.tabBarController.selectedViewController pushViewController:detailViewController animated:YES];
+				
+				if( self.authViewController )
+				{
+					[self.authViewController dismissViewControllerAnimated:YES completion:nil];
+				}
+			}
 		}
 		
 		return YES;
@@ -210,7 +269,7 @@
 		// 로그인
 		if( buttonIndex == 0 )
 		{
-			[AuthViewController presentAuthViewControllerFromViewController:self.tabBarController delegate:self];
+			[self presentAuthViewControllerWithClosingAnimation:YES];
 		}
 		
 	}] showInView:self.window];
@@ -218,7 +277,28 @@
 
 
 #pragma mark -
-#pragma mark AuthViewControllerDelegate
+
+- (void)presentAuthViewControllerWithClosingAnimation:(BOOL)withClosingAnimation
+{
+	self.authViewController = [[AuthViewController alloc] init];
+	self.authViewController.delegate = self;
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:self.authViewController];
+	navController.navigationBarHidden = YES;
+	
+	if( withClosingAnimation )
+	{
+		[self.authViewController closeBookCoverCompletion:^(UIImageView *coverView) {
+			[self.tabBarController presentViewController:navController animated:NO completion:nil];
+			[coverView removeFromSuperview];
+			[self.authViewController openBookCover];
+		}];
+	}
+	else
+	{
+		[self.tabBarController presentViewController:navController animated:NO completion:nil];
+		[self.authViewController openBookCover];
+	}
+}
 
 - (void)authViewControllerDidSucceedLogin:(AuthViewController *)authViewController
 {
@@ -226,6 +306,7 @@
 	[self.dishListViewController updateDishes];
 	[self.profileViewController loadUserId:[CurrentUser user].userId];
 	[self.settingsViewController loadSettings];
+	self.authViewController = nil;
 }
 
 @end

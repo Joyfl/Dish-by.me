@@ -16,10 +16,12 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) UITabBarController *tabBarController;
+@property (nonatomic, strong) AuthViewController *authViewController;
 @property (nonatomic, strong) DishListViewController *dishListViewController;
 @property (nonatomic, strong) ProfileViewController *profileViewController;
 @property (nonatomic, strong) SettingsViewController *settingsViewController;
 
 - (void)cameraButtonDidTouchUpInside;
+- (void)presentAuthViewControllerWithClosingAnimation:(BOOL)withClosingAnimation;
 
 @end
