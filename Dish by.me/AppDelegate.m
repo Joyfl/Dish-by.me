@@ -50,8 +50,6 @@
 	
 	SearchViewController *searchViewController = [[SearchViewController alloc] init];
 	DMNavigationController *searchNavigationController = [[DMNavigationController alloc] initWithRootViewController:searchViewController];
-	searchNavigationController.navigationBar.shadowImage = [[UIImage alloc] init];
-	[searchNavigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigation_bar_no_border.png"] forBarMetrics:UIBarMetricsDefault];
 //	searchNavigationController.title = NSLocalizedString( @"SEARCH", @"" );
 	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_search.png"];
 	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );

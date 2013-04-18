@@ -21,27 +21,25 @@
 	self.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	self.trackedViewName = [[self class] description];
 	
-	_searchBar = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 45 )];
-	[self.view addSubview:_searchBar];
+	UIImageView *searchBarBackgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_bar.png"]];
+	[self.view addSubview:searchBarBackgroundView];
 	
-	UIImageView *searchBarBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_bar.png"]];
-	[_searchBar addSubview:searchBarBg];
+	_searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake( 2, 0, 316, 45 )];
+	_searchBar.delegate = self;
+	_searchBar.backgroundImage = [[UIImage alloc] init];
+	[_searchBar setSearchFieldBackgroundImage:[UIImage imageNamed:@"search_bar_textfield.png"] forState:UIControlStateNormal];
+	_searchBar.placeholder = NSLocalizedString( @"SEARCH", nil );
+	_searchBar.searchTextPositionAdjustment = UIOffsetMake( 0, -1 );
 	
-	UIImageView *searchInputBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"textfield_bg.png"]];
-	searchInputBg.frame = CGRectMake( 5, 5, 235, 30 );
-	[_searchBar addSubview:searchInputBg];
-	
-	_searchInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
-	_searchInput.font = [UIFont systemFontOfSize:13];
-	_searchInput.placeholder = NSLocalizedString( @"SEARCH_INPUT", @"" );
-	[_searchInput addTarget:self action:@selector(searchInputEditingDidBegin) forControlEvents:UIControlEventEditingDidBegin];
-	[_searchBar addSubview:_searchInput];
-	
-	DMButton *searchButton = [[DMButton alloc] initWithTitle:NSLocalizedString( @"SEARCH", @"" )];
-	searchButton.frame = CGRectMake( 250, 5, 60, 30 );
-	searchButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
-	[searchButton addTarget:self action:@selector(searchButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[_searchBar addSubview:searchButton];
+	_searchButton = [[UIButton alloc] initWithFrame:CGRectMake( -8, -1, 51, 31 )];
+	_searchButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+	_searchButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[_searchButton setTitle:NSLocalizedString( @"SEARCH", nil ) forState:UIControlStateNormal];
+	[_searchButton setTitleColor:[UIColor colorWithHex:0x828083 alpha:1] forState:UIControlStateNormal];
+	[_searchButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.5] forState:UIControlStateNormal];
+	[_searchButton setBackgroundImage:[UIImage imageNamed:@"button_search.png"] forState:UIControlStateNormal];
+	[_searchButton setBackgroundImage:[UIImage imageNamed:@"button_search_selected.png"] forState:UIControlStateHighlighted];
+	[_searchButton addTarget:self action:@selector(searchButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 45, 320, UIScreenHeight - 158 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;
@@ -58,8 +56,8 @@
 	_messageLabel.textColor = [UIColor colorWithHex:0x717374 alpha:1];
 	_messageLabel.shadowColor = [UIColor whiteColor];
 	_messageLabel.shadowOffset = CGSizeMake( 0, 1 );
-	_messageLabel.hidden = YES;
 	[_tableView addSubview:_messageLabel];
+	[self.view addSubview:_searchBar];
 	
 	_dimView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 45, 320, UIScreenHeight )];
 	_dimView.userInteractionEnabled = YES;
@@ -79,6 +77,59 @@
 
 
 #pragma mark -
+#pragma mark UISearchBarDelegate
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+	[_searchBar setShowsCancelButton:YES animated:YES];
+	
+	for( UIView *cancelButton in _searchBar.subviews )
+	{
+		if( [[cancelButton.class description] isEqualToString:@"UINavigationButton"] )
+		{
+			for( UIView *subview in cancelButton.subviews )
+			{
+				[subview removeFromSuperview];
+			}
+			
+			[cancelButton addSubview:_searchButton];
+		}
+	}
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		_dimView.alpha = 0.7;
+	}];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+	[self searchButtonDidTouchUpInside];
+}
+
+- (void)searchButtonDidTouchUpInside
+{
+	if( _searchBar.text.length == 0 )
+		return;
+	
+	[_dishes removeAllObjects];
+	[_tableView reloadData];
+	[self dimViewDidTap];
+	
+	[self search:_searchBar.text];
+}
+
+- (void)dimViewDidTap
+{
+	[_searchBar resignFirstResponder];
+	[_searchBar setShowsCancelButton:NO animated:YES];
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		_dimView.alpha = 0;
+	}];
+}
+
+
+#pragma mark -
 #pragma mark Loading
 
 - (void)search:(NSString *)query
@@ -87,6 +138,8 @@
 	if( !query ) return;
 	
 	_searching = YES;
+	_messageLabel.hidden = YES;
+	_tableView.contentInset = UIEdgeInsetsMake( 0, 0, 0, 0 );
 	
 	NSDictionary *params = @{ @"query": query, @"offset": [NSString stringWithFormat:@"%d", _dishes.count] };
 	[[DMAPILoader sharedLoader] api:@"/search" method:@"GET" parameters:params success:^(id response) {		
@@ -102,19 +155,23 @@
 		_lastQuery = query;
 		
 		_searching = NO;
-		[_tableView reloadData];
+		_messageLabel.hidden = NO;
 		
 		if( data.count == 0 )
 		{
 			_messageLabel.text = NSLocalizedString( @"NO_SEARCH_RESULT", nil );
-			_messageLabel.hidden = NO;
 			[_messageLabel sizeToFit];
 			_messageLabel.frame = CGRectMake( 0, 147, 320, _messageLabel.frame.size.height );
 		}
 		else
 		{
-			_messageLabel.hidden = YES;
+			_tableView.contentInset = UIEdgeInsetsMake( 40, 0, 0, 0 );
+			_messageLabel.text = [NSString stringWithFormat:NSLocalizedString( _count == 1 ? @"ONE_DISH_WAS_FOUND" : @"N_DISHES_WERE_FOUND", nil ), _count];
+			[_messageLabel sizeToFit];
+			_messageLabel.frame = CGRectMake( 0, -28, 320, _messageLabel.frame.size.height );
 		}
+		
+		[_tableView reloadData];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		_searching = NO;
@@ -235,39 +292,6 @@
 - (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath
 {
 	[self unbookmarkDish:[_dishes objectAtIndex:indexPath.row]];
-}
-
-
-#pragma mark -
-#pragma mark SearchInput
-
-- (void)searchInputEditingDidBegin
-{
-	[UIView animateWithDuration:0.25 animations:^{
-		_dimView.alpha = 0.7;
-	}];
-}
-
-
-#pragma mark -
-#pragma mark Selectors
-
-- (void)searchButtonDidTouchUpInside
-{
-	[_dishes removeAllObjects];
-	[_tableView reloadData];
-	[self dimViewDidTap];
-	
-	[self search:_searchInput.text];
-}
-
-- (void)dimViewDidTap
-{
-	[_searchInput resignFirstResponder];
-	
-	[UIView animateWithDuration:0.25 animations:^{
-		_dimView.alpha = 0;
-	}];
 }
 
 @end

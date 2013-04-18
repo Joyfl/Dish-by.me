@@ -67,6 +67,8 @@
 // SearchView
 "SEARCH_INPUT" = "요리 검색";
 "SEARCH" = "검색";
+"ONE_DISH_WAS_FOUND" = "%d개의 요리가 검색되었습니다.";
+"N_DISHES_WERE_FOUND" = "%d개의 요리가 검색되었습니다.";
 "NO_SEARCH_RESULT" = "검색결과가 없습니다.";
 
 // WritingView

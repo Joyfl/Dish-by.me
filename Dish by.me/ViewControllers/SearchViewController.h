@@ -10,10 +10,10 @@
 #import "DishListCell.h"
 #import "GAITrackedViewController.h"
 
-@interface SearchViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, DishListCellDelegate>
+@interface SearchViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, DishListCellDelegate, UISearchBarDelegate>
 {
-	UIView *_searchBar;
-	UITextField *_searchInput;
+	UISearchBar *_searchBar;
+	UIButton *_searchButton;
 	UITableView *_tableView;
 	UILabel *_messageLabel;
 	UIView *_dimView;
