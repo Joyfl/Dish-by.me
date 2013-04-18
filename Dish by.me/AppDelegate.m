@@ -91,6 +91,8 @@
 		[AuthViewController presentAuthViewControllerWithoutClosingCoverFromViewController:self.tabBarController delegate:self];
 	}
 	
+	[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+	
     return YES;
 }
 
@@ -119,6 +121,26 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
 	// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+{
+	NSString *token = [[deviceToken.description stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+	JLLog( @"deviceToken : %@", token );
+	
+	NSDictionary *params = @{ @"device_token": token, @"device_os": @"iOS" };
+	[[DMAPILoader sharedLoader] api:@"/setting/device" method:@"PUT" parameters:params success:^(id response) {
+		
+		JLLog( @"Registered deviceToken" );
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		
+	}];
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+	JLLog( @"Remote Notification 등록 실패 : %@", error );
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

@@ -136,3 +136,10 @@
 "A_WEEK_AGO" = "일주일 전";
 "DATE_FORMAT_WITH_MONTH_DAY" = "M월 d일";
 "DATE_FORMAT_WITH_YEAR_MONTH_DAY" = "yyyy년 M월 d일";
+
+// Notifications
+"S_FOLLOWED_YOU" = "%@님이 회원님을 팔로우했습니다.";
+"S_BOOKMARKED_YOUR_DISH" = "%@님이 회원님의 요리 %@를 북마크했습니다.";
+"S_COMMENTED_ON_YOUR_DISH" = "%@님이 회원님의 요리 %@에 댓글을 남겼습니다.";
+"S_FORKED_YOUR_DISH" = "%@님이 회원님의 요리 %@를 포크했습니다.";
+"S_COMMENTED_ON_DISH_TOO" = "%@님도 요리 %@에 댓글을 남겼습니다.";
