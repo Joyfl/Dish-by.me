@@ -142,4 +142,4 @@
 "S_BOOKMARKED_YOUR_DISH" = "%@님이 회원님의 요리를 북마크했습니다.";
 "S_COMMENTED_ON_YOUR_DISH" = "%1$@님이 회원님의 요리에 댓글을 남겼습니다: \"%2$@\"";
 "S_FORKED_YOUR_DISH" = "%@님이 회원님의 요리를 포크했습니다.";
-"S_COMMENTED_ON_DISH_S_TOO" = "%1$@님도 요리 %2$@에 댓글을 남겼습니다: \"%3$@\"";
+"S_COMMENTED_ON_DISH_S_TOO" = "%1$@님도 요리 '%2$@'에 댓글을 남겼습니다: \"%3$@\"";
