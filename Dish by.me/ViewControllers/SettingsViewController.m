@@ -154,13 +154,14 @@ enum {
 		if( !cell )
 		{
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			cell.textLabel.font = [UIFont systemFontOfSize:16];
 			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
 			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
 			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
 			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
+		
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
 		if( indexPath.row == kRowChangeEmail )
 		{
@@ -183,13 +184,14 @@ enum {
 		if( !cell )
 		{
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 			cell.textLabel.font = [UIFont systemFontOfSize:16];
 			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
 			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
 			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
 			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
+		
+		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 		
 		if( indexPath.row == kRowFacebook )
 		{
@@ -259,6 +261,7 @@ enum {
 		
 		cell.textLabel.text = NSLocalizedString( @"LOGOUT", nil );
 		cell.detailTextLabel.text = nil;
+		cell.accessoryType = UITableViewCellAccessoryNone;
 		
 		return cell;
 	}
