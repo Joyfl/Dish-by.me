@@ -138,8 +138,8 @@
 "DATE_FORMAT_WITH_YEAR_MONTH_DAY" = "yyyy년 M월 d일";
 
 // Notifications
-"S_FOLLOWED_YOU" = "%@님이 회원님을 팔로우했습니다.";
-"S_BOOKMARKED_YOUR_DISH" = "%@님이 회원님의 요리 %@를 북마크했습니다.";
-"S_COMMENTED_ON_YOUR_DISH" = "%@님이 회원님의 요리 %@에 댓글을 남겼습니다.";
-"S_FORKED_YOUR_DISH" = "%@님이 회원님의 요리 %@를 포크했습니다.";
-"S_COMMENTED_ON_DISH_TOO" = "%@님도 요리 %@에 댓글을 남겼습니다.";
+"S_FOLLOWED_YOU" = "%@님이 회원님의 요리를 포크했습니다.";
+"S_BOOKMARKED_YOUR_DISH" = "%@님이 회원님의 요리를 북마크했습니다.";
+"S_COMMENTED_ON_YOUR_DISH" = "%1$@님이 회원님의 요리에 댓글을 남겼습니다: \"%2$@\"";
+"S_FORKED_YOUR_DISH" = "%@님이 회원님의 요리를 포크했습니다.";
+"S_COMMENTED_ON_DISH_S_TOO" = "%1$@님도 요리 %2$@에 댓글을 남겼습니다: \"%3$@\"";
