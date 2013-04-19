@@ -14,11 +14,13 @@
 	UITableView *_tableView;
 	UILabel *_servingsLabel;
 	UILabel *_minutesLabel;
+	UIView *_pageControlView;
 }
 
 @property (nonatomic) Recipe *recipe;
 @property (nonatomic, readonly) UIButton *checkButton;
 
 - (id)initWithRecipe:(Recipe *)recipe;
+- (void)setCurrentPage:(NSInteger)currentPage numberOfPages:(NSInteger)numberOfPages;
 
 @end

@@ -16,6 +16,7 @@
 	UIImageView *_borderView;
 	UIImageView *_lineView;
 	UITextView *_textView;
+	UIView *_pageControlView;
 }
 
 @property (nonatomic) RecipeContent *content;
@@ -23,5 +24,6 @@
 @property (nonatomic, readonly) UIButton *photoButton;
 
 - (id)initWithRecipeContent:(RecipeContent *)content;
+- (void)setCurrentPage:(NSInteger)currentPage numberOfPages:(NSInteger)numberOfPages;
 
 @end

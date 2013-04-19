@@ -27,6 +27,7 @@
 	
 	_infoViewerView = [[RecipeInfoViewerView alloc] initWithRecipe:_recipe];
 	_infoViewerView.frame = CGRectMake( -2, 0, 304, UIScreenHeight - 30 );
+	[_infoViewerView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
 	
 	// 그냥 addTarget:action: 하면 EXC_BAD_ACCESS 에러남 ㅡㅡ;;
 	[_infoViewerView.checkButton addTargetBlock:^(id sender) { [self dismiss]; } forControlEvents:UIControlEventTouchUpInside];
@@ -40,6 +41,7 @@
 		
 		// 그냥 addTarget:action: 하면 EXC_BAD_ACCESS 에러남 ㅡㅡ;;
 		[contentViewerView.checkButton addTargetBlock:^(id sender) { [self dismiss]; } forControlEvents:UIControlEventTouchUpInside];
+		[contentViewerView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
 		[_scrollView addSubview:contentViewerView];
 		[_contentViewerViews addObject:contentViewerView];
 	}

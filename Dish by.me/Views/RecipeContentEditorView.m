@@ -93,6 +93,9 @@
 	
 	[self layoutScrollViewContent];
 	
+	_pageControlView = [[UIView alloc] init];
+	[self addSubview:_pageControlView];
+	
 	return self;
 }
 
@@ -140,6 +143,29 @@
 	CGRect frame = _scrollView.frame;
 	frame.size.height = UIScreenHeight - 150;
 	_scrollView.frame = frame;
+}
+
+
+#pragma mark -
+
+- (void)setCurrentPage:(NSInteger)currentPage numberOfPages:(NSInteger)numberOfPages
+{
+	for( UIImageView *dotView in _pageControlView.subviews )
+	{
+		[dotView removeFromSuperview];
+	}
+	
+	for( NSInteger i = 0; i < numberOfPages; i++ )
+	{
+		UIImageView *dotView = [[UIImageView alloc] initWithFrame:CGRectMake( i * 10, 0, 10, 10 )];
+		dotView.image = [UIImage imageNamed:i == currentPage ? @"recipe_page_control_selected.png" : @"recipe_page_control.png"];
+		[_pageControlView addSubview:dotView];
+	}
+	
+	CGRect frame = _pageControlView.frame;
+	frame.size = CGSizeMake( 10 * numberOfPages, 10 );
+	_pageControlView.frame = frame;
+	_pageControlView.center = CGPointMake( 154, 416 );
 }
 
 @end

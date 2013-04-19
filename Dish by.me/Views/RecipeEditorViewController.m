@@ -29,6 +29,7 @@
 	_infoEditorView = [[RecipeInfoEditorView alloc] initWithRecipe:_recipe];
 	_infoEditorView.frame = CGRectMake( -2, 0, 304, UIScreenHeight - 30 );
 	[_infoEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
+	[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
 	[_scrollView addSubview:_infoEditorView];
 	
 	_contentEditorViews = [NSMutableArray array];
@@ -42,6 +43,7 @@
 		[contentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 		[contentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 		[contentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
+		[contentEditorView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
 		[_scrollView addSubview:contentEditorView];
 		[_contentEditorViews addObject:contentEditorView];
 	}
@@ -171,6 +173,13 @@
 		
 		_newContentEditorView.layer.transform = CATransform3DIdentity;
 		_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
+		
+		[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
+		for( NSInteger i = 0; i < _recipe.contents.count ; i++ )
+		{
+			RecipeContentEditorView *contentEditorView = [_contentEditorViews objectAtIndex:i];
+			[contentEditorView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
+		}
 	}
 }
 
@@ -288,6 +297,9 @@
 		targetEditorView.originalLocation = frame.origin;
 	} completion:nil];
 	
+	[targetEditorView setCurrentPage:currentDraggingEditorViewIndex + 1 numberOfPages:_recipe.contents.count + 1];
+	[_currentDraggingContentEditorView setCurrentPage:targetEditorViewIndex + 1 numberOfPages:_recipe.contents.count + 1];
+	
 	// 실제 데이터 교환
 	JLLog( @"드래그중인 %d를 %d와 교환", currentDraggingEditorViewIndex, targetEditorViewIndex );
 	[_recipe.contents exchangeObjectAtIndex:currentDraggingEditorViewIndex withObjectAtIndex:targetEditorViewIndex];
@@ -323,6 +335,9 @@
 		targetEditorView.frame = frame;
 		targetEditorView.originalLocation = frame.origin;
 	} completion:nil];
+	
+	[targetEditorView setCurrentPage:currentDraggingEditorViewIndex + 1 numberOfPages:_recipe.contents.count + 1];
+	[_currentDraggingContentEditorView setCurrentPage:targetEditorViewIndex + 1 numberOfPages:_recipe.contents.count + 1];
 	
 	// 실제 데이터 교환
 	JLLog( @"드래그중인 %d를 %d와 교환", currentDraggingEditorViewIndex, targetEditorViewIndex );

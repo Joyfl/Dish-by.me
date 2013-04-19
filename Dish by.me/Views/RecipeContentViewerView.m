@@ -82,6 +82,9 @@
 	
 	[self layoutScrollViewContent];
 	
+	_pageControlView = [[UIView alloc] init];
+	[self addSubview:_pageControlView];
+	
 	return self;
 }
 
@@ -102,6 +105,29 @@
 	_lineView.frame = CGRectMake( 12, _photoButton.frame.origin.y + _photoButton.frame.size.height + 13, 255, 4 );
 	_textView.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, _textView.contentSize.height );
 	_scrollView.contentSize = CGSizeMake( 280, _textView.frame.origin.y + _textView.frame.size.height + 13 );
+}
+
+
+#pragma mark -
+
+- (void)setCurrentPage:(NSInteger)currentPage numberOfPages:(NSInteger)numberOfPages
+{
+	for( UIImageView *dotView in _pageControlView.subviews )
+	{
+		[dotView removeFromSuperview];
+	}
+	
+	for( NSInteger i = 0; i < numberOfPages; i++ )
+	{
+		UIImageView *dotView = [[UIImageView alloc] initWithFrame:CGRectMake( i * 10, 0, 10, 10 )];
+		dotView.image = [UIImage imageNamed:i == currentPage ? @"recipe_page_control_selected.png" : @"recipe_page_control.png"];
+		[_pageControlView addSubview:dotView];
+	}
+	
+	CGRect frame = _pageControlView.frame;
+	frame.size = CGSizeMake( 10 * numberOfPages, 10 );
+	_pageControlView.frame = frame;
+	_pageControlView.center = CGPointMake( 154, 416 );
 }
 
 @end

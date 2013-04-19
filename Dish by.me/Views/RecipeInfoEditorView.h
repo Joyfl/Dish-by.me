@@ -16,11 +16,13 @@
 	UILabel *_servingsLabel;
 	UITextField *_minutesInput;
 	UILabel *_minutesLabel;
+	UIView *_pageControlView;
 }
 
 @property (nonatomic) Recipe *recipe;
 @property (nonatomic) UIButton *checkButton;
 
 - (id)initWithRecipe:(Recipe *)recipe;
+- (void)setCurrentPage:(NSInteger)currentPage numberOfPages:(NSInteger)numberOfPages;
 
 @end
