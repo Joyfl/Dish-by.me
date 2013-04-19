@@ -10,6 +10,8 @@
 #import "UIResponder+Dim.h"
 #import <QuartzCore/QuartzCore.h>
 
+#define MAX_RECIPE_COUNT 20
+
 @implementation RecipeEditorViewController
 
 - (id)initWithRecipe:(Recipe *)recipe
@@ -147,6 +149,9 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+	if( _recipe.contents.count >= MAX_RECIPE_COUNT )
+		return;
+	
 	CGFloat offset = scrollView.contentOffset.x;
 	if( offset > _scrollView.contentSize.width - 304 + 60 )
 	{
@@ -171,14 +176,21 @@
 		
 		[_contentEditorViews addObject:newContentEditorView];
 		
-		_newContentEditorView.layer.transform = CATransform3DIdentity;
-		_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
-		
 		[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
 		for( NSInteger i = 0; i < _recipe.contents.count ; i++ )
 		{
 			RecipeContentEditorView *contentEditorView = [_contentEditorViews objectAtIndex:i];
 			[contentEditorView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
+		}
+		
+		if( _recipe.contents.count < MAX_RECIPE_COUNT )
+		{
+			_newContentEditorView.layer.transform = CATransform3DIdentity;
+			_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
+		}
+		else
+		{
+			_newContentEditorView.hidden = YES;
 		}
 	}
 }
