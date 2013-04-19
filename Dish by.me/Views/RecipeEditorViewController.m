@@ -322,6 +322,7 @@
 			{
 				RecipeContentEditorView *contentEditorView = [_contentEditorViews objectAtIndex:i];
 				contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, UIScreenHeight - 30 );
+				contentEditorView.originalLocation = contentEditorView.frame.origin;
 				[contentEditorView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
 			}
 			
