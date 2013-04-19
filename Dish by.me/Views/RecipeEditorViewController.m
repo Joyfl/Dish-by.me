@@ -241,7 +241,7 @@
 		_currentDraggingContentEditorView.transform = CGAffineTransformScale( CGAffineTransformIdentity, DRAGGING_RECIPE_SCALE, DRAGGING_RECIPE_SCALE );
 		_currentDraggingContentEditorView.alpha = DRAGGING_RECIPE_ALPHA;
 		
-		_binView.center = CGPointMake( UIScreenWidth / 2, 420 );
+		_binView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight - _binView.frame.size.height - 20 );
 		_binView.alpha = 1;
 	}];
 }
@@ -253,6 +253,7 @@
 	CGPoint point = [touchEvent.allTouches.anyObject locationInView:[UIApplication sharedApplication].keyWindow];
 	CGFloat scale = REMOVING_RECIPE_SCALE + ( point.y - _binView.frame.origin.y ) * ( DRAGGING_RECIPE_SCALE - REMOVING_RECIPE_SCALE ) / ( UIScreenHeight / 2 - _binView.frame.origin.y );
 	if( scale > DRAGGING_RECIPE_SCALE ) scale = DRAGGING_RECIPE_SCALE;
+	else if( scale < REMOVING_RECIPE_SCALE ) scale = REMOVING_RECIPE_SCALE;
 	editorView.transform = CGAffineTransformMakeScale( scale, scale );
 	
 	CGFloat x = point.x - scale * 27;
@@ -281,7 +282,7 @@
 		{
 			_isDraggingRecipeOnBin = YES;
 			[UIView animateWithDuration:0.25 animations:^{
-				_binView.transform = CGAffineTransformMakeScale( 1.5, 1.5 );
+				_binView.transform = CGAffineTransformMakeScale( 1.2, 1.2 );
 			}];
 		}
 	}
@@ -316,6 +317,7 @@
 		[UIView animateWithDuration:0.25 animations:^{
 			_scrollView.contentSize = CGSizeMake( _recipe.contents.count == 0 ? 305 : 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
 			
+			[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
 			for( NSInteger i = 0; i < _recipe.contents.count; i++ )
 			{
 				RecipeContentEditorView *contentEditorView = [_contentEditorViews objectAtIndex:i];
@@ -323,7 +325,7 @@
 				[contentEditorView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
 			}
 			
-			editorView.transform = CGAffineTransformMakeScale( 0, 0 );
+			editorView.transform = CGAffineTransformMakeScale( 0.01, 0.01 );
 			editorView.alpha = 0;
 			
 			_binView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight + _binView.frame.size.height / 2 );

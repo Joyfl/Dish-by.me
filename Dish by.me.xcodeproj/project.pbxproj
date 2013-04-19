@@ -1753,7 +1753,7 @@
 					"\"$(SRCROOT)/Libraries/TestFlight\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D55969C9-C355-417F-AE8B-9A713DE7BC47";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BD2CBF8A-0CDF-4D77-BE95-1B55F44454BF";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1778,7 +1778,7 @@
 					"\"$(SRCROOT)/Libraries/TestFlight\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D55969C9-C355-417F-AE8B-9A713DE7BC47";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BD2CBF8A-0CDF-4D77-BE95-1B55F44454BF";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
