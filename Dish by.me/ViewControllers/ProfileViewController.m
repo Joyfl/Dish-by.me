@@ -17,6 +17,7 @@
 #import "DMTextFieldViewController.h"
 #import "HTBlock.h"
 #import "UIButton+ActivityIndicatorView.h"
+#import "NotificationListViewController.h"
 
 #define isLastDishLoaded ( _dishes.count == _user.dishCount )
 #define isLastBookmarkLoaded ( _bookmarks.count == _user.bookmarkCount )
@@ -44,6 +45,10 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	_followingButton.button.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 8 );
 	[_followingButton.button setImage:[UIImage imageNamed:@"icon_checkmark.png"] forState:UIControlStateNormal];
 	[_followingButton updateFrame];
+	
+	_notificationsButton = [DMBarButtonItem barButtonItemWithTitle:@"0" target:self action:@selector(notificationsButtonHandler)];
+	_notificationsButton.button.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 8 );
+	[_notificationsButton.button setImage:[UIImage imageNamed:@"icon_comment.png"] forState:UIControlStateNormal];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;
@@ -105,8 +110,19 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	}
 	else
 	{
-		self.navigationItem.rightBarButtonItem = nil;
+		self.navigationItem.rightBarButtonItem = _notificationsButton;
 	}
+}
+
+- (void)setNotificationsCount:(NSInteger)notificationsCount
+{
+	_notificationsButton.title = [NSString stringWithFormat:@"%d", notificationsCount];
+}
+
+- (void)notificationsButtonHandler
+{
+	NotificationListViewController *notificationListViewController = [[NotificationListViewController alloc] init];
+	[self.navigationController pushViewController:notificationListViewController animated:YES];
 }
 
 - (void)followButtonHandler
