@@ -86,7 +86,7 @@
 	_binView.animationDuration = 0.33;
 	_binView.animationRepeatCount = 1;
 	_binView.alpha = 0;
-	[self.view addSubview:_binView];
+	[[UIApplication sharedApplication].keyWindow addSubview:_binView];
 	
 	return self;
 }
@@ -96,6 +96,7 @@
 	NSTimeInterval duration = 0.4;
 	
 	[self dimWithDuration:duration completion:nil];
+	[[UIApplication sharedApplication].keyWindow bringSubviewToFront:_binView];
 	
 	self.view.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
 	
@@ -257,6 +258,7 @@
 {
 	_currentDraggingContentEditorView = (RecipeContentEditorView *)grabButton.superview;
 	[[UIApplication sharedApplication].keyWindow addSubview:_currentDraggingContentEditorView];
+	[[UIApplication sharedApplication].keyWindow bringSubviewToFront:_binView];
 	
 	CGPoint point = [touchEvent.allTouches.anyObject locationInView:[UIApplication sharedApplication].keyWindow];
 	_currentDraggingContentEditorView.center = CGPointMake( point.x - 27, _currentDraggingContentEditorView.center.y + self.view.frame.origin.y );
