@@ -10,7 +10,6 @@
 		03087E89171D100D0050BDAB /* FacebookSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03087E88171D100D0050BDAB /* FacebookSettingsViewController.m */; };
 		03087E8F171DAAD10050BDAB /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 03087E8E171DAAD10050BDAB /* Settings.m */; };
 		0314A11416E775AC00DAF40A /* TTTAttributedLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0314A11316E775AC00DAF40A /* TTTAttributedLabel.m */; };
-		0314A11716E776AC00DAF40A /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0314A11516E7769F00DAF40A /* CoreText.framework */; };
 		0314A11A16E7950F00DAF40A /* JLHangulUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 0314A11916E7950E00DAF40A /* JLHangulUtils.m */; };
 		0317883A160C6DDC0041DAD7 /* DishTileItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178839160C6DDC0041DAD7 /* DishTileItem.m */; };
 		0317884B160C76DB0041DAD7 /* DishDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03178842160C76DB0041DAD7 /* DishDetailViewController.m */; };
@@ -66,6 +65,8 @@
 		03981CFA1722A97B0056B4A1 /* Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981CF91722A97B0056B4A1 /* Notification.m */; };
 		03981CFD1722BA9D0056B4A1 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981CFC1722BA9D0056B4A1 /* NotificationCell.m */; };
 		03981D03172384DA0056B4A1 /* NSString+ArgumentArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981D02172384DA0056B4A1 /* NSString+ArgumentArray.m */; };
+		03A599561723907100A37070 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0314A11516E7769F00DAF40A /* CoreText.framework */; };
+		03A59C091723975700A37070 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A59C081723975700A37070 /* libxml2.dylib */; };
 		03A5E94116B4DBE800C79F8D /* SEGOEUI.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */; };
 		03A5E94216B4DBE800C79F8D /* SEGOEUIB.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */; };
 		03A5E94316B4DBE800C79F8D /* SEGOEUII.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */; };
@@ -527,6 +528,7 @@
 		03981CFC1722BA9D0056B4A1 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationCell.m; path = Views/NotificationCell.m; sourceTree = "<group>"; };
 		03981D01172384DA0056B4A1 /* NSString+ArgumentArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+ArgumentArray.h"; path = "Categories/NSString+ArgumentArray.h"; sourceTree = "<group>"; };
 		03981D02172384DA0056B4A1 /* NSString+ArgumentArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+ArgumentArray.m"; path = "Categories/NSString+ArgumentArray.m"; sourceTree = "<group>"; };
+		03A59C081723975700A37070 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUI.TTF; sourceTree = "<group>"; };
 		03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUIB.TTF; sourceTree = "<group>"; };
 		03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUII.TTF; sourceTree = "<group>"; };
@@ -811,7 +813,6 @@
 				03C52CC316F43618005B1B4C /* AdSupport.framework in Frameworks */,
 				03C52CBF16F435F5005B1B4C /* libsqlite3.dylib in Frameworks */,
 				03C52CBD16F435E7005B1B4C /* Accounts.framework in Frameworks */,
-				0314A11716E776AC00DAF40A /* CoreText.framework in Frameworks */,
 				0396E09416E5E7CD00CA2531 /* CoreData.framework in Frameworks */,
 				0349EA5A16D90C930057BD12 /* MobileCoreServices.framework in Frameworks */,
 				0349EA5816D90C870057BD12 /* SystemConfiguration.framework in Frameworks */,
@@ -2020,8 +2021,6 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BD2CBF8A-0CDF-4D77-BE95-1B55F44454BF";
-				USER_HEADER_SEARCH_PATHS = "Libraries/DTCoreText/Core/**";
-				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};

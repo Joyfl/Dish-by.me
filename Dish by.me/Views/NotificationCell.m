@@ -34,7 +34,6 @@
 	_timeLabel.font = [UIFont systemFontOfSize:10];
 	_timeLabel.textColor = [UIColor colorWithHex:0xAAA5A3 alpha:1];
 	[self.contentView addSubview:_timeLabel];
-	
 	return self;
 }
 
