@@ -27,9 +27,8 @@
 		0337A7951723AC2900E5EE05 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0337A7941723AC2900E5EE05 /* libxml2.dylib */; };
 		0337A7C71723AEA400E5EE05 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0337A7C61723AEA400E5EE05 /* ImageIO.framework */; };
 		0337A7C91723AED700E5EE05 /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0337A7C81723AED700E5EE05 /* Social.framework */; };
-		0337A8F51723B00E00E5EE05 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 0337A8831723B00E00E5EE05 /* .gitignore */; };
-		0337A8F61723B00E00E5EE05 /* .gitmodules in Resources */ = {isa = PBXBuildFile; fileRef = 0337A8841723B00E00E5EE05 /* .gitmodules */; };
 		0337A8F71723B00E00E5EE05 /* libDTCoreText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0337A8E81723B00E00E5EE05 /* libDTCoreText.a */; };
+		0337A8F81723C33700E5EE05 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0314A11516E7769F00DAF40A /* CoreText.framework */; };
 		033BA84316F5899900926F51 /* DMTextFieldViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033BA84216F5899900926F51 /* DMTextFieldViewController.m */; };
 		033BA84916F69D9200926F51 /* CurrentUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 033BA84816F69D9200926F51 /* CurrentUser.m */; };
 		033C52DF1610782A00F0B5E5 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033C52DE1610782900F0B5E5 /* LoginViewController.m */; };
@@ -65,8 +64,6 @@
 		03981CFA1722A97B0056B4A1 /* Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981CF91722A97B0056B4A1 /* Notification.m */; };
 		03981CFD1722BA9D0056B4A1 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981CFC1722BA9D0056B4A1 /* NotificationCell.m */; };
 		03981D03172384DA0056B4A1 /* NSString+ArgumentArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981D02172384DA0056B4A1 /* NSString+ArgumentArray.m */; };
-		03A599561723907100A37070 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0314A11516E7769F00DAF40A /* CoreText.framework */; };
-		03A59C091723975700A37070 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 03A59C081723975700A37070 /* libxml2.dylib */; };
 		03A5E94116B4DBE800C79F8D /* SEGOEUI.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */; };
 		03A5E94216B4DBE800C79F8D /* SEGOEUIB.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */; };
 		03A5E94316B4DBE800C79F8D /* SEGOEUII.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */; };
@@ -91,7 +88,6 @@
 		03CB74A4160CC42700A5C6A3 /* DMBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */; };
 		03CB74A5160CC42700A5C6A3 /* DMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */; };
 		03CE40AE16D93B7F0084AF5A /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CE40AD16D9378B0084AF5A /* UIButton+AFNetworking.m */; };
-		03DD161017096CBD0064D022 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 03DD154D17096CBC0064D022 /* .gitignore */; };
 		03DD161117096CBD0064D022 /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DD154E17096CBC0064D022 /* arrow.png */; };
 		03DD161217096CBD0064D022 /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DD154F17096CBC0064D022 /* arrow@2x.png */; };
 		03DD161317096CBD0064D022 /* bar_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DD155017096CBC0064D022 /* bar_button.png */; };
@@ -528,7 +524,6 @@
 		03981CFC1722BA9D0056B4A1 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationCell.m; path = Views/NotificationCell.m; sourceTree = "<group>"; };
 		03981D01172384DA0056B4A1 /* NSString+ArgumentArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+ArgumentArray.h"; path = "Categories/NSString+ArgumentArray.h"; sourceTree = "<group>"; };
 		03981D02172384DA0056B4A1 /* NSString+ArgumentArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+ArgumentArray.m"; path = "Categories/NSString+ArgumentArray.m"; sourceTree = "<group>"; };
-		03A59C081723975700A37070 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUI.TTF; sourceTree = "<group>"; };
 		03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUIB.TTF; sourceTree = "<group>"; };
 		03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUII.TTF; sourceTree = "<group>"; };
@@ -806,6 +801,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0337A8F81723C33700E5EE05 /* CoreText.framework in Frameworks */,
 				0337A7C91723AED700E5EE05 /* Social.framework in Frameworks */,
 				0337A7C71723AEA400E5EE05 /* ImageIO.framework in Frameworks */,
 				0337A7951723AC2900E5EE05 /* libxml2.dylib in Frameworks */,
@@ -1614,7 +1610,6 @@
 				03A5E94416B4DBE800C79F8D /* segoeuil.ttf in Resources */,
 				03A5E94516B4DBE800C79F8D /* SEGOEUIZ.TTF in Resources */,
 				03A5E94616B4DBE800C79F8D /* seguisb.ttf in Resources */,
-				03DD161017096CBD0064D022 /* .gitignore in Resources */,
 				03DD161117096CBD0064D022 /* arrow.png in Resources */,
 				03DD161217096CBD0064D022 /* arrow@2x.png in Resources */,
 				03DD161317096CBD0064D022 /* bar_button.png in Resources */,
@@ -1803,8 +1798,6 @@
 				03DD16CA17096CBD0064D022 /* textfield_bg@2x.png in Resources */,
 				03DD16CB17096CBD0064D022 /* tool_bar.png in Resources */,
 				03DD16CC17096CBD0064D022 /* tool_bar@2x.png in Resources */,
-				0337A8F51723B00E00E5EE05 /* .gitignore in Resources */,
-				0337A8F61723B00E00E5EE05 /* .gitmodules in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
