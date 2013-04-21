@@ -25,15 +25,17 @@
 	[DMBarButtonItem setBackButtonToViewController:self];
 	self.navigationItem.title = NSLocalizedString( @"NOTIFICATIONS", nil );
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStylePlain];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, -2, 320, UIScreenHeight - 112 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;
 	_tableView.dataSource = self;
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	_tableView.backgroundColor = self.view.backgroundColor;
+	_tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 2, 0, 0, 0 );
 	[self.view addSubview:_tableView];
 	
 	_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake( 0, -_tableView.bounds.size.height, self.view.frame.size.width, _tableView.bounds.size.height )];
 	_refreshHeaderView.delegate = self;
+	_refreshHeaderView.dottedLineView.hidden = YES;
 	_refreshHeaderView.backgroundColor = self.view.backgroundColor;
 	[_tableView addSubview:_refreshHeaderView];
 	
@@ -107,6 +109,8 @@
 		
 		Notification *notification = [notifications objectAtIndex:indexPath.row];
 		[cell setNotification:notification atIndexPath:indexPath];
+		
+		cell.bottomLineView.hidden = indexPath.row != notifications.count - 1;
 		
 		return cell;
 	}

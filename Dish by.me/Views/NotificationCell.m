@@ -14,16 +14,11 @@
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
 	self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
-	
-	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 75, 75, 320, 2 )];
-	lineView.image = [UIImage imageNamed:@"line.png"];
-	[self.contentView addSubview:lineView];
+	self.selectionStyle = UITableViewCellSelectionStyleGray;
 	
 	_thumbnailView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 75, 75 )];
 	_thumbnailView.image = [UIImage imageNamed:@"placeholder.png"];
 	[self.contentView addSubview:_thumbnailView];
-	
-	
 	
 	_descriptionLabel = [[DTAttributedLabel alloc] initWithFrame:CGRectMake( 84, 9, 227, 70 )];
 	_descriptionLabel.backgroundColor = [UIColor clearColor];
@@ -34,6 +29,24 @@
 	_timeLabel.font = [UIFont systemFontOfSize:10];
 	_timeLabel.textColor = [UIColor colorWithHex:0xAAA5A3 alpha:1];
 	[self.contentView addSubview:_timeLabel];
+	
+	UIImageView *profileLine = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 75, 2 )];
+	profileLine.image = [UIImage imageNamed:@"line_notification_profile.png"];
+	[self.contentView addSubview:profileLine];
+	
+	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 75, 0, 244, 2 )];
+	lineView.image = [UIImage imageNamed:@"line.png"];
+	[self.contentView addSubview:lineView];
+	
+	UIImageView *verticalLine = [[UIImageView alloc] initWithFrame:CGRectMake( 75, 0, 2, 75 )];
+	verticalLine.image = [UIImage imageNamed:@"line_notification_vertical.png"];
+	[self.contentView addSubview:verticalLine];
+	
+	_bottomLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 75, 320, 2 )];
+	_bottomLineView.image = [UIImage imageNamed:@"line.png"];
+	_bottomLineView.hidden = YES;
+	[self.contentView addSubview:_bottomLineView];
+	
 	return self;
 }
 

@@ -71,10 +71,10 @@
 		[[self layer] addSublayer:layer];
 		_arrowImage=layer;
 		
-		UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, frame.size.height - 7, self.frame.size.width, 2 )];
-		lineView.image = [UIImage imageNamed:@"line_dotted.png"];
-		[self addSubview:lineView];
-		[lineView release];
+		self.dottedLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, frame.size.height - 7, self.frame.size.width, 2 )];
+		self.dottedLineView.image = [UIImage imageNamed:@"line_dotted.png"];
+		[self addSubview:self.dottedLineView];
+		[self.dottedLineView release];
 		
 		UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 		view.frame = CGRectMake(25.0f, frame.size.height - 49.0f, 20.0f, 20.0f);

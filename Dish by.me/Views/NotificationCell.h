@@ -19,6 +19,7 @@
 
 @property (nonatomic, readonly) Notification *notification;
 @property (nonatomic, readonly) NSIndexPath *indexPath;
+@property (nonatomic, readonly) UIImageView *bottomLineView;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setNotification:(Notification *)notification atIndexPath:(NSIndexPath *)indexPath;

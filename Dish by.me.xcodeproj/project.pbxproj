@@ -282,6 +282,10 @@
 		03CB74A4160CC42700A5C6A3 /* DMBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */; };
 		03CB74A5160CC42700A5C6A3 /* DMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */; };
 		03CE40AE16D93B7F0084AF5A /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CE40AD16D9378B0084AF5A /* UIButton+AFNetworking.m */; };
+		03DB28F61723DE090071BBAA /* line_notification_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28F21723DE090071BBAA /* line_notification_profile.png */; };
+		03DB28F71723DE090071BBAA /* line_notification_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28F31723DE090071BBAA /* line_notification_profile@2x.png */; };
+		03DB28F81723DE090071BBAA /* line_notification_vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28F41723DE090071BBAA /* line_notification_vertical.png */; };
+		03DB28F91723DE090071BBAA /* line_notification_vertical@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28F51723DE090071BBAA /* line_notification_vertical@2x.png */; };
 		03DD16CF17096EE90064D022 /* RecipeEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16CE17096EE90064D022 /* RecipeEditorViewController.m */; };
 		03DD16FB170976260064D022 /* RecipeInfoEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16FA170976260064D022 /* RecipeInfoEditorView.m */; };
 		03DD16FE1709A3220064D022 /* IngredientEditorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16FD1709A3220064D022 /* IngredientEditorCell.m */; };
@@ -760,6 +764,10 @@
 		03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMNavigationController.m; sourceTree = "<group>"; };
 		03CE40AC16D9378B0084AF5A /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+AFNetworking.h"; sourceTree = "<group>"; };
 		03CE40AD16D9378B0084AF5A /* UIButton+AFNetworking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AFNetworking.m"; sourceTree = "<group>"; };
+		03DB28F21723DE090071BBAA /* line_notification_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_notification_profile.png; sourceTree = "<group>"; };
+		03DB28F31723DE090071BBAA /* line_notification_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line_notification_profile@2x.png"; sourceTree = "<group>"; };
+		03DB28F41723DE090071BBAA /* line_notification_vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_notification_vertical.png; sourceTree = "<group>"; };
+		03DB28F51723DE090071BBAA /* line_notification_vertical@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line_notification_vertical@2x.png"; sourceTree = "<group>"; };
 		03DD16CD17096EE90064D022 /* RecipeEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecipeEditorViewController.h; path = ../Views/RecipeEditorViewController.h; sourceTree = "<group>"; };
 		03DD16CE17096EE90064D022 /* RecipeEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecipeEditorViewController.m; path = ../Views/RecipeEditorViewController.m; sourceTree = "<group>"; };
 		03DD16F9170976260064D022 /* RecipeInfoEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecipeInfoEditorView.h; path = Views/RecipeInfoEditorView.h; sourceTree = "<group>"; };
@@ -1177,6 +1185,10 @@
 				03981BA5172045A60056B4A1 /* line@2x.png */,
 				03981BA6172045A60056B4A1 /* line_dotted.png */,
 				03981BA7172045A60056B4A1 /* line_dotted@2x.png */,
+				03DB28F21723DE090071BBAA /* line_notification_profile.png */,
+				03DB28F31723DE090071BBAA /* line_notification_profile@2x.png */,
+				03DB28F41723DE090071BBAA /* line_notification_vertical.png */,
+				03DB28F51723DE090071BBAA /* line_notification_vertical@2x.png */,
 				03981BA8172045A60056B4A1 /* login */,
 				03981BB6172045A60056B4A1 /* message_box.png */,
 				03981BB7172045A60056B4A1 /* message_box@2x.png */,
@@ -1816,6 +1828,10 @@
 				03981CF01721D6610056B4A1 /* recipe_bin.png in Resources */,
 				03981CF31722021A0056B4A1 /* recipe_reorder_control.png in Resources */,
 				03981CF41722021A0056B4A1 /* recipe_reorder_control@2x.png in Resources */,
+				03DB28F61723DE090071BBAA /* line_notification_profile.png in Resources */,
+				03DB28F71723DE090071BBAA /* line_notification_profile@2x.png in Resources */,
+				03DB28F81723DE090071BBAA /* line_notification_vertical.png in Resources */,
+				03DB28F91723DE090071BBAA /* line_notification_vertical@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

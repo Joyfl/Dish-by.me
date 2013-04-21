@@ -51,7 +51,16 @@
 //			JLLog( @"%@", error );
 //			return;
 //		}
-//		
+		
+		if( error )
+		{
+			if( error.code == -1001 )
+			{
+				JLLog( @"요청시간 초과 : %@", error );
+				return;
+			}
+		}
+//
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
 		

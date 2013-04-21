@@ -47,6 +47,7 @@ typedef enum{
 }
 
 @property(nonatomic,assign) id <EGORefreshTableHeaderDelegate> delegate;
+@property(nonatomic,strong) UIImageView *dottedLineView;
 
 - (id)initWithFrame:(CGRect)frame arrowImageName:(NSString *)arrow textColor:(UIColor *)textColor;
 
