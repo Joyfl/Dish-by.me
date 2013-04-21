@@ -60,6 +60,7 @@
 		03981CF71722A6460056B4A1 /* NotificationListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981CF61722A6460056B4A1 /* NotificationListViewController.m */; };
 		03981CFA1722A97B0056B4A1 /* Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981CF91722A97B0056B4A1 /* Notification.m */; };
 		03981CFD1722BA9D0056B4A1 /* NotificationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981CFC1722BA9D0056B4A1 /* NotificationCell.m */; };
+		03981D03172384DA0056B4A1 /* NSString+ArgumentArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 03981D02172384DA0056B4A1 /* NSString+ArgumentArray.m */; };
 		03A5E94116B4DBE800C79F8D /* SEGOEUI.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */; };
 		03A5E94216B4DBE800C79F8D /* SEGOEUIB.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */; };
 		03A5E94316B4DBE800C79F8D /* SEGOEUII.TTF in Resources */ = {isa = PBXBuildFile; fileRef = 03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */; };
@@ -403,6 +404,8 @@
 		03981CF91722A97B0056B4A1 /* Notification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Notification.m; path = Models/Notification.m; sourceTree = "<group>"; };
 		03981CFB1722BA9D0056B4A1 /* NotificationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotificationCell.h; path = Views/NotificationCell.h; sourceTree = "<group>"; };
 		03981CFC1722BA9D0056B4A1 /* NotificationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NotificationCell.m; path = Views/NotificationCell.m; sourceTree = "<group>"; };
+		03981D01172384DA0056B4A1 /* NSString+ArgumentArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSString+ArgumentArray.h"; path = "Categories/NSString+ArgumentArray.h"; sourceTree = "<group>"; };
+		03981D02172384DA0056B4A1 /* NSString+ArgumentArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSString+ArgumentArray.m"; path = "Categories/NSString+ArgumentArray.m"; sourceTree = "<group>"; };
 		03A5E93B16B4DBE800C79F8D /* SEGOEUI.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUI.TTF; sourceTree = "<group>"; };
 		03A5E93C16B4DBE800C79F8D /* SEGOEUIB.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUIB.TTF; sourceTree = "<group>"; };
 		03A5E93D16B4DBE800C79F8D /* SEGOEUII.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = SEGOEUII.TTF; sourceTree = "<group>"; };
@@ -1287,6 +1290,8 @@
 				036752B616FB7EEC00D889E8 /* UIButton+TouchAreaInsets.m */,
 				038DAF0D16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.h */,
 				038DAF0E16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m */,
+				03981D01172384DA0056B4A1 /* NSString+ArgumentArray.h */,
+				03981D02172384DA0056B4A1 /* NSString+ArgumentArray.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -1643,6 +1648,7 @@
 				03981CF71722A6460056B4A1 /* NotificationListViewController.m in Sources */,
 				03981CFA1722A97B0056B4A1 /* Notification.m in Sources */,
 				03981CFD1722BA9D0056B4A1 /* NotificationCell.m in Sources */,
+				03981D03172384DA0056B4A1 /* NSString+ArgumentArray.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

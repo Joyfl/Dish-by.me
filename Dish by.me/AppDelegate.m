@@ -319,8 +319,9 @@
 - (void)updateNotificationsSuccess:(void (^)(void))success failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
 	[[DMAPILoader sharedLoader] api:@"/notifications" method:@"GET" parameters:nil success:^(id response) {
-#warning 서버에서 count를 받아야 함
-		self.profileViewController.notificationsCount = 10;
+		NSLog( @"%@", response );
+		
+		self.profileViewController.notificationsCount = [[response objectForKey:@"badge_count"] integerValue];
 		
 		[self.notifications removeAllObjects];
 		
@@ -345,8 +346,9 @@
 - (void)loadMoreNotificationsSuccess:(void (^)(void))success failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
 	[[DMAPILoader sharedLoader] api:@"/notifications" method:@"GET" parameters:@{@"offset": [NSString stringWithFormat:@"%d", self.notifications.count]} success:^(id response) {
-#warning 서버에서 count를 받아야 함
-		self.profileViewController.notificationsCount = 10;
+		NSLog( @"%@", response );
+		
+		self.profileViewController.notificationsCount = [[response objectForKey:@"badge_count"] integerValue];
 		
 		NSArray *notifications = [response objectForKey:@"data"];
 		if( notifications.count == 0 )

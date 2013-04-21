@@ -7,14 +7,24 @@
 //
 
 #import "Notification.h"
+#import "NSString+ArgumentArray.h"
 
 @implementation Notification
 
 + (id)notificationFromDictionary:(NSDictionary *)dictionary
 {
 	Notification *notification = [[Notification alloc] init];
-	
+	notification.notificationId = [[dictionary objectForKey:@"id"] integerValue];
+	notification.photoURL = [dictionary objectForKey:@"photo_url"];
+	notification.description = [NSString stringWithFormat:NSLocalizedString( [dictionary objectForKey:@"loc-key"], nil ) arguments:[dictionary objectForKey:@"loc-args"]];
+	notification.url = [dictionary objectForKey:@"url"];
+	notification.createdTime = [Utils dateFromString:[dictionary objectForKey:@"created_time"]];
 	return notification;
+}
+
+- (void)updateRelativeTime
+{
+	self.relativeCreatedTime = [Utils relativeDateString:self.createdTime withTime:YES];
 }
 
 @end
