@@ -286,6 +286,8 @@
 		03DB28F71723DE090071BBAA /* line_notification_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28F31723DE090071BBAA /* line_notification_profile@2x.png */; };
 		03DB28F81723DE090071BBAA /* line_notification_vertical.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28F41723DE090071BBAA /* line_notification_vertical.png */; };
 		03DB28F91723DE090071BBAA /* line_notification_vertical@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28F51723DE090071BBAA /* line_notification_vertical@2x.png */; };
+		03DB28FC172400700071BBAA /* line_notification.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28FA172400700071BBAA /* line_notification.png */; };
+		03DB28FD172400700071BBAA /* line_notification@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03DB28FB172400700071BBAA /* line_notification@2x.png */; };
 		03DD16CF17096EE90064D022 /* RecipeEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16CE17096EE90064D022 /* RecipeEditorViewController.m */; };
 		03DD16FB170976260064D022 /* RecipeInfoEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16FA170976260064D022 /* RecipeInfoEditorView.m */; };
 		03DD16FE1709A3220064D022 /* IngredientEditorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16FD1709A3220064D022 /* IngredientEditorCell.m */; };
@@ -768,6 +770,8 @@
 		03DB28F31723DE090071BBAA /* line_notification_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line_notification_profile@2x.png"; sourceTree = "<group>"; };
 		03DB28F41723DE090071BBAA /* line_notification_vertical.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_notification_vertical.png; sourceTree = "<group>"; };
 		03DB28F51723DE090071BBAA /* line_notification_vertical@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line_notification_vertical@2x.png"; sourceTree = "<group>"; };
+		03DB28FA172400700071BBAA /* line_notification.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = line_notification.png; sourceTree = "<group>"; };
+		03DB28FB172400700071BBAA /* line_notification@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "line_notification@2x.png"; sourceTree = "<group>"; };
 		03DD16CD17096EE90064D022 /* RecipeEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecipeEditorViewController.h; path = ../Views/RecipeEditorViewController.h; sourceTree = "<group>"; };
 		03DD16CE17096EE90064D022 /* RecipeEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecipeEditorViewController.m; path = ../Views/RecipeEditorViewController.m; sourceTree = "<group>"; };
 		03DD16F9170976260064D022 /* RecipeInfoEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecipeInfoEditorView.h; path = Views/RecipeInfoEditorView.h; sourceTree = "<group>"; };
@@ -1189,6 +1193,8 @@
 				03DB28F31723DE090071BBAA /* line_notification_profile@2x.png */,
 				03DB28F41723DE090071BBAA /* line_notification_vertical.png */,
 				03DB28F51723DE090071BBAA /* line_notification_vertical@2x.png */,
+				03DB28FA172400700071BBAA /* line_notification.png */,
+				03DB28FB172400700071BBAA /* line_notification@2x.png */,
 				03981BA8172045A60056B4A1 /* login */,
 				03981BB6172045A60056B4A1 /* message_box.png */,
 				03981BB7172045A60056B4A1 /* message_box@2x.png */,
@@ -1832,6 +1838,8 @@
 				03DB28F71723DE090071BBAA /* line_notification_profile@2x.png in Resources */,
 				03DB28F81723DE090071BBAA /* line_notification_vertical.png in Resources */,
 				03DB28F91723DE090071BBAA /* line_notification_vertical@2x.png in Resources */,
+				03DB28FC172400700071BBAA /* line_notification.png in Resources */,
+				03DB28FD172400700071BBAA /* line_notification@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

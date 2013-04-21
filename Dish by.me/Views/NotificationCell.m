@@ -14,7 +14,8 @@
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
 	self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
-	self.selectionStyle = UITableViewCellSelectionStyleGray;
+	self.selectedBackgroundView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 320, 75 )];
+	self.selectedBackgroundView.backgroundColor = [UIColor colorWithHex:0xE6E2DB alpha:1];
 	
 	_thumbnailView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 75, 75 )];
 	_thumbnailView.image = [UIImage imageNamed:@"placeholder.png"];
@@ -35,15 +36,15 @@
 	[self.contentView addSubview:profileLine];
 	
 	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 75, 0, 244, 2 )];
-	lineView.image = [UIImage imageNamed:@"line.png"];
+	lineView.image = [UIImage imageNamed:@"line_notification.png"];
 	[self.contentView addSubview:lineView];
 	
-	UIImageView *verticalLine = [[UIImageView alloc] initWithFrame:CGRectMake( 75, 0, 2, 75 )];
+	UIImageView *verticalLine = [[UIImageView alloc] initWithFrame:CGRectMake( 74, 0, 2, 75 )];
 	verticalLine.image = [UIImage imageNamed:@"line_notification_vertical.png"];
 	[self.contentView addSubview:verticalLine];
 	
 	_bottomLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 75, 320, 2 )];
-	_bottomLineView.image = [UIImage imageNamed:@"line.png"];
+	_bottomLineView.image = [UIImage imageNamed:@"line_notification.png"];
 	_bottomLineView.hidden = YES;
 	[self.contentView addSubview:_bottomLineView];
 	
@@ -73,6 +74,8 @@
 	_descriptionLabel.attributedString = notification.attributedDescription;
 	_timeLabel.text = notification.relativeCreatedTime;
 	[_timeLabel sizeToFit];
+	
+	self.contentView.backgroundColor = notification.read ? [UIColor clearColor] : [UIColor colorWithHex:0xEEDCC6 alpha:1];
 }
 
 @end

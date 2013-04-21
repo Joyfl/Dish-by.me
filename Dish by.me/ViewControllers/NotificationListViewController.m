@@ -44,7 +44,7 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	[self updateNotifications];
+	[_tableView reloadData];
 }
 
 - (void)updateNotifications
@@ -72,6 +72,18 @@
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		_loading = NO;
+	}];
+}
+
+- (void)readNotification:(Notification *)notification
+{
+	NSString *api = [NSString stringWithFormat:@"/notification/%d", notification.notificationId];
+	[[DMAPILoader sharedLoader] api:api method:@"PUT" parameters:@{@"checked": @YES} success:^(id response) {
+		
+		notification.read = YES;
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		
 	}];
 }
 
@@ -141,6 +153,7 @@
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 	
 	Notification *notification = [notifications objectAtIndex:indexPath.row];
+	[self readNotification:notification];
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:notification.url]];
 }
 

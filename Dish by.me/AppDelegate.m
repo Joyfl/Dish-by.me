@@ -333,26 +333,6 @@
 		{
 			Notification *notification = [Notification notificationFromDictionary:dictionary];
 			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
 		}
 		
 		if( success )
@@ -377,25 +357,6 @@
 		for( NSDictionary *dictionary in notifications )
 		{
 			Notification *notification = [Notification notificationFromDictionary:dictionary];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
-			[self.notifications addObject:notification];
 			[self.notifications addObject:notification];
 		}
 		

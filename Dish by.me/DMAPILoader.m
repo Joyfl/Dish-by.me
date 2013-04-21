@@ -207,7 +207,8 @@
 			failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
 	AFHTTPRequestOperation *operation = [_client HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
-		success( responseObject );
+		if( success )
+			success( responseObject );
 		
 	} failure:failure];
 	[_client enqueueHTTPRequestOperation:operation];

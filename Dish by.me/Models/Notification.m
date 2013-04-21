@@ -20,6 +20,7 @@
 	notification.description = [NSString stringWithFormat:NSLocalizedString( [dictionary objectForKey:@"loc-key"], nil ) arguments:[dictionary objectForKey:@"loc-args"]];
 	notification.url = [dictionary objectForKey:@"url"];
 	notification.createdTime = [Utils dateFromString:[dictionary objectForKey:@"created_time"]];
+	notification.read = [[dictionary objectForKey:@"checked"] boolValue];
 	
 	NSMutableArray *args = [NSMutableArray arrayWithArray:[dictionary objectForKey:@"loc-args"]];
 	for( NSInteger i = 0; i < args.count; i++ )

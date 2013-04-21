@@ -123,6 +123,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 {
 	NotificationListViewController *notificationListViewController = [[NotificationListViewController alloc] init];
 	[self.navigationController pushViewController:notificationListViewController animated:YES];
+	
+	[[DMAPILoader sharedLoader] api:@"/notifications" method:@"PUT" parameters:nil success:nil failure:nil];
 }
 
 - (void)followButtonHandler
