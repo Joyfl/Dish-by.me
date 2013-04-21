@@ -341,6 +341,8 @@
 	// 버리기
 	if( _isDraggingRecipeOnBin )
 	{
+		_isDraggingRecipeOnBin = NO;
+		
 		NSInteger index = [_contentEditorViews indexOfObject:editorView];
 		[_contentEditorViews removeObjectAtIndex:index];
 		[_recipe.contents removeObjectAtIndex:index];
