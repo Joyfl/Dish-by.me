@@ -165,7 +165,7 @@
 	CGRect frame = _pageControlView.frame;
 	frame.size = CGSizeMake( 10 * numberOfPages, 10 );
 	_pageControlView.frame = frame;
-	_pageControlView.center = CGPointMake( 154, 416 );
+	_pageControlView.center = CGPointMake( 154, UIScreenHeight - 64 );
 }
 
 @end

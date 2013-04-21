@@ -22,6 +22,8 @@
 	RecipeContentEditorView *_newContentEditorView;
 	RecipeContentEditorView *_currentDraggingContentEditorView;
 	NSTimer *_pagingTimer;
+	UIImageView *_binView;
+	BOOL _isDraggingRecipeOnBin;
 }
 
 @property (nonatomic, weak) id<RecipeEditorViewControllerDelegate> delegate;
