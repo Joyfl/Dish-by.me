@@ -20,6 +20,7 @@
 	
 	DMBarButtonItem *_followButton;
 	DMBarButtonItem *_followingButton;
+	DMBarButtonItem *_notificationsButton;
 	
 	UITableView *_tableView;
 	EGORefreshTableHeaderView *_refreshHeaderView;
@@ -59,6 +60,8 @@
 	// 3 : followers
 	NSInteger _selectedTab;
 }
+
+@property (nonatomic, assign) NSInteger notificationsCount;
 
 - (void)loadUserId:(NSInteger)userId;
 

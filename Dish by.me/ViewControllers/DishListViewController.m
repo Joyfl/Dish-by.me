@@ -164,11 +164,6 @@
 	return _updating;
 }
 
-- (NSDate *)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView *)refreshHeaerView
-{
-	return [NSDate date];
-}
-
 
 #pragma mark -
 #pragma mark UITableView

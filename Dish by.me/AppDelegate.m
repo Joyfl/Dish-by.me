@@ -19,6 +19,7 @@
 #import "GAI.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "HTBlock.h"
+#import "Notification.h"
 
 @implementation AppDelegate
 
@@ -32,6 +33,8 @@
 	[GAI sharedInstance].dispatchInterval = 20;
 //	[GAI sharedInstance].debug = YES;
 	[[GAI sharedInstance] trackerWithTrackingId:@"UA-38348585-3"];
+	
+	self.notifications = [NSMutableArray array];
 	
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
@@ -120,7 +123,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-	// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+	[self updateNotificationsSuccess:nil failure:nil];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -304,7 +307,63 @@
 	[self.dishListViewController updateDishes];
 	[self.profileViewController loadUserId:[CurrentUser user].userId];
 	[self.settingsViewController loadSettings];
+	[self updateNotificationsSuccess:nil failure:nil];
 	self.authViewController = nil;
+}
+
+
+#pragma mark -
+
+- (void)updateNotificationsSuccess:(void (^)(void))success failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
+{
+	[[DMAPILoader sharedLoader] api:@"/notifications" method:@"GET" parameters:nil success:^(id response) {
+		NSLog( @"%@", response );
+		
+		self.profileViewController.notificationsCount = [[response objectForKey:@"badge_count"] integerValue];
+		
+		[self.notifications removeAllObjects];
+		
+		NSArray *notifications = [response objectForKey:@"data"];
+		if( notifications.count == 0 )
+		{
+			self.isLastNotificationLoaded = YES;
+		}
+		
+		for( NSDictionary *dictionary in notifications )
+		{
+			Notification *notification = [Notification notificationFromDictionary:dictionary];
+			[self.notifications addObject:notification];
+		}
+		
+		if( success )
+			success();
+		
+	} failure:failure];
+}
+
+- (void)loadMoreNotificationsSuccess:(void (^)(void))success failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
+{
+	[[DMAPILoader sharedLoader] api:@"/notifications" method:@"GET" parameters:@{@"offset": [NSString stringWithFormat:@"%d", self.notifications.count]} success:^(id response) {
+		NSLog( @"%@", response );
+		
+		self.profileViewController.notificationsCount = [[response objectForKey:@"badge_count"] integerValue];
+		
+		NSArray *notifications = [response objectForKey:@"data"];
+		if( notifications.count == 0 )
+		{
+			self.isLastNotificationLoaded = YES;
+		}
+		
+		for( NSDictionary *dictionary in notifications )
+		{
+			Notification *notification = [Notification notificationFromDictionary:dictionary];
+			[self.notifications addObject:notification];
+		}
+		
+		if( success )
+			success();
+		
+	} failure:failure];
 }
 
 @end
