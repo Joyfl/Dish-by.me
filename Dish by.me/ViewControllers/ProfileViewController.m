@@ -47,8 +47,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	[_followingButton updateFrame];
 	
 	_notificationsButton = [DMBarButtonItem barButtonItemWithTitle:@"0" target:self action:@selector(notificationsButtonHandler)];
-	_notificationsButton.button.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 8 );
-	[_notificationsButton.button setImage:[UIImage imageNamed:@"icon_comment.png"] forState:UIControlStateNormal];
+	_notificationsButton.button.imageEdgeInsets = UIEdgeInsetsMake( 0, 0, 0, 12 );
+	[_notificationsButton.button setImage:[UIImage imageNamed:@"icon_notification.png"] forState:UIControlStateNormal];
 	
 	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 ) style:UITableViewStylePlain];
 	_tableView.delegate = self;

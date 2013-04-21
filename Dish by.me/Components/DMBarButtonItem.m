@@ -14,10 +14,10 @@
 + (id)barButtonItemWithTitle:(NSString *)title target:(id)target action:(SEL)action
 {
 	UIButton *button = [[UIButton alloc] init];
+	button.titleEdgeInsets = UIEdgeInsetsMake( -1, 0, 0, 0 );
 	button.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	button.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[button setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
-	
 	button.adjustsImageWhenHighlighted = NO;
 	[button setBackgroundImage:[UIImage imageNamed:@"bar_button.png"] forState:UIControlStateNormal];
 	[button setBackgroundImage:[UIImage imageNamed:@"bar_button_selected.png"] forState:UIControlStateHighlighted];
