@@ -7,6 +7,7 @@
 //
 
 #import "CurrentUser.h"
+#import "AppDelegate.h"
 
 @implementation CurrentUser
 
@@ -80,6 +81,18 @@
 
 - (void)logout
 {
+	NSString *deviceToken = [(AppDelegate *)[UIApplication sharedApplication].delegate deviceToken];
+	if( deviceToken )
+	{
+		[[DMAPILoader sharedLoader] api:@"/device" method:@"DELETE" parameters:@{@"device_token": deviceToken} success:^(id response) {
+			
+			JLLog( @"Deleted device." );
+			
+		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+			
+		}];
+	}
+	
 	self.loggedIn = NO;
 	self.email = nil;
 	self.accessToken = nil;

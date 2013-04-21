@@ -135,10 +135,10 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-	NSString *token = [[deviceToken.description stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
-	JLLog( @"deviceToken : %@", token );
+	self.deviceToken = [[deviceToken.description stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] stringByReplacingOccurrencesOfString:@" " withString:@""];
+	JLLog( @"deviceToken : %@", self.deviceToken );
 	
-	NSDictionary *params = @{ @"device_token": token, @"device_os": @"iOS" };
+	NSDictionary *params = @{ @"device_token": self.deviceToken, @"device_os": @"iOS" };
 	[[DMAPILoader sharedLoader] api:@"/device" method:@"POST" parameters:params success:^(id response) {
 		
 		JLLog( @"Registered deviceToken" );

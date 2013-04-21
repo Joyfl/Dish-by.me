@@ -21,6 +21,7 @@
 @property (nonatomic, strong) ProfileViewController *profileViewController;
 @property (nonatomic, strong) SettingsViewController *settingsViewController;
 
+@property (nonatomic, strong) NSString *deviceToken;
 @property (nonatomic, strong) NSMutableArray *notifications;
 @property (nonatomic, assign) BOOL isLastNotificationLoaded;
 
