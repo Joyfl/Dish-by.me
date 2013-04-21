@@ -22,7 +22,11 @@
 	RecipeContentEditorView *_newContentEditorView;
 	RecipeContentEditorView *_currentDraggingContentEditorView;
 	NSTimer *_pagingTimer;
+	NSMutableArray *_openingAnimations;
+	NSMutableArray *_closingAnimations;
+	NSMutableArray *_throwingAnimations;
 	UIImageView *_binView;
+	CGFloat _animationStartTime;
 	BOOL _isDraggingRecipeOnBin;
 }
 

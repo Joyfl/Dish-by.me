@@ -24,11 +24,6 @@
 	
 	_recipe = recipe ? recipe : [[Recipe alloc] init];
 	
-	_binView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"recipe_bin.png"]];
-	_binView.frame = CGRectMake( 130, UIScreenHeight, 60, 60 );
-	_binView.alpha = 0;
-	[self.view addSubview:_binView];
-	
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 8, 0, 304, UIScreenHeight - 30 )];
 	_scrollView.delegate = self;
 	_scrollView.pagingEnabled = YES;
@@ -63,6 +58,35 @@
 	_newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:nil];
 	_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
 	[self.view addSubview:_newContentEditorView];
+	
+	_openingAnimations = [NSMutableArray array];
+	_closingAnimations = [NSMutableArray array];
+	_throwingAnimations = [NSMutableArray array];
+	
+	for( NSInteger i = 1; i <= 20; i++ )
+	{
+		NSString *imageName = [NSString stringWithFormat:@"recipe_bin_%04d.png", i];
+		[_openingAnimations addObject:[UIImage imageNamed:imageName]];
+	}
+	
+	for( NSInteger i = 19; i >= 0; i-- )
+	{
+		UIImage *image = [_openingAnimations objectAtIndex:i];
+		[_closingAnimations addObject:image];
+	}
+	
+	for( NSInteger i = 21; i <= 50; i++ )
+	{
+		NSString *imageName = [NSString stringWithFormat:@"recipe_bin_%04d.png", i];
+		[_throwingAnimations addObject:[UIImage imageNamed:imageName]];
+	}
+	
+	_binView = [[UIImageView alloc] initWithFrame:CGRectMake( 110, UIScreenHeight, 100, 100 )];
+	_binView.image = [_openingAnimations objectAtIndex:0];
+	_binView.animationDuration = 0.33;
+	_binView.animationRepeatCount = 1;
+	_binView.alpha = 0;
+	[self.view addSubview:_binView];
 	
 	return self;
 }
@@ -241,7 +265,7 @@
 		_currentDraggingContentEditorView.transform = CGAffineTransformScale( CGAffineTransformIdentity, DRAGGING_RECIPE_SCALE, DRAGGING_RECIPE_SCALE );
 		_currentDraggingContentEditorView.alpha = DRAGGING_RECIPE_ALPHA;
 		
-		_binView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight - _binView.frame.size.height - 20 );
+		_binView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight - _binView.frame.size.height + 30 );
 		_binView.alpha = 1;
 	}];
 }
@@ -281,9 +305,11 @@
 		if( !_isDraggingRecipeOnBin )
 		{
 			_isDraggingRecipeOnBin = YES;
-			[UIView animateWithDuration:0.25 animations:^{
-				_binView.transform = CGAffineTransformMakeScale( 1.2, 1.2 );
-			}];
+			
+			_binView.image = [_openingAnimations lastObject];
+			_binView.animationImages = _openingAnimations;
+			_binView.animationDuration = 0.33;
+			[_binView startAnimating];
 		}
 	}
 	else
@@ -294,9 +320,11 @@
 		if( _isDraggingRecipeOnBin )
 		{
 			_isDraggingRecipeOnBin = NO;
-			[UIView animateWithDuration:0.25 animations:^{
-				_binView.transform = CGAffineTransformIdentity;
-			}];
+			
+			_binView.image = [_openingAnimations objectAtIndex:0];
+			_binView.animationImages = _closingAnimations;
+			_binView.animationDuration = 0.33;
+			[_binView startAnimating];
 		}
 	}
 }
@@ -307,31 +335,42 @@
 	_pagingTimer = nil;
 	
 	RecipeContentEditorView *editorView = (RecipeContentEditorView *)grabButton.superview;
+	
+	// 버리기
 	if( _isDraggingRecipeOnBin )
 	{
 		NSInteger index = [_contentEditorViews indexOfObject:editorView];
 		[_contentEditorViews removeObjectAtIndex:index];
 		[_recipe.contents removeObjectAtIndex:index];
 		
+		_binView.image = [_openingAnimations objectAtIndex:0];
+		_binView.animationImages = _throwingAnimations;
+		_binView.animationDuration = 0.5;
+		[_binView startAnimating];
 		
 		[UIView animateWithDuration:0.25 animations:^{
-			_scrollView.contentSize = CGSizeMake( _recipe.contents.count == 0 ? 305 : 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
-			
-			[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
-			for( NSInteger i = 0; i < _recipe.contents.count; i++ )
-			{
-				RecipeContentEditorView *contentEditorView = [_contentEditorViews objectAtIndex:i];
-				contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, UIScreenHeight - 30 );
-				contentEditorView.originalLocation = contentEditorView.frame.origin;
-				[contentEditorView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
-			}
-			
 			editorView.transform = CGAffineTransformMakeScale( 0.01, 0.01 );
 			editorView.alpha = 0;
-			
-			_binView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight + _binView.frame.size.height / 2 );
-			_binView.alpha = 0;
 		}];
+		
+		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC));
+		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+			[UIView animateWithDuration:0.25 animations:^{
+				_scrollView.contentSize = CGSizeMake( _recipe.contents.count == 0 ? 305 : 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
+				
+				[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
+				for( NSInteger i = 0; i < _recipe.contents.count; i++ )
+				{
+					RecipeContentEditorView *contentEditorView = [_contentEditorViews objectAtIndex:i];
+					contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, UIScreenHeight - 30 );
+					contentEditorView.originalLocation = contentEditorView.frame.origin;
+					[contentEditorView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
+				}
+				
+				_binView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight + _binView.frame.size.height / 2 );
+				_binView.alpha = 0;
+			}];
+		});
 	}
 	else
 	{
