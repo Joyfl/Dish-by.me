@@ -116,15 +116,18 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)setNotificationsCount:(NSInteger)notificationsCount
 {
-	_notificationsButton.title = [NSString stringWithFormat:@"%d", notificationsCount];
+	NSString *badge = [NSString stringWithFormat:@"%d", notificationsCount];
+	JLLog( @"badge : %@", badge );
+	_notificationsButton.title = badge;
+	self.tabBarItem.badgeValue = notificationsCount > 0 ? badge : nil;
+	[UIApplication sharedApplication].applicationIconBadgeNumber = notificationsCount;
 }
 
 - (void)notificationsButtonHandler
 {
 	NotificationListViewController *notificationListViewController = [[NotificationListViewController alloc] init];
+	[notificationListViewController updateNotifications];
 	[self.navigationController pushViewController:notificationListViewController animated:YES];
-	
-	[[DMAPILoader sharedLoader] api:@"/notifications" method:@"PUT" parameters:nil success:nil failure:nil];
 }
 
 - (void)followButtonHandler

@@ -20,6 +20,7 @@
 #import <FacebookSDK/FacebookSDK.h>
 #import "HTBlock.h"
 #import "Notification.h"
+#import "NotificationListViewController.h"
 
 @implementation AppDelegate
 
@@ -87,6 +88,7 @@
 	
 	if( [CurrentUser user].loggedIn )
 	{
+		[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
 		[self.profileViewController loadUserId:[CurrentUser user].userId];
 	}
 	else
@@ -94,11 +96,11 @@
 		[self presentAuthViewControllerWithClosingAnimation:NO];
 	}
 	
-	[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
-	
-	if( launchOptions )
+	NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+	if( remoteNotification )
 	{
-		[self application:application didReceiveRemoteNotification:[launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey]];
+		NSURL *url = [NSURL URLWithString:[remoteNotification objectForKey:@"url"]];
+		[application openURL:url];
 	}
 	
     return YES;
@@ -123,7 +125,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-	[self updateNotificationsSuccess:nil failure:nil];
+	
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -137,9 +139,10 @@
 	JLLog( @"deviceToken : %@", token );
 	
 	NSDictionary *params = @{ @"device_token": token, @"device_os": @"iOS" };
-	[[DMAPILoader sharedLoader] api:@"/setting/device" method:@"PUT" parameters:params success:^(id response) {
+	[[DMAPILoader sharedLoader] api:@"/device" method:@"POST" parameters:params success:^(id response) {
 		
 		JLLog( @"Registered deviceToken" );
+		[self updateNotificationsSuccess:nil failure:nil];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		
@@ -153,9 +156,34 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-	JLLog( @"Received Remote Notification" );
-	NSURL *url = [NSURL URLWithString:[userInfo objectForKey:@"url"]];
-	[application openURL:url];
+	JLLog( @"Received Remote Notification : %@", userInfo );
+	JLLog( @"applicationState : %d", application.applicationState );
+	
+	// 앱이 active 상태일 경우
+	if( application.applicationState == UIApplicationStateActive )
+	{
+		// 현재 NotificationListViewController를 보고 있었다면 updateNotifications
+		if( [[self.profileViewController.navigationController.topViewController.class description] isEqualToString:@"NotificationListViewController"] )
+		{
+			[(NotificationListViewController *)self.profileViewController.navigationController.topViewController updateNotifications];
+		}
+		
+		// 그렇지 않으면 뱃지만 올리기
+		else
+		{
+			self.profileViewController.notificationsCount = [[[userInfo objectForKey:@"aps"] objectForKey:@"badge"] integerValue];
+		}
+	}
+	
+	// 앱이 background에 있을 때 Remote Notification을 타고 들어왔을 경우
+	else
+	{
+		NSURL *url = [NSURL URLWithString:[userInfo objectForKey:@"url"]];
+		[application openURL:url];
+		
+		// Notification을 타고 들어온 것 하나를 제외하고 뱃지 설정
+		self.profileViewController.notificationsCount = [[[userInfo objectForKey:@"aps"] objectForKey:@"badge"] integerValue] - 1;
+	}
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
@@ -309,6 +337,8 @@
 	[self.settingsViewController loadSettings];
 	[self updateNotificationsSuccess:nil failure:nil];
 	self.authViewController = nil;
+	
+	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
 }
 
 
@@ -317,7 +347,6 @@
 - (void)updateNotificationsSuccess:(void (^)(void))success failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
 	[[DMAPILoader sharedLoader] api:@"/notifications" method:@"GET" parameters:nil success:^(id response) {
-		NSLog( @"%@", response );
 		
 		self.profileViewController.notificationsCount = [[response objectForKey:@"badge_count"] integerValue];
 		
@@ -344,7 +373,6 @@
 - (void)loadMoreNotificationsSuccess:(void (^)(void))success failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
 	[[DMAPILoader sharedLoader] api:@"/notifications" method:@"GET" parameters:@{@"offset": [NSString stringWithFormat:@"%d", self.notifications.count]} success:^(id response) {
-		NSLog( @"%@", response );
 		
 		self.profileViewController.notificationsCount = [[response objectForKey:@"badge_count"] integerValue];
 		

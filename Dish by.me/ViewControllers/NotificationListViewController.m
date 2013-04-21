@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "NotificationCell.h"
 #import "DMBarButtonItem.h"
+#import "ProfileViewController.h"
 
 #define notifications [(AppDelegate *)[UIApplication sharedApplication].delegate notifications]
 #define isLastNotificationLoaded [(AppDelegate *)[UIApplication sharedApplication].delegate isLastNotificationLoaded]
@@ -55,6 +56,9 @@
 		[_tableView reloadData];
 		_updating = NO;
 		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
+		
+		[(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController].notificationsCount = 0;
+		[[DMAPILoader sharedLoader] api:@"/notifications" method:@"PUT" parameters:nil success:nil failure:nil];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		_updating = NO;

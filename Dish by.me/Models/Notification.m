@@ -29,7 +29,6 @@
 	}
 	
 	NSString *descriptionHTML = [NSString stringWithFormat:@"<font style='font-size: 13px; color: #514F4D; font-family: Helvetica; line-height: 16px; shadow-color: red; text-shadow: 0 0.5px white;'>%@</font>", [NSString stringWithFormat:NSLocalizedString( [dictionary objectForKey:@"loc-key"], nil ) arguments:args]];
-	NSLog( @"descriptionHTML : %@", descriptionHTML );
 	notification.attributedDescription = [[NSAttributedString alloc] initWithHTMLData:[descriptionHTML dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:NULL];
 	
 	[notification updateRelativeTime];

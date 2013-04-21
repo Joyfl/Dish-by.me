@@ -17,4 +17,6 @@
 	BOOL _loading;
 }
 
+- (void)updateNotifications;
+
 @end
