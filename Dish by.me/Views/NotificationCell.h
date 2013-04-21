@@ -8,10 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "Notification.h"
+#import "DTCoreText.h"
 
 @interface NotificationCell : UITableViewCell
 {
-	
+	UIImageView *_thumbnailView;
+	DTAttributedLabel *_descriptionLabel;
+	UILabel *_timeLabel;
 }
 
 @property (nonatomic, readonly) Notification *notification;

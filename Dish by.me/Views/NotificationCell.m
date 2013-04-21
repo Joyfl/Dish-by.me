@@ -7,12 +7,34 @@
 //
 
 #import "NotificationCell.h"
+#import "DTCoreText.h"
 
 @implementation NotificationCell
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier
 {
 	self = [super initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:reuseIdentifier];
+	
+	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 75, 75, 320, 2 )];
+	lineView.image = [UIImage imageNamed:@"line.png"];
+	[self.contentView addSubview:lineView];
+	
+	_thumbnailView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 75, 75 )];
+	_thumbnailView.image = [UIImage imageNamed:@"placeholder.png"];
+	[self.contentView addSubview:_thumbnailView];
+	
+	
+	
+	_descriptionLabel = [[DTAttributedLabel alloc] initWithFrame:CGRectMake( 84, 9, 227, 70 )];
+	_descriptionLabel.backgroundColor = [UIColor clearColor];
+	[self.contentView addSubview:_descriptionLabel];
+	
+	_timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 84, 50, 227, 15 )];
+	_timeLabel.backgroundColor = [UIColor clearColor];
+	_timeLabel.font = [UIFont systemFontOfSize:10];
+	_timeLabel.textColor = [UIColor colorWithHex:0xAAA5A3 alpha:1];
+	[self.contentView addSubview:_timeLabel];
+	
 	return self;
 }
 
@@ -23,7 +45,7 @@
 	
 	if( notification.photo )
 	{
-		self.imageView.image = notification.photo;
+		_thumbnailView.image = notification.photo;
 	}
 	else
 	{
@@ -31,13 +53,14 @@
 			notification.photo = image;
 			if( [_indexPath isEqual:context] )
 			{
-				self.imageView.image = notification.photo;
+				_thumbnailView.image = notification.photo;
 			}
 		}];
 	}
 	
-	self.textLabel.text = notification.description;
-	self.detailTextLabel.text = @"2분 전";
+	_descriptionLabel.attributedString = notification.attributedDescription;
+	_timeLabel.text = notification.relativeCreatedTime;
+	[_timeLabel sizeToFit];
 }
 
 @end

@@ -14,10 +14,12 @@
 @property (nonatomic, strong) NSString *photoURL;
 @property (nonatomic, strong) UIImage *photo;
 @property (nonatomic, strong) NSString *description;
+@property (nonatomic, strong) NSAttributedString *attributedDescription;
 @property (nonatomic, strong) NSString *url;
 @property (nonatomic, strong) NSDate *createdTime;
 @property (nonatomic, strong) NSString *relativeCreatedTime;
 
 + (id)notificationFromDictionary:(NSDictionary *)dictionary;
+- (void)updateRelativeTime;
 
 @end
