@@ -290,11 +290,13 @@
 	{
 		label = _servingsLabel;
 		placeholder = NSLocalizedString( @"HOW_MANY_SERVINGS", nil );
+		_recipe.servings = [input.text integerValue];
 	}
 	else
 	{
 		label = _minutesLabel;
 		placeholder = NSLocalizedString( @"HOW_MANY_MINUTES", nil );
+		_recipe.minutes = [input.text integerValue];
 	}
 	
 	if( input.text.length == 0 )

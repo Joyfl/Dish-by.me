@@ -38,7 +38,7 @@
 	[_scrollView addSubview:_infoEditorView];
 	
 	_contentEditorViews = [NSMutableArray array];
-	for( NSInteger i = 0; i < _recipe.contents.count ; i++ )
+	for( NSInteger i = 0; i < _recipe.contents.count; i++ )
 	{
 		RecipeContentEditorView *contentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
 		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, UIScreenHeight - 30 );

@@ -101,6 +101,7 @@
 
 - (void)setPhotoButtonImage:(UIImage *)image
 {
+	_content.photo = image;
 	[_photoButton setImage:image forState:UIControlStateNormal];
 	
 	CGRect frame = _photoButton.frame;

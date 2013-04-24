@@ -281,8 +281,11 @@ enum {
 	for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
 	{
 		Ingredient *ingredient = [_recipeView.recipe.ingredients objectAtIndex:i];
-		[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
-		[params setObject:ingredient.amount forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
+		if( ingredient.name )
+		{
+			[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
+			[params setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
+		}
 	}
 	
 	// 사진, 레시피 파라미터
@@ -314,11 +317,20 @@ enum {
 			[params setObject:content.photoURL forKey:[NSString stringWithFormat:@"recipe_photo_%d", i]];
 		}
 		// 새로운 사진이 등록되었을 경우 : Multipart로 사진 바이너리 전송
-		else
+		else if( content.photo )
 		{
 			JLLog( @"%d번째 레시피에 새로운 사진이 등록되었음", i );
 			[photos addObject:content.photo];
 			[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+		}
+		
+		// 사진이 없는 경우
+		else
+		{
+			JLLog( @"No photo at index : %d", i );
+			[self undim];
+			[(DMBarButtonItem *)self.navigationItem.rightBarButtonItem button].showsActivityIndicatorView = NO;
+			return;
 		}
 	}
 	
@@ -336,6 +348,8 @@ enum {
 		api = [NSString stringWithFormat:@"/dish/%d", _editingDishId];
 		method = @"PUT";
 	}
+	
+	JLLog( @"params : %@", params );
 	
 	[[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params success:^(id response) {
 		JLLog( @"Success" );
