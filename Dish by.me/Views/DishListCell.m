@@ -32,6 +32,24 @@ static const NSInteger PhotoViewMaxLength = 292;
 	frameView.image = [UIImage imageNamed:@"dish_border_big.png"];
 	[self.contentView addSubview:frameView];
 	
+	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 20, 18, 25, 25 )];
+	_userPhotoButton.adjustsImageWhenHighlighted = NO;
+	[_userPhotoButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
+	[_userPhotoButton addTarget:self action:@selector(userPhotoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	_userPhotoButton.layer.cornerRadius = 4;
+	_userPhotoButton.clipsToBounds = YES;
+	_userPhotoButton.alpha = 0;
+	[self addSubview:_userPhotoButton];
+	
+	_userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 18, 240, 25 )];
+	_userNameLabel.textColor = [UIColor whiteColor];
+	_userNameLabel.backgroundColor = [UIColor clearColor];
+	_userNameLabel.font = [UIFont systemFontOfSize:12];
+	_userNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.7];
+	_userNameLabel.shadowOffset = CGSizeMake( 0, 1 );
+	_userNameLabel.alpha = 0;
+	[self.contentView addSubview:_userNameLabel];
+	
 	_commentIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 22, 280, 13, 17 )];
 	_commentIconView.image = [UIImage imageNamed:@"icon_comment.png"];
 	[self.contentView addSubview:_commentIconView];
@@ -57,19 +75,12 @@ static const NSInteger PhotoViewMaxLength = 292;
 	_bookmarkCountLabel.textAlignment = NSTextAlignmentCenter;
 	[self.contentView addSubview:_bookmarkCountLabel];
 	
-	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 16, 312, 280, 20 )];
+	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 16, 312, 225, 20 )];
 	_dishNameLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	_dishNameLabel.font = [UIFont boldSystemFontOfSize:16];
 	_dishNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	_dishNameLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[self.contentView addSubview:_dishNameLabel];
-	
-	_userNameLabel = [[UILabel alloc] init];
-	_userNameLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
-	_userNameLabel.font = [UIFont systemFontOfSize:11];
-	_userNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
-	_userNameLabel.shadowOffset = CGSizeMake( 0, 1 );
-	[self.contentView addSubview:_userNameLabel];
 	
 	_bookmarkButton = [[BookmarkButton alloc] init];
 	_bookmarkButton.delegate = self;
@@ -92,12 +103,25 @@ static const NSInteger PhotoViewMaxLength = 292;
 	_dish = dish;
 	_indexPath = indexPath;
 	[self fillContents];
-	[self layoutContentView];
 }
 
 - (void)fillContents
 {
 	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
+	
+	if( _dish.userPhoto )
+	{
+		[_userPhotoButton setBackgroundImage:_dish.userPhoto forState:UIControlStateNormal];
+	}
+	else
+	{
+		[DMAPILoader loadImageFromURLString:_dish.userPhotoURL context:_indexPath success:^(UIImage *image, id indexPath) {
+			_dish.userPhoto = image;
+			
+			if( [_indexPath isEqual:indexPath] )
+				[_userPhotoButton setBackgroundImage:_dish.userPhoto forState:UIControlStateNormal];
+		}];
+	}
 	
 	if( _dish.croppedThumbnail )
 	{
@@ -138,7 +162,7 @@ static const NSInteger PhotoViewMaxLength = 292;
 	
 	_commentCountLabel.text = [NSString stringWithFormat:@"%d", _dish.commentCount];
 	_dishNameLabel.text = _dish.dishName;
-	_userNameLabel.text = [NSString stringWithFormat:@"by %@", _dish.userName];
+	_userNameLabel.text = _dish.userName;
 	
 	[self updateBookmarkUI];
 	
@@ -166,22 +190,18 @@ static const NSInteger PhotoViewMaxLength = 292;
 	}
 }
 
-- (void)layoutContentView
-{
-	[_dishNameLabel sizeToFit];
-	
-	_userNameLabel.frame = CGRectMake( _dishNameLabel.frame.origin.x + _dishNameLabel.frame.size.width + 10, 317, 100, 15 );
-	[_userNameLabel sizeToFit];
-}
-
 
 #pragma mark -
 #pragma mark Photo View
 
 - (void)photoViewDidTap
 {
-	NSLog( @"tap : %d", _dish.dishId );
 	[_delegate dishListCell:self didTouchPhotoViewAtIndexPath:_indexPath];
+}
+
+- (void)userPhotoButtonDidTouchUpInside
+{
+	[_delegate dishListCell:self didTouchUserPhotoButtonAtIndexPath:_indexPath];
 }
 
 

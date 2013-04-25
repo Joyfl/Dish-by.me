@@ -24,12 +24,13 @@
 	UIImageView *_bookmarkIconView;
 	UILabel *_bookmarkCountLabel;
 	UILabel *_dishNameLabel;
-	UILabel *_userNameLabel;
 	BookmarkButton *_bookmarkButton;
 }
 
 @property (nonatomic, weak) id<DishListCellDelegate> delegate;
 @property (nonatomic, readonly) Dish *dish;
+@property (nonatomic, readonly) UIButton *userPhotoButton;
+@property (nonatomic, readonly) UILabel *userNameLabel;
 
 - (id)initWithReuseIdentifier:(NSString *)reuseIdentifier;
 - (void)setDish:(Dish *)dish atIndexPath:(NSIndexPath *)indexPath;
@@ -41,6 +42,7 @@
 @protocol DishListCellDelegate
 
 - (void)dishListCell:(DishListCell *)dishListCell didTouchPhotoViewAtIndexPath:(NSIndexPath *)indexPath;
+- (void)dishListCell:(DishListCell *)dishListCell didTouchUserPhotoButtonAtIndexPath:(NSIndexPath *)indexPath;
 - (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath;
 - (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath;
 

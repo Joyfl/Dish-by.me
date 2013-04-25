@@ -22,6 +22,8 @@
 	BOOL _updating;
 	
 	EGORefreshTableHeaderView *_refreshHeaderView;
+	
+	NSTimer *_scrollTimer; // 스크롤 후 일정시간이 지나면 DishListCell에서 프로필을 fade out시킨다.
 }
 
 - (void)updateDishes;

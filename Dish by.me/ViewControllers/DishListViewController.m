@@ -10,6 +10,7 @@
 #import "Dish.h"
 #import "DishTileItem.h"
 #import "DishDetailViewController.h"
+#import "ProfileViewController.h"
 #import "CurrentUser.h"
 
 @implementation DishListViewController
@@ -226,6 +227,12 @@
 	}
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+	[self showUserPhoto];
+	[_scrollTimer invalidate];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
 	[_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
@@ -236,6 +243,34 @@
 	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+	_scrollTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(hideUserPhoto) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_scrollTimer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)showUserPhoto
+{
+	for( DishListCell *cell in [_tableView visibleCells] )
+	{
+		[UIView animateWithDuration:0.25 animations:^{
+			cell.userPhotoButton.alpha = 1;
+			cell.userNameLabel.alpha = 1;
+		}];
+	}
+}
+
+- (void)hideUserPhoto
+{
+	for( DishListCell *cell in [_tableView visibleCells] )
+	{
+		[UIView animateWithDuration:0.25 animations:^{
+			cell.userPhotoButton.alpha = 0;
+			cell.userNameLabel.alpha = 0;
+		}];
+	}
+}
+
 
 #pragma mark -
 #pragma mark DishListCellDelegate
@@ -244,6 +279,15 @@
 {
 	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
+}
+
+- (void)dishListCell:(DishListCell *)dishListCell didTouchUserPhotoButtonAtIndexPath:(NSIndexPath *)indexPath
+{
+	Dish *dish = [_dishes objectAtIndex:indexPath.row];
+	
+	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+	[profileViewController loadUserId:dish.userId];
+	[self.navigationController pushViewController:profileViewController animated:YES];
 }
 
 - (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath
