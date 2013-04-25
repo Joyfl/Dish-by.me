@@ -17,7 +17,7 @@
 #import "UIButton+ActivityIndicatorView.h"
 #import "RecipeEditorViewController.h"
 #import "Recipe.h"
-#import "UIView+JLAnimations.h";
+#import "UIView+JLAnimations.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 
