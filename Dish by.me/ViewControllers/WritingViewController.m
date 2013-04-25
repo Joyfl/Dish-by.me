@@ -253,6 +253,18 @@ enum {
 
 - (void)uploadButtonDidTouchUpInside
 {
+	if( !_nameInput.text.length )
+	{
+		[_nameInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+		[_nameInput becomeFirstResponder];
+		return;
+	}
+	else if( !_messageInput.text.length )
+	{
+		[_messageInput becomeFirstResponder];
+		return;
+	}
+	
 	UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
 	
 	[self backgroundDidTap];
@@ -330,6 +342,9 @@ enum {
 			JLLog( @"No photo at index : %d", i );
 			[self undim];
 			[(DMBarButtonItem *)self.navigationItem.rightBarButtonItem button].showsActivityIndicatorView = NO;
+			
+			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:[NSString stringWithFormat:NSLocalizedString( @"MESSAGE_NO_PHOTO_ON_N_TH_RECIPE", nil ), i + 1] delegate:nil cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil] show];
+			
 			return;
 		}
 	}

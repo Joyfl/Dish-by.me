@@ -522,6 +522,10 @@
 				[contentEditorView.textView becomeFirstResponder];
 		}];
 		
+		[picker setCancelBlock:^(UIImagePickerController *picker) {
+			[picker dismissModalViewControllerAnimated:YES];
+		}];
+		
 		[self presentViewController:picker animated:YES completion:nil];
 	}] showInView:self.view];
 }

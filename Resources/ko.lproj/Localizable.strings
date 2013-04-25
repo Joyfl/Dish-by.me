@@ -8,6 +8,7 @@
 "NO" = "아니오";
 "NO_THANKS" = "괜찮아요";
 "PROBABLY" = "그런 것 같아요";
+"OH_MY_MISTAKE" = "앗 실수!";
 
 // Messages
 "MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관 및 개인정보취급방침에 동의합니다";
@@ -22,6 +23,15 @@
 "MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_SET_SETTINGS" = "설정을 하려면 Dish by.me 계정이 필요합니다.";
+
+"MESSAGE_NO_PHOTO_ON_N_TH_RECIPE" = "%d번째 레시피에 사진이 빠졌어요;;";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
 
 // Auth
 "SIGNUP" = "가입하기";
@@ -73,6 +83,7 @@
 
 // WritingView
 "NEW_DISH" = "새 요리";
+"EDIT_DISH" = "요리 수정";
 "DO_FORK" = "포크하기";
 "TAKE_A_PHOTO" = "사진 찍기";
 "FROM_LIBRARY" = "라이브러리에서 선택";

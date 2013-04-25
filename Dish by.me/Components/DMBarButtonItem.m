@@ -17,6 +17,8 @@
 	button.titleEdgeInsets = UIEdgeInsetsMake( -1, 0, 0, 0 );
 	button.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	button.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[button setTitleColor:[UIColor colorWithWhite:1 alpha:0.7] forState:UIControlStateDisabled];
 	[button setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
 	button.adjustsImageWhenHighlighted = NO;
 	[button setBackgroundImage:[UIImage imageNamed:@"bar_button.png"] forState:UIControlStateNormal];
