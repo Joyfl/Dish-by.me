@@ -316,7 +316,7 @@
 		JLLog( @"SignUp complete" );
 		
 		// 회원가입이 완료되면 로그인
-		[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
+		[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"POST" parameters:params success:^(id response) {
 			
 			[CurrentUser user].loggedIn = YES;
 			[CurrentUser user].email = [[response objectForKeyNotNull:@"user"] objectForKeyNotNull:@"email"];
