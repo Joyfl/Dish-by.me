@@ -10,8 +10,12 @@
 
 @interface RecipeContent : NSObject
 
+@property (nonatomic, assign) NSInteger photoWidth;
+@property (nonatomic, assign) NSInteger photoHeight;
 @property (nonatomic, strong) NSString *photoURL;
 @property (nonatomic, strong) UIImage *photo;
+@property (nonatomic, strong) NSString *thumbnailURL;
+@property (nonatomic, strong) UIImage *thumbnail;
 @property (nonatomic, strong) NSString *description;
 
 + (id)recipeContentFromDictionary:(NSDictionary *)dictionary;

@@ -43,18 +43,31 @@
 	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 14, 59, 280, DMRecipeHeight - 120 )];
 	[self addSubview:_scrollView];
 	
-	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 7, 17, 263, 176 )];
+	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 7, 17, 263, 263 * content.photoHeight / content.photoWidth )];
 	_photoButton.adjustsImageWhenHighlighted = NO;
 	if( content.photo )
 	{
 		[self setPhotoButtonImage:content.photo];
 	}
-	else
+	else if( content.thumbnail )
 	{
-		[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		[self setPhotoButtonImage:content.thumbnail];
 		[DMAPILoader loadImageFromURLString:content.photoURL context:nil success:^(UIImage *image, id context) {
 			content.photo = image;
 			[self setPhotoButtonImage:image];
+		}];
+	}
+	else
+	{
+		[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		[DMAPILoader loadImageFromURLString:content.thumbnailURL context:nil success:^(UIImage *image, id context) {
+			content.thumbnail = image;
+			[self setPhotoButtonImage:image];
+			
+			[DMAPILoader loadImageFromURLString:content.photoURL context:nil success:^(UIImage *image, id context) {
+				content.photo = image;
+				[self setPhotoButtonImage:image];
+			}];
 		}];
 	}
 	[_scrollView addSubview:_photoButton];

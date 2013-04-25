@@ -13,7 +13,10 @@
 + (id)recipeContentFromDictionary:(NSDictionary *)dictionary
 {
 	RecipeContent *content = [[RecipeContent alloc] init];
+	content.photoWidth = [[dictionary objectForKeyNotNull:@"photo_width"] integerValue];
+	content.photoHeight = [[dictionary objectForKeyNotNull:@"photo_height"] integerValue];
 	content.photoURL = [dictionary objectForKeyNotNull:@"photo_url"];
+	content.thumbnailURL = [dictionary objectForKeyNotNull:@"thumbnail_url"];
 	content.description = [dictionary objectForKeyNotNull:@"description"];
 	return content;
 }
