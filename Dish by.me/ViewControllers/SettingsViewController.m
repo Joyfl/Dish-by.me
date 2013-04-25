@@ -412,6 +412,11 @@ enum {
 				
 				AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 				[appDelegate presentAuthViewControllerWithClosingAnimation:YES];
+				
+				dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC));
+				dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+					self.tabBarController.selectedIndex = 0;
+				});
 			}
 		}] showInView:self.tabBarController.view];
 	}
