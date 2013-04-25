@@ -347,19 +347,29 @@
 		[_contentEditorViews removeObjectAtIndex:index];
 		[_recipe.contents removeObjectAtIndex:index];
 		
-		_binView.image = [_openingAnimations objectAtIndex:0];
-		_binView.animationImages = _throwingAnimations;
-		_binView.animationDuration = 0.5;
-		[_binView startAnimating];
+		
 		
 		[UIView animateWithDuration:0.25 animations:^{
-			editorView.transform = CGAffineTransformMakeScale( 0.01, 0.01 );
-			editorView.alpha = 0;
-		}];
+			editorView.center = CGPointMake( 153, UIScreenHeight - 95 );
+			editorView.transform = CGAffineTransformMakeScale( 0.04, 0.04 );
+			editorView.alpha = 0.6;
+		} completion:^(BOOL finished) {
+			[UIView animateWithDuration:0.2 animations:^{
+				editorView.center = CGPointMake( 153, UIScreenHeight - 80 );
+				editorView.alpha = 0;
+			}];
+			
+			_binView.image = [_openingAnimations objectAtIndex:0];
+			_binView.animationImages = _throwingAnimations;
+			_binView.animationDuration = 0.5;
+			[_binView startAnimating];
+		
 		
 		dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC));
 		dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 			[UIView animateWithDuration:0.25 animations:^{
+				editorView.alpha = 0;
+				
 				_scrollView.contentSize = CGSizeMake( _recipe.contents.count == 0 ? 305 : 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
 				
 				[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
@@ -375,6 +385,8 @@
 				_binView.alpha = 0;
 			}];
 		});
+			
+			}];
 	}
 	else
 	{
