@@ -18,7 +18,7 @@
 
 - (id)initWithRecipe:(Recipe *)recipe
 {
-	self = [super initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
+	self = [super initWithFrame:CGRectMake( 0, 0, 308, DMRecipeHeight )];
 	
 	UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
 	recognizer.delegate = self;
@@ -47,7 +47,7 @@
 	[self.checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
 	[self addSubview:self.checkButton];
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, UIScreenHeight - 150 )];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, DMRecipeHeight - 120 )];
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
 	_tableView.editing = YES;
@@ -57,6 +57,8 @@
 	
 	_pageControlView = [[UIView alloc] init];
 	[self addSubview:_pageControlView];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
 	
 	return self;
 }
@@ -69,9 +71,18 @@
 - (void)backgroundDidTap
 {
 	[self endEditing:YES];
+}
+
+- (void)keyboardWillHide
+{
 	CGRect frame = _tableView.frame;
-	frame.size.height = UIScreenHeight - 150;
+	frame.size.height = DMRecipeHeight - 120;
 	_tableView.frame = frame;
+}
+
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -329,7 +340,7 @@
 {
 	[UIView animateWithDuration:0.5 animations:^{
 		CGRect frame = _tableView.frame;
-		frame.size.height = UIScreenHeight - 294;
+		frame.size.height = IPHONE5 ? 252 : DMRecipeHeight - 264;
 		_tableView.frame = frame;
 	}];
 	
@@ -374,7 +385,7 @@
 	CGRect frame = _pageControlView.frame;
 	frame.size = CGSizeMake( 10 * numberOfPages, 10 );
 	_pageControlView.frame = frame;
-	_pageControlView.center = CGPointMake( 154, UIScreenHeight - 64 );
+	_pageControlView.center = CGPointMake( 154, DMRecipeHeight - 34 );
 }
 
 @end

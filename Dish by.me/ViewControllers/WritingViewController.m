@@ -287,7 +287,6 @@ enum {
 								   @"description": _descriptionInput.text,
 								   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
 								   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
-								   @"ingredient_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count],
 								   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
 	
 	// 요리를 포크할 경우
@@ -295,6 +294,8 @@ enum {
 	{
 		[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
 	}
+	
+	NSInteger ingredientCount = 0;
 	
 	// 재료 파라미터
 	for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
@@ -304,8 +305,11 @@ enum {
 		{
 			[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
 			[params setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
+			ingredientCount ++;
 		}
 	}
+	
+	[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count] forKey:@"ingredient_count"];
 	
 	// 사진, 레시피 파라미터
 	// recipe_photo_%d : 레시피 사진 또는 URL

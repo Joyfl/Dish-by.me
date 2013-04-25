@@ -24,7 +24,8 @@
 	
 	_recipe = recipe ? recipe : [[Recipe alloc] init];
 	
-	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 8, 0, 304, UIScreenHeight - 30 )];
+	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 8, 0, 304, DMRecipeHeight )];
+	_scrollView.center = CGPointMake( _scrollView.center.x, UIScreenHeight / 2 - 20 );
 	_scrollView.delegate = self;
 	_scrollView.pagingEnabled = YES;
 	_scrollView.clipsToBounds = NO;
@@ -32,7 +33,7 @@
 	[self.view addSubview:_scrollView];
 	
 	_infoEditorView = [[RecipeInfoEditorView alloc] initWithRecipe:_recipe];
-	_infoEditorView.frame = CGRectMake( -2, 0, 304, UIScreenHeight - 30 );
+	_infoEditorView.frame = CGRectMake( -2, 0, 304, DMRecipeHeight );
 	[_infoEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 	[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
 	[_scrollView addSubview:_infoEditorView];
@@ -41,7 +42,7 @@
 	for( NSInteger i = 0; i < _recipe.contents.count; i++ )
 	{
 		RecipeContentEditorView *contentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:[_recipe.contents objectAtIndex:i]];
-		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, UIScreenHeight - 30 );
+		contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, DMRecipeHeight );
 		contentEditorView.originalLocation = contentEditorView.frame.origin;
 		[contentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDown:touchEvent:) forControlEvents:UIControlEventTouchDown];
 		[contentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDrag:touchEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
@@ -53,7 +54,7 @@
 		[_contentEditorViews addObject:contentEditorView];
 	}
 	
-	_scrollView.contentSize = CGSizeMake( _recipe.contents.count == 0 ? 305 : 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
+	_scrollView.contentSize = CGSizeMake( _recipe.contents.count == 0 ? 305 : 304 * ( _recipe.contents.count + 1 ), DMRecipeHeight );
 	
 	_newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:nil];
 	_newContentEditorView.frame = CGRectOffset( _newContentEditorView.frame, UIScreenWidth, 0 );
@@ -197,14 +198,14 @@
 		
 		RecipeContentEditorView *newContentEditorView = [[RecipeContentEditorView alloc] initWithRecipeContent:newContent];
 		newContentEditorView.layer.transform = _newContentEditorView.layer.transform;
-		newContentEditorView.frame = CGRectMake( -2 + 304 * _recipe.contents.count, 0, 304, UIScreenHeight - 30 );
+		newContentEditorView.frame = CGRectMake( -2 + 304 * _recipe.contents.count, 0, 304, DMRecipeHeight );
 		newContentEditorView.originalLocation = newContentEditorView.frame.origin;
 		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDown:touchEvent:) forControlEvents:UIControlEventTouchDown];
 		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchDrag:touchEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDragOutside];
 		[newContentEditorView.grabButton addTarget:self action:@selector(grabButtonDidTouchUp:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 		[newContentEditorView.checkButton addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
 		[newContentEditorView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
-		_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
+		_scrollView.contentSize = CGSizeMake( 304 * ( _recipe.contents.count + 1 ), DMRecipeHeight );
 		[_scrollView addSubview:newContentEditorView];
 		
 		[_contentEditorViews addObject:newContentEditorView];
@@ -283,7 +284,7 @@
 	editorView.transform = CGAffineTransformMakeScale( scale, scale );
 	
 	CGFloat x = point.x - scale * 27;
-	CGFloat y = point.y + scale * ( ( UIScreenHeight - 30 ) / 2 - 34 );
+	CGFloat y = point.y + scale * ( DMRecipeHeight / 2 - 34 );
 	editorView.center = CGPointMake( x, y );
 	
 	if( point.x < 20 )
@@ -370,13 +371,13 @@
 			[UIView animateWithDuration:0.25 animations:^{
 				editorView.alpha = 0;
 				
-				_scrollView.contentSize = CGSizeMake( _recipe.contents.count == 0 ? 305 : 304 * ( _recipe.contents.count + 1 ), UIScreenHeight - 30 );
+				_scrollView.contentSize = CGSizeMake( _recipe.contents.count == 0 ? 305 : 304 * ( _recipe.contents.count + 1 ), DMRecipeHeight );
 				
 				[_infoEditorView setCurrentPage:0 numberOfPages:_recipe.contents.count + 1];
 				for( NSInteger i = 0; i < _recipe.contents.count; i++ )
 				{
 					RecipeContentEditorView *contentEditorView = [_contentEditorViews objectAtIndex:i];
-					contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, UIScreenHeight - 30 );
+					contentEditorView.frame = CGRectMake( -2 + 304 * ( i + 1 ), 0, 304, DMRecipeHeight );
 					contentEditorView.originalLocation = contentEditorView.frame.origin;
 					[contentEditorView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
 				}

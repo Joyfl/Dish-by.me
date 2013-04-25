@@ -18,7 +18,7 @@
 
 - (id)initWithRecipe:(Recipe *)recipe
 {
-	self = [super initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
+	self = [super initWithFrame:CGRectMake( 0, 0, 308, DMRecipeHeight )];
 	
 	_recipe = recipe;
 	
@@ -43,7 +43,7 @@
 	[_checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
 	[self addSubview:_checkButton];
 	
-	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, UIScreenHeight - 150 )];
+	_tableView = [[UITableView alloc] initWithFrame:CGRectMake( 14, 59, 276, DMRecipeHeight - 120 )];
 	_tableView.dataSource = self;
 	_tableView.delegate = self;
 	_tableView.backgroundColor = [UIColor clearColor];
@@ -193,7 +193,7 @@
 	CGRect frame = _pageControlView.frame;
 	frame.size = CGSizeMake( 10 * numberOfPages, 10 );
 	_pageControlView.frame = frame;
-	_pageControlView.center = CGPointMake( 154, UIScreenHeight - 64 );
+	_pageControlView.center = CGPointMake( 154, DMRecipeHeight - 34 );
 }
 
 @end

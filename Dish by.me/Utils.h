@@ -11,6 +11,8 @@
 #define UIScreenWidth	[UIScreen mainScreen].bounds.size.width
 #define UIScreenHeight	[UIScreen mainScreen].bounds.size.height
 
+#define IPHONE5	(BOOL)( UIScreenHeight == 568.0 )
+
 @interface Utils : NSObject
 
 + (id)parseJSONString:(NSString *)jsonString;

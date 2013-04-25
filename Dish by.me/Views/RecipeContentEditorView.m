@@ -14,13 +14,13 @@
 
 - (id)initWithRecipeContent:(RecipeContent *)content
 {
-	self = [super initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
+	self = [super initWithFrame:CGRectMake( 0, 0, 308, DMRecipeHeight )];
 	self.layer.anchorPoint = CGPointMake( 0, 0.5 );
 	[self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)]];
 	
 	_content = content;
 	
-	UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 308, UIScreenHeight - 30 )];
+	UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 308, DMRecipeHeight )];
 	bgView.image = [[UIImage imageNamed:@"bg_recipe.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 70, 0, 70, 0 )];
 	bgView.userInteractionEnabled = YES;
 	[self addSubview:bgView];
@@ -47,10 +47,10 @@
 	[_checkButton setBackgroundImage:[UIImage imageNamed:@"recipe_button_check.png"] forState:UIControlStateNormal];
 	[self addSubview:_checkButton];
 	
-	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 14, 59, 280, UIScreenHeight - 150 )];
+	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 14, 59, 280, DMRecipeHeight - 120 )];
 	[self addSubview:_scrollView];
 	
-	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 19, 18, 241, 186 )];
+	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 7, 17, 263, 176 )];
 	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 	
 	if( content.photo )
@@ -96,6 +96,8 @@
 	_pageControlView = [[UIView alloc] init];
 	[self addSubview:_pageControlView];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide) name:UIKeyboardWillHideNotification object:nil];
+	
 	return self;
 }
 
@@ -114,9 +116,26 @@
 - (void)layoutScrollViewContent
 {
 	_borderView.frame = CGRectInset( _photoButton.frame, -7, -7 );
-	_lineView.frame = CGRectMake( 12, _photoButton.frame.origin.y + _photoButton.frame.size.height + 13, 255, 4 );
-	_textView.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, MAX( _textView.contentSize.height, UIScreenHeight - 380 ) );
+	_lineView.frame = CGRectMake( 12, _photoButton.frame.origin.y + _photoButton.frame.size.height + 20, 255, 4 );
+	_textView.frame = CGRectMake( 15, _lineView.frame.origin.y + _lineView.frame.size.height, 250, MAX( _textView.contentSize.height, DMRecipeHeight - 350 ) );
 	_scrollView.contentSize = CGSizeMake( 280, _textView.frame.origin.y + _textView.frame.size.height + 13 );
+}
+
+- (void)backgroundDidTap
+{
+	[self endEditing:YES];
+}
+
+- (void)keyboardWillHide
+{
+	CGRect frame = _scrollView.frame;
+	frame.size.height = DMRecipeHeight - 120;
+	_scrollView.frame = frame;
+}
+
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -127,7 +146,7 @@
 {
 	[UIView animateWithDuration:0.5 animations:^{
 		CGRect frame = _scrollView.frame;
-		frame.size.height = UIScreenHeight - 294;
+		frame.size.height = IPHONE5 ? 252 : DMRecipeHeight - 264;
 		_scrollView.frame = frame;
 	}];
 }
@@ -137,15 +156,6 @@
 	[self layoutScrollViewContent];
 	_content.description = textView.text;
 }
-
-- (void)backgroundDidTap
-{
-	[self endEditing:YES];
-	CGRect frame = _scrollView.frame;
-	frame.size.height = UIScreenHeight - 150;
-	_scrollView.frame = frame;
-}
-
 
 #pragma mark -
 
@@ -166,7 +176,7 @@
 	CGRect frame = _pageControlView.frame;
 	frame.size = CGSizeMake( 10 * numberOfPages, 10 );
 	_pageControlView.frame = frame;
-	_pageControlView.center = CGPointMake( 154, UIScreenHeight - 64 );
+	_pageControlView.center = CGPointMake( 154, DMRecipeHeight - 34 );
 }
 
 @end
