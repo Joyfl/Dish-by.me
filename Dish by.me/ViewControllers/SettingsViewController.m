@@ -192,6 +192,8 @@ enum {
 			cell.detailTextLabel.text = nil;
 		}
 		
+		[self skinCell:cell atIndexPath:indexPath];
+		
 		return cell;
 	}
 	
@@ -216,6 +218,8 @@ enum {
 			cell.textLabel.text = NSLocalizedString( @"FACEBOOK", nil );
 			cell.detailTextLabel.text = _settings.facebook ? _settings.facebook.name : nil;
 		}
+		
+		[self skinCell:cell atIndexPath:indexPath];
 		
 		return cell;
 	}
@@ -261,6 +265,8 @@ enum {
 			cell.on = _settings.notifications.fork;
 		}
 		
+		[self skinCell:cell atIndexPath:indexPath];
+		
 		return cell;
 	}
 		
@@ -280,6 +286,8 @@ enum {
 		cell.textLabel.text = NSLocalizedString( @"LOGOUT", nil );
 		cell.detailTextLabel.text = nil;
 		cell.accessoryType = UITableViewCellAccessoryNone;
+		
+		[self skinCell:cell atIndexPath:indexPath];
 		
 		return cell;
 	}
@@ -451,5 +459,24 @@ enum {
 	}
 }
 
+
+#pragma mark -
+
+- (void)skinCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+	NSInteger rowCount = [_tableView numberOfRowsInSection:indexPath.section];
+	
+	if( rowCount == 1 )
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 8, 8 )]];
+	
+	else if( indexPath.row == 0 )
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_top.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 2, 8 )]];
+	
+	else if( indexPath.row == rowCount - 1 )
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_bottom.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 8, 8, 8 )]];
+	
+	else
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_middle.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 2, 2, 2 )]];
+}
 
 @end
