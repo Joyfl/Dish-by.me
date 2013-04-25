@@ -121,18 +121,36 @@ enum {
 	return 0;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+	if( section == sectionCount - 1 )
+		return 0;
+	return 30;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+	static NSString *headerViewId = @"headerViewId";
+	UITableViewHeaderFooterView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:headerViewId];
+	if( !headerView )
+	{
+		headerView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:headerViewId];
+		headerView.textLabel.font = [UIFont boldSystemFontOfSize:15];
+		headerView.textLabel.textColor = [UIColor colorWithHex:0x726C6C alpha:1];
+		headerView.textLabel.shadowColor = [UIColor whiteColor];
+		headerView.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+	}
+	
 	if( section == kSectionAccountSettings )
-		return NSLocalizedString( @"ACCOUNT_SETTINGS", @"계정 설정" );
-		
+		headerView.textLabel.text = NSLocalizedString( @"ACCOUNT_SETTINGS", @"계정 설정" );
+	
 	if( section == kSectionShareSettings )
-		return NSLocalizedString( @"SHARE_SETTINGS", @"공유 설정" );
+		headerView.textLabel.text = NSLocalizedString( @"SHARE_SETTINGS", @"공유 설정" );
 	
 	else if( section == kSectionNotifications )
-		return NSLocalizedString( @"PUSH_NOTIFICATIONS_SETTINGS", @"푸시 알림 설정" );
+		headerView.textLabel.text = NSLocalizedString( @"PUSH_NOTIFICATIONS_SETTINGS", @"푸시 알림 설정" );
 	
-	return nil;
+	return headerView;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
