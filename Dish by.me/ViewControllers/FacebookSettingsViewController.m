@@ -10,6 +10,7 @@
 #import "DMBarButtonItem.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "UIResponder+Dim.h"
+#import "DMTableViewCell.h"
 
 @implementation FacebookSettingsViewController
 
@@ -84,15 +85,10 @@
 	// 연동 해제
 	else
 	{
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:disconnectCellId];
+		DMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:disconnectCellId];
 		if( !cell )
 		{
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:disconnectCellId];
-			cell.textLabel.font = [UIFont systemFontOfSize:16];
-			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
-			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
-			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+			cell = [[DMTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:disconnectCellId];
 			cell.textLabel.textAlignment = NSTextAlignmentCenter;
 			cell.textLabel.text = NSLocalizedString( @"DISCONNECT", nil );
 		}
@@ -142,6 +138,26 @@
 			showErrorAlert();
 		}];
 	}
+}
+
+
+#pragma mark -
+
+- (void)skinCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+	NSInteger rowCount = [_tableView numberOfRowsInSection:indexPath.section];
+	
+	if( rowCount == 1 )
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 8, 8 )]];
+	
+	else if( indexPath.row == 0 )
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_top.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 2, 8 )]];
+	
+	else if( indexPath.row == rowCount - 1 )
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_bottom.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 8, 8, 8 )]];
+	
+	else
+		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_middle.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 2, 2, 2 )]];
 }
 
 @end

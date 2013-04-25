@@ -360,6 +360,7 @@
 		036174DE172936C2002C7AB7 /* textfield_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 036173A1172936C2002C7AB7 /* textfield_bg@2x.png */; };
 		036174DF172936C2002C7AB7 /* tool_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 036173A3172936C2002C7AB7 /* tool_bar.png */; };
 		036174E0172936C2002C7AB7 /* tool_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 036173A4172936C2002C7AB7 /* tool_bar@2x.png */; };
+		036174EC17294136002C7AB7 /* DMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 036174EB17294136002C7AB7 /* DMTableViewCell.m */; };
 		036752AD16FB33B800D889E8 /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752AB16FB33B800D889E8 /* AuthViewController.m */; };
 		036752B116FB3D7D00D889E8 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752B016FB3D7D00D889E8 /* SignUpViewController.m */; };
 		036752B416FB3DD200D889E8 /* DMBookButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752B316FB3DD200D889E8 /* DMBookButton.m */; };
@@ -922,6 +923,8 @@
 		036173A1172936C2002C7AB7 /* textfield_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textfield_bg@2x.png"; sourceTree = "<group>"; };
 		036173A3172936C2002C7AB7 /* tool_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tool_bar.png; sourceTree = "<group>"; };
 		036173A4172936C2002C7AB7 /* tool_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool_bar@2x.png"; sourceTree = "<group>"; };
+		036174EA17294136002C7AB7 /* DMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMTableViewCell.h; sourceTree = "<group>"; };
+		036174EB17294136002C7AB7 /* DMTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMTableViewCell.m; sourceTree = "<group>"; };
 		036752AA16FB33B800D889E8 /* AuthViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AuthViewController.h; sourceTree = "<group>"; };
 		036752AB16FB33B800D889E8 /* AuthViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AuthViewController.m; sourceTree = "<group>"; };
 		036752AF16FB3D7D00D889E8 /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
@@ -1876,6 +1879,8 @@
 				03A5E94D16B4E48100C79F8D /* JLLabelButton.m */,
 				03DD1702170A76B50064D022 /* UIPlaceholderTextView.h */,
 				03DD1703170A76B50064D022 /* UIPlaceholderTextView.m */,
+				036174EA17294136002C7AB7 /* DMTableViewCell.h */,
+				036174EB17294136002C7AB7 /* DMTableViewCell.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2421,6 +2426,7 @@
 				0337A9011723C50A00E5EE05 /* NotificationCell.m in Sources */,
 				0337A9041723C51800E5EE05 /* NSString+ArgumentArray.m in Sources */,
 				0361726017292195002C7AB7 /* UIView+JLAnimations.m in Sources */,
+				036174EC17294136002C7AB7 /* DMTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DMTableViewCell.h"
 
 @protocol DMSwitchCellDelegate;
 
-@interface DMSwitchCell : UITableViewCell
+@interface DMSwitchCell : DMTableViewCell
 {
 	UISwitch *_switchView;
 }

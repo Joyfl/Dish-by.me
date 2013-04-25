@@ -14,6 +14,7 @@
 #import "AppDelegate.h"
 #import "FacebookSettingsViewController.h"
 #import "DMTextFieldViewController.h"
+#import "DMTableViewCell.h"
 
 @implementation SettingsViewController
 
@@ -144,20 +145,45 @@ enum {
 	if( section == kSectionAccountSettings )
 		headerView.textLabel.text = NSLocalizedString( @"ACCOUNT_SETTINGS", @"계정 설정" );
 	
-	if( section == kSectionShareSettings )
+	else if( section == kSectionShareSettings )
 		headerView.textLabel.text = NSLocalizedString( @"SHARE_SETTINGS", @"공유 설정" );
 	
 	else if( section == kSectionNotifications )
 		headerView.textLabel.text = NSLocalizedString( @"PUSH_NOTIFICATIONS_SETTINGS", @"푸시 알림 설정" );
 	
+	else
+		headerView.textLabel.text = nil;
+	
 	return headerView;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
 	if( section == kSectionLogout )
-		return [NSString stringWithFormat:@"Version : %@ (Build %@)", VERSION, BUILD];
-	return nil;
+		return 50;
+	return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+	static NSString *footerViewId = @"footerViewId";
+	UITableViewHeaderFooterView *footerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:footerViewId];
+	if( !footerView )
+	{
+		footerView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:footerViewId];
+		footerView.textLabel.font = [UIFont systemFontOfSize:14];
+		footerView.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+		footerView.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
+		footerView.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+	}
+	
+	if( section == kSectionLogout )
+		footerView.textLabel.text = [NSString stringWithFormat:@"Version : %@ (Build %@)", VERSION, BUILD];
+	
+	else
+		footerView.textLabel.text = nil;
+	
+	return footerView;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -167,16 +193,11 @@ enum {
 	
 	if( indexPath.section == kSectionAccountSettings )
 	{
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+		DMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 		
 		if( !cell )
 		{
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-			cell.textLabel.font = [UIFont systemFontOfSize:16];
-			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
-			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
-			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+			cell = [[DMTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
 		}
 		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -192,23 +213,16 @@ enum {
 			cell.detailTextLabel.text = nil;
 		}
 		
-		[self skinCell:cell atIndexPath:indexPath];
-		
 		return cell;
 	}
 	
 	else if( indexPath.section == kSectionShareSettings )
 	{
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+		DMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 		
 		if( !cell )
 		{
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-			cell.textLabel.font = [UIFont systemFontOfSize:16];
-			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
-			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
-			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+			cell = [[DMTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
 		}
 		
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -218,8 +232,6 @@ enum {
 			cell.textLabel.text = NSLocalizedString( @"FACEBOOK", nil );
 			cell.detailTextLabel.text = _settings.facebook ? _settings.facebook.name : nil;
 		}
-		
-		[self skinCell:cell atIndexPath:indexPath];
 		
 		return cell;
 	}
@@ -232,11 +244,6 @@ enum {
 		{
 			cell = [[DMSwitchCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:switchCellId];
 			cell.delegate = self;
-			cell.textLabel.font = [UIFont systemFontOfSize:16];
-			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
-			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
-			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 		}
 		
 		cell.indexPath = indexPath;
@@ -265,29 +272,20 @@ enum {
 			cell.on = _settings.notifications.fork;
 		}
 		
-		[self skinCell:cell atIndexPath:indexPath];
-		
 		return cell;
 	}
 		
 	else if( indexPath.section == kSectionLogout )
 	{
-		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+		DMTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
 		if( !cell )
 		{
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
-			cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
-			cell.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
-			cell.textLabel.backgroundColor = cell.detailTextLabel.backgroundColor = [UIColor clearColor];
-			cell.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
-			cell.textLabel.shadowOffset = CGSizeMake( 0, 1 );
+			cell = [[DMTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
 		}
 		
 		cell.textLabel.text = NSLocalizedString( @"LOGOUT", nil );
 		cell.detailTextLabel.text = nil;
 		cell.accessoryType = UITableViewCellAccessoryNone;
-		
-		[self skinCell:cell atIndexPath:indexPath];
 		
 		return cell;
 	}
@@ -459,24 +457,5 @@ enum {
 	}
 }
 
-
-#pragma mark -
-
-- (void)skinCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
-	NSInteger rowCount = [_tableView numberOfRowsInSection:indexPath.section];
-	
-	if( rowCount == 1 )
-		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 8, 8 )]];
-	
-	else if( indexPath.row == 0 )
-		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_top.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 2, 8 )]];
-	
-	else if( indexPath.row == rowCount - 1 )
-		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_bottom.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 8, 8, 8 )]];
-	
-	else
-		cell.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_middle.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 2, 2, 2 )]];
-}
 
 @end
