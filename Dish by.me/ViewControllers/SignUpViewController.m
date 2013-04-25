@@ -211,7 +211,7 @@
 	[self setInputFieldsEnabled:NO];
 	_facebookButton.showsActivityIndicatorView = YES;
 	
-	FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
+	FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions", @"email"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
 	[FBSession setActiveSession:session];
 	[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
 		
@@ -222,6 +222,12 @@
 				JLLog( @"openWithCompletionHandler with publish permissions complete." );
 				
 				[[FBRequest requestForGraphPath:@"/me?fields=id,email,name,bio,picture.width(200).height(200)"] startWithCompletionHandler:^(FBRequestConnection *connection, NSDictionary<FBGraphUser> *user, NSError *error) {
+					
+					// 이메일 정보가 없음
+					if( ![user objectForKey:@"email"] )
+					{
+						
+					}
 					
 					_facebookUserInfo = user;
 					_emailInput.text = [user objectForKey:@"email"];
@@ -313,12 +319,12 @@
 		[[DMAPILoader sharedLoader] api:@"/auth/login" method:@"GET" parameters:params success:^(id response) {
 			
 			[CurrentUser user].loggedIn = YES;
-			[CurrentUser user].email = [[response objectForKey:@"user"] objectForKey:@"email"];
-			[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
+			[CurrentUser user].email = [[response objectForKeyNotNull:@"user"] objectForKeyNotNull:@"email"];
+			[CurrentUser user].accessToken = [response objectForKeyNotNull:@"access_token"];
 			
 			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WELCOME", nil ) message:NSLocalizedString( @"MESSAGE_SIGNUP_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 				
-				NSInteger userId = [[response objectForKey:@"id"] integerValue];
+				NSInteger userId = [[response objectForKeyNotNull:@"id"] integerValue];
 				SignUpProfileViewController *signUpViewController = nil;
 				
 				// 페이스북으로 가입

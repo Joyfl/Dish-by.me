@@ -336,16 +336,16 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	_updating = YES;
 	
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", _user.userId] method:@"GET" parameters:nil success:^(id response) {
-		_user.userId = [[response objectForKey:@"id"] integerValue];
-		_user.name = [response objectForKey:@"name"];
-		_user.photoURL = [response objectForKey:@"photo_url"];
-		_user.thumbnailURL = [response objectForKey:@"thumbnail_url"];
-		_user.bio = [response objectForKey:@"bio"];
-		_user.dishCount = [[response objectForKey:@"dish_count"] integerValue];
-		_user.bookmarkCount = [[response objectForKey:@"bookmark_count"] integerValue];
-		_user.followingCount = [[response objectForKey:@"following_count"] integerValue];
-		_user.followersCount = [[response objectForKey:@"followers_count"] integerValue];
-		_user.following = [[response objectForKey:@"following"] boolValue];
+		_user.userId = [[response objectForKeyNotNull:@"id"] integerValue];
+		_user.name = [response objectForKeyNotNull:@"name"];
+		_user.photoURL = [response objectForKeyNotNull:@"photo_url"];
+		_user.thumbnailURL = [response objectForKeyNotNull:@"thumbnail_url"];
+		_user.bio = [response objectForKeyNotNull:@"bio"];
+		_user.dishCount = [[response objectForKeyNotNull:@"dish_count"] integerValue];
+		_user.bookmarkCount = [[response objectForKeyNotNull:@"bookmark_count"] integerValue];
+		_user.followingCount = [[response objectForKeyNotNull:@"following_count"] integerValue];
+		_user.followersCount = [[response objectForKeyNotNull:@"followers_count"] integerValue];
+		_user.following = [[response objectForKeyNotNull:@"following"] boolValue];
 		
 		self.navigationItem.title = userNameWithPlaceholder;
 		

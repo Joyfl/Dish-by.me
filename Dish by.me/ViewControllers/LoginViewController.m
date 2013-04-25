@@ -175,7 +175,7 @@
 	[self setInputFieldsEnabled:NO];
 	_facebookButton.showsActivityIndicatorView = YES;
 	
-	FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
+	FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions", @"email"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
 	[FBSession setActiveSession:session];
 	[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
 		
@@ -253,8 +253,8 @@
 		JLLog( @"Login complete" );
 		
 		[CurrentUser user].loggedIn = YES;
-		[CurrentUser user].email = [[response objectForKey:@"user"] objectForKey:@"email"];
-		[CurrentUser user].accessToken = [response objectForKey:@"access_token"];
+		[CurrentUser user].email = [[response objectForKeyNotNull:@"user"] objectForKeyNotNull:@"email"];
+		[CurrentUser user].accessToken = [response objectForKeyNotNull:@"access_token"];
 		
 		[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUserAndDismissViewController];
 		

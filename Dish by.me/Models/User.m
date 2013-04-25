@@ -15,17 +15,17 @@
 + (id)userFromDictionary:(NSDictionary *)dictionary
 {
 	User *user = [[User alloc] init];
-	user.userId = [[dictionary objectForKey:@"id"] integerValue];
-	user.name = [dictionary objectForKey:@"name"];
-	user.photoURL = [dictionary objectForKey:@"photo_url"];
-	user.thumbnailURL = [dictionary objectForKey:@"thumbnail_url"];
-	user.bio = [dictionary objectForKey:@"bio"];
-	user.dishCount = [[dictionary objectForKey:@"dish_count"] integerValue];
-	user.bookmarkCount = [[dictionary objectForKey:@"bookmark_count"] integerValue];
-	user.followingCount = [[dictionary objectForKey:@"following_count"] integerValue];
-	user.followersCount = [[dictionary objectForKey:@"followers_count"] integerValue];
-	user.following = [[dictionary objectForKey:@"following"] boolValue];
-	user.activated = [[dictionary objectForKey:@"activated"] boolValue];
+	user.userId = [[dictionary objectForKeyNotNull:@"id"] integerValue];
+	user.name = [dictionary objectForKeyNotNull:@"name"];
+	user.photoURL = [dictionary objectForKeyNotNull:@"photo_url"];
+	user.thumbnailURL = [dictionary objectForKeyNotNull:@"thumbnail_url"];
+	user.bio = [dictionary objectForKeyNotNull:@"bio"];
+	user.dishCount = [[dictionary objectForKeyNotNull:@"dish_count"] integerValue];
+	user.bookmarkCount = [[dictionary objectForKeyNotNull:@"bookmark_count"] integerValue];
+	user.followingCount = [[dictionary objectForKeyNotNull:@"following_count"] integerValue];
+	user.followersCount = [[dictionary objectForKeyNotNull:@"followers_count"] integerValue];
+	user.following = [[dictionary objectForKeyNotNull:@"following"] boolValue];
+	user.activated = [[dictionary objectForKeyNotNull:@"activated"] boolValue];
 	return user;
 }
 

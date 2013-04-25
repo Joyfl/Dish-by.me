@@ -364,7 +364,7 @@ enum {
 			else
 			{
 				[self dim];
-				FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
+				FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions", @"email"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
 				[FBSession setActiveSession:session];
 				[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
 					JLLog( @"status : %d", status );

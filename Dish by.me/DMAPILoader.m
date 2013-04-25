@@ -83,7 +83,7 @@
 			return;
 		}
 		
-		JLLog( @"URL : %@", operation.request.URL );
+		JLLog( @"URL(%@) : %@", method, operation.request.URL );
 		JLLog( @"statusCode : %d", operation.response.statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", [errorInfo objectForKey:@"message"] );
@@ -134,7 +134,7 @@
 			return;
 		}
 		
-		JLLog( @"URL : %@", operation.request.URL );
+		JLLog( @"URL(%@) : %@", method, operation.request.URL );
 		failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
 	}];
 }
@@ -194,7 +194,7 @@
 			return;
 		}
 		
-		JLLog( @"URL : %@", operation.request.URL );
+		JLLog( @"URL(%@) : %@", method, operation.request.URL );
 		failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
 	}];
 }

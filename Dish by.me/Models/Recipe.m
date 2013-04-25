@@ -15,17 +15,17 @@
 + (id)recipeFromDictionary:(NSDictionary *)dictionary
 {
 	Recipe *recipe = [[Recipe alloc] init];
-	recipe.servings = [[dictionary objectForKey:@"servings"] integerValue];
-	recipe.minutes = [[dictionary objectForKey:@"minutes"] integerValue];
+	recipe.servings = [[dictionary objectForKeyNotNull:@"servings"] integerValue];
+	recipe.minutes = [[dictionary objectForKeyNotNull:@"minutes"] integerValue];
 	
-	NSArray *ingredients = [dictionary objectForKey:@"ingredients"];
+	NSArray *ingredients = [dictionary objectForKeyNotNull:@"ingredients"];
 	for( NSDictionary *ingredientDictionary in ingredients )
 	{
 		Ingredient *ingredient = [Ingredient ingredientFromDictionary:ingredientDictionary];
 		[recipe.ingredients addObject:ingredient];
 	}
 	
-	NSArray *contents = [dictionary objectForKey:@"contents"];
+	NSArray *contents = [dictionary objectForKeyNotNull:@"contents"];
 	for( NSDictionary *contentDictionary in contents )
 	{
 		RecipeContent *content = [RecipeContent recipeContentFromDictionary:contentDictionary];

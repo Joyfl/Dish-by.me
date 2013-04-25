@@ -13,8 +13,8 @@
 - (id)initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super init];
-	_name = [dictionary objectForKey:@"name"];
-	_og = [[dictionary objectForKey:@"og"] boolValue];
+	_name = [dictionary objectForKeyNotNull:@"name"];
+	_og = [[dictionary objectForKeyNotNull:@"og"] boolValue];
 	return self;
 }
 
@@ -27,10 +27,10 @@
 - (id)initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super init];
-	_follow = [[dictionary objectForKey:@"follow"] boolValue];
-	_bookmark = [[dictionary objectForKey:@"bookmark"] boolValue];
-	_comment = [[dictionary objectForKey:@"comment"] boolValue];
-	_fork = [[dictionary objectForKey:@"fork"] boolValue];
+	_follow = [[dictionary objectForKeyNotNull:@"follow"] boolValue];
+	_bookmark = [[dictionary objectForKeyNotNull:@"bookmark"] boolValue];
+	_comment = [[dictionary objectForKeyNotNull:@"comment"] boolValue];
+	_fork = [[dictionary objectForKeyNotNull:@"fork"] boolValue];
 	return self;
 }
 
@@ -43,8 +43,8 @@
 - (id)initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super init];
-	self.facebook = [dictionary objectForKey:@"facebook"] ? [[FacebookSettings alloc] initWithDictionary:[dictionary objectForKey:@"facebook"]] : nil;
-	self.notifications = [[NotificationSettings alloc] initWithDictionary:[dictionary objectForKey:@"notifications"]];
+	self.facebook = [dictionary objectForKeyNotNull:@"facebook"] ? [[FacebookSettings alloc] initWithDictionary:[dictionary objectForKeyNotNull:@"facebook"]] : nil;
+	self.notifications = [[NotificationSettings alloc] initWithDictionary:[dictionary objectForKeyNotNull:@"notifications"]];
 	return self;
 }
 

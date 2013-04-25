@@ -16,6 +16,7 @@
 #import "Common.h"
 #import "Utils.h"
 #import "UIColor+Utils.h"
+#import "NSDictionary+Utils.h"
 #import "DMAPILoader.h"
 #import "JLLogger.h"
 #import "HTBlock.h"

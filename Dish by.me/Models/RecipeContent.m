@@ -13,8 +13,8 @@
 + (id)recipeContentFromDictionary:(NSDictionary *)dictionary
 {
 	RecipeContent *content = [[RecipeContent alloc] init];
-	content.photoURL = [dictionary objectForKey:@"photo_url"];
-	content.description = [dictionary objectForKey:@"description"];
+	content.photoURL = [dictionary objectForKeyNotNull:@"photo_url"];
+	content.description = [dictionary objectForKeyNotNull:@"description"];
 	return content;
 }
 

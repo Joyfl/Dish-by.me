@@ -29,9 +29,9 @@
 	if( userInfo )
 	{
 		[self updateToDictionary:userInfo];
-		self.loggedIn = [[userInfo objectForKey:@"logged_in"] boolValue];
-		self.email = [userInfo objectForKey:@"email"];
-		self.accessToken = [userInfo objectForKey:@"access_token"];
+		self.loggedIn = [[userInfo objectForKeyNotNull:@"logged_in"] boolValue];
+		self.email = [userInfo objectForKeyNotNull:@"email"];
+		self.accessToken = [userInfo objectForKeyNotNull:@"access_token"];
 	}
 	
 	return self;
@@ -39,15 +39,15 @@
 
 - (void)updateToDictionary:(NSDictionary *)dictionary
 {
-	self.userId = [[dictionary objectForKey:@"id"] integerValue];
-	self.name = [dictionary objectForKey:@"name"];
-	self.photoURL = [dictionary objectForKey:@"photo_url"];
-	self.thumbnailURL = [dictionary objectForKey:@"thumbnail_url"];
-	self.bio = [dictionary objectForKey:@"bio"];
-	self.dishCount = [[dictionary objectForKey:@"dish_count"] integerValue];
-	self.bookmarkCount = [[dictionary objectForKey:@"bookmark_count"] integerValue];
-	self.followingCount = [[dictionary objectForKey:@"following_count"] integerValue];
-	self.followersCount = [[dictionary objectForKey:@"followers_count"] integerValue];
+	self.userId = [[dictionary objectForKeyNotNull:@"id"] integerValue];
+	self.name = [dictionary objectForKeyNotNull:@"name"];
+	self.photoURL = [dictionary objectForKeyNotNull:@"photo_url"];
+	self.thumbnailURL = [dictionary objectForKeyNotNull:@"thumbnail_url"];
+	self.bio = [dictionary objectForKeyNotNull:@"bio"];
+	self.dishCount = [[dictionary objectForKeyNotNull:@"dish_count"] integerValue];
+	self.bookmarkCount = [[dictionary objectForKeyNotNull:@"bookmark_count"] integerValue];
+	self.followingCount = [[dictionary objectForKeyNotNull:@"following_count"] integerValue];
+	self.followersCount = [[dictionary objectForKeyNotNull:@"followers_count"] integerValue];
 }
 
 - (void)setLoggedIn:(BOOL)loggedIn

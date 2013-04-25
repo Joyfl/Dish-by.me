@@ -42,6 +42,7 @@
 		0349EA5816D90C870057BD12 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5616D90C7B0057BD12 /* SystemConfiguration.framework */; };
 		0349EA5A16D90C930057BD12 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5916D90C930057BD12 /* MobileCoreServices.framework */; };
 		034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 034A0A0E1656779700C7DA93 /* DishTileCell.m */; };
+		03509CB617296DA400EE31F5 /* NSDictionary+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CB517296DA300EE31F5 /* NSDictionary+Utils.m */; };
 		03549A9B17003D8000EFCB14 /* AFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 03549A9A17003D8000EFCB14 /* AFImageCache.m */; };
 		0361726017292195002C7AB7 /* UIView+JLAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = 0361725F17292195002C7AB7 /* UIView+JLAnimations.m */; };
 		036173A5172936C2002C7AB7 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 03617262172936C2002C7AB7 /* .gitignore */; };
@@ -603,6 +604,8 @@
 		0349EA5916D90C930057BD12 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		034A0A0D1656779700C7DA93 /* DishTileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishTileCell.h; path = Views/DishTileCell.h; sourceTree = "<group>"; };
 		034A0A0E1656779700C7DA93 /* DishTileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishTileCell.m; path = Views/DishTileCell.m; sourceTree = "<group>"; };
+		03509CB417296DA300EE31F5 /* NSDictionary+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+Utils.h"; path = "Categories/NSDictionary+Utils.h"; sourceTree = "<group>"; };
+		03509CB517296DA300EE31F5 /* NSDictionary+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+Utils.m"; path = "Categories/NSDictionary+Utils.m"; sourceTree = "<group>"; };
 		03549A9917003D8000EFCB14 /* AFImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFImageCache.h; sourceTree = "<group>"; };
 		03549A9A17003D8000EFCB14 /* AFImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageCache.m; sourceTree = "<group>"; };
 		0361725E17292195002C7AB7 /* UIView+JLAnimations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+JLAnimations.h"; path = "Categories/UIView+JLAnimations.h"; sourceTree = "<group>"; };
@@ -1941,6 +1944,8 @@
 				0337A9031723C51800E5EE05 /* NSString+ArgumentArray.m */,
 				0361725E17292195002C7AB7 /* UIView+JLAnimations.h */,
 				0361725F17292195002C7AB7 /* UIView+JLAnimations.m */,
+				03509CB417296DA300EE31F5 /* NSDictionary+Utils.h */,
+				03509CB517296DA300EE31F5 /* NSDictionary+Utils.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -2427,6 +2432,7 @@
 				0337A9041723C51800E5EE05 /* NSString+ArgumentArray.m in Sources */,
 				0361726017292195002C7AB7 /* UIView+JLAnimations.m in Sources */,
 				036174EC17294136002C7AB7 /* DMTableViewCell.m in Sources */,
+				03509CB617296DA400EE31F5 /* NSDictionary+Utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

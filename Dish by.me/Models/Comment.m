@@ -14,13 +14,13 @@
 + (Comment *)commentFromDictionary:(NSDictionary *)dictionary
 {
 	Comment *comment = [[Comment alloc] init];
-	comment.commentId = [[dictionary objectForKey:@"id"] integerValue];
-	comment.userId = [[[dictionary objectForKey:@"user"] objectForKey:@"id"] integerValue];
-	comment.userName = [[dictionary objectForKey:@"user"] objectForKey:@"name"];
-	comment.userPhotoURL = [[dictionary objectForKey:@"user"] objectForKey:@"photo_url"];
-	comment.message = [dictionary objectForKey:@"message"];
-	comment.createdTime = [Utils dateFromString:[dictionary objectForKey:@"created_time"]];
-	comment.updatedTime = [Utils dateFromString:[dictionary objectForKey:@"updated_time"]];
+	comment.commentId = [[dictionary objectForKeyNotNull:@"id"] integerValue];
+	comment.userId = [[[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"id"] integerValue];
+	comment.userName = [[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"name"];
+	comment.userPhotoURL = [[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"photo_url"];
+	comment.message = [dictionary objectForKeyNotNull:@"message"];
+	comment.createdTime = [Utils dateFromString:[dictionary objectForKeyNotNull:@"created_time"]];
+	comment.updatedTime = [Utils dateFromString:[dictionary objectForKeyNotNull:@"updated_time"]];
 	[comment updateRelativeTime];
 	[comment calculateMessageHeight];
 	
