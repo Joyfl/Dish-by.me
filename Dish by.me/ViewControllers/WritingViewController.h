@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GAITrackedViewController.h"
 #import "RecipeEditorViewController.h"
+#import "UIPlaceholderTextView.h"
 
 @class Dish;
 @class RecipeView;
@@ -22,7 +23,7 @@
 	UIButton *_photoButton;
 	UIImageView *_borderView;
 	UITextField *_nameInput;
-	UITextView *_messageInput;
+	UIPlaceHolderTextView *_descriptionInput;
 	UIButton *_recipeButton;
 	
 	RecipeEditorViewController *_recipeView;

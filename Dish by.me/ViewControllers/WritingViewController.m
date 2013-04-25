@@ -17,6 +17,7 @@
 #import "UIButton+ActivityIndicatorView.h"
 #import "RecipeEditorViewController.h"
 #import "Recipe.h"
+#import "UIView+JLAnimations.h";
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 
@@ -63,13 +64,14 @@ enum {
 	_nameInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
 	[_nameInput addTarget:self action:@selector(textViewDidBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
 	
-	_messageInput = [[UITextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 70 )];
-	_messageInput.delegate = self;
-	_messageInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
-	_messageInput.backgroundColor = [UIColor clearColor];
-	_messageInput.font = [UIFont boldSystemFontOfSize:15];
-	_messageInput.layer.shadowOffset = CGSizeMake( 0, 1 );
-	_messageInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
+	_descriptionInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 70 )];
+	_descriptionInput.delegate = self;
+	_descriptionInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+	_descriptionInput.placeholder = NSLocalizedString( @"INPUT_DESCRIPTION", nil );
+	_descriptionInput.backgroundColor = [UIColor clearColor];
+	_descriptionInput.font = [UIFont boldSystemFontOfSize:15];
+	_descriptionInput.layer.shadowOffset = CGSizeMake( 0, 1 );
+	_descriptionInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
 	
 	_photoHeight = PhotoButtonMaxWidth;
 	
@@ -118,7 +120,7 @@ enum {
 	}
 	
 	_nameInput.text = dish.dishName;
-	_messageInput.text = dish.description;
+	_descriptionInput.text = dish.description;
 	
 	_recipeView = [[RecipeEditorViewController alloc] initWithRecipe:dish.recipe];
 	_recipeView.delegate = self;
@@ -202,7 +204,7 @@ enum {
 			UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
 			messageBoxView.frame = CGRectMake( 9, 0, 304, 100 );
 			[cell.contentView addSubview:messageBoxView];
-			[cell.contentView addSubview:_messageInput];
+			[cell.contentView addSubview:_descriptionInput];
 		}
 	}
 	
@@ -256,12 +258,17 @@ enum {
 	if( !_nameInput.text.length )
 	{
 		[_nameInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
-		[_nameInput becomeFirstResponder];
+		[_nameInput shakeCount:3 radius:4 duration:0.05 delay:0 completion:^{
+			[_nameInput becomeFirstResponder];
+		}];
 		return;
 	}
-	else if( !_messageInput.text.length )
+	else if( !_descriptionInput.text.length )
 	{
-		[_messageInput becomeFirstResponder];
+		_descriptionInput.placeHolderLabel.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
+		[_descriptionInput shakeCount:3 radius:4 duration:0.05 delay:0 completion:^{
+			[_descriptionInput becomeFirstResponder];
+		}];
 		return;
 	}
 	
@@ -277,7 +284,7 @@ enum {
 	
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
 								   @{ @"name": _nameInput.text,
-								   @"description": _messageInput.text,
+								   @"description": _descriptionInput.text,
 								   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
 								   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
 								   @"ingredient_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count],

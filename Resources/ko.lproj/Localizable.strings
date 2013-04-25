@@ -88,7 +88,7 @@
 "TAKE_A_PHOTO" = "사진 찍기";
 "FROM_LIBRARY" = "라이브러리에서 선택";
 "INPUT_DISH_NAME" = "요리 이름";
-"INPUT_MESSAGE" = "내용";
+"INPUT_DESCRIPTION" = "내용";
 "WRITE_RECIPE" = "레시피 작성하기";
 "UPLOAD" = "업로드";
 
