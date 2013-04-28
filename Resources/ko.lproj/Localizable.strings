@@ -24,6 +24,7 @@
 "MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_SET_SETTINGS" = "설정을 하려면 Dish by.me 계정이 필요합니다.";
 
+"MESSAGE_FACEBOOK_NOT_CONNECTED" = "페이스북 연동이 되어있지 않아요.\n지금 연동하시겠어요?";
 "MESSAGE_NO_PHOTO_ON_N_TH_RECIPE" = "%d번째 레시피에 사진이 빠졌어요;;";
 "MESSAGE_" = "";
 "MESSAGE_" = "";

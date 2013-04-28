@@ -40,7 +40,7 @@
 
 @implementation Settings
 
-+ (id)sharedSettings
++ (Settings *)sharedSettings
 {
 	static Settings *settings = nil;
 	if( !settings )
@@ -53,8 +53,6 @@
 - (id)init
 {
 	self = [super init];
-	self.facebook = [[FacebookSettings alloc] init];
-	self.notifications = [[NotificationSettings alloc] init];
 	return self;
 }
 

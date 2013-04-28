@@ -18,6 +18,8 @@
 #import "RecipeEditorViewController.h"
 #import "Recipe.h"
 #import "UIView+JLAnimations.h"
+#import "Settings.h"
+#import <FacebookSDK/FacebookSDK.h>
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 
@@ -427,6 +429,50 @@ enum {
 
 - (void)facebookButtonDidTouchUpInside
 {
+	// 페이스북 연동이 안되어있는데 페이스북 공유를 원할 경우
+	if( !_facebookButton.selected && ![Settings sharedSettings].facebook )
+	{
+		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_FACEBOOK_NOT_CONNECTED", nil ) cancelButtonTitle:NSLocalizedString( @"NO_THANKS", nil ) otherButtonTitles:@[NSLocalizedString( @"YES", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+			if( buttonIndex == 1 )
+			{
+				// 아래 코드는 SettingsViewController의 코드와 동일함.
+				[self dim];
+				FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions", @"email"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
+				[FBSession setActiveSession:session];
+				[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
+					JLLog( @"status : %d", status );
+					switch( status )
+					{
+						case FBSessionStateOpen:
+						{
+							NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
+							[[DMAPILoader sharedLoader] api:@"/setting/facebook" method:@"PUT" parameters:params success:^(id response) {
+								[self undim];
+								JLLog( @"response : %@", response );
+								
+								[Settings sharedSettings].facebook = [[FacebookSettings alloc] initWithDictionary:response];
+								_facebookButton.selected = YES;
+								
+							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+								[self undim];
+								showErrorAlert();
+							}];
+							break;
+						}
+							
+						case FBSessionStateClosedLoginFailed:
+							[self undim];
+							JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
+							break;
+							
+						default:
+							break;
+					}
+				}];
+			}
+		}] show];
+		return;
+	}
 	_facebookButton.selected = !_facebookButton.selected;
 }
 
