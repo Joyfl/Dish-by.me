@@ -179,7 +179,7 @@
 - (void)inputFieldEditingDidBegin
 {
 	[UIView animateWithDuration:0.25 animations:^{
-		self.view.frame = CGRectMake( 0, -140, self.view.frame.size.width, self.view.frame.size.height );
+		self.view.frame = CGRectMake( 0, IPHONE5 ? 0 : -55, self.view.frame.size.width, self.view.frame.size.height );
 	}];
 }
 
