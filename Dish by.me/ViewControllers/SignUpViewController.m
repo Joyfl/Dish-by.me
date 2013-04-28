@@ -129,7 +129,8 @@
 	inputField.delegate = self;
 	inputField.placeholder = placeholder;
 	inputField.font = [UIFont boldSystemFontOfSize:13];
-	inputField.textColor = [UIColor colorWithHex:0xADA8A3 alpha:1];
+	inputField.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+	[inputField setValue:[UIColor colorWithHex:0xADA8A3 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 	inputField.backgroundColor = [UIColor clearColor];
 	inputField.layer.shadowOffset = CGSizeMake( 0, 1 );
 	inputField.layer.shadowColor = [UIColor whiteColor].CGColor;
@@ -144,7 +145,7 @@
 
 - (void)inputFieldEditingChanged:(UITextField *)inputField
 {
-	_emailInput.textColor = [UIColor colorWithHex:0xADA8A3 alpha:1];
+	_emailInput.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
 	
 	if( inputField.text.length == 0 )
 	{
@@ -160,7 +161,7 @@
 		}
 		else
 		{
-			_passwordConfirmationInput.textColor = [UIColor colorWithHex:0xADA8A3 alpha:1];
+			_passwordConfirmationInput.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
 		}
 	}
 	

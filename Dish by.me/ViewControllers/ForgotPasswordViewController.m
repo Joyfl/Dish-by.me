@@ -34,7 +34,7 @@
 	[self.view addSubview:backButton];
 	
 	UILabel *titleLabel = [[UILabel alloc] init];
-	titleLabel.text = NSLocalizedString( @"LOGIN", nil );
+	titleLabel.text = NSLocalizedString( @"RESET_PASSWORD", nil );
 	titleLabel.font = [UIFont boldSystemFontOfSize:20];
 	titleLabel.textColor = [UIColor colorWithHex:0x4B4A47 alpha:1];
 	titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -49,7 +49,8 @@
 	self.emailInput.delegate = self;
 	self.emailInput.placeholder = NSLocalizedString( @"SIGNED_UP_EMAIL", nil );
 	self.emailInput.font = [UIFont boldSystemFontOfSize:13];
-	self.emailInput.textColor = [UIColor colorWithHex:0xADA8A3 alpha:1];
+	self.emailInput.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+	[self.emailInput setValue:[UIColor colorWithHex:0xADA8A3 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 	self.emailInput.backgroundColor = [UIColor clearColor];
 	self.emailInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	self.emailInput.layer.shadowColor = [UIColor whiteColor].CGColor;

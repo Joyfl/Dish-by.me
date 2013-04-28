@@ -57,6 +57,7 @@
 "DO_IT_LATER" = "나중에 하기";
 "PROFILE" = "프로필";
 
+"RESET_PASSWORD" = "비밀번호 재설정";
 "SIGNED_UP_EMAIL" = "가입할 때의 이메일";
 "SEND_EMAIL" = "본인확인메일 보내기";
 
