@@ -94,7 +94,7 @@
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)getUserAndDismissViewController
+- (void)getUser
 {
 	[self dim];
 	
@@ -106,8 +106,6 @@
 		
 		[[CurrentUser user] updateToDictionary:response];
 		[[CurrentUser user] save];
-		
-		[self dismissViewControllerAnimated:YES completion:nil];
 		
 		AuthViewController *authViewController = [self.navigationController.viewControllers objectAtIndex:0];
 		[authViewController.delegate authViewControllerDidSucceedLogin:authViewController];

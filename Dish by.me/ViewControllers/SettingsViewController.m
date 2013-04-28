@@ -58,12 +58,7 @@ enum {
 	_tableView.backgroundView.hidden = YES;
 	[self.view addSubview:_tableView];
 	
-	_loadingIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-	_loadingIndicatorView.center = CGPointMake( UIScreenWidth / 2, 20 );
-	[_loadingIndicatorView startAnimating];
-	[self.view addSubview:_loadingIndicatorView];
-	
-	[self loadSettings];
+	_settings = [Settings sharedSettings];
 	
     return self;
 }
@@ -71,29 +66,6 @@ enum {
 - (void)viewWillAppear:(BOOL)animated
 {
 	[_tableView reloadData];
-}
-
-
-#pragma mark -
-
-- (void)loadSettings
-{
-	JLLog( @"Load Settings" );
-	
-	_tableView.hidden = YES;
-	
-	[[DMAPILoader sharedLoader] api:@"/settings" method:@"GET" parameters:nil success:^(id response) {
-		JLLog( @"설정 로드 완료 : %@", response );
-		
-		_settings = [[Settings alloc] initWithDictionary:response];
-		
-		[_loadingIndicatorView removeFromSuperview];
-		_tableView.hidden = NO;
-		[_tableView reloadData];
-		
-	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		
-	}];
 }
 
 
@@ -454,7 +426,7 @@ enum {
 		
 		[[DMAPILoader sharedLoader] api:@"/setting/notifications" method:@"PUT" parameters:params success:^(id response) {
 			
-			JLLog( @"response : %@", response );
+			
 			
 		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 			showErrorAlert();

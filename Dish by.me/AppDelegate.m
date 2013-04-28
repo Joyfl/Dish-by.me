@@ -21,6 +21,8 @@
 #import "HTBlock.h"
 #import "Notification.h"
 #import "NotificationListViewController.h"
+#import "CoverView.h"
+#import "Settings.h"
 
 @implementation AppDelegate
 
@@ -32,12 +34,9 @@
 	
 	[GAI sharedInstance].trackUncaughtExceptions = YES;
 	[GAI sharedInstance].dispatchInterval = 20;
-//	[GAI sharedInstance].debug = YES;
 	[[GAI sharedInstance] trackerWithTrackingId:@"UA-38348585-3"];
 	
-	self.notifications = [NSMutableArray array];
-	
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
 	
@@ -45,39 +44,82 @@
 	self.tabBarController.delegate = self;
 	self.tabBarController.tabBar.backgroundImage = [UIImage imageNamed:@"tab_bar_bg.png"];
 	self.tabBarController.tabBar.selectionIndicatorImage = [UIImage imageNamed:@"tab_bar_bg_selected.png"];
+	self.window.rootViewController = self.tabBarController;
 	
+	self.notifications = [NSMutableArray array];
+	
+	self.coverView = [[CoverView alloc] init];
+	[self.window addSubview:self.coverView];
+	
+	if( [CurrentUser user].loggedIn )
+	{
+		JLLog( @"[TRY] Load settings" );
+		
+		[[DMAPILoader sharedLoader] api:@"/settings" method:@"GET" parameters:nil success:^(id response) {
+			
+			JLLog( @"[SUCCESS] Load settings : %@", response );
+			
+			[[Settings sharedSettings] updateFromDictionary:response];
+			
+			[self buildViewControllers];
+			[self.profileViewController loadUserId:[CurrentUser user].userId];
+			[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+			[self.coverView open];
+			
+		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+			
+			JLLog( @"[FAILED] Load settings." );
+			
+			// Invalid AccessToken
+			if( errorCode == 4000 )
+			{
+				[self buildViewControllers];
+				[self presentAuthViewControllerWithClosingAnimation:NO];
+			}
+		}];
+	}
+	else
+	{
+		JLLog( @"Not logged in." );
+		
+		[self buildViewControllers];
+		[self presentAuthViewControllerWithClosingAnimation:NO];
+	}
+	
+	[self handleRemoteNotificationFromLaunchOptions:launchOptions];
+	
+    return YES;
+}
+
+- (void)buildViewControllers
+{
 	self.dishListViewController = [[DishListViewController alloc] init];
 	DMNavigationController *dishNavigationController = [[DMNavigationController alloc] initWithRootViewController:self.dishListViewController];
-//	dishNavigationController.title = NSLocalizedString( @"DISHES", @"" );
 	dishNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_dish.png"];
 	dishNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	
 	SearchViewController *searchViewController = [[SearchViewController alloc] init];
 	DMNavigationController *searchNavigationController = [[DMNavigationController alloc] initWithRootViewController:searchViewController];
-//	searchNavigationController.title = NSLocalizedString( @"SEARCH", @"" );
 	searchNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_search.png"];
 	searchNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	
 	self.profileViewController = [[ProfileViewController alloc] init];
 	DMNavigationController *profileNavigationController = [[DMNavigationController alloc] initWithRootViewController:self.profileViewController];
-//	meNavigationController.title = NSLocalizedString( @"ME", @"" );
 	self.profileViewController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_me.png"];
 	self.profileViewController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	
 	self.settingsViewController = [[SettingsViewController alloc] init];
 	DMNavigationController *settingsNavigationController = [[DMNavigationController alloc] initWithRootViewController:self.settingsViewController];
-//	settingsNavigationController.title = NSLocalizedString( @"SETTINGS", @"" );
 	settingsNavigationController.tabBarItem.image = [UIImage imageNamed:@"tab_icon_settings.png"];
 	settingsNavigationController.tabBarItem.imageInsets = UIEdgeInsetsMake( 5, 0, -5, 0 );
 	
 	self.tabBarController.viewControllers = [NSArray arrayWithObjects:
-										dishNavigationController,
-										searchNavigationController,
-										[[UIViewController alloc] init],
-										profileNavigationController,
-										settingsNavigationController,
-										nil];
-	self.window.rootViewController = self.tabBarController;
+											 dishNavigationController,
+											 searchNavigationController,
+											 [[UIViewController alloc] init],
+											 profileNavigationController,
+											 settingsNavigationController,
+											 nil];
 	
 	UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	cameraButton.frame = CGRectMake( 128, -1, 64, 50 );
@@ -85,25 +127,16 @@
 	[cameraButton setImage:[UIImage imageNamed:@"tab_camera_highlighted.png"] forState:UIControlStateHighlighted];
 	[cameraButton addTarget:self action:@selector(cameraButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.tabBarController.tabBar addSubview:cameraButton];
-	
-	if( [CurrentUser user].loggedIn )
-	{
-		[application registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
-		[self.profileViewController loadUserId:[CurrentUser user].userId];
-	}
-	else
-	{
-		[self presentAuthViewControllerWithClosingAnimation:NO];
-	}
-	
+}
+
+- (void)handleRemoteNotificationFromLaunchOptions:(NSDictionary *)launchOptions
+{
 	NSDictionary *remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
 	if( remoteNotification )
 	{
 		NSURL *url = [NSURL URLWithString:[remoteNotification objectForKey:@"url"]];
-		[application openURL:url];
+		[[UIApplication sharedApplication] openURL:url];
 	}
-	
-    return YES;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -316,29 +349,44 @@
 	
 	if( withClosingAnimation )
 	{
-		[self.authViewController closeBookCoverCompletion:^(UIImageView *coverView) {
+		[self.coverView closeCompletion:^(CoverView *coverView) {
 			[self.tabBarController presentViewController:navController animated:NO completion:nil];
-			[coverView removeFromSuperview];
-			[self.authViewController openBookCover];
+			[self.coverView openAfterDelay:0.25];
 		}];
 	}
 	else
 	{
 		[self.tabBarController presentViewController:navController animated:NO completion:nil];
-		[self.authViewController openBookCover];
+		[self.coverView open];
 	}
 }
 
 - (void)authViewControllerDidSucceedLogin:(AuthViewController *)authViewController
 {
 	JLLog( @"loginViewControllerDidSucceedLogin (userId : %d)", [CurrentUser user].userId );
-	[self.dishListViewController updateDishes];
-	[self.profileViewController loadUserId:[CurrentUser user].userId];
-	[self.settingsViewController loadSettings];
-	[self updateNotificationsSuccess:nil failure:nil];
-	self.authViewController = nil;
 	
-	[[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
+	[[DMAPILoader sharedLoader] api:@"/settings" method:@"GET" parameters:nil success:^(id response) {
+		
+		JLLog( @"[SUCCESS] Load settings : %@", response );
+		
+		[[Settings sharedSettings] updateFromDictionary:response];
+		
+		[self.dishListViewController updateDishes];
+		[self.profileViewController loadUserId:[CurrentUser user].userId];
+		[self updateNotificationsSuccess:nil failure:nil];
+		[self.authViewController dismissViewControllerAnimated:YES completion:nil];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		
+		JLLog( @"[FAILED] Load settings." );
+		
+		// Invalid AccessToken
+		if( errorCode == 4000 )
+		{
+			[self buildViewControllers];
+			[self presentAuthViewControllerWithClosingAnimation:NO];
+		}
+	}];
 }
 
 

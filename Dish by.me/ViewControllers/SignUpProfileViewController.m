@@ -239,7 +239,7 @@
 		
 		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"WOW", nil ) message:NSLocalizedString( @"MESSAGE_PROFILE_UPDATE_COMPLETE", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 			
-			[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUserAndDismissViewController];
+			[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUser];
 			
 		}] show];
 		

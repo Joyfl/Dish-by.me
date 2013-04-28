@@ -37,6 +37,8 @@
 @property (nonatomic, strong) FacebookSettings *facebook;
 @property (nonatomic, strong) NotificationSettings *notifications;
 
++ (id)sharedSettings;
 - (id)initWithDictionary:(NSDictionary *)dictionary;
+- (void)updateFromDictionary:(NSDictionary *)dictionary;
 
 @end

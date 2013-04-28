@@ -59,8 +59,17 @@
 				JLLog( @"요청시간 초과 : %@", error );
 				return;
 			}
+			else if( error.code == -1009 )
+			{
+				JLLog( @"오프라인 : %@", error );
+				return;
+			}
+			else
+			{
+				JLLog( @"Error : %@", error );
+			}
 		}
-//
+		
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
 		

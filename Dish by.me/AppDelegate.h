@@ -11,10 +11,12 @@
 #import "DishListViewController.h"
 #import "ProfileViewController.h"
 #import "SettingsViewController.h"
+#import "CoverView.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIActionSheetDelegate, AuthViewControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, strong) CoverView *coverView;
 @property (nonatomic, strong) UITabBarController *tabBarController;
 @property (nonatomic, strong) AuthViewController *authViewController;
 @property (nonatomic, strong) DishListViewController *dishListViewController;

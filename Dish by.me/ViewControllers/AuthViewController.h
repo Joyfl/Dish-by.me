@@ -19,7 +19,7 @@
 - (void)openBookCoverAfterDelay:(NSTimeInterval)delay;
 - (void)closeBookCoverCompletion:(void (^)(UIImageView *coverView))completion;
 
-- (void)getUserAndDismissViewController;
+- (void)getUser;
 
 @end
 

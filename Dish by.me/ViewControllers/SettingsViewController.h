@@ -14,10 +14,7 @@
 @interface SettingsViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, DMSwitchCellDelegate>
 {
 	UITableView *_tableView;
-	UIActivityIndicatorView *_loadingIndicatorView;
 	Settings *_settings;
 }
-
-- (void)loadSettings;
 
 @end

@@ -40,12 +40,40 @@
 
 @implementation Settings
 
++ (id)sharedSettings
+{
+	static Settings *settings = nil;
+	if( !settings )
+	{
+		settings = [[Settings alloc] init];
+	}
+	return settings;
+}
+
+- (id)init
+{
+	self = [super init];
+	self.facebook = [[FacebookSettings alloc] init];
+	self.notifications = [[NotificationSettings alloc] init];
+	return self;
+}
+
 - (id)initWithDictionary:(NSDictionary *)dictionary
 {
 	self = [super init];
+	[self updateFromDictionary:dictionary];
+	return self;
+}
+
+- (void)updateFromDictionary:(NSDictionary *)dictionary
+{
 	self.facebook = [dictionary objectForKeyNotNull:@"facebook"] ? [[FacebookSettings alloc] initWithDictionary:[dictionary objectForKeyNotNull:@"facebook"]] : nil;
 	self.notifications = [[NotificationSettings alloc] initWithDictionary:[dictionary objectForKeyNotNull:@"notifications"]];
-	return self;
+}
+
+- (void)loadSettings
+{
+	
 }
 
 @end

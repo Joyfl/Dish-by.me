@@ -256,7 +256,7 @@
 		[CurrentUser user].email = [[response objectForKeyNotNull:@"user"] objectForKeyNotNull:@"email"];
 		[CurrentUser user].accessToken = [response objectForKeyNotNull:@"access_token"];
 		
-		[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUserAndDismissViewController];
+		[(AuthViewController *)[self.navigationController.viewControllers objectAtIndex:0] getUser];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		_loginButton.showsActivityIndicatorView = NO;
