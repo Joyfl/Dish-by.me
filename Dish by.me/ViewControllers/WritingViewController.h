@@ -23,6 +23,7 @@
 	UIButton *_photoButton;
 	UIImageView *_borderView;
 	UITextField *_nameInput;
+	UIButton *_facebookButton;
 	UIPlaceHolderTextView *_descriptionInput;
 	UIButton *_recipeButton;
 	

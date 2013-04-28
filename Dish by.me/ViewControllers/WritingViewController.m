@@ -64,6 +64,12 @@ enum {
 	_nameInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
 	[_nameInput addTarget:self action:@selector(textViewDidBeginEditing:) forControlEvents:UIControlEventEditingDidBegin];
 	
+	_facebookButton = [[UIButton alloc] init];
+	_facebookButton.adjustsImageWhenHighlighted = NO;
+	[_facebookButton setBackgroundImage:[UIImage imageNamed:@"facebook.png"] forState:UIControlStateNormal];
+	[_facebookButton setBackgroundImage:[UIImage imageNamed:@"facebook_selected.png"] forState:UIControlStateSelected];
+	[_facebookButton addTarget:self action:@selector(facebookButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	
 	_descriptionInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 70 )];
 	_descriptionInput.delegate = self;
 	_descriptionInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
@@ -185,12 +191,14 @@ enum {
 			_borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_writing_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 45, 12 )]];
 			[cell.contentView addSubview:_borderView];
 			[cell.contentView addSubview:_nameInput];
+			[cell.contentView addSubview:_facebookButton];
 		}
 		
 		NSLog( @"photoHeight : %d", _photoHeight );
 		_photoButton.frame = CGRectMake( 11, 11, PhotoButtonMaxWidth, _photoHeight );
 		_borderView.frame = _borderView.frame = CGRectMake( 5, 5, 310, _photoButton.frame.size.height + 42 );
 		_nameInput.frame = CGRectMake( 20, _photoHeight + 12, 280, 20 );
+		_facebookButton.frame = CGRectMake( 279, _photoHeight + 10, 24, 25 );
 	}
 	
 	else if( indexPath.row == kRowMessage )
@@ -285,6 +293,7 @@ enum {
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
 								   @{ @"name": _nameInput.text,
 								   @"description": _descriptionInput.text,
+								   @"facebook_share": [NSNumber numberWithBool:_facebookButton.selected],
 								   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
 								   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
 								   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
@@ -414,6 +423,11 @@ enum {
 {
 	[self backgroundDidTap];		
 	[self presentActionSheet];
+}
+
+- (void)facebookButtonDidTouchUpInside
+{
+	_facebookButton.selected = !_facebookButton.selected;
 }
 
 - (void)recipeButtonDidTouchUpInside

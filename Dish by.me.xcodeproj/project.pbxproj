@@ -101,8 +101,8 @@
 		036173DA172936C2002C7AB7 /* dish_writing_border@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03617297172936C2002C7AB7 /* dish_writing_border@2x.png */; };
 		036173DB172936C2002C7AB7 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 03617298172936C2002C7AB7 /* facebook.png */; };
 		036173DC172936C2002C7AB7 /* facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03617299172936C2002C7AB7 /* facebook@2x.png */; };
-		036173DD172936C2002C7AB7 /* facebook_seleceted.png in Resources */ = {isa = PBXBuildFile; fileRef = 0361729A172936C2002C7AB7 /* facebook_seleceted.png */; };
-		036173DE172936C2002C7AB7 /* facebook_seleceted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0361729B172936C2002C7AB7 /* facebook_seleceted@2x.png */; };
+		036173DD172936C2002C7AB7 /* facebook_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 0361729A172936C2002C7AB7 /* facebook_selected.png */; };
+		036173DE172936C2002C7AB7 /* facebook_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0361729B172936C2002C7AB7 /* facebook_selected@2x.png */; };
 		036173DF172936C2002C7AB7 /* fork.png in Resources */ = {isa = PBXBuildFile; fileRef = 0361729C172936C2002C7AB7 /* fork.png */; };
 		036173E0172936C2002C7AB7 /* fork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0361729D172936C2002C7AB7 /* fork@2x.png */; };
 		036173E1172936C2002C7AB7 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 0361729E172936C2002C7AB7 /* icon.png */; };
@@ -666,8 +666,8 @@
 		03617297172936C2002C7AB7 /* dish_writing_border@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dish_writing_border@2x.png"; sourceTree = "<group>"; };
 		03617298172936C2002C7AB7 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		03617299172936C2002C7AB7 /* facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook@2x.png"; sourceTree = "<group>"; };
-		0361729A172936C2002C7AB7 /* facebook_seleceted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_seleceted.png; sourceTree = "<group>"; };
-		0361729B172936C2002C7AB7 /* facebook_seleceted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook_seleceted@2x.png"; sourceTree = "<group>"; };
+		0361729A172936C2002C7AB7 /* facebook_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_selected.png; sourceTree = "<group>"; };
+		0361729B172936C2002C7AB7 /* facebook_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook_selected@2x.png"; sourceTree = "<group>"; };
 		0361729C172936C2002C7AB7 /* fork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fork.png; sourceTree = "<group>"; };
 		0361729D172936C2002C7AB7 /* fork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fork@2x.png"; sourceTree = "<group>"; };
 		0361729E172936C2002C7AB7 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
@@ -1364,8 +1364,8 @@
 				03617297172936C2002C7AB7 /* dish_writing_border@2x.png */,
 				03617298172936C2002C7AB7 /* facebook.png */,
 				03617299172936C2002C7AB7 /* facebook@2x.png */,
-				0361729A172936C2002C7AB7 /* facebook_seleceted.png */,
-				0361729B172936C2002C7AB7 /* facebook_seleceted@2x.png */,
+				0361729A172936C2002C7AB7 /* facebook_selected.png */,
+				0361729B172936C2002C7AB7 /* facebook_selected@2x.png */,
 				0361729C172936C2002C7AB7 /* fork.png */,
 				0361729D172936C2002C7AB7 /* fork@2x.png */,
 				0361729E172936C2002C7AB7 /* icon.png */,
@@ -2067,8 +2067,8 @@
 				036173DA172936C2002C7AB7 /* dish_writing_border@2x.png in Resources */,
 				036173DB172936C2002C7AB7 /* facebook.png in Resources */,
 				036173DC172936C2002C7AB7 /* facebook@2x.png in Resources */,
-				036173DD172936C2002C7AB7 /* facebook_seleceted.png in Resources */,
-				036173DE172936C2002C7AB7 /* facebook_seleceted@2x.png in Resources */,
+				036173DD172936C2002C7AB7 /* facebook_selected.png in Resources */,
+				036173DE172936C2002C7AB7 /* facebook_selected@2x.png in Resources */,
 				036173DF172936C2002C7AB7 /* fork.png in Resources */,
 				036173E0172936C2002C7AB7 /* fork@2x.png in Resources */,
 				036173E1172936C2002C7AB7 /* icon.png in Resources */,
