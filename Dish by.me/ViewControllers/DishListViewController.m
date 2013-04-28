@@ -241,6 +241,14 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
 	[_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
+	
+	_scrollTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(hideUserPhoto) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_scrollTimer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+	[_scrollTimer invalidate];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
