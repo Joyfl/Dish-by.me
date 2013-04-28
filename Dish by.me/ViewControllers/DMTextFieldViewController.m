@@ -8,6 +8,7 @@
 
 #import "DMTextFieldViewController.h"
 #import "DMBarButtonItem.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation DMTextFieldViewController
 
@@ -25,12 +26,25 @@
 	self.navigationItem.title = title;
 	self.navigationItem.rightBarButtonItem = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"SAVE", nil ) target:self action:@selector(saveButtonHandler)];
 	
-	self.textField = [[UITextField alloc] initWithFrame:CGRectMake( 10, 10, 300, 30 )];
+	UIImageView *backgroundView = [[UIImageView alloc] initWithFrame:CGRectMake( 8, (UIScreenHeight - 20 - 44 - 214 - 49)/2, 304, 49 )];
+	backgroundView.image = [[UIImage imageNamed:@"cell_grouped.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 8, 8, 8, 8 )];
+	backgroundView.userInteractionEnabled = YES;
+	[self.view addSubview:backgroundView];
+	
+	self.textField = [[UITextField alloc] initWithFrame:CGRectMake( 12, 7, 280, 33 )];
 	self.textField.delegate = self;
-	self.textField.borderStyle = UITextBorderStyleRoundedRect;
+	self.textField.font = [UIFont systemFontOfSize:15];
+	self.textField.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+	self.textField.layer.shadowColor = [UIColor colorWithWhite:0 alpha:1].CGColor;
+	self.textField.layer.shadowOffset = CGSizeMake( 0, 1 );
+	self.textField.layer.shadowOpacity = 0.07;
+	self.textField.layer.shadowRadius = 1;
+	self.textField.borderStyle = UITextBorderStyleNone;
 	self.textField.returnKeyType = UIReturnKeyDone;
+	self.textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+	self.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
 	[self.textField becomeFirstResponder];
-	[self.view addSubview:self.textField];
+	[backgroundView addSubview:self.textField];
 	
 	_shouldComplete = shouldComplete;
 	
