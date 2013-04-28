@@ -25,6 +25,8 @@
 "MESSAGE_NEED_ACCOUNT_TO_SET_SETTINGS" = "설정을 하려면 Dish by.me 계정이 필요합니다.";
 
 "MESSAGE_FACEBOOK_NOT_CONNECTED" = "페이스북 연동이 되어있지 않아요.\n지금 연동하시겠어요?";
+"MESSAGE_THIS_FACEBOOK_ACCOUNT_IS_ALREADY_LINKED" = "이미 누군가가 해당 페이스북 계정을 사용하고 있어요.";
+
 "MESSAGE_NO_PHOTO_ON_N_TH_RECIPE" = "%d번째 레시피에 사진이 빠졌어요;;";
 "MESSAGE_" = "";
 "MESSAGE_" = "";

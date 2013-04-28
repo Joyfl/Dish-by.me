@@ -200,7 +200,7 @@ enum {
 		_photoButton.frame = CGRectMake( 11, 11, PhotoButtonMaxWidth, _photoHeight );
 		_borderView.frame = _borderView.frame = CGRectMake( 5, 5, 310, _photoButton.frame.size.height + 42 );
 		_nameInput.frame = CGRectMake( 20, _photoHeight + 12, 280, 20 );
-		_facebookButton.frame = CGRectMake( 279, _photoHeight + 10, 24, 25 );
+		_facebookButton.frame = CGRectMake( 279, _photoHeight + 9, 24, 25 );
 	}
 	
 	else if( indexPath.row == kRowMessage )
@@ -454,8 +454,17 @@ enum {
 								_facebookButton.selected = YES;
 								
 							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+								
 								[self undim];
-								showErrorAlert();
+								
+								if( errorCode == 1401 )
+								{
+									[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_THIS_FACEBOOK_ACCOUNT_IS_ALREADY_LINKED", nil ) cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", nil ) otherButtonTitles:nil dismissBlock:nil] show];
+								}
+								else
+								{
+									showErrorAlert();
+								}
 							}];
 							break;
 						}

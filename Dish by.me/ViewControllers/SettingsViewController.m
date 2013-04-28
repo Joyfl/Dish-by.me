@@ -356,8 +356,17 @@ enum {
 								[self.navigationController pushViewController:facebookSettingsViewController animated:YES];
 								
 							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+								
 								[self undim];
-								showErrorAlert();
+								
+								if( errorCode == 1401 )
+								{
+									[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_THIS_FACEBOOK_ACCOUNT_IS_ALREADY_LINKED", nil ) cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", nil ) otherButtonTitles:nil dismissBlock:nil] show];
+								}
+								else
+								{
+									showErrorAlert();
+								}
 							}];
 							break;
 						}
