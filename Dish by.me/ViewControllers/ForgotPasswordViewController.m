@@ -45,7 +45,18 @@
 	titleLabel.frame = CGRectOffset( titleLabel.frame, 160 - titleLabel.frame.size.width / 2, 30 );
 	[self.view addSubview:titleLabel];
 	
-	self.emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 30, 80, 260, 20 )];
+	UILabel *messageLabel = [[UILabel alloc] initWithFrame:CGRectMake( 30, 70, 260, 0 )];
+	messageLabel.text = NSLocalizedString( @"MESSAGE_INPUT_YOUR_EMAIL", nil );
+	messageLabel.font = [UIFont systemFontOfSize:13];
+	messageLabel.textColor = [UIColor colorWithHex:0x4B4A47 alpha:1];
+	messageLabel.shadowColor = [UIColor whiteColor];
+	messageLabel.shadowOffset = CGSizeMake( 0, 1 );
+	messageLabel.backgroundColor = [UIColor clearColor];
+	messageLabel.numberOfLines = 2;
+	[messageLabel sizeToFit];
+	[self.view addSubview:messageLabel];
+	
+	self.emailInput = [[UITextField alloc] initWithFrame:CGRectMake( 30, 123, 260, 20 )];
 	self.emailInput.delegate = self;
 	self.emailInput.placeholder = NSLocalizedString( @"SIGNED_UP_EMAIL", nil );
 	self.emailInput.font = [UIFont boldSystemFontOfSize:13];
@@ -64,11 +75,11 @@
 	[self.emailInput addTarget:self action:@selector(emailInputEditingChanged) forControlEvents:UIControlEventEditingChanged];
 	[self.view addSubview:self.emailInput];
 	
-	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 27, self.emailInput.frame.origin.y + 25, 265, 5 )];
+	UIImageView *lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 28, 150, 265, 5 )];
 	lineView.image = [UIImage imageNamed:@"book_line.png"];
 	[self.view addSubview:lineView];
 	
-	_sendEmailButton = [DMBookButton bookButtonWithPosition:CGPointMake( 30, self.emailInput.frame.origin.y + 57 ) title:NSLocalizedString( @"SEND_EMAIL", nil )];
+	_sendEmailButton = [DMBookButton bookButtonWithPosition:CGPointMake( 30, 180 ) title:NSLocalizedString( @"SEND_EMAIL", nil )];
 	_sendEmailButton.enabled = NO;
 	[_sendEmailButton addTarget:self action:@selector(sendEmailButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_sendEmailButton];
