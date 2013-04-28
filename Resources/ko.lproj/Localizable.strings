@@ -18,6 +18,9 @@
 "MESSAGE_LOGIN_FAILED" = "로그인에 실패했어요. 이메일과 비밀번호를 확인해주세요.";
 "MESSAGE_FACEBOOK_NOT_ALLOWED" = "페이스북 연동에 실패했어요.\n[설정] > [Facebook]에 가서\nDish by.me를 허용해주세요.";
 
+"MESSAGE_INVALID_USER" = "존재하지 않는 사용자입니다.";
+"MESSAGE_WRONG_PASSWORD" = "비밀번호가 잘못되었습니다.";
+
 "MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
 "MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
 "MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
@@ -41,6 +44,7 @@
 "SIGNUP_WITH_FACEBOOK" = "페이스북에서 정보 가져오기";
 "LOGIN" = "로그인";
 "LOGIN_WITH_FACEBOOK" = "페이스북으로 로그인";
+"FORGOT_PASSWORD" = "비밀번호를 잊으셨나요?";
 "LOOK_AROUND" = "둘러보기";
 "OR" = "또는";
 "EMAIL" = "이메일";
@@ -52,6 +56,9 @@
 "WELCOME" = "환영합니다!";
 "DO_IT_LATER" = "나중에 하기";
 "PROFILE" = "프로필";
+
+"SIGNED_UP_EMAIL" = "가입할 때의 이메일";
+"SEND_EMAIL" = "본인확인메일 보내기";
 
 // 
 "PULL_DOWN_TO_UPDATE" = "업데이트하시려면 아래로 당기세요.";

@@ -44,6 +44,7 @@
 		034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 034A0A0E1656779700C7DA93 /* DishTileCell.m */; };
 		03509CB617296DA400EE31F5 /* NSDictionary+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CB517296DA300EE31F5 /* NSDictionary+Utils.m */; };
 		03509CB9172CF00A00EE31F5 /* CoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CB8172CF00900EE31F5 /* CoverView.m */; };
+		03509CBC172D14C000EE31F5 /* ForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CBB172D14BF00EE31F5 /* ForgotPasswordViewController.m */; };
 		03549A9B17003D8000EFCB14 /* AFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 03549A9A17003D8000EFCB14 /* AFImageCache.m */; };
 		0361726017292195002C7AB7 /* UIView+JLAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = 0361725F17292195002C7AB7 /* UIView+JLAnimations.m */; };
 		036173A5172936C2002C7AB7 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 03617262172936C2002C7AB7 /* .gitignore */; };
@@ -609,6 +610,8 @@
 		03509CB517296DA300EE31F5 /* NSDictionary+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+Utils.m"; path = "Categories/NSDictionary+Utils.m"; sourceTree = "<group>"; };
 		03509CB7172CF00900EE31F5 /* CoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoverView.h; path = Views/CoverView.h; sourceTree = "<group>"; };
 		03509CB8172CF00900EE31F5 /* CoverView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CoverView.m; path = Views/CoverView.m; sourceTree = "<group>"; };
+		03509CBA172D14BF00EE31F5 /* ForgotPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForgotPasswordViewController.h; sourceTree = "<group>"; };
+		03509CBB172D14BF00EE31F5 /* ForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgotPasswordViewController.m; sourceTree = "<group>"; };
 		03549A9917003D8000EFCB14 /* AFImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFImageCache.h; sourceTree = "<group>"; };
 		03549A9A17003D8000EFCB14 /* AFImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageCache.m; sourceTree = "<group>"; };
 		0361725E17292195002C7AB7 /* UIView+JLAnimations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+JLAnimations.h"; path = "Categories/UIView+JLAnimations.h"; sourceTree = "<group>"; };
@@ -1145,6 +1148,8 @@
 				033FBC2F16F746DD00934FC8 /* SignUpProfileViewController.m */,
 				033C52DD1610782900F0B5E5 /* LoginViewController.h */,
 				033C52DE1610782900F0B5E5 /* LoginViewController.m */,
+				03509CBA172D14BF00EE31F5 /* ForgotPasswordViewController.h */,
+				03509CBB172D14BF00EE31F5 /* ForgotPasswordViewController.m */,
 				03178843160C76DB0041DAD7 /* DishListViewController.h */,
 				03178844160C76DB0041DAD7 /* DishListViewController.m */,
 				03178841160C76DB0041DAD7 /* DishDetailViewController.h */,
@@ -2439,6 +2444,7 @@
 				036174EC17294136002C7AB7 /* DMTableViewCell.m in Sources */,
 				03509CB617296DA400EE31F5 /* NSDictionary+Utils.m in Sources */,
 				03509CB9172CF00A00EE31F5 /* CoverView.m in Sources */,
+				03509CBC172D14C000EE31F5 /* ForgotPasswordViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

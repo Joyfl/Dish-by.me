@@ -17,6 +17,7 @@
 #import "AuthViewController.h"
 #import "UIButton+TouchAreaInsets.h"
 #import "UIButton+ActivityIndicatorView.h"
+#import "ForgotPasswordViewController.h"
 
 @implementation LoginViewController
 
@@ -30,7 +31,7 @@
 	bgView.image = [UIImage imageNamed:@"book_background.png"];
 	[self.view addSubview:bgView];
 	
-	UIImageView *paperView = [[UIImageView alloc] initWithFrame:CGRectMake( 7, 7, 305, 295 )];
+	UIImageView *paperView = [[UIImageView alloc] initWithFrame:CGRectMake( 7, 7, 305, 340 )];
 	paperView.image = [[UIImage imageNamed:@"book_paper.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 10, 10, 10, 10 )];
 	[self.view addSubview:paperView];
 	
@@ -91,6 +92,17 @@
 	_loginButton.enabled = NO;
 	[_loginButton addTarget:self action:@selector(loginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_loginButton];
+	
+	_forgotPasswordButton = [[UIButton alloc] init];
+	_forgotPasswordButton.titleLabel.font = [UIFont systemFontOfSize:12];
+	_forgotPasswordButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[_forgotPasswordButton setTitle:NSLocalizedString( @"FORGOT_PASSWORD", nil ) forState:UIControlStateNormal];
+	[_forgotPasswordButton setTitleShadowColor:[UIColor whiteColor] forState:UIControlStateNormal];
+	[_forgotPasswordButton setTitleColor:[UIColor colorWithHex:0x4B4A47 alpha:1] forState:UIControlStateNormal];
+	[_forgotPasswordButton sizeToFit];
+	_forgotPasswordButton.center = CGPointMake( UIScreenWidth / 2, 310 );
+	[_forgotPasswordButton addTarget:self action:@selector(forgotPasswordButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:_forgotPasswordButton];
 	
 	return self;
 }
@@ -262,7 +274,27 @@
 		_loginButton.showsActivityIndicatorView = NO;
 		_facebookButton.showsActivityIndicatorView = NO;
 		[self setInputFieldsEnabled:YES];
-		showErrorAlert();
+		
+		// 존재하지 않는 사용자
+		if( errorCode == 4100 )
+		{
+			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_INVALID_USER", nil ) cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+				[_emailInput becomeFirstResponder];
+			}] show];
+		}
+		
+		// 패스워드 틀림
+		else if( errorCode == 3100 )
+		{
+			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_WRONG_PASSWORD", nil ) cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+				[_passwordInput becomeFirstResponder];
+			}] show];
+		}
+		
+		else
+		{
+			showErrorAlert();
+		}
 	}];
 }
 
@@ -278,6 +310,16 @@
 		self.emailInput.enabled = NO;
 		_passwordInput.enabled = NO;
 	}
+}
+
+
+#pragma mark -
+
+- (void)forgotPasswordButtonDidTouchUpInside
+{
+	ForgotPasswordViewController *forgotPasswordViewController = [[ForgotPasswordViewController alloc] init];
+	forgotPasswordViewController.emailInput.text = _emailInput.text;
+	[self.navigationController pushViewController:forgotPasswordViewController animated:YES];
 }
 
 @end
