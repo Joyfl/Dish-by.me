@@ -20,3 +20,4 @@
 #import "DMAPILoader.h"
 #import "JLLogger.h"
 #import "HTBlock.h"
+#import "UITableViewCell+Utils.h"

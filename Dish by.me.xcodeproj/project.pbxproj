@@ -377,6 +377,7 @@
 		038A529A1698863A001FDF75 /* DishListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 038A52991698863A001FDF75 /* DishListCell.m */; };
 		038DAF0F16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 038DAF0E16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m */; };
 		038DAF1216FC78EF00007BA4 /* UserListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 038DAF1116FC78EF00007BA4 /* UserListCell.m */; };
+		038F81EC1731079A00738F17 /* UITableViewCell+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 038F81EB1731079A00738F17 /* UITableViewCell+Utils.m */; };
 		03927C2316F014D8001606A6 /* UIColor+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03927C2216F014D8001606A6 /* UIColor+Utils.m */; };
 		0392A52216F01DBB0045209E /* ForkListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0392A52116F01DBB0045209E /* ForkListViewController.m */; };
 		0392A53116F0464B0045209E /* UIActionSheet+HTBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 0392A52A16F0464B0045209E /* UIActionSheet+HTBlock.m */; };
@@ -960,6 +961,8 @@
 		038DAF0E16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+ActivityIndicatorView.m"; path = "Categories/UIButton+ActivityIndicatorView.m"; sourceTree = "<group>"; };
 		038DAF1016FC78EF00007BA4 /* UserListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UserListCell.h; path = Views/UserListCell.h; sourceTree = "<group>"; };
 		038DAF1116FC78EF00007BA4 /* UserListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UserListCell.m; path = Views/UserListCell.m; sourceTree = "<group>"; };
+		038F81EA1731079A00738F17 /* UITableViewCell+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+Utils.h"; path = "Categories/UITableViewCell+Utils.h"; sourceTree = "<group>"; };
+		038F81EB1731079A00738F17 /* UITableViewCell+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewCell+Utils.m"; path = "Categories/UITableViewCell+Utils.m"; sourceTree = "<group>"; };
 		03927C2116F014D8001606A6 /* UIColor+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Utils.h"; path = "Categories/UIColor+Utils.h"; sourceTree = "<group>"; };
 		03927C2216F014D8001606A6 /* UIColor+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Utils.m"; path = "Categories/UIColor+Utils.m"; sourceTree = "<group>"; };
 		0392A52016F01DBB0045209E /* ForkListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForkListViewController.h; sourceTree = "<group>"; };
@@ -1956,6 +1959,8 @@
 				0361725F17292195002C7AB7 /* UIView+JLAnimations.m */,
 				03509CB417296DA300EE31F5 /* NSDictionary+Utils.h */,
 				03509CB517296DA300EE31F5 /* NSDictionary+Utils.m */,
+				038F81EA1731079A00738F17 /* UITableViewCell+Utils.h */,
+				038F81EB1731079A00738F17 /* UITableViewCell+Utils.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -2445,6 +2450,7 @@
 				03509CB617296DA400EE31F5 /* NSDictionary+Utils.m in Sources */,
 				03509CB9172CF00A00EE31F5 /* CoverView.m in Sources */,
 				03509CBC172D14C000EE31F5 /* ForgotPasswordViewController.m in Sources */,
+				038F81EC1731079A00738F17 /* UITableViewCell+Utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
