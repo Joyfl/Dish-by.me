@@ -315,6 +315,7 @@
 	if( [CurrentUser user].loggedIn )
 	{
 		WritingViewController *writingViewController = [[WritingViewController alloc] initWithNewDish];
+		writingViewController.delegate = self.dishListViewController;
 		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
 		[self.tabBarController presentViewController:navController animated:YES completion:nil];
 	}

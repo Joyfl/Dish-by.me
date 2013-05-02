@@ -134,6 +134,7 @@ enum {
 		{
 			[DMAPILoader loadImageFromURLString:dish.photoURL context:nil success:^(UIImage *image, id context) {
 				dish.photo = image;
+				[_photoButton setImage:nil forState:UIControlStateNormal];
 				[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
 				[self resizePhotoButton];
 			}];
@@ -283,125 +284,149 @@ enum {
 		return;
 	}
 	
-	UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
-	
 	[self backgroundDidTap];
 	[self dim];
-	[(DMBarButtonItem *)self.navigationItem.rightBarButtonItem button].showsActivityIndicatorView = YES;
 	
-	NSMutableDictionary *recipe = [NSMutableDictionary dictionary];
-	[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.servings] forKey:@"servings"];
-	[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.minutes] forKey:@"minutes"];
-	
-	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
-								   @{ @"name": _nameInput.text,
-								   @"description": _descriptionInput.text,
-								   @"facebook_share": [NSNumber numberWithBool:_facebookButton.selected],
-								   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
-								   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
-								   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
-	
-	// 요리를 포크할 경우
-	if( _originalDishId )
-	{
-		[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
-	}
-	
-	NSInteger ingredientCount = 0;
-	
-	// 재료 파라미터
-	for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
-	{
-		Ingredient *ingredient = [_recipeView.recipe.ingredients objectAtIndex:i];
-		if( ingredient.name )
-		{
-			[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
-			[params setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
-			ingredientCount ++;
-		}
-	}
-	
-	[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count] forKey:@"ingredient_count"];
-	
-	// 사진, 레시피 파라미터
-	// recipe_photo_%d : 레시피 사진 또는 URL
-	// recipe_description_%d : 레시피 설명
-	NSMutableArray *photos = [NSMutableArray array];
-	NSMutableArray *names = [NSMutableArray array];
-	
-	if( _isPhotoChanged )
-	{
-		JLLog( @"새로운 사진이 등록되었음" );
-		[photos addObject:image];
-		[names addObject:@"photo"];
-	}
-	else
-	{
-		JLLog( @"새로운 사진이 등록되지 않았음" );
-	}
-	
-	for( NSInteger i = 0; i < _recipeView.recipe.contents.count; i++ )
-	{
-		RecipeContent *content = [_recipeView.recipe.contents objectAtIndex:i];
-		[params setObject:content.description forKey:[NSString stringWithFormat:@"recipe_description_%d", i]];
+	dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 ), ^{
+		UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
 		
-		// 새로운 사진이 올라오지 않았을 경우 : photoURL을 POST 파라미터로 넘김
-		if( content.photoURL )
+		NSMutableDictionary *recipe = [NSMutableDictionary dictionary];
+		[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.servings] forKey:@"servings"];
+		[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.minutes] forKey:@"minutes"];
+		
+		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
+									   @{ @"name": _nameInput.text,
+									   @"description": _descriptionInput.text,
+									   @"facebook_share": [NSNumber numberWithBool:_facebookButton.selected],
+									   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
+									   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
+									   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
+		
+		// 요리를 포크할 경우
+		if( _originalDishId )
 		{
-			JLLog( @"%d번째 레시피에 새로운 사진이 등록되지 않았음", i );
-			[params setObject:content.photoURL forKey:[NSString stringWithFormat:@"recipe_photo_%d", i]];
-		}
-		// 새로운 사진이 등록되었을 경우 : Multipart로 사진 바이너리 전송
-		else if( content.photo )
-		{
-			JLLog( @"%d번째 레시피에 새로운 사진이 등록되었음", i );
-			[photos addObject:content.photo];
-			[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+			[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
 		}
 		
-		// 사진이 없는 경우
+		NSInteger ingredientCount = 0;
+		
+		// 재료 파라미터
+		for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
+		{
+			Ingredient *ingredient = [_recipeView.recipe.ingredients objectAtIndex:i];
+			if( ingredient.name )
+			{
+				[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
+				[params setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
+				ingredientCount ++;
+			}
+		}
+		
+		[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count] forKey:@"ingredient_count"];
+		
+		// 사진, 레시피 파라미터
+		// recipe_photo_%d : 레시피 사진 또는 URL
+		// recipe_description_%d : 레시피 설명
+		NSMutableArray *photos = [NSMutableArray array];
+		NSMutableArray *names = [NSMutableArray array];
+		
+		if( _isPhotoChanged )
+		{
+			JLLog( @"새로운 사진이 등록되었음" );
+			[photos addObject:image];
+			[names addObject:@"photo"];
+		}
 		else
 		{
-			JLLog( @"No photo at index : %d", i );
-			[self undim];
-			[(DMBarButtonItem *)self.navigationItem.rightBarButtonItem button].showsActivityIndicatorView = NO;
-			
-			[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:[NSString stringWithFormat:NSLocalizedString( @"MESSAGE_NO_PHOTO_ON_N_TH_RECIPE", nil ), i + 1] delegate:nil cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil] show];
-			
-			return;
+			JLLog( @"새로운 사진이 등록되지 않았음" );
 		}
-	}
-	
-	JLLog( @"params : %@", params );
-	
-	NSString *api = nil;
-	NSString *method = nil;
-	if( !_editingDishId )
-	{
-		api = @"/dish";
-		method = @"POST";
-	}
-	else
-	{
-		api = [NSString stringWithFormat:@"/dish/%d", _editingDishId];
-		method = @"PUT";
-	}
-	
-	JLLog( @"params : %@", params );
-	
-	[[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params success:^(id response) {
-		JLLog( @"Success" );
-		[self undim];
-		[self dismissViewControllerAnimated:YES completion:nil];
-		[self.delegate writingViewControllerDidFinishUpload:self];
 		
-	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-		[self undim];
-		[(DMBarButtonItem *)self.navigationItem.rightBarButtonItem button].showsActivityIndicatorView = NO;
-		JLLog( @"statusCode : %d", statusCode );
-		JLLog( @"errorCode : %d", errorCode );
-		JLLog( @"message : %@", message );
-	}];
+		for( NSInteger i = 0; i < _recipeView.recipe.contents.count; i++ )
+		{
+			RecipeContent *content = [_recipeView.recipe.contents objectAtIndex:i];
+			[params setObject:content.description.length > 0 ? content.description : @"" forKey:[NSString stringWithFormat:@"recipe_description_%d", i]];
+			
+			// 새로운 사진이 올라오지 않았을 경우 : photoURL을 POST 파라미터로 넘김
+			if( content.photoURL )
+			{
+				JLLog( @"%d번째 레시피에 새로운 사진이 등록되지 않았음", i );
+				[params setObject:content.photoURL forKey:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+			}
+			// 새로운 사진이 등록되었을 경우 : Multipart로 사진 바이너리 전송
+			else if( content.photo )
+			{
+				JLLog( @"%d번째 레시피에 새로운 사진이 등록되었음", i );
+				[photos addObject:content.photo];
+				[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+			}
+			
+			// 사진이 없는 경우
+			else
+			{
+				JLLog( @"No photo at index : %d", i );
+				[self undim];
+				
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:[NSString stringWithFormat:NSLocalizedString( @"MESSAGE_NO_PHOTO_ON_N_TH_RECIPE", nil ), i + 1] delegate:nil cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil] show];
+				
+				return;
+			}
+		}
+		
+		JLLog( @"params : %@", params );
+		
+		NSString *api = nil;
+		NSString *method = nil;
+		if( !_editingDishId )
+		{
+			api = @"/dish";
+			method = @"POST";
+		}
+		else
+		{
+			api = [NSString stringWithFormat:@"/dish/%d", _editingDishId];
+			method = @"PUT";
+		}
+		
+		JLLog( @"params : %@", params );
+		
+		dispatch_async( dispatch_get_main_queue(), ^{
+			[self.delegate writingViewControllerWillBeginUpload:self];
+		} );
+		
+		[[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params upload:^(long long bytesLoaded, long long bytesTotal) {
+			
+			dispatch_async( dispatch_get_main_queue(), ^{
+				[self.delegate writingViewController:self bytesUploaded:bytesLoaded bytesTotal:bytesTotal];
+			} );
+			
+		} download:nil success:^(id response) {
+			JLLog( @"Success" );
+			[self undim];
+			
+			dispatch_async( dispatch_get_main_queue(), ^{
+				[self.delegate writingViewControllerDidFinishUpload:self];
+			} );
+			
+		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+			[self undim];
+			
+			JLLog( @"statusCode : %d", statusCode );
+			JLLog( @"errorCode : %d", errorCode );
+			JLLog( @"message : %@", message );
+			
+			dispatch_async( dispatch_get_main_queue(), ^{
+				[self.delegate writingViewControllerDidFailedUpload:self];
+			} );
+		}];
+		
+		dispatch_async( dispatch_get_main_queue(), ^{
+			[self undim];
+			
+			dispatch_async( dispatch_get_main_queue(), ^{
+				[self dismissViewControllerAnimated:YES completion:nil];
+			} );
+		} );
+	} );
 }
 
 - (void)textViewDidBeginEditing:(id)sender

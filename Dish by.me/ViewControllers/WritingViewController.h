@@ -35,7 +35,6 @@
 	BOOL _isPhotoChanged; // 새 사진이 등록되었는지
 	NSInteger _originalDishId;
 	
-//	NSInteger _messageBoxHeight;
 	NSInteger _photoHeight;
 }
 
@@ -50,6 +49,9 @@
 
 @protocol WritingViewControllerDelegate
 
+- (void)writingViewControllerWillBeginUpload:(WritingViewController *)writingViewController;
+- (void)writingViewController:(WritingViewController *)writingViewController bytesUploaded:(long long)bytesUploaded bytesTotal:(long long)bytesTotal;
+- (void)writingViewControllerDidFailedUpload:(WritingViewController *)writingViewController;
 - (void)writingViewControllerDidFinishUpload:(WritingViewController *)writingViewController;
 
 @end

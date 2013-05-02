@@ -73,6 +73,7 @@
 
 // DishListView
 "BOOKMARK" = "북마크";
+"UPLOAD_FAILURE" = "업로드 실패";
 
 // DishDetailView
 "EDIT" = "수정";

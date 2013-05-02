@@ -12,6 +12,7 @@
 #import "DishDetailViewController.h"
 #import "ProfileViewController.h"
 #import "CurrentUser.h"
+#import "UIButton+TouchAreaInsets.h"
 
 @implementation DishListViewController
 
@@ -32,6 +33,37 @@
 	_refreshHeaderView.delegate = self;
 	_refreshHeaderView.backgroundColor = self.view.backgroundColor;
 	[_tableView addSubview:_refreshHeaderView];
+	
+	_progressView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_bar.png"]];
+	_progressView.frame = CGRectOffset( _progressView.frame, 0, -_progressView.frame.size.height );
+	_progressView.userInteractionEnabled = YES;
+	[self.view addSubview:_progressView];
+	
+	_progressBarBackgroundView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 16, 267, 11 )];
+	_progressBarBackgroundView.image = [UIImage imageNamed:@"progress_bar_bg.png"];
+	[_progressView addSubview:_progressBarBackgroundView];
+	
+	_progressBar = [[UIImageView alloc] initWithFrame:CGRectMake( 1, 1, 0, 8 )];
+	_progressBar.image = [[UIImage imageNamed:@"progress_bar.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 4, 0, 4 )];
+	[_progressBarBackgroundView addSubview:_progressBar];
+	
+	_progressFailedLabel = [[UILabel alloc] init];
+	_progressFailedLabel.text = NSLocalizedString( @"UPLOAD_FAILURE", @"업로드 실패" );
+	_progressFailedLabel.textColor = [UIColor colorWithHex:0x8E8F8F alpha:1];
+	_progressFailedLabel.backgroundColor = [UIColor clearColor];
+	_progressFailedLabel.font = [UIFont boldSystemFontOfSize:14];
+	_progressFailedLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.5];
+	_progressFailedLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[_progressFailedLabel sizeToFit];
+	_progressFailedLabel.center = CGPointMake( 160, 22 );
+	_progressFailedLabel.hidden = YES;
+	[_progressView addSubview:_progressFailedLabel];
+	
+	_progressButton = [[UIButton alloc] initWithFrame:CGRectMake( 289, 12, 20, 21 )];
+	_progressButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
+	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_cancel_button.png"] forState:UIControlStateNormal];
+	[_progressButton addTarget:self action:@selector(progressButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[_progressView addSubview:_progressButton];
 	
 	_dishes = [[NSMutableArray alloc] init];
 	
@@ -314,6 +346,80 @@
 - (void)dishListCell:(DishListCell *)dishListCell didUnbookmarkAtIndexPath:(NSIndexPath *)indexPath
 {
 	[self unbookmarkDish:[_dishes objectAtIndex:indexPath.row]];
+}
+
+
+#pragma mark -
+#pragma mark WritingViewControllerDelegate
+
+- (void)writingViewControllerWillBeginUpload:(WritingViewController *)writingViewController
+{
+	_progressState = DMProgressStateLoading;
+	
+	_progressBarBackgroundView.hidden = NO;
+	_progressFailedLabel.hidden = YES;
+	
+	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_cancel_button.png"] forState:UIControlStateNormal];
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		CGRect frame = _progressView.frame;
+		frame.origin.y = 0;
+		_progressView.frame = frame;
+		
+		_tableView.contentInset = UIEdgeInsetsMake( 44, 0, 0, 0 );
+	}];
+}
+
+- (void)writingViewController:(WritingViewController *)writingViewController bytesUploaded:(long long)bytesUploaded bytesTotal:(long long)bytesTotal
+{
+	CGRect frame = _progressBar.frame;
+	frame.size.width = 265.0 * bytesUploaded / bytesTotal;
+	_progressBar.frame = frame;
+}
+
+- (void)writingViewControllerDidFailedUpload:(WritingViewController *)writingViewController
+{
+	_progressState = DMProgressStateFailure;
+	
+	_progressBarBackgroundView.hidden = YES;
+	_progressFailedLabel.hidden = NO;
+	
+	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_retry_button.png"] forState:UIControlStateNormal];
+}
+
+- (void)writingViewControllerDidFinishUpload:(WritingViewController *)writingViewController
+{
+	_progressState = DMProgressStateIdle;
+	
+	_progressButton.adjustsImageWhenHighlighted = NO;
+	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_check_icon.png"] forState:UIControlStateNormal];
+	
+	dispatch_async( dispatch_get_main_queue(), ^{
+		[UIView animateWithDuration:0.25 delay:1 options:0 animations:^{
+			CGRect frame = _progressView.frame;
+			frame.origin.y = -_progressView.frame.size.height;
+			_progressView.frame = frame;
+			
+			_tableView.contentInset = UIEdgeInsetsZero;
+			
+			[self updateDishes];
+		} completion:nil];
+	} );
+}
+
+- (void)progressButtonDidTouchUpInside
+{
+	// 업로드 취소
+	if( _progressState == DMProgressStateLoading )
+	{
+		
+	}
+	
+	// 다시 시도
+	else if( _progressState == DMProgressStateFailure )
+	{
+		
+	}
 }
 
 @end
