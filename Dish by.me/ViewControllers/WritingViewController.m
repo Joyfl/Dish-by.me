@@ -262,7 +262,12 @@ enum {
 
 - (void)cancelButtonDidTouchUpInside
 {
-	[self dismissViewControllerAnimated:YES completion:nil];
+	[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_REALLY_CANCEL", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:@[NSLocalizedString( @"OH_MY_MISTAKE", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+		
+		if( buttonIndex == 0 )
+			[self dismissViewControllerAnimated:YES completion:nil];
+		
+	}] show];
 }
 
 - (void)uploadButtonDidTouchUpInside
