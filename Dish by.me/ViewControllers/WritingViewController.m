@@ -55,6 +55,7 @@ enum {
 	[self.view addSubview:_tableView];
 	
 	_photoButton = [[UIButton alloc] init];
+	[_photoButton setImage:[UIImage imageNamed:@"icon_camera.png"] forState:UIControlStateNormal];
 	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 	[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
@@ -112,6 +113,7 @@ enum {
 	
 	if( dish.photo )
 	{
+		[_photoButton setImage:nil forState:UIControlStateNormal];
 		[_photoButton setBackgroundImage:dish.photo forState:UIControlStateNormal];
 		[self resizePhotoButton];
 	}
@@ -556,6 +558,7 @@ enum {
 	
 	self.navigationItem.rightBarButtonItem.enabled = YES;
 	
+	[_photoButton setImage:nil forState:UIControlStateNormal];
 	[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
 	[self resizePhotoButton];
 	

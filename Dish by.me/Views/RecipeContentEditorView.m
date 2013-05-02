@@ -51,6 +51,7 @@
 	[self addSubview:_scrollView];
 	
 	_photoButton = [[UIButton alloc] initWithFrame:CGRectMake( 7, 17, 263, 176 )];
+	[_photoButton setImage:[UIImage imageNamed:@"icon_camera.png"] forState:UIControlStateNormal];
 	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 	
 	if( content.photo )
@@ -104,7 +105,8 @@
 - (void)setPhotoButtonImage:(UIImage *)image
 {
 	_content.photo = image;
-	[_photoButton setImage:image forState:UIControlStateNormal];
+	[_photoButton setImage:nil forState:UIControlStateNormal];
+	[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
 	
 	CGRect frame = _photoButton.frame;
 	frame.size.height = floorf( 241 * image.size.height / image.size.width );

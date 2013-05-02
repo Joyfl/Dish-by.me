@@ -103,7 +103,7 @@
 
 - (void)setPhotoButtonImage:(UIImage *)image
 {
-	[_photoButton setImage:image forState:UIControlStateNormal];
+	[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
 	
 	CGRect frame = _photoButton.frame;
 	frame.size.height = floorf( 241 * image.size.height / image.size.width );
