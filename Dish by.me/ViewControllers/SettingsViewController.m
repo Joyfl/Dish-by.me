@@ -275,6 +275,11 @@ enum {
 		{
 			DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"CHANGE_EMAIL", nil ) shouldComplete:^BOOL(DMTextFieldViewController *textFieldViewController, NSString *text) {
 				
+				if( text.length == 0 || [text isEqualToString:[CurrentUser user].email] )
+				{
+					return YES;
+				}
+				
 				[textFieldViewController dim];
 				
 				NSDictionary *params = @{ @"email": text };
@@ -286,8 +291,16 @@ enum {
 					[textFieldViewController undim];
 					
 				} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-					showErrorAlert();
 					[textFieldViewController undim];
+					
+					if( errorCode == 1402 )
+					{
+						[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:[NSString stringWithFormat:NSLocalizedString( @"MESSAGE_ALREADY_IN_USE_EMAIL", nil ), text] cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", nil ) otherButtonTitles:nil dismissBlock:nil] show];
+					}
+					else
+					{
+						showErrorAlert();
+					}
 				}];
 				
 				return NO;
@@ -300,6 +313,11 @@ enum {
 		else if( indexPath.row == kRowChangePassword )
 		{
 			DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"CHANGE_PASSWORD", nil ) shouldComplete:^BOOL(DMTextFieldViewController *textFieldViewController, NSString *text) {
+				
+				if( text.length == 0 )
+				{
+					return YES;
+				}
 				
 				[textFieldViewController dim];
 				
