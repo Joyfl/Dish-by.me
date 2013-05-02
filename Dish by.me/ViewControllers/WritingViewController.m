@@ -54,6 +54,8 @@ enum {
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	[self.view addSubview:_tableView];
 	
+	_photoHeight = 232;
+	
 	_photoButton = [[UIButton alloc] init];
 	[_photoButton setImage:[UIImage imageNamed:@"icon_camera.png"] forState:UIControlStateNormal];
 	[_photoButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
@@ -73,8 +75,9 @@ enum {
 	[_facebookButton setBackgroundImage:[UIImage imageNamed:@"facebook_selected.png"] forState:UIControlStateSelected];
 	[_facebookButton addTarget:self action:@selector(facebookButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
-	_descriptionInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 70 )];
+	_descriptionInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 15, 10, 290, 35 )];
 	_descriptionInput.delegate = self;
+	_descriptionInput.scrollEnabled = NO;
 	_descriptionInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	_descriptionInput.placeholder = NSLocalizedString( @"INPUT_DESCRIPTION", nil );
 	_descriptionInput.backgroundColor = [UIColor clearColor];
@@ -82,7 +85,15 @@ enum {
 	_descriptionInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	_descriptionInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
 	
-	_photoHeight = 232;
+	_photoCell = [[UITableViewCell alloc] init];
+	_photoCell.selectionStyle = UITableViewCellSelectionStyleNone;
+	
+	_borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_writing_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 45, 12 )]];
+	
+	[_photoCell.contentView addSubview:_photoButton];
+	[_photoCell.contentView addSubview:_borderView];
+	[_photoCell.contentView addSubview:_nameInput];
+	[_photoCell.contentView addSubview:_facebookButton];
 	
 	return self;
 }
@@ -170,14 +181,13 @@ enum {
 		return _photoHeight + 52;
 	
 	if( indexPath.row == kRowMessage )
-		return 110;
+		return _descriptionInput.contentSize.height + 30;
 	
 	return 60;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *photoCellId = @"photoCellId";
 	static NSString *messageCellId = @"messageCellId";
 	static NSString *recipeCellId = @"recipeCellId";
 	
@@ -185,20 +195,8 @@ enum {
 	
 	if( indexPath.row == kRowPhoto )
 	{
-		cell = [tableView dequeueReusableCellWithIdentifier:photoCellId];
-		if( !cell )
-		{
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:photoCellId];
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-			[cell.contentView addSubview:_photoButton];
-			
-			_borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_writing_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 45, 12 )]];
-			[cell.contentView addSubview:_borderView];
-			[cell.contentView addSubview:_nameInput];
-			[cell.contentView addSubview:_facebookButton];
-		}
+		cell = _photoCell;
 		
-		NSLog( @"photoHeight : %d", _photoHeight );
 		_photoButton.frame = CGRectMake( 11, 11, PhotoButtonMaxWidth, _photoHeight );
 		_borderView.frame = _borderView.frame = CGRectMake( 5, 5, 310, _photoButton.frame.size.height + 42 );
 		_nameInput.frame = CGRectMake( 20, _photoHeight + 12, 280, 20 );
@@ -213,11 +211,12 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:messageCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			UIImageView *messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
-			messageBoxView.frame = CGRectMake( 9, 0, 304, 100 );
-			[cell.contentView addSubview:messageBoxView];
+			_messageBoxView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"message_box.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 24, 12, 10 )]];
+			[cell.contentView addSubview:_messageBoxView];
 			[cell.contentView addSubview:_descriptionInput];
 		}
+		
+		_messageBoxView.frame = CGRectMake( 9, 0, 304, _descriptionInput.contentSize.height + 20 );
 	}
 	
 	else
@@ -411,6 +410,22 @@ enum {
 	
 	[UIView animateWithDuration:0.25 animations:^{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 64 - 216 );
+	}];
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+	[_tableView beginUpdates];
+	[_tableView endUpdates];
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		CGRect frame = _messageBoxView.frame;
+		frame.size.height = _descriptionInput.contentSize.height + 20;
+		_messageBoxView.frame = frame;
+		
+		frame = _descriptionInput.frame;
+		frame.size.height = _descriptionInput.contentSize.height;
+		_descriptionInput.frame = frame;
 	}];
 }
 

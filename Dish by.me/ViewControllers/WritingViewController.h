@@ -20,10 +20,12 @@
 {
 	UITableView *_tableView;
 	
+	UITableViewCell *_photoCell;
 	UIButton *_photoButton;
 	UIImageView *_borderView;
 	UITextField *_nameInput;
 	UIButton *_facebookButton;
+	UIImageView *_messageBoxView;
 	UIPlaceHolderTextView *_descriptionInput;
 	UIButton *_recipeButton;
 	
@@ -32,6 +34,8 @@
 	NSInteger _editingDishId; // 요리 수정일 경우 수정중인 dish id
 	BOOL _isPhotoChanged; // 새 사진이 등록되었는지
 	NSInteger _originalDishId;
+	
+//	NSInteger _messageBoxHeight;
 	NSInteger _photoHeight;
 }
 
