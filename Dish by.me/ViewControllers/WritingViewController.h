@@ -49,7 +49,7 @@
 
 @protocol WritingViewControllerDelegate
 
-- (void)writingViewControllerWillBeginUpload:(WritingViewController *)writingViewController;
+- (void)writingViewController:(WritingViewController *)writingViewController willBeginUploadWithBlock:(void (^)(void))uploadBlock;
 - (void)writingViewController:(WritingViewController *)writingViewController bytesUploaded:(long long)bytesUploaded bytesTotal:(long long)bytesTotal;
 - (void)writingViewControllerDidFailedUpload:(WritingViewController *)writingViewController;
 - (void)writingViewControllerDidFinishUpload:(WritingViewController *)writingViewController;

@@ -389,35 +389,39 @@ enum {
 		
 		JLLog( @"params : %@", params );
 		
-		dispatch_async( dispatch_get_main_queue(), ^{
-			[self.delegate writingViewControllerWillBeginUpload:self];
-		} );
+		void (^__block uploadBlock)(void) = ^{
+			dispatch_async( dispatch_get_main_queue(), ^{
+				[self.delegate writingViewController:self willBeginUploadWithBlock:uploadBlock];
+			} );
+			
+			[[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params upload:^(long long bytesLoaded, long long bytesTotal) {
+				
+				dispatch_async( dispatch_get_main_queue(), ^{
+					[self.delegate writingViewController:self bytesUploaded:bytesLoaded bytesTotal:bytesTotal];
+				} );
+				
+			} download:nil success:^(id response) {
+				JLLog( @"Success" );
+				[self undim];
+				
+				dispatch_async( dispatch_get_main_queue(), ^{
+					[self.delegate writingViewControllerDidFinishUpload:self];
+				} );
+				
+			} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+				[self undim];
+				
+				JLLog( @"statusCode : %d", statusCode );
+				JLLog( @"errorCode : %d", errorCode );
+				JLLog( @"message : %@", message );
+				
+				dispatch_async( dispatch_get_main_queue(), ^{
+					[self.delegate writingViewControllerDidFailedUpload:self];
+				} );
+			}];
+		};
 		
-		[[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params upload:^(long long bytesLoaded, long long bytesTotal) {
-			
-			dispatch_async( dispatch_get_main_queue(), ^{
-				[self.delegate writingViewController:self bytesUploaded:bytesLoaded bytesTotal:bytesTotal];
-			} );
-			
-		} download:nil success:^(id response) {
-			JLLog( @"Success" );
-			[self undim];
-			
-			dispatch_async( dispatch_get_main_queue(), ^{
-				[self.delegate writingViewControllerDidFinishUpload:self];
-			} );
-			
-		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-			[self undim];
-			
-			JLLog( @"statusCode : %d", statusCode );
-			JLLog( @"errorCode : %d", errorCode );
-			JLLog( @"message : %@", message );
-			
-			dispatch_async( dispatch_get_main_queue(), ^{
-				[self.delegate writingViewControllerDidFailedUpload:self];
-			} );
-		}];
+		uploadBlock();
 		
 		dispatch_async( dispatch_get_main_queue(), ^{
 			[self undim];

@@ -266,7 +266,9 @@
 			{
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_INTERNET_OFFLINE", nil ) cancelButtonTitle:NSLocalizedString( @"RETRY", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 					
-					[self sendRequest:request upload:upload download:download success:success failure:failure];
+					dispatch_async(dispatch_get_main_queue(), ^{
+						[self sendRequest:request upload:upload download:download success:success failure:failure];
+					});
 					
 				}] show];
 				return;

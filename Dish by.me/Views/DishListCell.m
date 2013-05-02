@@ -34,6 +34,7 @@ static const NSInteger PhotoViewMaxLength = 292;
 	
 	_topGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 12, 292, 35)];
 	_topGradientView.image = [UIImage imageNamed:@"dish_border_gradient.png"];
+	_topGradientView.alpha = 0;
 	[self.contentView addSubview:_topGradientView];
 	
 	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 20, 18, 25, 25 )];

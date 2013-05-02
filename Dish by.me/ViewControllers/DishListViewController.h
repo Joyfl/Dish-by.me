@@ -36,7 +36,9 @@ typedef enum {
 	UIImageView *_progressBarBackgroundView;
 	UILabel *_progressFailedLabel;
 	UIButton *_progressButton;
+	UIButton *_cancelButton;
 	DMProgressState _progressState;
+	void (^_uploadBlock)(void);
 	
 	NSTimer *_scrollTimer; // 스크롤 후 일정시간이 지나면 DishListCell에서 프로필을 fade out시킨다.
 }

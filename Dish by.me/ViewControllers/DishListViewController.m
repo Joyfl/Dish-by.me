@@ -59,6 +59,13 @@
 	_progressFailedLabel.hidden = YES;
 	[_progressView addSubview:_progressFailedLabel];
 	
+	// 업로드 실패시 왼쪽에 뜨는 X 버튼
+	_cancelButton = [[UIButton alloc] initWithFrame:CGRectMake( 10, 12, 20, 21 )];
+	_cancelButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
+	[_cancelButton setBackgroundImage:[UIImage imageNamed:@"progress_cancel_button.png"] forState:UIControlStateNormal];
+	[_cancelButton addTarget:self action:@selector(cancelButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[_progressView addSubview:_cancelButton];
+	
 	_progressButton = [[UIButton alloc] initWithFrame:CGRectMake( 289, 12, 20, 21 )];
 	_progressButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
 	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_cancel_button.png"] forState:UIControlStateNormal];
@@ -352,12 +359,15 @@
 #pragma mark -
 #pragma mark WritingViewControllerDelegate
 
-- (void)writingViewControllerWillBeginUpload:(WritingViewController *)writingViewController
+- (void)writingViewController:(WritingViewController *)writingViewController willBeginUploadWithBlock:(void (^)(void))uploadBlock
 {
 	_progressState = DMProgressStateLoading;
+	_uploadBlock = uploadBlock;
 	
 	_progressBarBackgroundView.hidden = NO;
 	_progressFailedLabel.hidden = YES;
+	_cancelButton.hidden = YES;
+	_progressButton.adjustsImageWhenHighlighted = YES;
 	
 	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_cancel_button.png"] forState:UIControlStateNormal];
 	
@@ -366,7 +376,7 @@
 		frame.origin.y = 0;
 		_progressView.frame = frame;
 		
-		_tableView.contentInset = UIEdgeInsetsMake( 44, 0, 0, 0 );
+		_tableView.frame = CGRectMake( 0, 44, 320, UIScreenHeight - 158 );
 	}];
 }
 
@@ -383,6 +393,7 @@
 	
 	_progressBarBackgroundView.hidden = YES;
 	_progressFailedLabel.hidden = NO;
+	_cancelButton.hidden = NO;
 	
 	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_retry_button.png"] forState:UIControlStateNormal];
 }
@@ -390,6 +401,7 @@
 - (void)writingViewControllerDidFinishUpload:(WritingViewController *)writingViewController
 {
 	_progressState = DMProgressStateIdle;
+	_uploadBlock = nil;
 	
 	_progressButton.adjustsImageWhenHighlighted = NO;
 	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_check_icon.png"] forState:UIControlStateNormal];
@@ -400,7 +412,7 @@
 			frame.origin.y = -_progressView.frame.size.height;
 			_progressView.frame = frame;
 			
-			_tableView.contentInset = UIEdgeInsetsZero;
+			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
 			
 			[self updateDishes];
 		} completion:nil];
@@ -412,14 +424,30 @@
 	// 업로드 취소
 	if( _progressState == DMProgressStateLoading )
 	{
-		
+		[self cancelButtonDidTouchUpInside];
 	}
 	
 	// 다시 시도
 	else if( _progressState == DMProgressStateFailure )
 	{
-		
+		_uploadBlock();
 	}
+}
+
+- (void)cancelButtonDidTouchUpInside
+{
+	_progressState = DMProgressStateIdle;
+	_uploadBlock = nil;
+	
+	dispatch_async( dispatch_get_main_queue(), ^{
+		[UIView animateWithDuration:0.25 animations:^{
+			CGRect frame = _progressView.frame;
+			frame.origin.y = -_progressView.frame.size.height;
+			_progressView.frame = frame;
+			
+			_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
+		}];
+	} );
 }
 
 @end
