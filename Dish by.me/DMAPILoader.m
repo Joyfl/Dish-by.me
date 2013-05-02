@@ -35,6 +35,7 @@
 	return self;
 }
 
+
 #pragma mark -
 
 - (void)api:(NSString *)api
@@ -43,9 +44,20 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
+	[self api:api method:method parameters:parameters upload:nil download:nil success:success failure:failure];
+}
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+ parameters:(NSDictionary *)parameters
+	 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
+   download:(void (^)(long long bytesLoaded, long long bytesTotal))download
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
+{
 	NSURLRequest *request = [_client requestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters]];
 	
-	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+	[self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
@@ -80,12 +92,29 @@
 	}];
 }
 
+
+#pragma mark -
+
 - (void)api:(NSString *)api
 	 method:(NSString *)method
 	  image:(UIImage *)image
 	forName:(NSString *)name
    fileName:(NSString *)fileName
  parameters:(NSDictionary *)parameters
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
+{
+	[self api:api method:method image:image forName:name fileName:fileName parameters:parameters upload:nil download:nil success:success failure:failure];
+}
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+	  image:(UIImage *)image
+	forName:(NSString *)name
+   fileName:(NSString *)fileName
+ parameters:(NSDictionary *)parameters
+	 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
+   download:(void (^)(long long bytesLoaded, long long bytesTotal))download
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
@@ -99,7 +128,7 @@
 		[formData appendPartWithFileData:UIImageJPEGRepresentation( image, 1 ) name:name fileName:fileName mimeType:@"image/jpeg"];
 	}];
 	
-	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+	[self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
 		
@@ -127,12 +156,29 @@
 	}];
 }
 
+
+#pragma mark -
+
 - (void)api:(NSString *)api
 	 method:(NSString *)method
 	 images:(NSArray *)images
    forNames:(NSArray *)names
   fileNames:(NSArray *)fileNames
  parameters:(NSDictionary *)parameters
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
+{
+	[self api:api method:method images:images forNames:names fileNames:fileNames parameters:parameters upload:nil download:nil success:success failure:failure];
+}
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+	 images:(NSArray *)images
+   forNames:(NSArray *)names
+  fileNames:(NSArray *)fileNames
+ parameters:(NSDictionary *)parameters
+	 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
+   download:(void (^)(long long bytesLoaded, long long bytesTotal))download
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
@@ -159,7 +205,7 @@
 		}
 	}];
 	
-	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+	[self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
 		
@@ -191,6 +237,8 @@
 #pragma mark -
 
 - (void)sendRequest:(NSURLRequest *)request
+			 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
+		   download:(void (^)(long long bytesLoaded, long long bytesTotal))download
 			success:(void (^)(id response))success
 			failure:(void (^)(AFHTTPRequestOperation *operation, NSError *error))failure
 {
@@ -207,7 +255,7 @@
 			{
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_REQUEST_TIMEOUT", nil ) cancelButtonTitle:NSLocalizedString( @"RETRY", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 					
-					[self sendRequest:request success:success failure:failure];
+					[self sendRequest:request upload:upload download:download success:success failure:failure];
 					
 				}] show];
 				return;
@@ -218,7 +266,7 @@
 			{
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_INTERNET_OFFLINE", nil ) cancelButtonTitle:NSLocalizedString( @"RETRY", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 					
-					[self sendRequest:request success:success failure:failure];
+					[self sendRequest:request upload:upload download:download success:success failure:failure];
 					
 				}] show];
 				return;
@@ -231,6 +279,21 @@
 		}
 		
 	}];
+	
+	if( upload )
+	{
+		[operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+			upload( totalBytesWritten, totalBytesExpectedToWrite );
+		}];
+	}
+	
+	if( download )
+	{
+		[operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+			download( totalBytesRead, totalBytesExpectedToRead );
+		}];
+	}
+	
 	[_client enqueueHTTPRequestOperation:operation];
 }
 

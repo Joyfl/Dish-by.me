@@ -15,11 +15,25 @@
 
 + (id)sharedLoader;
 
+
+#pragma mark -
+
 - (void)api:(NSString *)api
 	 method:(NSString *)method
  parameters:(NSDictionary *)parameters
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+ parameters:(NSDictionary *)parameters
+	 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
+   download:(void (^)(long long bytesLoaded, long long bytesTotal))download
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
+
+
+#pragma mark -
 
 - (void)api:(NSString *)api
 	 method:(NSString *)method
@@ -32,12 +46,40 @@
 
 - (void)api:(NSString *)api
 	 method:(NSString *)method
+	  image:(UIImage *)image
+	forName:(NSString *)name
+   fileName:(NSString *)fileName
+ parameters:(NSDictionary *)parameters
+	 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
+   download:(void (^)(long long bytesLoaded, long long bytesTotal))download
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
+
+
+#pragma mark -
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
 	 images:(NSArray *)images
    forNames:(NSArray *)names
   fileNames:(NSArray *)fileNames
  parameters:(NSDictionary *)parameters
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
+
+- (void)api:(NSString *)api
+	 method:(NSString *)method
+	 images:(NSArray *)images
+   forNames:(NSArray *)names
+  fileNames:(NSArray *)fileNames
+ parameters:(NSDictionary *)parameters
+	 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
+   download:(void (^)(long long bytesLoaded, long long bytesTotal))download
+	success:(void (^)(id response))success
+	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
+
+
+#pragma mark -
 
 + (void)loadImageFromURLString:(NSString *)urlString
 					   context:(id)context
