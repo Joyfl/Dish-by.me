@@ -46,29 +46,6 @@
 	NSURLRequest *request = [_client requestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters]];
 	
 	[self sendRequest:request success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//		if( error )
-//		{
-//			JLLog( @"%@", error );
-//			return;
-//		}
-		
-		if( error )
-		{
-			if( error.code == -1001 )
-			{
-				JLLog( @"요청시간 초과 : %@", error );
-				return;
-			}
-			else if( error.code == -1009 )
-			{
-				JLLog( @"오프라인 : %@", error );
-				return;
-			}
-			else
-			{
-				JLLog( @"Error : %@", error );
-			}
-		}
 		
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
@@ -219,7 +196,39 @@
 		if( success )
 			success( responseObject );
 		
-	} failure:failure];
+	} failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		
+		if( error )
+		{
+			// 요청 시간 초과
+			if( error.code == -1001 )
+			{
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_REQUEST_TIMEOUT", nil ) cancelButtonTitle:NSLocalizedString( @"RETRY", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+					
+					[self sendRequest:request success:success failure:failure];
+					
+				}] show];
+				return;
+			}
+			
+			// 인터넷 연결 오프라인
+			else if( error.code == -1009 )
+			{
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_INTERNET_OFFLINE", nil ) cancelButtonTitle:NSLocalizedString( @"RETRY", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+					
+					[self sendRequest:request success:success failure:failure];
+					
+				}] show];
+				return;
+			}
+			else
+			{
+				JLLog( @"Error : %@", error );
+				failure( operation, error );
+			}
+		}
+		
+	}];
 	[_client enqueueHTTPRequestOperation:operation];
 }
 

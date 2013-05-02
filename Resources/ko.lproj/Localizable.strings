@@ -9,8 +9,16 @@
 "NO_THANKS" = "괜찮아요";
 "PROBABLY" = "그런 것 같아요";
 "OH_MY_MISTAKE" = "앗 실수!";
+"RETRY" = "다시 시도";
 
 // Messages
+"MESSAGE_INTERNET_OFFLINE" = "인터넷 연결이 꺼져있습니다. 셀룰러 데이터 사용을 꺼놓았거나, 에어플레인모드가 켜져 있지는 않은지 확인해보세요.";
+"MESSAGE_REQUEST_TIMEOUT" = "인터넷 연결이 원활하지 않습니다. 잠시 후 다시 시도해보세요.";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
+"MESSAGE_" = "";
+
 "MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관 및 개인정보취급방침에 동의합니다.";
 "MESSAGE_SIGNUP_COMPLETE" = "회원가입이 완료되었습니다!\n프로필을 완성해주세요.";
 "MESSAGE_ALREADY_SIGNED_UP" = "누군가가 이미 %@ 이메일을 사용하고 있어요.\n혹시 가입했던 적이 있나요?";
@@ -33,12 +41,6 @@
 "MESSAGE_THIS_FACEBOOK_ACCOUNT_IS_ALREADY_LINKED" = "이미 누군가가 해당 페이스북 계정을 사용하고 있어요.";
 
 "MESSAGE_NO_PHOTO_ON_N_TH_RECIPE" = "%d번째 레시피에 사진이 빠졌어요;;";
-"MESSAGE_" = "";
-"MESSAGE_" = "";
-"MESSAGE_" = "";
-"MESSAGE_" = "";
-"MESSAGE_" = "";
-"MESSAGE_" = "";
 "MESSAGE_" = "";
 
 // Auth
