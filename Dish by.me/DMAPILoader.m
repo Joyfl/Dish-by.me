@@ -73,6 +73,8 @@
 		JLLog( @"statusCode : %d", operation.response.statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", [errorInfo objectForKey:@"message"] );
+		if( operation.response.statusCode == 500 )
+			JLLog( @"response : %@", operation.responseString );
 		if( failure )
 			failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
 	}];

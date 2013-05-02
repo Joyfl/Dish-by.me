@@ -42,6 +42,8 @@
 		0349EA5816D90C870057BD12 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5616D90C7B0057BD12 /* SystemConfiguration.framework */; };
 		0349EA5A16D90C930057BD12 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0349EA5916D90C930057BD12 /* MobileCoreServices.framework */; };
 		034A0A0F1656779700C7DA93 /* DishTileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 034A0A0E1656779700C7DA93 /* DishTileCell.m */; };
+		034E828717329EB400EC4B08 /* dish_border_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 034E828517329EB400EC4B08 /* dish_border_gradient.png */; };
+		034E828817329EB400EC4B08 /* dish_border_gradient@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 034E828617329EB400EC4B08 /* dish_border_gradient@2x.png */; };
 		03509CB617296DA400EE31F5 /* NSDictionary+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CB517296DA300EE31F5 /* NSDictionary+Utils.m */; };
 		03509CB9172CF00A00EE31F5 /* CoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CB8172CF00900EE31F5 /* CoverView.m */; };
 		03509CBC172D14C000EE31F5 /* ForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CBB172D14BF00EE31F5 /* ForgotPasswordViewController.m */; };
@@ -609,6 +611,8 @@
 		0349EA5916D90C930057BD12 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		034A0A0D1656779700C7DA93 /* DishTileCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishTileCell.h; path = Views/DishTileCell.h; sourceTree = "<group>"; };
 		034A0A0E1656779700C7DA93 /* DishTileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DishTileCell.m; path = Views/DishTileCell.m; sourceTree = "<group>"; };
+		034E828517329EB400EC4B08 /* dish_border_gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dish_border_gradient.png; sourceTree = "<group>"; };
+		034E828617329EB400EC4B08 /* dish_border_gradient@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dish_border_gradient@2x.png"; sourceTree = "<group>"; };
 		03509CB417296DA300EE31F5 /* NSDictionary+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+Utils.h"; path = "Categories/NSDictionary+Utils.h"; sourceTree = "<group>"; };
 		03509CB517296DA300EE31F5 /* NSDictionary+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+Utils.m"; path = "Categories/NSDictionary+Utils.m"; sourceTree = "<group>"; };
 		03509CB7172CF00900EE31F5 /* CoverView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CoverView.h; path = Views/CoverView.h; sourceTree = "<group>"; };
@@ -1568,6 +1572,8 @@
 				03E1EFE417327EEE001DABC9 /* dim@2x.png */,
 				03E1EFE517327EEE001DABC9 /* dish_border_big.png */,
 				03E1EFE617327EEE001DABC9 /* dish_border_big@2x.png */,
+				034E828517329EB400EC4B08 /* dish_border_gradient.png */,
+				034E828617329EB400EC4B08 /* dish_border_gradient@2x.png */,
 				03E1EFE717327EEE001DABC9 /* dish_detail_border.png */,
 				03E1EFE817327EEE001DABC9 /* dish_detail_border@2x.png */,
 				03E1EFE917327EEE001DABC9 /* dish_detail_recipe_bottom_line.png */,
@@ -2350,6 +2356,8 @@
 				03E1F23F17327EEE001DABC9 /* textfield_bg@2x.png in Resources */,
 				03E1F24017327EEE001DABC9 /* tool_bar.png in Resources */,
 				03E1F24117327EEE001DABC9 /* tool_bar@2x.png in Resources */,
+				034E828717329EB400EC4B08 /* dish_border_gradient.png in Resources */,
+				034E828817329EB400EC4B08 /* dish_border_gradient@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

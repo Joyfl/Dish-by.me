@@ -29,6 +29,7 @@
 
 @property (nonatomic, weak) id<DishListCellDelegate> delegate;
 @property (nonatomic, readonly) Dish *dish;
+@property (nonatomic, readonly) UIImageView *topGradientView;
 @property (nonatomic, readonly) UIButton *userPhotoButton;
 @property (nonatomic, readonly) UILabel *userNameLabel;
 

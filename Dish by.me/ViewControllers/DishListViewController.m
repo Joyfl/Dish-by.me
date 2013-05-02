@@ -264,6 +264,7 @@
 		if( cell.indexPath.section == 0 )
 		{
 			[UIView animateWithDuration:0.25 animations:^{
+				cell.topGradientView.alpha = 1;
 				cell.userPhotoButton.alpha = 1;
 				cell.userNameLabel.alpha = 1;
 			}];
@@ -278,6 +279,7 @@
 		if( cell.indexPath.section == 0 )
 		{
 			[UIView animateWithDuration:0.25 animations:^{
+				cell.topGradientView.alpha = 0;
 				cell.userPhotoButton.alpha = 0;
 				cell.userNameLabel.alpha = 0;
 			}];

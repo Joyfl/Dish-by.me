@@ -32,6 +32,10 @@ static const NSInteger PhotoViewMaxLength = 292;
 	frameView.image = [UIImage imageNamed:@"dish_border_big.png"];
 	[self.contentView addSubview:frameView];
 	
+	_topGradientView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 12, 292, 35)];
+	_topGradientView.image = [UIImage imageNamed:@"dish_border_gradient.png"];
+	[self.contentView addSubview:_topGradientView];
+	
 	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 20, 18, 25, 25 )];
 	_userPhotoButton.adjustsImageWhenHighlighted = NO;
 	[_userPhotoButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
