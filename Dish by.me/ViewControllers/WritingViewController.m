@@ -82,7 +82,7 @@ enum {
 	_descriptionInput.layer.shadowOffset = CGSizeMake( 0, 1 );
 	_descriptionInput.layer.shadowColor = [UIColor colorWithWhite:0 alpha:0.1].CGColor;
 	
-	_photoHeight = PhotoButtonMaxWidth;
+	_photoHeight = 232;
 	
 	return self;
 }
