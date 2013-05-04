@@ -12,6 +12,7 @@
 #import "DMButton.h"
 #import "DishDetailViewController.h"
 #import "DMAPILoader.h"
+#import "ProfileViewController.h"
 
 @implementation SearchViewController
 
@@ -274,6 +275,59 @@
 	}
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+	[self showUserPhoto];
+	[_scrollTimer invalidate];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+	_scrollTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(hideUserPhoto) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_scrollTimer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+	[_scrollTimer invalidate];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+	_scrollTimer = [NSTimer timerWithTimeInterval:0.5 target:self selector:@selector(hideUserPhoto) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_scrollTimer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)showUserPhoto
+{
+	for( DishListCell *cell in [_tableView visibleCells] )
+	{
+		if( cell.indexPath.section == 0 )
+		{
+			[UIView animateWithDuration:0.25 animations:^{
+				cell.topGradientView.alpha = 1;
+				cell.userPhotoButton.alpha = 1;
+				cell.userNameLabel.alpha = 1;
+			}];
+		}
+	}
+}
+
+- (void)hideUserPhoto
+{
+	for( DishListCell *cell in [_tableView visibleCells] )
+	{
+		if( cell.indexPath.section == 0 )
+		{
+			[UIView animateWithDuration:0.25 animations:^{
+				cell.topGradientView.alpha = 0;
+				cell.userPhotoButton.alpha = 0;
+				cell.userNameLabel.alpha = 0;
+			}];
+		}
+	}
+}
+
 
 #pragma mark -
 #pragma mark DishListCellDelegate
@@ -282,6 +336,15 @@
 {
 	DishDetailViewController *dishDetailViewController = [[DishDetailViewController alloc] initWithDish:[_dishes objectAtIndex:indexPath.row]];
 	[self.navigationController pushViewController:dishDetailViewController animated:YES];
+}
+
+- (void)dishListCell:(DishListCell *)dishListCell didTouchUserPhotoButtonAtIndexPath:(NSIndexPath *)indexPath
+{
+	Dish *dish = [_dishes objectAtIndex:indexPath.row];
+	
+	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
+	[profileViewController loadUserId:dish.userId];
+	[self.navigationController pushViewController:profileViewController animated:YES];
 }
 
 - (void)dishListCell:(DishListCell *)dishListCell didBookmarkAtIndexPath:(NSIndexPath *)indexPath
