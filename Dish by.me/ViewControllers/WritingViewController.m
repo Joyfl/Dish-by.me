@@ -20,6 +20,7 @@
 #import "UIView+JLAnimations.h"
 #import "Settings.h"
 #import <FacebookSDK/FacebookSDK.h>
+#import "UIButton+TouchAreaInsets.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 
@@ -94,6 +95,45 @@ enum {
 	[_photoCell.contentView addSubview:_borderView];
 	[_photoCell.contentView addSubview:_nameInput];
 	[_photoCell.contentView addSubview:_facebookButton];
+	
+	
+	_progressView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_bar.png"]];
+	_progressView.frame = CGRectOffset( _progressView.frame, 0, -_progressView.frame.size.height );
+	_progressView.userInteractionEnabled = YES;
+	[self.view addSubview:_progressView];
+	
+	_progressBarBackgroundView = [[UIImageView alloc] initWithFrame:CGRectMake( 11, 16, 267, 11 )];
+	_progressBarBackgroundView.image = [UIImage imageNamed:@"progress_bar_bg.png"];
+	[_progressView addSubview:_progressBarBackgroundView];
+	
+	_progressBar = [[UIImageView alloc] initWithFrame:CGRectMake( 1, 1, 0, 8 )];
+	_progressBar.image = [[UIImage imageNamed:@"progress_bar.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 4, 0, 4 )];
+	[_progressBarBackgroundView addSubview:_progressBar];
+	
+	_progressFailedLabel = [[UILabel alloc] init];
+	_progressFailedLabel.text = NSLocalizedString( @"UPLOAD_FAILURE", @"업로드 실패" );
+	_progressFailedLabel.textColor = [UIColor colorWithHex:0x8E8F8F alpha:1];
+	_progressFailedLabel.backgroundColor = [UIColor clearColor];
+	_progressFailedLabel.font = [UIFont boldSystemFontOfSize:14];
+	_progressFailedLabel.shadowColor = [UIColor colorWithWhite:1 alpha:0.5];
+	_progressFailedLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[_progressFailedLabel sizeToFit];
+	_progressFailedLabel.center = CGPointMake( 160, 22 );
+	_progressFailedLabel.hidden = YES;
+	[_progressView addSubview:_progressFailedLabel];
+	
+	// 업로드 실패시 왼쪽에 뜨는 X 버튼
+	_cancelButton = [[UIButton alloc] initWithFrame:CGRectMake( 10, 12, 20, 21 )];
+	_cancelButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
+	[_cancelButton setBackgroundImage:[UIImage imageNamed:@"progress_cancel_button.png"] forState:UIControlStateNormal];
+	[_cancelButton addTarget:self action:@selector(stopButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[_progressView addSubview:_cancelButton];
+	
+	_progressButton = [[UIButton alloc] initWithFrame:CGRectMake( 289, 12, 20, 21 )];
+	_progressButton.touchAreaInsets = UIEdgeInsetsMake( 10, 10, 10, 10 );
+	[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_cancel_button.png"] forState:UIControlStateNormal];
+	[_progressButton addTarget:self action:@selector(progressButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[_progressView addSubview:_progressButton];
 	
 	return self;
 }
@@ -268,174 +308,6 @@ enum {
 			[self dismissViewControllerAnimated:YES completion:nil];
 		
 	}] show];
-}
-
-- (void)uploadButtonDidTouchUpInside
-{
-	if( !_nameInput.text.length )
-	{
-		[_nameInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
-		[_nameInput shakeCount:3 radius:4 duration:0.05 delay:0 completion:^{
-			[_nameInput becomeFirstResponder];
-		}];
-		return;
-	}
-	else if( !_descriptionInput.text.length )
-	{
-		_descriptionInput.placeHolderLabel.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
-		[_descriptionInput shakeCount:3 radius:4 duration:0.05 delay:0 completion:^{
-			[_descriptionInput becomeFirstResponder];
-		}];
-		return;
-	}
-	
-	[self backgroundDidTap];
-	[self dim];
-	
-	dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 ), ^{
-		UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
-		
-		NSMutableDictionary *recipe = [NSMutableDictionary dictionary];
-		[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.servings] forKey:@"servings"];
-		[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.minutes] forKey:@"minutes"];
-		
-		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
-									   @{ @"name": _nameInput.text,
-									   @"description": _descriptionInput.text,
-									   @"facebook_share": [NSNumber numberWithBool:_facebookButton.selected],
-									   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
-									   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
-									   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
-		
-		// 요리를 포크할 경우
-		if( _originalDishId )
-		{
-			[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
-		}
-		
-		NSInteger ingredientCount = 0;
-		
-		// 재료 파라미터
-		for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
-		{
-			Ingredient *ingredient = [_recipeView.recipe.ingredients objectAtIndex:i];
-			if( ingredient.name )
-			{
-				[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
-				[params setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
-				ingredientCount ++;
-			}
-		}
-		
-		[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count] forKey:@"ingredient_count"];
-		
-		// 사진, 레시피 파라미터
-		// recipe_photo_%d : 레시피 사진 또는 URL
-		// recipe_description_%d : 레시피 설명
-		NSMutableArray *photos = [NSMutableArray array];
-		NSMutableArray *names = [NSMutableArray array];
-		
-		if( _isPhotoChanged )
-		{
-			JLLog( @"새로운 사진이 등록되었음" );
-			[photos addObject:image];
-			[names addObject:@"photo"];
-		}
-		else
-		{
-			JLLog( @"새로운 사진이 등록되지 않았음" );
-		}
-		
-		for( NSInteger i = 0; i < _recipeView.recipe.contents.count; i++ )
-		{
-			RecipeContent *content = [_recipeView.recipe.contents objectAtIndex:i];
-			[params setObject:content.description.length > 0 ? content.description : @"" forKey:[NSString stringWithFormat:@"recipe_description_%d", i]];
-			
-			// 새로운 사진이 올라오지 않았을 경우 : photoURL을 POST 파라미터로 넘김
-			if( content.photoURL )
-			{
-				JLLog( @"%d번째 레시피에 새로운 사진이 등록되지 않았음", i );
-				[params setObject:content.photoURL forKey:[NSString stringWithFormat:@"recipe_photo_%d", i]];
-			}
-			// 새로운 사진이 등록되었을 경우 : Multipart로 사진 바이너리 전송
-			else if( content.photo )
-			{
-				JLLog( @"%d번째 레시피에 새로운 사진이 등록되었음", i );
-				[photos addObject:content.photo];
-				[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
-			}
-			
-			// 사진이 없는 경우
-			else
-			{
-				JLLog( @"No photo at index : %d", i );
-				[self undim];
-				
-				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:[NSString stringWithFormat:NSLocalizedString( @"MESSAGE_NO_PHOTO_ON_N_TH_RECIPE", nil ), i + 1] delegate:nil cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil] show];
-				
-				return;
-			}
-		}
-		
-		JLLog( @"params : %@", params );
-		
-		NSString *api = nil;
-		NSString *method = nil;
-		if( !_editingDishId )
-		{
-			api = @"/dish";
-			method = @"POST";
-		}
-		else
-		{
-			api = [NSString stringWithFormat:@"/dish/%d", _editingDishId];
-			method = @"PUT";
-		}
-		
-		JLLog( @"params : %@", params );
-		
-		void (^__block uploadBlock)(void) = ^{
-			dispatch_async( dispatch_get_main_queue(), ^{
-				[self.delegate writingViewController:self willBeginUploadWithBlock:uploadBlock];
-			} );
-			
-			[[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params upload:^(long long bytesLoaded, long long bytesTotal) {
-				
-				dispatch_async( dispatch_get_main_queue(), ^{
-					[self.delegate writingViewController:self bytesUploaded:bytesLoaded bytesTotal:bytesTotal];
-				} );
-				
-			} download:nil success:^(id response) {
-				JLLog( @"Success" );
-				[self undim];
-				
-				dispatch_async( dispatch_get_main_queue(), ^{
-					[self.delegate writingViewControllerDidFinishUpload:self];
-				} );
-				
-			} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-				[self undim];
-				
-				JLLog( @"statusCode : %d", statusCode );
-				JLLog( @"errorCode : %d", errorCode );
-				JLLog( @"message : %@", message );
-				
-				dispatch_async( dispatch_get_main_queue(), ^{
-					[self.delegate writingViewControllerDidFailedUpload:self];
-				} );
-			}];
-		};
-		
-		uploadBlock();
-		
-		dispatch_async( dispatch_get_main_queue(), ^{
-			[self undim];
-			
-			dispatch_async( dispatch_get_main_queue(), ^{
-				[self dismissViewControllerAnimated:YES completion:nil];
-			} );
-		} );
-	} );
 }
 
 - (void)textViewDidBeginEditing:(id)sender
@@ -619,6 +491,245 @@ enum {
 	UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
 	_photoHeight = PhotoButtonMaxWidth * image.size.height / image.size.width;
 	[_tableView reloadData];
+}
+
+- (void)uploadButtonDidTouchUpInside
+{
+	if( !_nameInput.text.length )
+	{
+		[_nameInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+		[_nameInput shakeCount:3 radius:4 duration:0.05 delay:0 completion:^{
+			[_nameInput becomeFirstResponder];
+		}];
+		return;
+	}
+	else if( !_descriptionInput.text.length )
+	{
+		_descriptionInput.placeHolderLabel.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
+		[_descriptionInput shakeCount:3 radius:4 duration:0.05 delay:0 completion:^{
+			[_descriptionInput becomeFirstResponder];
+		}];
+		return;
+	}
+	
+	[self backgroundDidTap];
+	
+	self.navigationItem.leftBarButtonItem.enabled = NO;
+	self.navigationItem.rightBarButtonItem.enabled = NO;
+	[_tableView dim];
+	
+	dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 ), ^{
+		//
+		// 업로드 UI 보여주기
+		//
+		dispatch_async( dispatch_get_main_queue(), ^{
+			_progressState = DMProgressStateLoading;
+			
+			_progressBarBackgroundView.hidden = NO;
+			_progressFailedLabel.hidden = YES;
+			_cancelButton.hidden = YES;
+			_progressButton.adjustsImageWhenHighlighted = YES;
+			
+			[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_cancel_button.png"] forState:UIControlStateNormal];
+			
+			[UIView animateWithDuration:0.25 animations:^{
+				CGRect frame = _progressView.frame;
+				frame.origin.y = 0;
+				_progressView.frame = frame;
+			}];
+		} );
+		
+		UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
+		
+		NSMutableDictionary *recipe = [NSMutableDictionary dictionary];
+		[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.servings] forKey:@"servings"];
+		[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.minutes] forKey:@"minutes"];
+		
+		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
+									   @{ @"name": _nameInput.text,
+									   @"description": _descriptionInput.text,
+									   @"facebook_share": [NSNumber numberWithBool:_facebookButton.selected],
+									   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
+									   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
+									   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
+		
+		// 요리를 포크할 경우
+		if( _originalDishId )
+		{
+			[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
+		}
+		
+		NSInteger ingredientCount = 0;
+		
+		// 재료 파라미터
+		for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
+		{
+			Ingredient *ingredient = [_recipeView.recipe.ingredients objectAtIndex:i];
+			if( ingredient.name )
+			{
+				[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
+				[params setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
+				ingredientCount ++;
+			}
+		}
+		
+		[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count] forKey:@"ingredient_count"];
+		
+		// 사진, 레시피 파라미터
+		// recipe_photo_%d : 레시피 사진 또는 URL
+		// recipe_description_%d : 레시피 설명
+		NSMutableArray *photos = [NSMutableArray array];
+		NSMutableArray *names = [NSMutableArray array];
+		
+		if( _isPhotoChanged )
+		{
+			JLLog( @"새로운 사진이 등록되었음" );
+			[photos addObject:image];
+			[names addObject:@"photo"];
+		}
+		else
+		{
+			JLLog( @"새로운 사진이 등록되지 않았음" );
+		}
+		
+		for( NSInteger i = 0; i < _recipeView.recipe.contents.count; i++ )
+		{
+			RecipeContent *content = [_recipeView.recipe.contents objectAtIndex:i];
+			[params setObject:content.description.length > 0 ? content.description : @"" forKey:[NSString stringWithFormat:@"recipe_description_%d", i]];
+			
+			// 새로운 사진이 올라오지 않았을 경우 : photoURL을 POST 파라미터로 넘김
+			if( content.photoURL )
+			{
+				JLLog( @"%d번째 레시피에 새로운 사진이 등록되지 않았음", i );
+				[params setObject:content.photoURL forKey:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+			}
+			// 새로운 사진이 등록되었을 경우 : Multipart로 사진 바이너리 전송
+			else if( content.photo )
+			{
+				JLLog( @"%d번째 레시피에 새로운 사진이 등록되었음", i );
+				[photos addObject:content.photo];
+				[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+			}
+			
+			// 사진이 없는 경우
+			else
+			{
+				JLLog( @"No photo at index : %d", i );
+				self.navigationItem.leftBarButtonItem.enabled = YES;
+				self.navigationItem.rightBarButtonItem.enabled = YES;
+				[_tableView undim];
+				
+				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:[NSString stringWithFormat:NSLocalizedString( @"MESSAGE_NO_PHOTO_ON_N_TH_RECIPE", nil ), i + 1] delegate:nil cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil] show];
+				
+				return;
+			}
+		}
+		
+		JLLog( @"params : %@", params );
+		
+		NSString *api = nil;
+		NSString *method = nil;
+		if( !_editingDishId )
+		{
+			api = @"/dish";
+			method = @"POST";
+		}
+		else
+		{
+			api = [NSString stringWithFormat:@"/dish/%d", _editingDishId];
+			method = @"PUT";
+		}
+		
+		JLLog( @"params : %@", params );
+		
+		
+		//
+		// 업로드
+		//
+		_uploadOperation = [[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params upload:^(long long bytesLoaded, long long bytesTotal) {
+			
+			dispatch_async( dispatch_get_main_queue(), ^{
+				CGRect frame = _progressBar.frame;
+				frame.size.width = 265.0 * bytesLoaded / bytesTotal;
+				_progressBar.frame = frame;
+			} );
+			
+		} download:nil success:^(id response) {
+			JLLog( @"Success" );
+			
+			[[(AppDelegate *)[UIApplication sharedApplication].delegate dishListViewController] updateDishes];
+			
+			dispatch_async( dispatch_get_main_queue(), ^{
+				_progressState = DMProgressStateIdle;
+				
+				_progressButton.adjustsImageWhenHighlighted = NO;
+				[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_check_icon.png"] forState:UIControlStateNormal];
+				
+				double delayInSeconds = 1.0;
+				dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+				dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+					[self dismissViewControllerAnimated:YES completion:nil];
+				});
+			} );
+			
+		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+			self.navigationItem.leftBarButtonItem.enabled = YES;
+			self.navigationItem.rightBarButtonItem.enabled = YES;
+			[_tableView undim];
+			
+			JLLog( @"statusCode : %d", statusCode );
+			JLLog( @"errorCode : %d", errorCode );
+			JLLog( @"message : %@", message );
+			
+			dispatch_async( dispatch_get_main_queue(), ^{
+				_progressState = DMProgressStateFailure;
+				
+				_progressBarBackgroundView.hidden = YES;
+				_progressFailedLabel.hidden = NO;
+				_cancelButton.hidden = NO;
+				
+				CGRect frame = _progressBar.frame;
+				frame.size.width = 0;
+				_progressBar.frame = frame;
+				
+				[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_retry_button.png"] forState:UIControlStateNormal];
+			} );
+		}];
+	} );
+}
+
+- (void)progressButtonDidTouchUpInside
+{
+	// 업로드 취소
+	if( _progressState == DMProgressStateLoading )
+	{
+		[_uploadOperation cancel];
+		[self stopButtonDidTouchUpInside];
+	}
+	
+	// 다시 시도
+	else if( _progressState == DMProgressStateFailure )
+	{
+		[self uploadButtonDidTouchUpInside];
+	}
+}
+
+- (void)stopButtonDidTouchUpInside
+{
+	_progressState = DMProgressStateIdle;
+	_uploadOperation = nil;
+	
+	dispatch_async( dispatch_get_main_queue(), ^{
+		[UIView animateWithDuration:0.25 animations:^{
+			CGRect frame = _progressView.frame;
+			frame.origin.y = -_progressView.frame.size.height;
+			_progressView.frame = frame;
+		}];
+		
+		self.navigationItem.leftBarButtonItem.enabled = YES;
+		self.navigationItem.rightBarButtonItem.enabled = YES;
+		[_tableView undim];
+	} );
 }
 
 @end

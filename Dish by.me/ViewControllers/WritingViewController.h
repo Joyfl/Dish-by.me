@@ -16,6 +16,12 @@
 
 @protocol WritingViewControllerDelegate;
 
+typedef enum {
+	DMProgressStateIdle,
+	DMProgressStateLoading,
+	DMProgressStateFailure
+} DMProgressState;
+
 @interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextViewDelegate, RecipeEditorViewControllerDelegate>
 {
 	UITableView *_tableView;
@@ -36,6 +42,17 @@
 	NSInteger _originalDishId;
 	
 	NSInteger _photoHeight;
+	
+	
+	// 업로드 관련
+	UIImageView *_progressView;
+	UIImageView *_progressBar;
+	UIImageView *_progressBarBackgroundView;
+	UILabel *_progressFailedLabel;
+	UIButton *_progressButton;
+	UIButton *_cancelButton;
+	DMProgressState _progressState;
+	AFHTTPRequestOperation *_uploadOperation;
 }
 
 @property (nonatomic, weak) id<WritingViewControllerDelegate> delegate;
@@ -49,9 +66,6 @@
 
 @protocol WritingViewControllerDelegate
 
-- (void)writingViewController:(WritingViewController *)writingViewController willBeginUploadWithBlock:(void (^)(void))uploadBlock;
-- (void)writingViewController:(WritingViewController *)writingViewController bytesUploaded:(long long)bytesUploaded bytesTotal:(long long)bytesTotal;
-- (void)writingViewControllerDidFailedUpload:(WritingViewController *)writingViewController;
 - (void)writingViewControllerDidFinishUpload:(WritingViewController *)writingViewController;
 
 @end

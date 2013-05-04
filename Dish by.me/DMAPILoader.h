@@ -18,13 +18,13 @@
 
 #pragma mark -
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
  parameters:(NSDictionary *)parameters
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
  parameters:(NSDictionary *)parameters
 	 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
@@ -35,7 +35,7 @@
 
 #pragma mark -
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
 	  image:(UIImage *)image
 	forName:(NSString *)name
@@ -44,7 +44,7 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
 	  image:(UIImage *)image
 	forName:(NSString *)name
@@ -58,7 +58,7 @@
 
 #pragma mark -
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
 	 images:(NSArray *)images
    forNames:(NSArray *)names
@@ -67,7 +67,7 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
 	 images:(NSArray *)images
    forNames:(NSArray *)names

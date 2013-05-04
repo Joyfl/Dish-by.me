@@ -12,13 +12,7 @@
 #import "GAITrackedViewController.h"
 #import "WritingViewController.h"
 
-typedef enum {
-	DMProgressStateIdle,
-	DMProgressStateLoading,
-	DMProgressStateFailure
-} DMProgressState;
-
-@interface DishListViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishListCellDelegate, WritingViewControllerDelegate>
+@interface DishListViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishListCellDelegate>
 {
 	UITableView *_tableView;
 	NSMutableArray *_dishes;
@@ -29,16 +23,6 @@ typedef enum {
 	BOOL _updating;
 	
 	EGORefreshTableHeaderView *_refreshHeaderView;
-	
-	// 업로드 관련 UI
-	UIImageView *_progressView;
-	UIImageView *_progressBar;
-	UIImageView *_progressBarBackgroundView;
-	UILabel *_progressFailedLabel;
-	UIButton *_progressButton;
-	UIButton *_cancelButton;
-	DMProgressState _progressState;
-	void (^_uploadBlock)(void);
 	
 	NSTimer *_scrollTimer; // 스크롤 후 일정시간이 지나면 DishListCell에서 프로필을 fade out시킨다.
 }

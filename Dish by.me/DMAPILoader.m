@@ -38,16 +38,16 @@
 
 #pragma mark -
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
  parameters:(NSDictionary *)parameters
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
-	[self api:api method:method parameters:parameters upload:nil download:nil success:success failure:failure];
+	return [self api:api method:method parameters:parameters upload:nil download:nil success:success failure:failure];
 }
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
  parameters:(NSDictionary *)parameters
 	 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
@@ -57,7 +57,7 @@
 {
 	NSURLRequest *request = [_client requestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters]];
 	
-	[self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+	return [self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
@@ -95,7 +95,7 @@
 
 #pragma mark -
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
 	  image:(UIImage *)image
 	forName:(NSString *)name
@@ -107,7 +107,7 @@
 	[self api:api method:method image:image forName:name fileName:fileName parameters:parameters upload:nil download:nil success:success failure:failure];
 }
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
 	  image:(UIImage *)image
 	forName:(NSString *)name
@@ -120,15 +120,14 @@
 {
 	if( !image )
 	{
-		[self api:api method:method parameters:parameters success:success failure:failure];
-		return;
+		return [self api:api method:method parameters:parameters success:success failure:failure];
 	}
 	
 	NSURLRequest *request = [_client multipartFormRequestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
 		[formData appendPartWithFileData:UIImageJPEGRepresentation( image, 1 ) name:name fileName:fileName mimeType:@"image/jpeg"];
 	}];
 	
-	[self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+	return [self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
 		
@@ -159,7 +158,7 @@
 
 #pragma mark -
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
 	 images:(NSArray *)images
    forNames:(NSArray *)names
@@ -168,10 +167,10 @@
 	success:(void (^)(id response))success
 	failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure
 {
-	[self api:api method:method images:images forNames:names fileNames:fileNames parameters:parameters upload:nil download:nil success:success failure:failure];
+	return [self api:api method:method images:images forNames:names fileNames:fileNames parameters:parameters upload:nil download:nil success:success failure:failure];
 }
 
-- (void)api:(NSString *)api
+- (AFHTTPRequestOperation *)api:(NSString *)api
 	 method:(NSString *)method
 	 images:(NSArray *)images
    forNames:(NSArray *)names
@@ -184,14 +183,13 @@
 {
 	if( !images || images.count == 0 )
 	{
-		[self api:api method:method parameters:parameters success:success failure:failure];
-		return;
+		return [self api:api method:method parameters:parameters success:success failure:failure];
 	}
 	
 	if( images.count != names.count || names.count != fileNames.count )
 	{
 		JLLog( @"Must be image.count == names.count == fileNames.count" );
-		return;
+		return nil;
 	}
 	
 	NSURLRequest *request = [_client multipartFormRequestWithMethod:method path:[NSString stringWithFormat:@"/api/%@", api] parameters:[self parametersWithAccessToken:parameters] constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
@@ -205,8 +203,8 @@
 		}
 	}];
 	
-	[self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-		NSDictionary *errorInfo = [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"];
+	return [self sendRequest:request upload:upload download:download success:success failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+		NSDictionary *errorInfo = operation.responseData ? [[NSJSONSerialization JSONObjectWithData:operation.responseData options:0 error:nil] objectForKey:@"error"] : nil;
 		NSInteger errorCode = [[errorInfo objectForKey:@"code"] integerValue];
 		
 		// AccessToken is expired
@@ -236,7 +234,7 @@
 
 #pragma mark -
 
-- (void)sendRequest:(NSURLRequest *)request
+- (AFHTTPRequestOperation *)sendRequest:(NSURLRequest *)request
 			 upload:(void (^)(long long bytesLoaded, long long bytesTotal))upload
 		   download:(void (^)(long long bytesLoaded, long long bytesTotal))download
 			success:(void (^)(id response))success
@@ -297,6 +295,7 @@
 	}
 	
 	[_client enqueueHTTPRequestOperation:operation];
+	return operation;
 }
 
 

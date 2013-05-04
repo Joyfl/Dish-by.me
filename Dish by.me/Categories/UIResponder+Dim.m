@@ -23,9 +23,25 @@
 	return dimView;
 }
 
+- (UIView *)targetView
+{
+	UIView *targetView = nil;
+	
+	if( [self isKindOfClass:[UIViewController class]] )
+	{
+		targetView = [UIApplication sharedApplication].keyWindow;
+	}
+	else if( [self isKindOfClass:[UIView class]] )
+	{
+		targetView = (UIView *)self;
+	}
+	
+	return targetView;
+}
+
 
 #pragma mark -
-#pragma mark Dim
+#pragma mark Dim Window
 
 - (void)dim
 {
@@ -47,10 +63,13 @@
 	if( self.isDimmed ) return;
 	[self setIsDimmed:YES];
 	
-	UIImageView *dimView = [self dimView];
+	UIView *targetView = [self targetView];
+	targetView.userInteractionEnabled = NO;
 	
-	[[[UIApplication sharedApplication] keyWindow] addSubview:dimView];
+	UIImageView *dimView = [self dimView];
+	dimView.frame = targetView.frame;
 	dimView.alpha = 0;
+	[targetView addSubview:dimView];
 	
 	[UIView animateWithDuration:duration delay:delay options:0 animations:^{
 		dimView.alpha = 1;
@@ -91,7 +110,11 @@
 		dimView.alpha = 0;
 		
 	} completion:^(BOOL finished) {
-		[[[UIApplication sharedApplication] keyWindow] addSubview:dimView];
+		[dimView removeFromSuperview];
+		
+		UIView *targetView = [self targetView];
+		targetView.userInteractionEnabled = YES;
+		
 		if( completion )
 			completion( finished );
 	}];

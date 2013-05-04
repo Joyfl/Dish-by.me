@@ -14,7 +14,7 @@
 // Messages
 "MESSAGE_INTERNET_OFFLINE" = "인터넷 연결이 꺼져있습니다. 셀룰러 데이터 사용을 꺼놓았거나, 에어플레인모드가 켜져 있지는 않은지 확인해보세요.";
 "MESSAGE_REQUEST_TIMEOUT" = "인터넷 연결이 원활하지 않습니다. 잠시 후 다시 시도해보세요.";
-"MESSAGE_" = "";
+"MESSAGE_BAD_GATEWAY" = "서버에 연결할 수 없습니다. 금방 복구될 예정이니 조금만 기다려주세요.";
 "MESSAGE_" = "";
 "MESSAGE_" = "";
 "MESSAGE_" = "";
