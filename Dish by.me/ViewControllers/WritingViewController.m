@@ -302,7 +302,7 @@ enum {
 
 - (void)cancelButtonDidTouchUpInside
 {
-	[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_REALLY_CANCEL", nil ) cancelButtonTitle:NSLocalizedString( @"YES", nil ) otherButtonTitles:@[NSLocalizedString( @"OH_MY_MISTAKE", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+	[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_REALLY_CANCEL", nil ) cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:@[NSLocalizedString( @"YES", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 		
 		if( buttonIndex == 0 )
 			[self dismissViewControllerAnimated:YES completion:nil];
@@ -516,6 +516,7 @@ enum {
 	
 	self.navigationItem.leftBarButtonItem.enabled = NO;
 	self.navigationItem.rightBarButtonItem.enabled = NO;
+	_tableView.userInteractionEnabled = NO;
 	[_tableView dim];
 	
 	dispatch_async( dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 ), ^{
@@ -617,6 +618,7 @@ enum {
 				JLLog( @"No photo at index : %d", i );
 				self.navigationItem.leftBarButtonItem.enabled = YES;
 				self.navigationItem.rightBarButtonItem.enabled = YES;
+				_tableView.userInteractionEnabled = YES;
 				[_tableView undim];
 				
 				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:[NSString stringWithFormat:NSLocalizedString( @"MESSAGE_NO_PHOTO_ON_N_TH_RECIPE", nil ), i + 1] delegate:nil cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil] show];
@@ -675,6 +677,7 @@ enum {
 		} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 			self.navigationItem.leftBarButtonItem.enabled = YES;
 			self.navigationItem.rightBarButtonItem.enabled = YES;
+			_tableView.userInteractionEnabled = YES;
 			[_tableView undim];
 			
 			JLLog( @"statusCode : %d", statusCode );
@@ -728,6 +731,7 @@ enum {
 		
 		self.navigationItem.leftBarButtonItem.enabled = YES;
 		self.navigationItem.rightBarButtonItem.enabled = YES;
+		_tableView.userInteractionEnabled = YES;
 		[_tableView undim];
 	} );
 }

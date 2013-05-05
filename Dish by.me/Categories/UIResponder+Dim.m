@@ -64,7 +64,6 @@
 	[self setIsDimmed:YES];
 	
 	UIView *targetView = [self targetView];
-	targetView.userInteractionEnabled = NO;
 	
 	UIImageView *dimView = [self dimView];
 	dimView.frame = targetView.frame;
