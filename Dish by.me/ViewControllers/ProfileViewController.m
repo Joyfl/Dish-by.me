@@ -206,7 +206,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	JLLog( @"loadMoreDishes" );
 	_loadingDishes = YES;
 	
-	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _dishes.count] };
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _dishes.count], @"limit": @"30" };
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:params success:^(id response) {
 		JLLog( @"loadMoreDishes success" );
 		
@@ -238,7 +238,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	JLLog( @"loadMoreBookmarks" );
 	_loadingBookmarks = YES;
 	
-	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _bookmarks.count] };
+	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _bookmarks.count], @"limit": @"30" };
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:params success:^(id response) {
 		JLLog( @"loadMoreBookmarks success" );
 		
@@ -368,7 +368,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 {
 	_updating = YES;
 	
-	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+	NSDictionary *params = @{ @"limit": @"30" };
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/dishes", _user.userId] method:@"GET" parameters:params success:^(id response) {
 		[_dishes removeAllObjects];
 		
 		NSArray *data = [response objectForKey:@"data"];
@@ -395,7 +396,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 {
 	_updating = YES;
 	
-	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:nil success:^(id response) {
+	NSDictionary *params = @{ @"limit": @"30" };
+	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d/bookmarks", _user.userId] method:@"GET" parameters:params success:^(id response) {
 		[_bookmarks removeAllObjects];
 		
 		NSArray *data = [response objectForKey:@"data"];		
