@@ -542,17 +542,14 @@ enum {
 		
 		UIImage *image = [_photoButton backgroundImageForState:UIControlStateNormal];
 		
-		NSMutableDictionary *recipe = [NSMutableDictionary dictionary];
-		[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.servings] forKey:@"servings"];
-		[recipe setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.minutes] forKey:@"minutes"];
 		
+		//
+		// 기본 내용
+		//
 		NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:
 									   @{ @"name": _nameInput.text,
 									   @"description": _descriptionInput.text,
-									   @"facebook_share": [NSNumber numberWithBool:_facebookButton.selected],
-									   @"servings": [NSString stringWithFormat:@"%d", _recipeView.recipe.servings],
-									   @"minutes": [NSString stringWithFormat:@"%d", _recipeView.recipe.minutes],
-									   @"recipe_count": [NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] }];
+									   @"facebook_share": [NSNumber numberWithBool:_facebookButton.selected] }];
 		
 		// 요리를 포크할 경우
 		if( _originalDishId )
@@ -560,7 +557,11 @@ enum {
 			[params setObject:[NSString stringWithFormat:@"%d", _originalDishId] forKey:@"forked_from"];
 		}
 		
-		NSInteger ingredientCount = 0;
+		
+		//
+		// 레시피
+		//
+		NSMutableDictionary *ingredients = [NSMutableDictionary dictionary];
 		
 		// 재료 파라미터
 		for( NSInteger i = 0; i < _recipeView.recipe.ingredients.count; i++ )
@@ -568,13 +569,10 @@ enum {
 			Ingredient *ingredient = [_recipeView.recipe.ingredients objectAtIndex:i];
 			if( ingredient.name )
 			{
-				[params setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
-				[params setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
-				ingredientCount ++;
+				[ingredients setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
+				[ingredients setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
 			}
 		}
-		
-		[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.ingredients.count] forKey:@"ingredient_count"];
 		
 		// 사진, 레시피 파라미터
 		// recipe_photo_%d : 레시피 사진 또는 URL
@@ -627,8 +625,30 @@ enum {
 			}
 		}
 		
+		if( _recipeView.recipe.servings > 0 )
+		{
+			[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.servings] forKey:@"servings"];
+		}
+		
+		if( _recipeView.recipe.minutes > 0 )
+		{
+			[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.minutes] forKey:@"minutes"];
+		}
+		
+		if( ingredients.count > 0 )
+		{
+			// name과 amount가 각각 들어가므로 2로 나눠줌
+			[params setObject:[NSString stringWithFormat:@"%d", ingredients.count / 2] forKey:@"ingredient_count"];
+			[params addEntriesFromDictionary:ingredients];
+		}
+		
+		[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] forKey:@"recipe_count"];
+		
 		JLLog( @"params : %@", params );
 		
+		//
+		// 업로드
+		//
 		NSString *api = nil;
 		NSString *method = nil;
 		if( !_editingDishId )
@@ -644,10 +664,6 @@ enum {
 		
 		JLLog( @"params : %@", params );
 		
-		
-		//
-		// 업로드
-		//
 		_uploadOperation = [[DMAPILoader sharedLoader] api:api method:method images:photos forNames:names fileNames:names parameters:params upload:^(long long bytesLoaded, long long bytesTotal) {
 			
 			dispatch_async( dispatch_get_main_queue(), ^{
