@@ -66,7 +66,7 @@
 	UIView *targetView = [self targetView];
 	
 	UIImageView *dimView = [self dimView];
-	dimView.frame = targetView.frame;
+	dimView.frame = targetView.bounds;
 	dimView.alpha = 0;
 	[targetView addSubview:dimView];
 	
