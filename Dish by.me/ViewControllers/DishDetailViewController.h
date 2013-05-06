@@ -35,8 +35,9 @@
 	
 	CGFloat _contentRowHeight;
 	
-	UIImageView *_photoView;
+	UIButton *_photoView;
 	UIImageView *_borderView;
+	NSTimer *_photoViewTouchTimer;
 	
 	UILabel *_timeLabel;
 	

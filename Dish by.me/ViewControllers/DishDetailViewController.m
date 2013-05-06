@@ -104,16 +104,8 @@ enum {
 {
 	if( [CurrentUser user].loggedIn )
 	{
-		if( _dish.userId == [CurrentUser user].userId )
-		{
-			DMBarButtonItem *editButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"EDIT", @"" ) target:self	action:@selector(editButtonDidTouchUpInside)];
-			self.navigationItem.rightBarButtonItem = editButton;
-		}
-		else
-		{
-			DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
-			self.navigationItem.rightBarButtonItem = forkButton;
-		}
+		DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
+		self.navigationItem.rightBarButtonItem = forkButton;
 		
 		_commentInput.enabled = YES;
 		_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
@@ -387,6 +379,36 @@ enum {
 	}];
 }
 
+- (void)deleteDish
+{
+	self.view.userInteractionEnabled = NO;
+	[self dim];
+	
+	JLLog( @"[TRY] Delete a dish : %d", _dish.dishId );
+	
+	NSString *api = [NSString stringWithFormat:@"/dish/%d", _dish.dishId];
+	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+		JLLog( @"[SUCCESS] Delete a dish : %d", _dish.dishId );
+		
+		DishListViewController *dishListViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate dishListViewController];
+		for( Dish *dish in dishListViewController.dishes )
+		{
+			if( dish.dishId == _dish.dishId )
+			{
+				[dishListViewController.dishes removeObject:dish];
+				break;
+			}
+		}
+		[self.navigationController popViewControllerAnimated:YES];
+		[self undim];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
 
 #pragma mark -
 #pragma mark UITableView
@@ -471,7 +493,10 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:photoCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			_photoView = [[UIImageView alloc] init];
+			_photoView = [[UIButton alloc] init];
+			_photoView.adjustsImageWhenHighlighted = NO;
+			[_photoView addTarget:self action:@selector(photoViewDidTouchDown) forControlEvents:UIControlEventTouchDown];
+			[_photoView addTarget:self action:@selector(photoViewDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[cell.contentView addSubview:_photoView];
 			
 			_borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_detail_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )]];
@@ -483,22 +508,22 @@ enum {
 		
 		if( _dish.photo )
 		{
-			_photoView.image = _dish.photo;
+			[_photoView setBackgroundImage:_dish.photo forState:UIControlStateNormal];
 		}
 		else if( _dish.thumbnail )
 		{
-			_photoView.image = _dish.thumbnail;
+			[_photoView setBackgroundImage:_dish.thumbnail forState:UIControlStateNormal];
 			[DMAPILoader loadImageFromURLString:_dish.photoURL context:nil success:^(UIImage *image, id context) {
-				_photoView.image = _dish.photo = image;
+				[_photoView setBackgroundImage:_dish.photo = image forState:UIControlStateNormal];
 			}];
 		}
 		else
 		{
-			_photoView.image = [UIImage imageNamed:@"placeholder.png"];
+			[_photoView setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
 			[DMAPILoader loadImageFromURLString:_dish.thumbnailURL context:nil success:^(UIImage *image, id context) {
-				_photoView.image = _dish.thumbnail = image;
+				[_photoView setBackgroundImage:_dish.thumbnail = image forState:UIControlStateNormal];
 				[DMAPILoader loadImageFromURLString:_dish.photoURL context:nil success:^(UIImage *image, id context) {
-					_photoView.image = _dish.photo = image;
+					[_photoView setBackgroundImage:_dish.photo = image forState:UIControlStateNormal];
 				}];
 			}];
 		}
@@ -855,14 +880,6 @@ enum {
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)editButtonDidTouchUpInside
-{
-	WritingViewController *writingViewController = [[WritingViewController alloc] initWithDish:_dish];
-	writingViewController.delegate = self;
-	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
-	[self.navigationController presentViewController:navController animated:YES completion:NO];
-}
-
 - (void)forkButtonDidTouchUpInside
 {
 	WritingViewController *writingViewController = [[WritingViewController alloc] initWithOriginalDishId:_dish.dishId];
@@ -880,6 +897,46 @@ enum {
 	{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
 	} completion:nil];
+}
+
+- (void)photoViewDidTouchDown
+{
+	_photoViewTouchTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(showMenu) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_photoViewTouchTimer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)photoViewDidTouchUpInside
+{
+	[_photoViewTouchTimer invalidate];
+	_photoViewTouchTimer = nil;
+}
+
+- (void)showMenu
+{
+	UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"EDIT_DISH", nil ) otherButtonTitles:@[NSLocalizedString( @"DELETE_DISH", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+		
+		// 요리 수정
+		if( buttonIndex == 0 )
+		{
+			WritingViewController *writingViewController = [[WritingViewController alloc] initWithDish:_dish];
+			writingViewController.delegate = self;
+			DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
+			[self.navigationController presentViewController:navController animated:YES completion:NO];
+		}
+		
+		// 요리 삭제 -> 재확인
+		else if( buttonIndex == 1 )
+		{
+			[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REALLY_DELETE", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"DELETE_DISH", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+				if( buttonIndex == 0 )
+				{
+					[self deleteDish];
+				}
+			}] showInView:self.tabBarController.view];
+		}
+	}];
+	menu.destructiveButtonIndex = 1;
+	[menu showInView:self.tabBarController.view];
 }
 
 - (void)profileImageButtonDidTouchUpInside

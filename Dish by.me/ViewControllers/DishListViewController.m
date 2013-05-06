@@ -43,7 +43,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-//	[self updateDishes];
 	[_tableView reloadData];
 }
 

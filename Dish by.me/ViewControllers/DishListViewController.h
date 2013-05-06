@@ -15,7 +15,7 @@
 @interface DishListViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishListCellDelegate>
 {
 	UITableView *_tableView;
-	NSMutableArray *_dishes;
+//	NSMutableArray *_dishes;
 	NSInteger _offset;
 	BOOL _loadedLastDish;
 	
@@ -26,6 +26,8 @@
 	
 	NSTimer *_scrollTimer; // 스크롤 후 일정시간이 지나면 DishListCell에서 프로필을 fade out시킨다.
 }
+
+@property (nonatomic, strong) NSMutableArray *dishes;
 
 - (void)updateDishes;
 
