@@ -31,7 +31,7 @@
 	bgView.image = [UIImage imageNamed:@"book_background.png"];
 	[self.view addSubview:bgView];
 	
-	UIImageView *paperView = [[UIImageView alloc] initWithFrame:CGRectMake( 7, 7, 305, 340 )];
+	UIImageView *paperView = [[UIImageView alloc] initWithFrame:CGRectMake( 7, 7, 305, 295 )];
 	paperView.image = [[UIImage imageNamed:@"book_paper.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 10, 10, 10, 10 )];
 	[self.view addSubview:paperView];
 	
@@ -93,6 +93,9 @@
 	[_loginButton addTarget:self action:@selector(loginButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[self.view addSubview:_loginButton];
 	
+	//
+	// 추후 업데이트
+	//
 	_forgotPasswordButton = [[UIButton alloc] init];
 	_forgotPasswordButton.titleLabel.font = [UIFont systemFontOfSize:12];
 	_forgotPasswordButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -102,7 +105,7 @@
 	[_forgotPasswordButton sizeToFit];
 	_forgotPasswordButton.center = CGPointMake( UIScreenWidth / 2, 310 );
 	[_forgotPasswordButton addTarget:self action:@selector(forgotPasswordButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[self.view addSubview:_forgotPasswordButton];
+//	[self.view addSubview:_forgotPasswordButton];
 	
 	return self;
 }
