@@ -60,7 +60,7 @@
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragInside];
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonDrag:withEvent:) forControlEvents:UIControlEventTouchDragOutside];
 	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUp) forControlEvents:UIControlEventTouchUpOutside];
+	[_bookmarkButton addTarget:self action:@selector(bookmarkButtonTouchUpOutside) forControlEvents:UIControlEventTouchUpOutside];
 	[_bookmarkButtonContainer addSubview:_bookmarkButton];
 	
 	CALayer *maskLayer = [CALayer layer];
@@ -77,6 +77,8 @@
 
 - (void)bookmarkButtonDrag:(UIButton *)button withEvent:(UIEvent *)event
 {
+	_dragging = YES;
+	
 	UITouch *touch = [[event touchesForView:button] anyObject];
 	CGPoint prevLocation = [touch previousLocationInView:_bookmarkButtonContainer];
 	CGPoint location = [touch locationInView:_bookmarkButtonContainer];
@@ -102,6 +104,8 @@
 
 - (void)bookmarkButtonTouchUpInside
 {
+	_dragging = NO;
+	
 	// Just touch when not bookmarked
 	if( _bookmarkButton.frame.origin.x == 75 )
 	{
@@ -130,12 +134,14 @@
 	}
 	else
 	{
-		[self bookmarkButtonTouchUp];
+		[self bookmarkButtonTouchUpOutside];
 	}
 }
 
-- (void)bookmarkButtonTouchUp
+- (void)bookmarkButtonTouchUpOutside
 {
+	_dragging = NO;
+	
 	// Swipe to bookmark
 	if( _bookmarkButton.frame.origin.x < 30 )
 	{

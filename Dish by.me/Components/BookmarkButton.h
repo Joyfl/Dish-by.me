@@ -25,6 +25,7 @@
 @property (nonatomic, assign) CGPoint position;
 @property (nonatomic, assign) CGFloat buttonX;
 @property (nonatomic, assign) BOOL hidden;
+@property (nonatomic, readonly) BOOL dragging;
 
 @end
 

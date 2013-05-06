@@ -1032,7 +1032,9 @@ enum {
 	{
 		if( !_dish.bookmarked )
 		{
-			[self bookmark];
+			if( !button.dragging )
+				[self bookmark];
+			
 			_dish.bookmarked = YES;
 			_dish.bookmarkCount++;
 			[self updateBookmarkUI];
@@ -1058,7 +1060,9 @@ enum {
 	{
 		if( _dish.bookmarked )
 		{
-			[self unbookmark];
+			if( !button.dragging )
+				[self unbookmark];
+			
 			_dish.bookmarked = NO;
 			_dish.bookmarkCount--;
 			[self updateBookmarkUI];

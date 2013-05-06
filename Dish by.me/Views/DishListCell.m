@@ -219,7 +219,8 @@ static const NSInteger PhotoViewMaxLength = 292;
 	{
 		if( !_dish.bookmarked )
 		{
-			[_delegate dishListCell:self didBookmarkAtIndexPath:_indexPath];
+			if( !button.dragging )
+				[_delegate dishListCell:self didBookmarkAtIndexPath:_indexPath];
 			
 			_dish.bookmarked = YES;
 			_dish.bookmarkCount++;
@@ -262,7 +263,8 @@ static const NSInteger PhotoViewMaxLength = 292;
 	{
 		if( _dish.bookmarked )
 		{
-			[_delegate dishListCell:self didUnbookmarkAtIndexPath:_indexPath];
+			if( !button.dragging )
+				[_delegate dishListCell:self didUnbookmarkAtIndexPath:_indexPath];
 			
 			_dish.bookmarked = NO;
 			_dish.bookmarkCount--;
