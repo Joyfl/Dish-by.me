@@ -304,7 +304,7 @@ enum {
 {
 	[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_REALLY_CANCEL", nil ) cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:@[NSLocalizedString( @"YES", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
 		
-		if( buttonIndex == 0 )
+		if( buttonIndex == 1 )
 			[self dismissViewControllerAnimated:YES completion:nil];
 		
 	}] show];
