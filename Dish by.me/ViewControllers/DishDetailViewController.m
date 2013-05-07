@@ -496,7 +496,7 @@ enum {
 			_photoView = [[UIButton alloc] init];
 			_photoView.adjustsImageWhenHighlighted = NO;
 			[_photoView addTarget:self action:@selector(photoViewDidTouchDown) forControlEvents:UIControlEventTouchDown];
-			[_photoView addTarget:self action:@selector(photoViewDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[_photoView addTarget:self action:@selector(photoViewDidTouchUp) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 			[cell.contentView addSubview:_photoView];
 			
 			_borderView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_detail_border.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 12, 12, 12, 12 )]];
@@ -901,11 +901,14 @@ enum {
 
 - (void)photoViewDidTouchDown
 {
-	_photoViewTouchTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(showMenu) userInfo:nil repeats:NO];
-	[[NSRunLoop mainRunLoop] addTimer:_photoViewTouchTimer forMode:NSDefaultRunLoopMode];
+	if( _dish.userId == [CurrentUser user].userId )
+	{
+		_photoViewTouchTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(showMenu) userInfo:nil repeats:NO];
+		[[NSRunLoop mainRunLoop] addTimer:_photoViewTouchTimer forMode:NSDefaultRunLoopMode];
+	}
 }
 
-- (void)photoViewDidTouchUpInside
+- (void)photoViewDidTouchUp
 {
 	[_photoViewTouchTimer invalidate];
 	_photoViewTouchTimer = nil;
