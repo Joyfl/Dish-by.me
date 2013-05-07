@@ -300,8 +300,6 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)loadMoreFollowers
 {
-	JLLog( @"loadMoreFollowers" );
-	
 	_loadingFollowers = YES;
 	
 	NSDictionary *params = @{ @"offset": [NSString stringWithFormat:@"%d", _followers.count] };
@@ -309,7 +307,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		JLLog( @"loadMoreFollowers success" );
 		
 		_loadingFollowers = NO;
-		
+		NSLog( @"%@", response );
 		NSArray *data = [response objectForKey:@"data"];
 		for( NSDictionary *d in data )
 		{
@@ -1143,15 +1141,16 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		userListCell.followButton.showsActivityIndicatorView = NO;
 		[userListCell setUser:user atIndexPath:indexPath];
 		
+		// 내 프로필을 보고 있을 경우에만
 		if( _user.userId == [CurrentUser user].userId )
 		{
 			_user.followingCount ++;
 			[_following addObject:user];
-			[_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+			[_tableView reloadData];
 		}
 		
 	} failure:^(NSInteger errorCode) {
-		
+		JLLog( @"팔로우 실패" );
 	}];
 }
 
@@ -1165,6 +1164,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		userListCell.followButton.showsActivityIndicatorView = NO;
 		[userListCell setUser:user atIndexPath:indexPath];
 		
+		// 내 프로필을 보고 있을 경우에만
 		if( _user.userId == [CurrentUser user].userId )
 		{
 			_user.followingCount --;
@@ -1179,7 +1179,9 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			[_tableView reloadData];
 		}
 		
-	} failure:nil];
+	} failure:^(NSInteger errorCode) {
+		JLLog( @"언팔로우 실패" );
+	}];
 }
 
 @end

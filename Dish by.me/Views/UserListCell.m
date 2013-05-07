@@ -75,7 +75,7 @@
 	}
 	else
 	{
-		[_profileImageButton setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		[_profileImageButton setBackgroundImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
 		[DMAPILoader loadImageFromURL:[NSURL URLWithString:_user.thumbnailURL] context:_indexPath success:^(UIImage *image, NSIndexPath *indexPath) {
 			_user.thumbnail = image;
 			
