@@ -172,7 +172,8 @@ static const NSInteger PhotoViewMaxLength = 292;
 	[self updateBookmarkUI];
 	
 	_bookmarkButton.hidden = ![CurrentUser user].loggedIn;
-		 
+	_bookmarkButton.bookmarked = _dish.bookmarked;
+	
 	if( _dish.bookmarked )
 		_bookmarkButton.buttonX = 10;
 	else
@@ -213,63 +214,63 @@ static const NSInteger PhotoViewMaxLength = 292;
 #pragma mark -
 #pragma mark BookmarkButtonDelegate
 
+- (void)bookmarkButton:(BookmarkButton *)button needsUpdateBookmarkUIAsBookmarked:(BOOL)bookmarked
+{
+	if( bookmarked )
+	{
+		_dish.bookmarked = YES;
+		_dish.bookmarkCount++;
+		[self updateBookmarkUI];
+		
+		[UIView animateWithDuration:0.18 animations:^{
+			_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+		} completion:^(BOOL finished) {
+			[UIView animateWithDuration:0.14 animations:^{
+				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
+			} completion:^(BOOL finished) {
+				[UIView animateWithDuration:0.12 animations:^{
+					_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
+				} completion:^(BOOL finished) {
+					[UIView animateWithDuration:0.1 animations:^{
+						_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+					}];
+				}];
+			}];
+		}];
+		
+		[UIView animateWithDuration:0.2 delay:0.14 options:0 animations:^{
+			_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.4, 1.4);
+		} completion:^(BOOL finished) {
+			[UIView animateWithDuration:0.15 animations:^{
+				_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
+			} completion:^(BOOL finished) {
+				[UIView animateWithDuration:0.12 animations:^{
+					_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
+				} completion:^(BOOL finished) {
+					[UIView animateWithDuration:0.1 animations:^{
+						_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+					}];
+				}];
+			}];
+		}];
+	}
+	else
+	{
+		_dish.bookmarked = NO;
+		_dish.bookmarkCount--;
+		[self updateBookmarkUI];
+	}
+}
+
 - (void)bookmarkButton:(BookmarkButton *)button didChangeBookmarked:(BOOL)bookmarked
 {
 	if( bookmarked )
 	{
-		if( !_dish.bookmarked )
-		{
-			if( !button.dragging )
-				[_delegate dishListCell:self didBookmarkAtIndexPath:_indexPath];
-			
-			_dish.bookmarked = YES;
-			_dish.bookmarkCount++;
-			[self updateBookmarkUI];
-			
-			[UIView animateWithDuration:0.18 animations:^{
-				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
-			} completion:^(BOOL finished) {
-				[UIView animateWithDuration:0.14 animations:^{
-					_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
-				} completion:^(BOOL finished) {
-					[UIView animateWithDuration:0.12 animations:^{
-						_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
-					} completion:^(BOOL finished) {
-						[UIView animateWithDuration:0.1 animations:^{
-							_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-						}];
-					}];
-				}];
-			}];
-			
-			[UIView animateWithDuration:0.2 delay:0.14 options:0 animations:^{
-				_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.4, 1.4);
-			} completion:^(BOOL finished) {
-				[UIView animateWithDuration:0.15 animations:^{
-					_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
-				} completion:^(BOOL finished) {
-					[UIView animateWithDuration:0.12 animations:^{
-						_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
-					} completion:^(BOOL finished) {
-						[UIView animateWithDuration:0.1 animations:^{
-							_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-						}];
-					}];
-				}];
-			}];
-		}
+		[_delegate dishListCell:self didBookmarkAtIndexPath:_indexPath];
 	}
 	else if( !bookmarked )
 	{
-		if( _dish.bookmarked )
-		{
-			if( !button.dragging )
-				[_delegate dishListCell:self didUnbookmarkAtIndexPath:_indexPath];
-			
-			_dish.bookmarked = NO;
-			_dish.bookmarkCount--;
-			[self updateBookmarkUI];
-		}
+		[_delegate dishListCell:self didUnbookmarkAtIndexPath:_indexPath];
 	}
 }
 

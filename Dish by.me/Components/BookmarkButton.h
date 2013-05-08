@@ -18,6 +18,8 @@
 	UILabel *_bookmarkLabel;
 	UIButton *_bookmarkButton;
 	UIView *_bookmarkButtonContainer;
+	
+	BOOL _fakeBookmarked;
 }
 
 @property (nonatomic, retain) id<BookmarkButtonDelegate> delegate;
@@ -25,13 +27,14 @@
 @property (nonatomic, assign) CGPoint position;
 @property (nonatomic, assign) CGFloat buttonX;
 @property (nonatomic, assign) BOOL hidden;
-@property (nonatomic, readonly) BOOL dragging;
+@property (nonatomic, assign) BOOL bookmarked;
 
 @end
 
 
 @protocol BookmarkButtonDelegate
 
+- (void)bookmarkButton:(BookmarkButton *)button needsUpdateBookmarkUIAsBookmarked:(BOOL)bookmarked;
 - (void)bookmarkButton:(BookmarkButton *)button didChangeBookmarked:(BOOL)bookmarked;
 
 @end

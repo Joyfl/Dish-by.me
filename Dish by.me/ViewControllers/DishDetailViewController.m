@@ -679,6 +679,7 @@ enum {
 			_bookmarkButton = [[BookmarkButton alloc] init];
 			_bookmarkButton.delegate = self;
 			_bookmarkButton.parentView = cell.contentView;
+			_bookmarkButton.bookmarked = _dish.bookmarked;
 			
 			[_tableView reloadData];
 		}
@@ -1029,47 +1030,48 @@ enum {
 #pragma mark -
 #pragma mark BookmarkButtonDelegate
 
+- (void)bookmarkButton:(BookmarkButton *)button needsUpdateBookmarkUIAsBookmarked:(BOOL)bookmarked
+{
+	if( bookmarked )
+	{
+		_dish.bookmarked = YES;
+		_dish.bookmarkCount++;
+		[self updateBookmarkUI];
+		
+		[UIView animateWithDuration:0.18 animations:^{
+			_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+		} completion:^(BOOL finished) {
+			[UIView animateWithDuration:0.14 animations:^{
+				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
+			} completion:^(BOOL finished) {
+				[UIView animateWithDuration:0.12 animations:^{
+					_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
+				} completion:^(BOOL finished) {
+					[UIView animateWithDuration:0.1 animations:^{
+						_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+					}];
+				}];
+			}];
+		}];
+	}
+	
+	else
+	{
+		_dish.bookmarked = NO;
+		_dish.bookmarkCount--;
+		[self updateBookmarkUI];
+	}
+}
+
 - (void)bookmarkButton:(BookmarkButton *)button didChangeBookmarked:(BOOL)bookmarked
 {
 	if( bookmarked )
 	{
-		if( !_dish.bookmarked )
-		{
-			if( !button.dragging )
-				[self bookmark];
-			
-			_dish.bookmarked = YES;
-			_dish.bookmarkCount++;
-			[self updateBookmarkUI];
-			
-			[UIView animateWithDuration:0.18 animations:^{
-				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
-			} completion:^(BOOL finished) {
-				[UIView animateWithDuration:0.14 animations:^{
-					_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
-				} completion:^(BOOL finished) {
-					[UIView animateWithDuration:0.12 animations:^{
-						_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
-					} completion:^(BOOL finished) {
-						[UIView animateWithDuration:0.1 animations:^{
-							_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-						}];
-					}];
-				}];
-			}];
-		}
+		[self bookmark];
 	}
 	else if( !bookmarked )
 	{
-		if( _dish.bookmarked )
-		{
-			if( !button.dragging )
-				[self unbookmark];
-			
-			_dish.bookmarked = NO;
-			_dish.bookmarkCount--;
-			[self updateBookmarkUI];
-		}
+		[self unbookmark];
 	}
 }
 

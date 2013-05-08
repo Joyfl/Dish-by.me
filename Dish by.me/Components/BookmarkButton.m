@@ -75,10 +75,13 @@
     return self;
 }
 
+- (void)setBookmarked:(BOOL)bookmarked
+{
+	_bookmarked = _fakeBookmarked = bookmarked;
+}
+
 - (void)bookmarkButtonDrag:(UIButton *)button withEvent:(UIEvent *)event
 {
-	_dragging = YES;
-	
 	UITouch *touch = [[event touchesForView:button] anyObject];
 	CGPoint prevLocation = [touch previousLocationInView:_bookmarkButtonContainer];
 	CGPoint location = [touch locationInView:_bookmarkButtonContainer];
@@ -96,16 +99,26 @@
 		_bookmarkLabel.alpha = ( buttonX - 30 ) / 45;
 		
 		if( button.frame.origin.x < 30 )
-			[delegate bookmarkButton:self didChangeBookmarked:YES];
+		{
+			if( !_fakeBookmarked )
+			{
+				_fakeBookmarked = YES;
+				[delegate bookmarkButton:self needsUpdateBookmarkUIAsBookmarked:_fakeBookmarked];
+			}
+		}
 		else
-			[delegate bookmarkButton:self didChangeBookmarked:NO];
+		{
+			if( _fakeBookmarked )
+			{
+				_fakeBookmarked = NO;
+				[delegate bookmarkButton:self needsUpdateBookmarkUIAsBookmarked:_fakeBookmarked];
+			}
+		}
 	}
 }
 
 - (void)bookmarkButtonTouchUpInside
 {
-	_dragging = NO;
-	
 	// Just touch when not bookmarked
 	if( _bookmarkButton.frame.origin.x == 75 )
 	{
@@ -129,9 +142,13 @@
 	// Just touch when bookmarked
 	else if( _bookmarkButton.frame.origin.x == 10 )
 	{
-		[delegate bookmarkButton:self didChangeBookmarked:NO];
+		self.bookmarked = NO;
+		[delegate bookmarkButton:self needsUpdateBookmarkUIAsBookmarked:_bookmarked];
+		[delegate bookmarkButton:self didChangeBookmarked:_bookmarked];
 		[self beginUnbookmarkAnimation];
 	}
+	
+	// Touch up after dragging
 	else
 	{
 		[self bookmarkButtonTouchUpOutside];
@@ -140,19 +157,25 @@
 
 - (void)bookmarkButtonTouchUpOutside
 {
-	_dragging = NO;
-	
 	// Swipe to bookmark
 	if( _bookmarkButton.frame.origin.x < 30 )
 	{
-		[delegate bookmarkButton:self didChangeBookmarked:YES];
+		if( !_bookmarked )
+		{
+			self.bookmarked = YES;
+			[delegate bookmarkButton:self didChangeBookmarked:_bookmarked];
+		}
 		[self beginBookmarkAnimation];
 	}
 	
 	// Swipe to unbookmark
 	else if( _bookmarkButton.frame.origin.x >= 30 )
 	{
-		[delegate bookmarkButton:self didChangeBookmarked:NO];
+		if( _bookmarked )
+		{
+			self.bookmarked = NO;
+			[delegate bookmarkButton:self didChangeBookmarked:_bookmarked];
+		}
 		[self beginUnbookmarkAnimation];
 	}
 }
