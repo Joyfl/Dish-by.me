@@ -571,6 +571,8 @@ enum {
 			{
 				[ingredients setObject:ingredient.name forKey:[NSString stringWithFormat:@"ingredient_name_%d", i]];
 				[ingredients setObject:ingredient.amount ? ingredient.amount : @"" forKey:[NSString stringWithFormat:@"ingredient_amount_%d", i]];
+				JLLog( @"%@ = %@", [NSString stringWithFormat:@"ingredient_name_%d", i], ingredient.name );
+				JLLog( @"%@ = %@", [NSString stringWithFormat:@"ingredient_amount_%d", i], ingredient.amount );
 			}
 		}
 		
@@ -601,6 +603,7 @@ enum {
 			{
 				JLLog( @"%d번째 레시피에 새로운 사진이 등록되지 않았음", i );
 				[params setObject:content.photoURL forKey:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+				JLLog( @"%@ = %@", [NSString stringWithFormat:@"recipe_photo_%d", i], content.photoURL );
 			}
 			// 새로운 사진이 등록되었을 경우 : Multipart로 사진 바이너리 전송
 			else if( content.photo )
@@ -608,6 +611,7 @@ enum {
 				JLLog( @"%d번째 레시피에 새로운 사진이 등록되었음", i );
 				[photos addObject:content.photo];
 				[names addObject:[NSString stringWithFormat:@"recipe_photo_%d", i]];
+				JLLog( @"%@ = %@", [NSString stringWithFormat:@"recipe_photo_%d", i], content.photo );
 			}
 			
 			// 사진이 없는 경우
@@ -642,9 +646,9 @@ enum {
 			[params addEntriesFromDictionary:ingredients];
 		}
 		
-		[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] forKey:@"recipe_count"];
+		if( _recipeView.recipe.contents.count > 0 )
+			[params setObject:[NSString stringWithFormat:@"%d", _recipeView.recipe.contents.count] forKey:@"recipe_count"];
 		
-		JLLog( @"params : %@", params );
 		
 		//
 		// 업로드
