@@ -59,7 +59,6 @@
 	_indexPath = indexPath;
 	[self fillContents];
 	[self layoutContentView];
-	[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];
 }
 
 - (void)fillContents
@@ -69,22 +68,7 @@
 	else
 		_lineView.image = [UIImage imageNamed:@"line.png"];
 	
-	if( _comment.userPhoto )
-	{
-		[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];
-	}
-	else
-	{
-		[_profileImageButton setBackgroundImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
-		
-		[DMAPILoader loadImageFromURLString:_comment.userPhotoURL context:_indexPath success:^(UIImage *image, id indexPath) {
-			if( !_comment ) return;
-			_comment.userPhoto = image;
-			
-			if( [_indexPath isEqual:indexPath] )
-				[_profileImageButton setBackgroundImage:_comment.userPhoto forState:UIControlStateNormal];
-		}];
-	}
+	[_profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_comment.userPhotoURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
 	
 	_nameLabel.text = _comment.userName;
 	_timeLabel.text = _comment.relativeCreatedTime;
