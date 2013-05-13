@@ -18,6 +18,7 @@
 	Dish *_dish;
 	NSIndexPath *_indexPath;
 	
+	CALayer *_photoViewMaskLayer;
 	UIImageView *_photoView;
 	UIImageView *_commentIconView;
 	UILabel *_commentCountLabel;

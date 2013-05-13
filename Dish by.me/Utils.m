@@ -177,6 +177,31 @@
 	return croppedImage;
 }
 
++ (UIImage *)cropImageToSquare:(UIImage *)imageToCrop
+{
+	// Square
+	if( imageToCrop.size.width == imageToCrop.size.height )
+	{
+		return imageToCrop;
+	}
+	
+	// Landscape
+	else if( imageToCrop.size.width > imageToCrop.size.height )
+	{
+		CGFloat scale = [UIScreen mainScreen].scale;
+		CGRect rect = CGRectMake( ( imageToCrop.size.width * scale - imageToCrop.size.height * scale ) / 2, 0, imageToCrop.size.height * scale, imageToCrop.size.height * scale );
+		return [Utils cropImage:imageToCrop toRect:rect];
+	}
+	
+	// Portrait
+	else
+	{
+		CGFloat scale = [UIScreen mainScreen].scale;
+		CGRect rect = CGRectMake( 0, ( imageToCrop.size.height * scale - imageToCrop.size.width * scale ) / 2, imageToCrop.size.width * scale, imageToCrop.size.width * scale );
+		return [Utils cropImage:imageToCrop toRect:rect];
+	}
+}
+
 + (UIImage *)scaleAndRotateImage:(UIImage *)image
 {
 	int kMaxResolution = 1024;

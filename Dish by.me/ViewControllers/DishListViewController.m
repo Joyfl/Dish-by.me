@@ -52,6 +52,9 @@
 
 - (void)updateDishes
 {
+	if( _loading )
+		return;
+	
 	JLLog( @"updateDishes" );
 	
 	_updating = YES;
@@ -88,6 +91,9 @@
 
 - (void)loadMoreDishes
 {
+	if( _updating )
+		return;
+	
 	JLLog( @"loadMoreDishes" );
 	
 	_loading = YES;

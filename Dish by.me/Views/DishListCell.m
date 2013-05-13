@@ -112,21 +112,7 @@ static const NSInteger PhotoViewMaxLength = 292;
 
 - (void)fillContents
 {
-	_photoView.image = [UIImage imageNamed:@"placeholder.png"];
-	
-	if( _dish.userPhoto )
-	{
-		[_userPhotoButton setBackgroundImage:_dish.userPhoto forState:UIControlStateNormal];
-	}
-	else
-	{
-		[DMAPILoader loadImageFromURLString:_dish.userPhotoURL context:_indexPath success:^(UIImage *image, id indexPath) {
-			_dish.userPhoto = image;
-			
-			if( [_indexPath isEqual:indexPath] )
-				[_userPhotoButton setBackgroundImage:_dish.userPhoto forState:UIControlStateNormal];
-		}];
-	}
+	[_userPhotoButton setBackgroundImageWithURL:[NSURL URLWithString:_dish.userPhotoURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
 	
 	if( _dish.croppedThumbnail )
 	{
@@ -134,37 +120,10 @@ static const NSInteger PhotoViewMaxLength = 292;
 	}
 	else
 	{
-		[DMAPILoader loadImageFromURLString:_dish.thumbnailURL context:_indexPath success:^(UIImage *thumbnail, id indexPath) {
-			_dish.thumbnail = thumbnail;
-			
-			// Square
-			if( thumbnail.size.width == thumbnail.size.height )
-			{
-				_dish.croppedThumbnail = thumbnail;
-			}
-			
-			// Landscape
-			else if( thumbnail.size.width > thumbnail.size.height )
-			{
-				CGFloat scale = [UIScreen mainScreen].scale;
-				CGRect rect = CGRectMake( ( thumbnail.size.width * scale - thumbnail.size.height * scale ) / 2, 0, thumbnail.size.height * scale, thumbnail.size.height * scale );
-				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
-			}
-			
-			// Portrait
-			else
-			{
-				CGFloat scale = [UIScreen mainScreen].scale;
-				CGRect rect = CGRectMake( 0, ( thumbnail.size.height * scale - thumbnail.size.width * scale ) / 2, thumbnail.size.width * scale, thumbnail.size.width * scale );
-				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
-			}
-			
-			if( [_indexPath isEqual:indexPath] )
-				_photoView.image = _dish.croppedThumbnail;
-		}];
-	}
-	
-	
+		[_photoView setImageWithURL:[NSURL URLWithString:_dish.thumbnailURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+			_photoView.image = _dish.croppedThumbnail = [Utils cropImageToSquare:image];
+		} failure:nil];
+	}	
 	_commentCountLabel.text = [NSString stringWithFormat:@"%d", _dish.commentCount];
 	_dishNameLabel.text = _dish.dishName;
 	_userNameLabel.text = _dish.userName;
