@@ -28,41 +28,16 @@
 {
 	_dish = dish;
 	
-	[_photoButton setBackgroundImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal];
-	
 	if( _dish.croppedThumbnail )
 	{
 		[_photoButton setBackgroundImage:_dish.croppedThumbnail forState:UIControlStateNormal];
 	}
 	else
 	{
-		[DMAPILoader loadImageFromURLString:_dish.thumbnailURL context:nil success:^(UIImage *thumbnail, id context) {
-			_dish.thumbnail = thumbnail;
-			
-			// Square
-			if( thumbnail.size.width == thumbnail.size.height )
-			{
-				_dish.croppedThumbnail = thumbnail;
-			}
-			
-			// Landscape
-			else if( thumbnail.size.width > thumbnail.size.height )
-			{
-				CGFloat scale = [UIScreen mainScreen].scale;
-				CGRect rect = CGRectMake( ( thumbnail.size.width * scale - thumbnail.size.height * scale ) / 2, 0, thumbnail.size.height * scale, thumbnail.size.height * scale );
-				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
-			}
-			
-			// Portrait
-			else
-			{
-				CGFloat scale = [UIScreen mainScreen].scale;
-				CGRect rect = CGRectMake( 0, ( thumbnail.size.height * scale - thumbnail.size.width * scale ) / 2, thumbnail.size.width * scale, thumbnail.size.width * scale );
-				_dish.croppedThumbnail = [Utils cropImage:thumbnail toRect:rect];
-			}
-			
+		[_photoButton setBackgroundImageWithURL:[NSURL URLWithString:_dish.thumbnailURL] placeholderImage:[UIImage imageNamed:@"dish_tile_loading.png"] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+			_dish.croppedThumbnail = [Utils cropImageToSquare:image];
 			[_photoButton setBackgroundImage:_dish.croppedThumbnail forState:UIControlStateNormal];
-		}];
+		} failure:nil];
 	}
 }
 

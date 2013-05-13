@@ -111,11 +111,20 @@ static char kAFBackgroundImageRequestOperationObjectKey;
        placeholderImage:(UIImage *)placeholderImage
 			  forState:(UIControlState)state
 {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [self setImageWithURL:url placeholderImage:placeholderImage forState:state success:nil failure:nil];
+}
+
+- (void)setImageWithURL:(NSURL *)url
+       placeholderImage:(UIImage *)placeholderImage
+			   forState:(UIControlState)state
+				success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image))success
+				failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error))failure
+{
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPShouldHandleCookies:NO];
     [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
-
-    [self setImageWithURLRequest:request placeholderImage:placeholderImage forState:state success:nil failure:nil];
+	
+    [self setImageWithURLRequest:request placeholderImage:placeholderImage forState:state success:success failure:failure];
 }
 
 - (void)setImageWithURLRequest:(NSURLRequest *)urlRequest
@@ -189,11 +198,20 @@ static char kAFBackgroundImageRequestOperationObjectKey;
        placeholderImage:(UIImage *)placeholderImage
 			   forState:(UIControlState)state
 {
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [self setBackgroundImageWithURL:url placeholderImage:placeholderImage forState:state success:nil failure:nil];
+}
+
+- (void)setBackgroundImageWithURL:(NSURL *)url
+				 placeholderImage:(UIImage *)placeholderImage
+						 forState:(UIControlState)state
+						  success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image))success
+						  failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error))failure
+{
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPShouldHandleCookies:NO];
     [request addValue:@"image/*" forHTTPHeaderField:@"Accept"];
 	
-    [self setBackgroundImageWithURLRequest:request placeholderImage:placeholderImage forState:state success:nil failure:nil];
+    [self setBackgroundImageWithURLRequest:request placeholderImage:placeholderImage forState:state success:success failure:failure];
 }
 
 - (void)setBackgroundImageWithURLRequest:(NSURLRequest *)urlRequest
