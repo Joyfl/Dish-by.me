@@ -69,20 +69,8 @@
 
 - (void)fillContents
 {
-	if( _user.thumbnail )
-	{
-		[_profileImageButton setBackgroundImage:_user.thumbnail forState:UIControlStateNormal];
-	}
-	else
-	{
-		[_profileImageButton setBackgroundImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
-		[DMAPILoader loadImageFromURL:[NSURL URLWithString:_user.thumbnailURL] context:_indexPath success:^(UIImage *image, NSIndexPath *indexPath) {
-			_user.thumbnail = image;
-			
-			if( [_indexPath isEqual:indexPath] )
-				[_profileImageButton setBackgroundImage:_user.thumbnail forState:UIControlStateNormal];
-		}];
-	}
+	[_profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_user.thumbnailURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
+	
 	_nameLabel.text = _user.name;
 	_bioLabel.text = _user.bio;
 	
