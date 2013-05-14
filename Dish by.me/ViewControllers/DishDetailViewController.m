@@ -295,7 +295,7 @@ enum {
 	Comment *comment = [[Comment alloc] init];
 	comment.userId = [CurrentUser user].userId;
 	comment.userName = [CurrentUser user].name;
-	comment.userPhoto = [CurrentUser user].photo;
+	comment.userPhotoURL = [CurrentUser user].photoURL;
 	comment.message = _commentInput.text;
 	comment.createdTime = [NSDate date];
 	comment.relativeCreatedTime = NSLocalizedString( @"SENDING", @"전송중" );
