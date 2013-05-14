@@ -58,7 +58,7 @@
 		[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tableView];
 		
 		[(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController].notificationsCount = 0;
-		[[DMAPILoader sharedLoader] api:@"/notifications" method:@"PUT" parameters:nil success:nil failure:nil];
+		[[DMAPILoader sharedLoader] api:@"/notifications" method:@"PUT" parameters:@{@"received": @"1"} success:nil failure:nil];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		_updating = NO;
