@@ -14,7 +14,6 @@
 @property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, strong) NSString *userName;
 @property (nonatomic, strong) NSString *userPhotoURL;
-@property (nonatomic, strong) UIImage *userPhoto;
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic, strong) NSDate *createdTime;
 @property (nonatomic, strong) NSString *relativeCreatedTime;

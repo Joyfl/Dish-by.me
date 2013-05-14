@@ -11,8 +11,6 @@
 
 @implementation Dish
 
-@synthesize dishId, dishName, userId, userName, userPhotoURL, userPhoto, description, recipe, photoURL, photo, thumbnailURL, thumbnail, forkedFromId, forkedFromName, forkCount, bookmarkCount, commentCount, bookmarked, createdTime, relativeCreatedTime, updatedTime, relativeUpdatedTime;
-
 + (id)dishFromDictionary:(NSDictionary *)dictionary
 {
 	Dish *dish = [[Dish alloc] init];

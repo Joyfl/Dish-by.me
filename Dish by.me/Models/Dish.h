@@ -17,15 +17,12 @@
 @property (nonatomic, assign) NSInteger userId;
 @property (nonatomic, strong) NSString *userName;
 @property (nonatomic, strong) NSString *userPhotoURL;
-@property (nonatomic, strong) UIImage *userPhoto;
 @property (nonatomic, strong) NSString *description;
 @property (nonatomic, strong) Recipe *recipe;
 @property (nonatomic, assign) NSInteger photoWidth;
 @property (nonatomic, assign) NSInteger photoHeight;
 @property (nonatomic, strong) NSString *photoURL;
-@property (nonatomic, strong) UIImage *photo;
 @property (nonatomic, strong) NSString *thumbnailURL;
-@property (nonatomic, strong) UIImage *thumbnail;
 @property (nonatomic, strong) UIImage *croppedThumbnail;
 @property (nonatomic, assign) NSInteger forkedFromId;
 @property (nonatomic, strong) NSString *forkedFromName;

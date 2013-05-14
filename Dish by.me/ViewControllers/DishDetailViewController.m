@@ -506,27 +506,8 @@ enum {
 		_photoView.frame = CGRectMake( 11, 11, 298, photoHeight );
 		_borderView.frame = CGRectMake( 5, 5, 310, _photoView.frame.size.height + 12 );
 		
-		if( _dish.photo )
-		{
-			[_photoView setBackgroundImage:_dish.photo forState:UIControlStateNormal];
-		}
-		else if( _dish.thumbnail )
-		{
-			[_photoView setBackgroundImage:_dish.thumbnail forState:UIControlStateNormal];
-			[DMAPILoader loadImageFromURLString:_dish.photoURL context:nil success:^(UIImage *image, id context) {
-				[_photoView setBackgroundImage:_dish.photo = image forState:UIControlStateNormal];
-			}];
-		}
-		else
-		{
-			[_photoView setBackgroundImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-			[DMAPILoader loadImageFromURLString:_dish.thumbnailURL context:nil success:^(UIImage *image, id context) {
-				[_photoView setBackgroundImage:_dish.thumbnail = image forState:UIControlStateNormal];
-				[DMAPILoader loadImageFromURLString:_dish.photoURL context:nil success:^(UIImage *image, id context) {
-					[_photoView setBackgroundImage:_dish.photo = image forState:UIControlStateNormal];
-				}];
-			}];
-		}
+		[_photoView setBackgroundImageWithURL:[NSURL URLWithString:_dish.thumbnailURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
+		[_photoView setBackgroundImageWithURL:[NSURL URLWithString:_dish.photoURL] placeholderImage:[_photoView backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal];
 		
 		return cell;
 	}

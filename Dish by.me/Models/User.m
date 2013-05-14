@@ -10,8 +10,6 @@
 
 @implementation User
 
-@synthesize userId, name, photoURL, photo, thumbnailURL, thumbnail, bio, dishCount, bookmarkCount, followingCount, followersCount;
-
 + (id)userFromDictionary:(NSDictionary *)dictionary
 {
 	User *user = [[User alloc] init];

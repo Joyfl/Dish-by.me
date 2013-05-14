@@ -27,7 +27,7 @@ typedef enum {
 	UITableView *_tableView;
 	
 	UITableViewCell *_photoCell;
-	UIButton *_photoButton;
+	__block UIButton *_photoButton;
 	UIImageView *_borderView;
 	UITextField *_nameInput;
 	UIButton *_facebookButton;
