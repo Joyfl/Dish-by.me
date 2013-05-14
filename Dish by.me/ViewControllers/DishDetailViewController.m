@@ -23,6 +23,7 @@
 #import "JLHangulUtils.h"
 #import "ForkListViewController.h"
 #import "AppDelegate.h"
+#import "DMPhotoViewerViewController.h"
 
 #define photoHeight !_dish ? 298 : 298 * _dish.photoHeight / _dish.photoWidth
 #define isFirstCommentLoaded _dish.commentCount > 0 && _commentOffset == 0
@@ -894,6 +895,12 @@ enum {
 {
 	[_photoViewTouchTimer invalidate];
 	_photoViewTouchTimer = nil;
+	
+	DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] init];
+	photoViewer.originRect = [photoViewer.view convertRect:_photoView.frame fromView:_tableView];
+	[photoViewer.imageView setImageWithURL:[NSURL URLWithString:_dish.photoURL] placeholderImage:[_photoView backgroundImageForState:UIControlStateNormal]];
+	self.tabBarController.modalPresentationStyle = UIModalPresentationCurrentContext;
+	[self presentViewController:photoViewer animated:YES completion:nil];
 }
 
 - (void)showMenu

@@ -69,6 +69,7 @@
 		0377B1F017146F0300D7F75F /* RecipeInfoViewerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0377B1EF17146F0300D7F75F /* RecipeInfoViewerView.m */; };
 		0377B1F317146F2100D7F75F /* RecipeContentViewerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0377B1F217146F2100D7F75F /* RecipeContentViewerView.m */; };
 		0377B1F617147D2000D7F75F /* IngredientViewerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0377B1F517147D1F00D7F75F /* IngredientViewerCell.m */; };
+		037CCEAE17420D3500BF8A5A /* DMPhotoViewerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 037CCEAD17420D3500BF8A5A /* DMPhotoViewerViewController.m */; };
 		037EF61E16887BBA00FA765D /* EGORefreshTableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		038A529A1698863A001FDF75 /* DishListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 038A52991698863A001FDF75 /* DishListCell.m */; };
 		038DAF0F16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 038DAF0E16FC4E8100007BA4 /* UIButton+ActivityIndicatorView.m */; };
@@ -663,6 +664,8 @@
 		0377B1F217146F2100D7F75F /* RecipeContentViewerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecipeContentViewerView.m; path = Views/RecipeContentViewerView.m; sourceTree = "<group>"; };
 		0377B1F417147D1F00D7F75F /* IngredientViewerCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IngredientViewerCell.h; path = Views/IngredientViewerCell.h; sourceTree = "<group>"; };
 		0377B1F517147D1F00D7F75F /* IngredientViewerCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IngredientViewerCell.m; path = Views/IngredientViewerCell.m; sourceTree = "<group>"; };
+		037CCEAC17420D3500BF8A5A /* DMPhotoViewerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMPhotoViewerViewController.h; sourceTree = "<group>"; };
+		037CCEAD17420D3500BF8A5A /* DMPhotoViewerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMPhotoViewerViewController.m; sourceTree = "<group>"; };
 		037EF60116887BBA00FA765D /* EGORefreshTableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGORefreshTableHeaderView.h; sourceTree = "<group>"; };
 		037EF60216887BBA00FA765D /* EGORefreshTableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGORefreshTableHeaderView.m; sourceTree = "<group>"; };
 		038A52981698863A001FDF75 /* DishListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DishListCell.h; path = Views/DishListCell.h; sourceTree = "<group>"; };
@@ -1207,6 +1210,8 @@
 				033BA84216F5899900926F51 /* DMTextFieldViewController.m */,
 				0337A8FC1723C50300E5EE05 /* NotificationListViewController.h */,
 				0337A8FD1723C50300E5EE05 /* NotificationListViewController.m */,
+				037CCEAC17420D3500BF8A5A /* DMPhotoViewerViewController.h */,
+				037CCEAD17420D3500BF8A5A /* DMPhotoViewerViewController.m */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2507,6 +2512,7 @@
 				03509CB9172CF00A00EE31F5 /* CoverView.m in Sources */,
 				03509CBC172D14C000EE31F5 /* ForgotPasswordViewController.m in Sources */,
 				038F81EC1731079A00738F17 /* UITableViewCell+Utils.m in Sources */,
+				037CCEAE17420D3500BF8A5A /* DMPhotoViewerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
