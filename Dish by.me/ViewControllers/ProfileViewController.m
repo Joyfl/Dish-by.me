@@ -581,24 +581,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)updateUserPhoto
 {
-	if( _user.photo )
-	{
-		[_userPhotoButton setBackgroundImage:_user.photo forState:UIControlStateNormal];
-	}
-	
-	else if( _user.thumbnail )
-	{
-		[_userPhotoButton setBackgroundImage:_user.thumbnail forState:UIControlStateNormal];
-	}
-	else
-	{
-		[_userPhotoButton setBackgroundImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
-		[DMAPILoader loadImageFromURLString:_user.photoURL context:nil success:^(UIImage *image, id context) {
-			[_userPhotoButton setBackgroundImage:_user.photo = image forState:UIControlStateNormal];
-			if( _user.userId == [CurrentUser user].userId )
-				[CurrentUser user].photo = image;
-		}];
-	}
+	[_userPhotoButton setBackgroundImageWithURL:[NSURL URLWithString:_user.thumbnailURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
+	[_userPhotoButton setBackgroundImageWithURL:[NSURL URLWithString:_user.photoURL] placeholderImage:[_userPhotoButton backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal];
 }
 
 
@@ -1027,11 +1011,8 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
 				UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
 			
-			_user.thumbnail = [CurrentUser user].thumbnail = image;
-			_user.photo = [CurrentUser user].photo = image;
+			[_userPhotoButton setBackgroundImage:image forState:UIControlStateNormal];
 			[self uploadUserPhoto:image];
-			[_tableView reloadData];
-
 		}];
 		
 		[picker setCancelBlock:^(UIImagePickerController *picker) {
