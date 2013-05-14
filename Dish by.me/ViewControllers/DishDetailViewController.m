@@ -897,9 +897,9 @@ enum {
 	_photoViewTouchTimer = nil;
 	
 	DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] initWithPhotoURL:[NSURL URLWithString:_dish.photoURL] thumbnailImage:[_photoView backgroundImageForState:UIControlStateNormal]];
-	photoViewer.originRect = [photoViewer.view convertRect:CGRectInset( _photoView.frame, 0, 0 ) fromView:_tableView];
+	photoViewer.originRect = [photoViewer.view convertRect:_photoView.frame fromView:_tableView];
 	self.tabBarController.modalPresentationStyle = UIModalPresentationCurrentContext;
-	[self presentViewController:photoViewer animated:YES completion:nil];
+	[self presentViewController:photoViewer animated:NO completion:nil];
 }
 
 - (void)showMenu

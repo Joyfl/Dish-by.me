@@ -18,6 +18,7 @@
 #import "HTBlock.h"
 #import "UIButton+ActivityIndicatorView.h"
 #import "NotificationListViewController.h"
+#import "DMPhotoViewerViewController.h"
 
 #define isLastDishLoaded ( _dishes.count == _user.dishCount )
 #define isLastBookmarkLoaded ( _bookmarks.count == _user.bookmarkCount )
@@ -58,7 +59,6 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	[self.view addSubview:_tableView];
 	
 	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 13, 85, 85 )];
-	_userPhotoButton.userInteractionEnabled = NO;
 	
 	_refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake( 0, -_tableView.bounds.size.height, self.view.frame.size.width, _tableView.bounds.size.height )];
 	_refreshHeaderView.delegate = self;
@@ -711,8 +711,6 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			// My profile
 			if( _user.userId == [[CurrentUser user] userId] )
 			{
-				_userPhotoButton.userInteractionEnabled = YES;
-				
 				nameButton.imageEdgeInsets = UIEdgeInsetsMake( 4, 170, 0, 0 );
 				[nameButton setImage:[UIImage imageNamed:@"disclosure_indicator.png"] forState:UIControlStateNormal];
 				nameButton.userInteractionEnabled = YES;
@@ -723,7 +721,6 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 			}
 			else
 			{
-				_userPhotoButton.userInteractionEnabled = NO;
 				nameButton.userInteractionEnabled = NO;
 				bioButton.userInteractionEnabled = NO;
 			}
@@ -972,54 +969,67 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)userPhotoButtonDidTouchUpInside
 {
-	[[[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"TAKE_A_PHOTO", nil ), NSLocalizedString( @"FROM_LIBRARY", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
-		
-		UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-		
-		if( buttonIndex == 0 ) // Camera
-		{
-			@try
+	// 내 프로필
+	if( _user.userId == [CurrentUser user].userId )
+	{
+		[[[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"TAKE_A_PHOTO", nil ), NSLocalizedString( @"FROM_LIBRARY", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+			
+			UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+			
+			if( buttonIndex == 0 ) // Camera
 			{
-				picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+				@try
+				{
+					picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+				}
+				@catch( NSException *exception )
+				{
+					[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_NO_SUPPORT_CAMERA", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
+					return;
+				}
+				
+				picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
 			}
-			@catch( NSException *exception )
+			else if( buttonIndex == 1 ) // Album
 			{
-				[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", @"" ) message:NSLocalizedString( @"MESSAGE_NO_SUPPORT_CAMERA", @"" ) delegate:self cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", @"" ) otherButtonTitles:nil] show];
+				picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+			}
+			else
+			{
 				return;
 			}
 			
-			picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
-		}
-		else if( buttonIndex == 1 ) // Album
-		{
-			picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-		}
-		else
-		{
-			return;
-		}
-		
-		picker.allowsEditing = YES;
-		[self presentViewController:picker animated:YES completion:nil];
-		
-		[picker setFinishBlock:^(UIImagePickerController *picker, NSDictionary *info) {
-			[picker dismissViewControllerAnimated:YES completion:nil];
+			picker.allowsEditing = YES;
+			[self presentViewController:picker animated:YES completion:nil];
 			
-			UIImage *image = [Utils scaleAndRotateImage:[info objectForKey:@"UIImagePickerControllerEditedImage"]];
+			[picker setFinishBlock:^(UIImagePickerController *picker, NSDictionary *info) {
+				[picker dismissViewControllerAnimated:YES completion:nil];
+				
+				UIImage *image = [Utils scaleAndRotateImage:[info objectForKey:@"UIImagePickerControllerEditedImage"]];
+				
+				// 카메라로 찍은 경우 앨범에 저장
+				if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
+					UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
+				
+				[_userPhotoButton setBackgroundImage:image forState:UIControlStateNormal];
+				[self uploadUserPhoto:image];
+			}];
 			
-			// 카메라로 찍은 경우 앨범에 저장
-			if( picker.sourceType == UIImagePickerControllerSourceTypeCamera )
-				UIImageWriteToSavedPhotosAlbum( image, nil, nil, nil );
+			[picker setCancelBlock:^(UIImagePickerController *picker) {
+				[picker dismissViewControllerAnimated:YES completion:nil];
+			}];
 			
-			[_userPhotoButton setBackgroundImage:image forState:UIControlStateNormal];
-			[self uploadUserPhoto:image];
-		}];
-		
-		[picker setCancelBlock:^(UIImagePickerController *picker) {
-			[picker dismissViewControllerAnimated:YES completion:nil];
-		}];
-		
-	}] showInView:[[UIApplication sharedApplication] keyWindow]];
+		}] showInView:[[UIApplication sharedApplication] keyWindow]];
+	}
+	
+	// 다른 사람의 프로필
+	else
+	{
+		DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] initWithPhotoURL:[NSURL URLWithString:_user.photoURL] thumbnailImage:[_userPhotoButton backgroundImageForState:UIControlStateNormal]];
+		photoViewer.originRect = [photoViewer.view convertRect:_userPhotoButton.frame fromView:_tableView];
+		self.tabBarController.modalPresentationStyle = UIModalPresentationCurrentContext;
+		[self presentViewController:photoViewer animated:NO completion:nil];
+	}
 }
 
 - (void)nameButtonDidTouchUpInside
