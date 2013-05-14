@@ -316,6 +316,7 @@
 	{
 		WritingViewController *writingViewController = [[WritingViewController alloc] initWithNewDish];
 		DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
+		self.tabBarController.modalPresentationStyle = 0;
 		[self.tabBarController presentViewController:navController animated:YES completion:nil];
 	}
 	else
