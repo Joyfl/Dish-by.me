@@ -228,6 +228,10 @@
 		
 		JLLog( @"URL(%@) : %@", method, operation.request.URL );
 		failure( operation.response.statusCode, errorCode, [errorInfo objectForKey:@"message"] );
+		if( operation.response.statusCode >= 500 )
+		{
+			JLLog( @"response : %@", operation.responseString );
+		}
 	}];
 }
 

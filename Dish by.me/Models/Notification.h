@@ -12,7 +12,6 @@
 
 @property (nonatomic, assign) NSInteger notificationId;
 @property (nonatomic, strong) NSString *photoURL;
-@property (nonatomic, strong) UIImage *photo;
 @property (nonatomic, strong) NSString *description;
 @property (nonatomic, strong) NSAttributedString *attributedDescription;
 @property (nonatomic, strong) NSString *url;

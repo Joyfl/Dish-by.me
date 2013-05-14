@@ -56,20 +56,7 @@
 	_notification = notification;
 	_indexPath = indexPath;
 	
-	if( notification.photo )
-	{
-		_thumbnailView.image = notification.photo;
-	}
-	else
-	{
-		[DMAPILoader loadImageFromURLString:notification.photoURL context:_indexPath success:^(UIImage *image, id context) {
-			notification.photo = image;
-			if( [_indexPath isEqual:context] )
-			{
-				_thumbnailView.image = notification.photo;
-			}
-		}];
-	}
+	[_thumbnailView setImageWithURL:[NSURL URLWithString:notification.photoURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"]];
 	
 	_descriptionLabel.attributedString = notification.attributedDescription;
 	_timeLabel.text = notification.relativeCreatedTime;
