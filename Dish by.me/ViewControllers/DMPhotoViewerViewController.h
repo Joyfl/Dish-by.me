@@ -11,9 +11,12 @@
 @interface DMPhotoViewerViewController : GAITrackedViewController <UIScrollViewDelegate>
 {
 	UIScrollView *_scrollView;
+	CGRect _aspectFitRect;
 }
 
 @property (nonatomic, assign) CGRect originRect;
 @property (nonatomic, readonly) UIImageView *imageView;
+
+- (id)initWithPhotoURL:(NSURL *)url thumbnailImage:(UIImage *)thumbnailImage;
 
 @end

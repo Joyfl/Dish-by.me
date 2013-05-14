@@ -896,9 +896,8 @@ enum {
 	[_photoViewTouchTimer invalidate];
 	_photoViewTouchTimer = nil;
 	
-	DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] init];
-	photoViewer.originRect = [photoViewer.view convertRect:_photoView.frame fromView:_tableView];
-	[photoViewer.imageView setImageWithURL:[NSURL URLWithString:_dish.photoURL] placeholderImage:[_photoView backgroundImageForState:UIControlStateNormal]];
+	DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] initWithPhotoURL:[NSURL URLWithString:_dish.photoURL] thumbnailImage:[_photoView backgroundImageForState:UIControlStateNormal]];
+	photoViewer.originRect = [photoViewer.view convertRect:CGRectInset( _photoView.frame, 0, 0 ) fromView:_tableView];
 	self.tabBarController.modalPresentationStyle = UIModalPresentationCurrentContext;
 	[self presentViewController:photoViewer animated:YES completion:nil];
 }
