@@ -16,8 +16,6 @@
 
 @interface ProfileViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, EGORefreshTableHeaderDelegate, DishTileCellDelegate, UserListCellDelegate>
 {
-	User *_user;
-	
 	DMBarButtonItem *_followButton;
 	DMBarButtonItem *_followingButton;
 	DMBarButtonItem *_notificationsButton;
@@ -61,8 +59,14 @@
 	NSInteger _selectedTab;
 }
 
+@property (nonatomic, strong) User *user;
 @property (nonatomic, assign) NSInteger notificationsCount;
 
 - (void)loadUserId:(NSInteger)userId;
+- (void)updateDishes;
+- (void)addDish:(Dish *)dish;
+- (void)removeDish:(NSInteger)dishId;
+- (void)addBookmark:(Dish *)dish;
+- (void)removeBookmark:(NSInteger)dishId;
 
 @end

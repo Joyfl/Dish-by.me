@@ -13,6 +13,7 @@
 #import "ProfileViewController.h"
 #import "CurrentUser.h"
 #import "UIButton+TouchAreaInsets.h"
+#import "AppDelegate.h"
 
 @implementation DishListViewController
 
@@ -131,6 +132,9 @@
 {
 	JLLog( @"bookmarkDish" );
 	
+	ProfileViewController *profileViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController];
+	[profileViewController addBookmark:dish];
+	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];	
 	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
@@ -145,6 +149,9 @@
 - (void)unbookmarkDish:(Dish *)dish
 {
 	JLLog( @"unbookmarkDish" );
+	
+	ProfileViewController *profileViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController];
+	[profileViewController removeBookmark:dish.dishId];
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", dish.dishId];	
 	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {

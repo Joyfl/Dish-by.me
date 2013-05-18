@@ -21,6 +21,7 @@
 #import "Settings.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "UIButton+TouchAreaInsets.h"
+#import "CurrentUser.h"
 
 static const NSInteger PhotoButtonMaxWidth = 298;
 
@@ -679,7 +680,7 @@ enum {
 			} );
 			
 		} download:nil success:^(id response) {
-			JLLog( @"Success" );
+			JLLog( @"Success : %@", response );
 			
 			[[(AppDelegate *)[UIApplication sharedApplication].delegate dishListViewController] updateDishes];
 			
@@ -688,6 +689,10 @@ enum {
 				
 				_progressButton.adjustsImageWhenHighlighted = NO;
 				[_progressButton setBackgroundImage:[UIImage imageNamed:@"progress_check_icon.png"] forState:UIControlStateNormal];
+				
+				ProfileViewController *profileViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController];
+				profileViewController.user.dishCount ++;
+				[profileViewController updateDishes];
 				
 				double delayInSeconds = 1.0;
 				dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));

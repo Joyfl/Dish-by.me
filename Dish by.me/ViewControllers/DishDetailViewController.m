@@ -353,6 +353,9 @@ enum {
 
 - (void)bookmark
 {
+	ProfileViewController *profileViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController];
+	[profileViewController addBookmark:_dish];
+	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", _dish.dishId];
 	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
@@ -369,6 +372,9 @@ enum {
 
 - (void)unbookmark
 {
+	ProfileViewController *profileViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController];
+	[profileViewController removeBookmark:_dish.dishId];
+	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/bookmark", _dish.dishId];
 	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
 		JLLog( @"Success" );
@@ -383,7 +389,7 @@ enum {
 - (void)deleteDish
 {
 	self.view.userInteractionEnabled = NO;
-	[self.navigationController dim];
+	[self.tabBarController dim];
 	
 	JLLog( @"[TRY] Delete a dish : %d", _dish.dishId );
 	
@@ -400,8 +406,12 @@ enum {
 				break;
 			}
 		}
-		[self.navigationController popViewControllerAnimated:YES];
+		
+		ProfileViewController *profileViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController];
+		[profileViewController removeDish:_dish.dishId];
+		
 		[self.tabBarController undim];
+		[self.navigationController popViewControllerAnimated:YES];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );

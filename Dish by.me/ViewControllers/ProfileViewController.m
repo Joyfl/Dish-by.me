@@ -1175,4 +1175,53 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	}];
 }
 
+
+#pragma mark -
+
+- (void)addDish:(Dish *)dish
+{
+	_user.dishCount ++;
+	[_dishes insertObject:dish atIndex:0];
+	[_tableView reloadData];
+}
+
+- (void)removeDish:(NSInteger)dishId
+{
+	_user.dishCount --;
+	
+	for( Dish *dish in _dishes )
+	{
+		if( dish.dishId == dishId )
+		{
+			[_dishes removeObject:dish];
+			break;
+		}
+	}
+	
+	[_tableView reloadData];
+}
+
+- (void)addBookmark:(Dish *)dish
+{
+	_user.bookmarkCount ++;
+	[_bookmarks insertObject:dish atIndex:0];
+	[_tableView reloadData];
+}
+
+- (void)removeBookmark:(NSInteger)dishId
+{
+	_user.bookmarkCount --;
+	
+	for( Dish *dish in _bookmarks )
+	{
+		if( dish.dishId == dishId )
+		{
+			[_bookmarks removeObject:dish];
+			break;
+		}
+	}
+	
+	[_tableView reloadData];
+}
+
 @end
