@@ -89,6 +89,10 @@
 {
 	_scrollView.userInteractionEnabled = NO;
 	
+	_imageView.frame = [self.view convertRect:_imageView.frame fromView:_scrollView];
+	[_imageView removeFromSuperview];
+	[self.view addSubview:_imageView];
+	
 	[UIView animateWithDuration:0.25 animations:^{
 		_imageView.frame = _originRect;
 		self.view.backgroundColor = [UIColor clearColor];
@@ -108,15 +112,13 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    UIView *subView = [scrollView.subviews objectAtIndex:0];
-	
     CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
     (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
 	
     CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
     (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
 	
-    subView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+    _imageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
                                  scrollView.contentSize.height * 0.5 + offsetY);
 }
 
