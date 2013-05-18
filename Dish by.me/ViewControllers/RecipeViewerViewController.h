@@ -24,7 +24,7 @@
 @property (nonatomic) Recipe *recipe;
 
 - (id)initWithRecipe:(Recipe *)recipe;
-- (void)presentAfterDelay:(NSTimeInterval)delay;
+- (void)presentAnimation;
 - (void)dismiss;
 
 @end

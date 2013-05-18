@@ -34,6 +34,7 @@
 @property (nonatomic, readonly) Recipe *recipe;
 
 - (id)initWithRecipe:(Recipe *)recipe;
+- (void)presentAnimation;
 
 @end
 

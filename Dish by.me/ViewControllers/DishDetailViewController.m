@@ -952,6 +952,7 @@ enum {
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 		RecipeViewerViewController *recipeView = [[RecipeViewerViewController alloc] initWithRecipe:_dish.recipe];
 		recipeView.delegate = self;
+		[recipeView presentAnimation];
 		[self presentViewController:recipeView animated:NO completion:nil];
 	});
 }

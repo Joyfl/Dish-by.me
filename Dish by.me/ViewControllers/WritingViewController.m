@@ -411,6 +411,7 @@ enum {
 	
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC));
 	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		[_recipeView presentAnimation];
 		[self presentViewController:_recipeView animated:NO completion:nil];
 	});
 }
