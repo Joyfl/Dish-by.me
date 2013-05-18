@@ -34,8 +34,6 @@
 @property (nonatomic, readonly) Recipe *recipe;
 
 - (id)initWithRecipe:(Recipe *)recipe;
-- (void)presentAfterDelay:(NSTimeInterval)delay;
-- (void)dismiss;
 
 @end
 

@@ -92,7 +92,7 @@
 	return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidLoad
 {
 	_scrollView.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
 	

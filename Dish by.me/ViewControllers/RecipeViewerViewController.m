@@ -9,6 +9,7 @@
 #import "RecipeViewerViewController.h"
 #import "UIResponder+Dim.h"
 #import <QuartzCore/QuartzCore.h>
+#import "DMPhotoViewerViewController.h"
 
 @implementation RecipeViewerViewController
 
@@ -42,6 +43,7 @@
 		
 		// 그냥 addTarget:action: 하면 EXC_BAD_ACCESS 에러남 ㅡㅡ;;
 		[contentViewerView.checkButton addTargetBlock:^(id sender) { [self dismiss]; } forControlEvents:UIControlEventTouchUpInside];
+		[contentViewerView.photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
 		[contentViewerView setCurrentPage:i + 1 numberOfPages:_recipe.contents.count + 1];
 		[_scrollView addSubview:contentViewerView];
 		[_contentViewerViews addObject:contentViewerView];
@@ -52,7 +54,7 @@
 	return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidLoad
 {
 	_scrollView.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
 	
@@ -82,6 +84,15 @@
 - (void)animateRecipes
 {
 	
+}
+
+- (void)photoButtonDidTouchUpInside:(UIButton *)photoButton
+{
+	RecipeContent *content = [(RecipeContentViewerView *)photoButton.superview.superview content];
+	DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] initWithPhotoURL:[NSURL URLWithString:content.photoURL] thumbnailImage:[photoButton backgroundImageForState:UIControlStateNormal]];
+	photoViewer.originRect = [photoViewer.view convertRect:photoButton.frame fromView:photoButton.superview];
+	self.modalPresentationStyle = UIModalPresentationCurrentContext;
+	[self presentViewController:photoViewer animated:NO completion:nil];
 }
 
 @end
