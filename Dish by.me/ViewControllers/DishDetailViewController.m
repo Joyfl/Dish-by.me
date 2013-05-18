@@ -626,30 +626,27 @@ enum {
 			//
 			// Recipe
 			//
-			if( _dish.recipe )
-			{
-				_dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
-				[cell.contentView addSubview:_dotLineView];
-				
-				_recipeButtonContainer = [[UIView alloc] init];
-				[cell.contentView addSubview:_recipeButtonContainer];
-				
-				_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 50 )];
-				[_recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-				[_recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
-				[_recipeButton setTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) forState:UIControlStateNormal];
-				[_recipeButton setTitleColor:[UIColor colorWithHex:0x5B5046 alpha:1] forState:UIControlStateNormal];
-				[_recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
-				_recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-				_recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
-				_recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
-				[_recipeButtonContainer addSubview:_recipeButton];
-				
-				CALayer *maskLayer = [CALayer layer];
-				maskLayer.bounds = CGRectMake( 0, 0, 640, 100 );
-				maskLayer.contents = (id)[UIImage imageNamed:@"placeholder"].CGImage;
-				_recipeButtonContainer.layer.mask = maskLayer;
-			}
+			_dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
+			[cell.contentView addSubview:_dotLineView];
+			
+			_recipeButtonContainer = [[UIView alloc] init];
+			[cell.contentView addSubview:_recipeButtonContainer];
+			
+			_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 50 )];
+			[_recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+			[_recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
+			[_recipeButton setTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) forState:UIControlStateNormal];
+			[_recipeButton setTitleColor:[UIColor colorWithHex:0x5B5046 alpha:1] forState:UIControlStateNormal];
+			[_recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
+			_recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+			_recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
+			_recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+			[_recipeButtonContainer addSubview:_recipeButton];
+			
+			CALayer *maskLayer = [CALayer layer];
+			maskLayer.bounds = CGRectMake( 0, 0, 640, 100 );
+			maskLayer.contents = (id)[UIImage imageNamed:@"placeholder"].CGImage;
+			_recipeButtonContainer.layer.mask = maskLayer;
 			
 			_recipeBottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
 			[cell.contentView addSubview:_recipeBottomLine];
@@ -697,6 +694,7 @@ enum {
 		NSInteger recipeButtonBottomY = messageBoxBottomY + 8;
 		
 		_dotLineView.frame = CGRectMake( 8, messageBoxBottomY + 18, 304, 2 );
+		_dotLineView.hidden = _recipeButtonContainer.hidden = !_dish.recipe;
 		
 		if( _dish.recipe )
 		{
