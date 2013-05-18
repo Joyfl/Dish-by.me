@@ -383,7 +383,7 @@ enum {
 - (void)deleteDish
 {
 	self.view.userInteractionEnabled = NO;
-	[self dim];
+	[self.navigationController dim];
 	
 	JLLog( @"[TRY] Delete a dish : %d", _dish.dishId );
 	
@@ -401,7 +401,7 @@ enum {
 			}
 		}
 		[self.navigationController popViewControllerAnimated:YES];
-		[self undim];
+		[self.tabBarController undim];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
@@ -938,19 +938,30 @@ enum {
 }
 
 - (void)recipeButtonDidTouchUpInside
-{	
+{
 	[self backgroundDidTap];
+	[self.tabBarController dim];
 	
-	RecipeViewerViewController *recipeView = [[RecipeViewerViewController alloc] initWithRecipe:_dish.recipe];
-	recipeView.delegate = self;
 	[UIView animateWithDuration:0.25 animations:^{
 		_recipeButton.frame = CGRectMake( 0, 50, 320, 50 );
 	}];
 	
-	[recipeView presentAfterDelay:0.1];
+	self.tabBarController.modalPresentationStyle = UIModalPresentationCurrentContext;
+	
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		RecipeViewerViewController *recipeView = [[RecipeViewerViewController alloc] initWithRecipe:_dish.recipe];
+		recipeView.delegate = self;
+		[self presentViewController:recipeView animated:NO completion:nil];
+	});
 }
 
-- (void)recipeViewerViewControllerDidDismiss:(RecipeViewerViewController *)recipeViewerViewController
+- (void)recipeViewerViewControllerWillDismiss:(RecipeEditorViewController *)recipeEditorView
+{
+	[self.tabBarController undim];
+}
+
+- (void)recipeViewerViewControllerDidDismiss:(RecipeEditorViewController *)recipeEditorView
 {
 	[UIView animateWithDuration:0.25 animations:^{
 		_recipeButton.frame = CGRectMake( 0, 0, 320, 50 );

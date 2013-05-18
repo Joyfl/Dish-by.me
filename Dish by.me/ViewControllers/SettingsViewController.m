@@ -353,7 +353,7 @@ enum {
 			}
 			else
 			{
-				[self dim];
+				[self.tabBarController dim];
 				FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions", @"email"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
 				[FBSession setActiveSession:session];
 				[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
@@ -364,7 +364,7 @@ enum {
 						{
 							NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
 							[[DMAPILoader sharedLoader] api:@"/setting/facebook" method:@"PUT" parameters:params success:^(id response) {
-								[self undim];
+								[self.tabBarController undim];
 								JLLog( @"response : %@", response );
 								
 								_settings.facebook = [[FacebookSettings alloc] initWithDictionary:response];
@@ -375,7 +375,7 @@ enum {
 								
 							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 								
-								[self undim];
+								[self.tabBarController undim];
 								
 								if( errorCode == 1401 )
 								{
@@ -390,7 +390,7 @@ enum {
 						}
 							
 						case FBSessionStateClosedLoginFailed:
-							[self undim];
+							[self.tabBarController undim];
 							JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
 							break;
 							

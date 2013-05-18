@@ -29,7 +29,7 @@
 	
 	if( [self isKindOfClass:[UIViewController class]] )
 	{
-		targetView = [UIApplication sharedApplication].keyWindow;
+		targetView = [(UIViewController *)self view];
 	}
 	else if( [self isKindOfClass:[UIView class]] )
 	{

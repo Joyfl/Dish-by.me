@@ -349,7 +349,7 @@ enum {
 			if( buttonIndex == 1 )
 			{
 				// 아래 코드는 SettingsViewController의 코드와 동일함.
-				[self dim];
+				[self.navigationController dim];
 				FBSession *session = [[FBSession alloc] initWithAppID:@"115946051893330" permissions:@[@"publish_actions", @"email"] defaultAudience:FBSessionDefaultAudienceEveryone urlSchemeSuffix:nil tokenCacheStrategy:nil];
 				[FBSession setActiveSession:session];
 				[session openWithCompletionHandler:^(FBSession *session, FBSessionState status, NSError *error) {
@@ -360,7 +360,7 @@ enum {
 						{
 							NSDictionary *params = @{ @"facebook_token": [[FBSession activeSession] accessToken] };
 							[[DMAPILoader sharedLoader] api:@"/setting/facebook" method:@"PUT" parameters:params success:^(id response) {
-								[self undim];
+								[self.navigationController undim];
 								JLLog( @"response : %@", response );
 								
 								[Settings sharedSettings].facebook = [[FacebookSettings alloc] initWithDictionary:response];
@@ -368,7 +368,7 @@ enum {
 								
 							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 								
-								[self undim];
+								[self.navigationController undim];
 								
 								if( errorCode == 1401 )
 								{
@@ -383,7 +383,7 @@ enum {
 						}
 							
 						case FBSessionStateClosedLoginFailed:
-							[self undim];
+							[self.navigationController undim];
 							JLLog( @"FBSessionStateClosedLoginFailed (User canceled login to facebook)" );
 							break;
 							
@@ -401,12 +401,23 @@ enum {
 - (void)recipeButtonDidTouchUpInside
 {
 	[self backgroundDidTap];
+	[self.navigationController dim];
 	
 	[UIView animateWithDuration:0.25 animations:^{
 		_recipeButton.frame = CGRectMake( 0, 50, 320, 50 );
 	}];
 	
-	[_recipeView presentAfterDelay:0.1];
+	self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+	
+	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(100 * NSEC_PER_MSEC));
+	dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+		[self presentViewController:_recipeView animated:NO completion:nil];
+	});
+}
+
+- (void)recipeEditorViewControllerWillDismiss:(RecipeEditorViewController *)recipeEditorView
+{
+	[self.navigationController undim];
 }
 
 - (void)recipeEditorViewControllerDidDismiss:(RecipeEditorViewController *)recipeEditorView

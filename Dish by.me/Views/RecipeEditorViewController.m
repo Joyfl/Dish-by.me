@@ -92,43 +92,25 @@
 	return self;
 }
 
-- (void)presentAfterDelay:(NSTimeInterval)delay
+- (void)viewWillAppear:(BOOL)animated
 {
-	NSTimeInterval duration = 0.4;
+	_scrollView.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
 	
-	[self dimWithDuration:duration completion:nil];
-	[[UIApplication sharedApplication].keyWindow bringSubviewToFront:_binView];
-	
-	self.view.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
-	
-	[UIView animateWithDuration:duration delay:delay options:0 animations:^{
+	[UIView animateWithDuration:0.4 animations:^{
 		[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
-		[[[UIApplication sharedApplication] keyWindow] addSubview:self.view];
-		
-		self.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 + 10 );
-		
-	} completion:^(BOOL finished) {
-		[self animateRecipes];
-		[[[UIApplication sharedApplication] keyWindow] addSubview:self.view];
+		_scrollView.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 - 20 );
 	}];
 }
 
 - (void)dismiss
 {
-	NSTimeInterval duration = 0.4;
-	
-	if( [self.delegate respondsToSelector:@selector(recipeEditorViewControllerWillDismiss:)] )
-		[self.delegate recipeEditorViewControllerWillDismiss:self];
-	
 	[self.view endEditing:YES];
-	[self undimWithDuration:duration completion:nil];
-	
-	[UIView animateWithDuration:duration animations:^{
-		self.view.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
-		
+	[self.delegate recipeEditorViewControllerWillDismiss:self];
+	[UIView animateWithDuration:0.4 animations:^{
+		_scrollView.center = CGPointMake( UIScreenWidth / 2, -UIScreenHeight / 2 );
 	} completion:^(BOOL finished) {
+		[self dismissViewControllerAnimated:NO completion:nil];
 		[UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackOpaque;
-		[self.view removeFromSuperview];
 	}];
 	
 	dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(50 * NSEC_PER_MSEC));
