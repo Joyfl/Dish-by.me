@@ -145,7 +145,18 @@
 
 - (void)inputFieldEditingChanged:(UITextField *)inputField
 {
-	_emailInput.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+	if( _validateEmailWhenEditting )
+	{
+		if( [Utils validateEmailWithString:_emailInput.text] )
+		{
+			_emailInput.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
+		}
+		else
+		{
+			_emailInput.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
+			[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+		}
+	}
 	
 	if( inputField.text.length == 0 )
 	{
@@ -274,6 +285,17 @@
 	{
 		[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 		[_emailInput becomeFirstResponder];
+		return;
+	}
+	
+	if( ![Utils validateEmailWithString:_emailInput.text] )
+	{
+		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_EMAIL_NOT_VALIDATE", nil ) cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+			_validateEmailWhenEditting = YES;
+			_emailInput.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
+			[_emailInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+			[_emailInput becomeFirstResponder];
+		}] show];
 		return;
 	}
 	

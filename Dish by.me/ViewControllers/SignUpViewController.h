@@ -17,6 +17,8 @@
 	DMBookButton *_signUpButton;
 	DMBookButton *_facebookButton;
 	NSDictionary *_facebookUserInfo;
+	
+	BOOL _validateEmailWhenEditting;
 }
 
 @end

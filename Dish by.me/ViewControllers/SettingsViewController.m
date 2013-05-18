@@ -279,6 +279,11 @@ enum {
 				{
 					return YES;
 				}
+				else if( ![Utils validateEmailWithString:text] )
+				{
+					[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_EMAIL_NOT_VALIDATE", nil ) cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:nil dismissBlock:nil] show];
+					return NO;
+				}
 				
 				[textFieldViewController dim];
 				

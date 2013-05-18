@@ -30,4 +30,6 @@
 + (UIImage *)cropImageToSquare:(UIImage *)imageToCrop;
 + (UIImage *)scaleAndRotateImage:(UIImage *)image;
 
++ (BOOL)validateEmailWithString:(NSString *)email;
+
 @end
