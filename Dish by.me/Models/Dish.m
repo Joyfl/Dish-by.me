@@ -14,28 +14,32 @@
 + (id)dishFromDictionary:(NSDictionary *)dictionary
 {
 	Dish *dish = [[Dish alloc] init];
-	dish.dishId = [[dictionary objectForKeyNotNull:@"id"] integerValue];
-	dish.dishName = [dictionary objectForKeyNotNull:@"name"];
-	dish.userId = [[[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"id"] integerValue];
-	dish.userName = [[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"name"];
-	dish.userPhotoURL = [[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"photo_url"];
-	dish.description = [dictionary objectForKeyNotNull:@"description"];
-	dish.recipe = [[dictionary objectForKeyNotNull:@"recipe"] count] > 0 ? [Recipe recipeFromDictionary:[dictionary objectForKeyNotNull:@"recipe"]] : nil;
-	dish.photoWidth = [[dictionary objectForKeyNotNull:@"photo_width"] integerValue];
-	dish.photoHeight = [[dictionary objectForKeyNotNull:@"photo_height"] integerValue];
-	dish.photoURL = [dictionary objectForKeyNotNull:@"photo_url"];
-	dish.thumbnailURL = [dictionary objectForKeyNotNull:@"thumbnail_url"];
-	dish.forkedFromId = [[[dictionary objectForKeyNotNull:@"forked_from"] objectForKeyNotNull:@"id"] integerValue];
-	dish.forkedFromName = [[dictionary objectForKeyNotNull:@"forked_from"] objectForKeyNotNull:@"name"];
-	dish.forkCount = [[dictionary objectForKeyNotNull:@"fork_count"] integerValue];
-	dish.bookmarkCount = [[dictionary objectForKeyNotNull:@"bookmark_count"] integerValue];
-	dish.commentCount = [[dictionary objectForKeyNotNull:@"comment_count"] integerValue];
-	dish.bookmarked = [[dictionary objectForKeyNotNull:@"bookmarked"] boolValue];
-	dish.createdTime = [Utils dateFromString:[dictionary objectForKeyNotNull:@"created_time"]];
-	dish.updatedTime = [Utils dateFromString:[dictionary objectForKeyNotNull:@"updated_time"]];
-	[dish updateRelativeTime];
-	
+	[dish updateFromDictionary:dictionary];
 	return dish;
+}
+
+- (void)updateFromDictionary:(NSDictionary *)dictionary
+{
+	self.dishId = [[dictionary objectForKeyNotNull:@"id"] integerValue];
+	self.dishName = [dictionary objectForKeyNotNull:@"name"];
+	self.userId = [[[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"id"] integerValue];
+	self.userName = [[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"name"];
+	self.userPhotoURL = [[dictionary objectForKeyNotNull:@"user"] objectForKeyNotNull:@"photo_url"];
+	self.description = [dictionary objectForKeyNotNull:@"description"];
+	self.recipe = [[dictionary objectForKeyNotNull:@"recipe"] count] > 0 ? [Recipe recipeFromDictionary:[dictionary objectForKeyNotNull:@"recipe"]] : nil;
+	self.photoWidth = [[dictionary objectForKeyNotNull:@"photo_width"] integerValue];
+	self.photoHeight = [[dictionary objectForKeyNotNull:@"photo_height"] integerValue];
+	self.photoURL = [dictionary objectForKeyNotNull:@"photo_url"];
+	self.thumbnailURL = [dictionary objectForKeyNotNull:@"thumbnail_url"];
+	self.forkedFromId = [[[dictionary objectForKeyNotNull:@"forked_from"] objectForKeyNotNull:@"id"] integerValue];
+	self.forkedFromName = [[dictionary objectForKeyNotNull:@"forked_from"] objectForKeyNotNull:@"name"];
+	self.forkCount = [[dictionary objectForKeyNotNull:@"fork_count"] integerValue];
+	self.bookmarkCount = [[dictionary objectForKeyNotNull:@"bookmark_count"] integerValue];
+	self.commentCount = [[dictionary objectForKeyNotNull:@"comment_count"] integerValue];
+	self.bookmarked = [[dictionary objectForKeyNotNull:@"bookmarked"] boolValue];
+	self.createdTime = [Utils dateFromString:[dictionary objectForKeyNotNull:@"created_time"]];
+	self.updatedTime = [Utils dateFromString:[dictionary objectForKeyNotNull:@"updated_time"]];
+	[self updateRelativeTime];
 }
 
 - (void)updateRelativeTime

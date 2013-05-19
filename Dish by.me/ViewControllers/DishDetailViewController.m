@@ -144,7 +144,10 @@ enum {
 	[[DMAPILoader sharedLoader] api:api method:@"GET" parameters:nil success:^(id response) {
 		JLLog( @"%d번 Dish 로드 완료", dishId );
 		
-		_dish = [Dish dishFromDictionary:response];
+		if( _dish )
+			[_dish updateFromDictionary:response];
+		else
+			_dish = [Dish dishFromDictionary:response];
 		
 		self.navigationItem.title = _dish.dishName;
 		

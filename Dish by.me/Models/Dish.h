@@ -36,6 +36,7 @@
 @property (nonatomic, strong) NSString *relativeUpdatedTime;
 
 + (id)dishFromDictionary:(NSDictionary *)dictionary;
+- (void)updateFromDictionary:(NSDictionary *)dictionary;
 - (void)updateRelativeTime;
 
 @end
