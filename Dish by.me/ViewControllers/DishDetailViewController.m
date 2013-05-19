@@ -876,6 +876,7 @@ enum {
 	WritingViewController *writingViewController = [[WritingViewController alloc] initWithOriginalDishId:_dish.dishId];
 	writingViewController.delegate = self;
 	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
+	self.tabBarController.modalPresentationStyle = 0;
 	[self.navigationController presentViewController:navController animated:YES completion:NO];
 }
 
