@@ -275,6 +275,7 @@ enum {
 				[foldableView removeFromSuperview];
 				
 				[self.view addSubview:_tableView];
+				[self.view bringSubviewToFront:_commentBar];
 				[_moreCommentsIndicatorView removeFromSuperview];
 				
 				// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
@@ -989,8 +990,8 @@ enum {
 		[_moreCommentsIndicatorView startAnimating];
 	}
 	
-	_moreCommentsIndicatorView.frame = CGRectMake( -1, [_moreCommentsButton convertPoint:_moreCommentsButton.frame.origin toView:self.view].y, 37, 37 );
-	[self.view addSubview:_moreCommentsIndicatorView];
+	_moreCommentsIndicatorView.frame = CGRectMake( -1, [_moreCommentsButton convertPoint:_moreCommentsButton.frame.origin toView:_tableView].y, 37, 37 );
+	[_tableView addSubview:_moreCommentsIndicatorView];
 	
 	[self loadComments];
 }
