@@ -19,7 +19,7 @@
 
 @class Dish;
 
-@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, RecipeViewerViewControllerDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate, AuthViewControllerDelegate>
+@interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, RecipeViewerViewControllerDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate, AuthViewControllerDelegate, UITextViewDelegate>
 {
 	Dish *_dish;
 	NSMutableArray *_comments;
@@ -58,8 +58,9 @@
 	BookmarkButton *_bookmarkButton;
 	UIButton *_moreCommentsButton;
 	UIActivityIndicatorView *_moreCommentsIndicatorView;
-	UIView *_commentBar;
-	UITextField *_commentInput;
+	UIImageView *_commentBar;
+	UIImageView *_commentInputBackgroundView;
+	UIPlaceHolderTextView *_commentInput;
 	DMButton *_sendButton;
 }
 

@@ -35,7 +35,6 @@ enum {
 	kSectionContent = 1,
 	kSectionMoreComments = 2,
 	kSectionComment = 3,
-	kSectionCommentInput = 4,
 };
 
 - (id)initWithDish:(Dish *)dish
@@ -60,23 +59,27 @@ enum {
 	_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 	_tableView.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
 	_tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 0, 0, 40, 0 );
+	_tableView.contentInset = UIEdgeInsetsMake( 0, 0, 40, 0 );
 	[self.view addSubview:_tableView];
 	
 	_comments = [[NSMutableArray alloc] init];
 	
-	_commentBar = [[UIView alloc] initWithFrame:CGRectMake( 0, UIScreenHeight - 114, 320, 40 )];
+	_commentBar = [[UIImageView alloc] initWithFrame:CGRectMake( 0, UIScreenHeight, 320, 40 )];
+	_commentBar.image = [UIImage imageNamed:@"tool_bar.png"];
+	_commentBar.userInteractionEnabled = YES;
+	[self.view addSubview:_commentBar];
 	
-	UIImageView *commentBarBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tool_bar.png"]];
-	[_commentBar addSubview:commentBarBg];
+	_commentInputBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"textfield_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 10, 10, 10, 10 )]];
+	_commentInputBackgroundView.frame = CGRectMake( 5, 5, 235, 30 );
+	_commentInputBackgroundView.userInteractionEnabled = YES;
+	[_commentBar addSubview:_commentInputBackgroundView];
 	
-	UIImageView *commentInputBg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"textfield_bg.png"]];
-	commentInputBg.frame = CGRectMake( 5, 5, 235, 30 );
-	[_commentBar addSubview:commentInputBg];
-	
-	_commentInput = [[UITextField alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
+	_commentInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
 	_commentInput.font = [UIFont systemFontOfSize:13];
-	_commentInput.enabled = NO;
-	[_commentInput addTarget:self action:@selector(commentInputDidBeginEditing) forControlEvents:UIControlEventEditingDidBegin];
+	_commentInput.delegate = self;
+//	_commentInput.editable = NO;
+	_commentInput.contentInset = UIEdgeInsetsMake( -8, -8, -8, -8 );
+	_commentInput.backgroundColor = [UIColor clearColor];
 	[_commentBar addSubview:_commentInput];
 	
 	_sendButton = [[DMButton alloc] init];
@@ -84,8 +87,6 @@ enum {
 	_sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[_sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[_commentBar addSubview:_sendButton];
-	
-	[_tableView addSubview:_commentBar];
 	
 	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
 	tapRecognizer.enabled = NO; // 댓글입력중일때만 활성화 (TTTAttributedLabel 링크 터치 중복문제)
@@ -108,7 +109,7 @@ enum {
 		DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 		self.navigationItem.rightBarButtonItem = forkButton;
 		
-		_commentInput.enabled = YES;
+//		_commentInput.editable = NO;
 		_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
 		[_sendButton setTitle:NSLocalizedString( @"SEND", @"전송" ) forState:UIControlStateNormal];
 		
@@ -121,7 +122,7 @@ enum {
 	{
 		self.navigationItem.rightBarButtonItem = nil;
 		
-		_commentInput.enabled = NO;
+//		_commentInput.editable = NO;
 		_commentInput.placeholder = NSLocalizedString( @"LOGIN_TO_COMMENT", @"댓글을 남기려면 로그인해주세요." );
 		[_sendButton setTitle:NSLocalizedString( @"LOGIN", @"로그인" ) forState:UIControlStateNormal];
 	}
@@ -174,7 +175,7 @@ enum {
 		_dish.commentCount = [[response objectForKey:@"count"] integerValue];
 		_commentOffset += data.count;
 		
-		_commentInput.enabled = YES;
+//		_commentInput.editable = YES;
 		
 		// 로드된 댓글이 없을 경우
 		if( data.count == 0 )
@@ -308,7 +309,7 @@ enum {
 	[_comments addObject:comment];
 	
 	[_tableView reloadData];
-	[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+	[_tableView setContentOffset:CGPointMake( 0, _tableView.contentSize.height ) animated:YES];
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/comment", _dish.dishId];
 	NSDictionary *params = @{ @"message": _commentInput.text };
@@ -429,7 +430,7 @@ enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 5;
+	return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -449,9 +450,6 @@ enum {
 			if( isFirstCommentLoaded )
 				return 1; // Loading UI
 			return _comments.count;
-			
-		case kSectionCommentInput:
-			return 1;
 	}
 	
 	return 0;
@@ -474,9 +472,6 @@ enum {
 			if( isFirstCommentLoaded )
 				return 50;
 			return [[_comments objectAtIndex:indexPath.row] messageHeight] + 32;
-		
-		case kSectionCommentInput:
-			return 40;
 	}
 	
 	return 0;
@@ -488,7 +483,6 @@ enum {
 	static NSString *contentCellId = @"contentCellId";
 	static NSString *moreCommentCellId = @"moreCommentCellId";
 	static NSString *commentCellId = @"commentCellId";
-	static NSString *commentInputCellId = @"commentInputCellId";
 	static NSString *loadingCellId = @"loadingCellId";
 	
 	//
@@ -792,36 +786,28 @@ enum {
 		return cell;
 	}
 	
-	// Comment Input (Empty cell just for height)
-	else if( indexPath.section == kSectionCommentInput )
-	{
-		UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:commentInputCellId];
-		if( !cell )
-		{
-			cell = [[UITableViewCell alloc] init];
-			cell.selectionStyle = UITableViewCellSelectionStyleNone;
-		}
-		return cell;
-	}
-	
 	return nil;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+	if( scrollView.contentSize.height < 50 )
+		return;
+	
 	if( !_commentInput.isFirstResponder )
 	{
-		if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 114 )
-			_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
+		if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 154 )
+		{
+			_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - scrollView.contentOffset.y, 320, 40 );
+		}
 		else
-			_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + UIScreenHeight - 154, 320, 40 );
+		{
+			_commentBar.frame = CGRectMake( 0, UIScreenHeight - 154, 320, 40 );
+		}
 	}
 	else
 	{
-		if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 279 )
-			_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - 40, 320, 40 );
-		else
-			_commentBar.frame = CGRectMake( 0, scrollView.contentOffset.y + UIScreenHeight - 319, 320, 40 );
+		_commentBar.frame = CGRectMake( 0, UIScreenHeight - 319, 320, 40 );
 	}
 }
 
@@ -995,19 +981,20 @@ enum {
 	[self loadComments];
 }
 
-- (void)commentInputDidBeginEditing
+- (void)textViewDidBeginEditing:(UITextView *)textView
 {
 	[[self.view.gestureRecognizers objectAtIndex:0] setEnabled:YES];
 	
 	[UIView animateWithDuration:0.2 animations:^
 	{
-		_commentBar.frame = CGRectMake( 0, _tableView.contentSize.height - 41, 320, 40 );
+		_commentBar.frame = CGRectMake( 0, UIScreenHeight - 319, 320, 40 );
 	}
 	 
 	completion:^(BOOL finished)
 	{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 279 );
-		[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+//		[_tableView setContentOffset:CGPointMake( 0, _tableView.contentSize.height + 40 ) animated:NO];
+//		[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 	}];
 }
 
@@ -1123,6 +1110,67 @@ enum {
 {
 	ForkListViewController *forkListViewController = [[ForkListViewController alloc] initWithDish:_dish];
 	[self.navigationController pushViewController:forkListViewController animated:YES];
+}
+
+
+//- (void)textViewDidBeginEditing:(UITextView *)textView
+//{
+//	NSLog( @"%f, %f", _tableView.contentOffset.y, _tableView.contentSize.height );
+//	
+//	[UIView animateWithDuration:0.25 animations:^{
+//		_commentBar.frame = CGRectMake( 0, UIScreenHeight - 328 - _commentBar.frame.size.height + 48, 320, _commentBar.frame.size.height );
+//		
+//		_tableView.contentInset = UIEdgeInsetsMake( 0, 0, 216, 0 );
+//		_tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 0, 0, 216, 0 );
+//		
+//		if( _tableView.contentSize.height - _tableView.contentOffset.y <= UIScreenHeight - 89 )
+//			_tableView.contentOffset = CGPointMake( 0, _tableView.contentOffset.y + 216 );
+//	}];
+//}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+	return YES;
+	static NSInteger fontHeight = 16;
+	
+	NSInteger maxLineCount = 8;
+	CGFloat maxCommentInputHeight = maxLineCount * fontHeight;
+	
+	NSString *comment = [_commentInput.text stringByReplacingCharactersInRange:range withString:text];
+	
+	UIFont *font = _commentInput.font;
+	CGSize constraintSize = CGSizeMake( _commentInput.frame.size.width - 16, maxCommentInputHeight ); // 최대 8줄
+	CGFloat commentHeight = [comment sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping].height;
+	if( commentHeight < fontHeight ) commentHeight = fontHeight;
+	
+	if( [text isEqualToString:@"\n"] && commentHeight < maxCommentInputHeight - fontHeight )
+	{
+		commentHeight += fontHeight;
+	}
+	
+	CGRect frame = _commentInput.frame;
+	frame.size.height = commentHeight;
+	_commentInput.frame = frame;
+	
+	frame = _commentBar.frame;
+	frame.size.height = commentHeight + 24;
+	frame.origin.y = _tableView.contentSize.height + 31 - frame.size.height;
+	_commentBar.frame = frame;
+	
+	frame = _commentInputBackgroundView.frame;
+	frame.size.height = commentHeight + 14;
+	_commentInputBackgroundView.frame = frame;
+	
+	frame =_sendButton.frame;
+	frame.origin.y = _commentBar.frame.size.height - 35;
+	_sendButton.frame = frame;
+	
+	return YES;
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+	_sendButton.enabled = _commentInput.text.length > 0;
 }
 
 @end
