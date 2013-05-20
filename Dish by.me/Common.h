@@ -10,8 +10,7 @@
 #define BUILD [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
 #define LANGUAGE [[NSLocale preferredLanguages] objectAtIndex:0]
 
-#define API_ROOT_URL	@"http://dev.dishby.me/api/"
-//#define API_ROOT_URL	@"http://xoul.kr:8008/api/"
+#define API_ROOT_URL	@"http://dishby.me/api/"
 
 #define DMUserDefaultsKeyCurrentUser @"DMUserDefaultsKeyCurrentUser"
 

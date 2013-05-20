@@ -2625,7 +2625,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BD2CBF8A-0CDF-4D77-BE95-1B55F44454BF";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1EA8DA3D-788C-4849-BAB3-650189DC2656";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2654,7 +2654,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "BD2CBF8A-0CDF-4D77-BE95-1B55F44454BF";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1EA8DA3D-788C-4849-BAB3-650189DC2656";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
