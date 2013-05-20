@@ -77,7 +77,7 @@ enum {
 	_commentInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
 	_commentInput.font = [UIFont systemFontOfSize:13];
 	_commentInput.delegate = self;
-//	_commentInput.editable = NO;
+	_commentInput.editable = NO;
 	_commentInput.contentInset = UIEdgeInsetsMake( -8, -8, -8, -8 );
 	_commentInput.backgroundColor = [UIColor clearColor];
 	[_commentBar addSubview:_commentInput];
@@ -109,7 +109,7 @@ enum {
 		DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 		self.navigationItem.rightBarButtonItem = forkButton;
 		
-//		_commentInput.editable = NO;
+		_commentInput.editable = NO;
 		_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
 		[_sendButton setTitle:NSLocalizedString( @"SEND", @"전송" ) forState:UIControlStateNormal];
 		
@@ -122,7 +122,7 @@ enum {
 	{
 		self.navigationItem.rightBarButtonItem = nil;
 		
-//		_commentInput.editable = NO;
+		_commentInput.editable = NO;
 		_commentInput.placeholder = NSLocalizedString( @"LOGIN_TO_COMMENT", @"댓글을 남기려면 로그인해주세요." );
 		[_sendButton setTitle:NSLocalizedString( @"LOGIN", @"로그인" ) forState:UIControlStateNormal];
 	}
@@ -175,7 +175,7 @@ enum {
 		_dish.commentCount = [[response objectForKey:@"count"] integerValue];
 		_commentOffset += data.count;
 		
-//		_commentInput.editable = YES;
+		_commentInput.editable = YES;
 		
 		// 로드된 댓글이 없을 경우
 		if( data.count == 0 )
@@ -309,12 +309,14 @@ enum {
 	[_comments addObject:comment];
 	
 	[_tableView reloadData];
-	[_tableView setContentOffset:CGPointMake( 0, _tableView.contentSize.height ) animated:YES];
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/comment", _dish.dishId];
 	NSDictionary *params = @{ @"message": _commentInput.text };
 	
+	[self textView:_commentInput shouldChangeTextInRange:(NSRange){0, _commentInput.text.length} replacementText:@""];
 	_commentInput.text = @"";
+	
+	[_tableView setContentOffset:CGPointMake( 0, _tableView.contentSize.height - UIScreenHeight + 114 + _commentBar.frame.size.height ) animated:YES];
 	
 	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
 		JLLog( @"Success" );
@@ -796,18 +798,24 @@ enum {
 	
 	if( !_commentInput.isFirstResponder )
 	{
-		if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 154 )
+		if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 114 - _commentBar.frame.size.height )
 		{
-			_commentBar.frame = CGRectMake( 0, scrollView.contentSize.height - scrollView.contentOffset.y, 320, 40 );
+			CGRect frame = _commentBar.frame;
+			frame.origin.y = scrollView.contentSize.height - scrollView.contentOffset.y + frame.size.height - _tableView.contentInset.bottom;
+			_commentBar.frame = frame;
 		}
 		else
 		{
-			_commentBar.frame = CGRectMake( 0, UIScreenHeight - 154, 320, 40 );
+			CGRect frame = _commentBar.frame;
+			frame.origin.y = UIScreenHeight - 154 - frame.size.height + 41;
+			_commentBar.frame = frame;
 		}
 	}
 	else
 	{
-		_commentBar.frame = CGRectMake( 0, UIScreenHeight - 319, 320, 40 );
+		CGRect frame = _commentBar.frame;
+		frame.origin.y = UIScreenHeight - 279 - frame.size.height;
+		_commentBar.frame = frame;
 	}
 }
 
@@ -874,7 +882,7 @@ enum {
 	[[self.view.gestureRecognizers objectAtIndex:0] setEnabled:NO];
 	[_commentInput resignFirstResponder];
 	
-	[UIView animateWithDuration:0.18 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^
+	[UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^
 	{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 114 );
 	} completion:nil];
@@ -935,6 +943,12 @@ enum {
 	[self.navigationController pushViewController:profileViewController animated:YES];
 }
 
+- (void)forkCountButtonDidTouchUpInside
+{
+	ForkListViewController *forkListViewController = [[ForkListViewController alloc] initWithDish:_dish];
+	[self.navigationController pushViewController:forkListViewController animated:YES];
+}
+
 - (void)recipeButtonDidTouchUpInside
 {
 	[self backgroundDidTap];
@@ -985,16 +999,18 @@ enum {
 {
 	[[self.view.gestureRecognizers objectAtIndex:0] setEnabled:YES];
 	
-	[UIView animateWithDuration:0.2 animations:^
+	
+	[UIView animateWithDuration:0.25 animations:^
 	{
-		_commentBar.frame = CGRectMake( 0, UIScreenHeight - 319, 320, 40 );
+		CGRect frame = _commentBar.frame;
+		frame.origin.y = UIScreenHeight - 279 - frame.size.height;
+		_commentBar.frame = frame;
+		_tableView.contentOffset = CGPointMake( 0, _tableView.contentSize.height - frame.origin.y );
 	}
 	 
 	completion:^(BOOL finished)
 	{
 		_tableView.frame = CGRectMake( 0, 0, 320, UIScreenHeight - 279 );
-//		[_tableView setContentOffset:CGPointMake( 0, _tableView.contentSize.height + 40 ) animated:NO];
-//		[_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:kSectionCommentInput] atScrollPosition:UITableViewScrollPositionNone animated:YES];
 	}];
 }
 
@@ -1104,33 +1120,8 @@ enum {
 	JLLog( @"Login succeed" );
 }
 
-
-
-- (void)forkCountButtonDidTouchUpInside
-{
-	ForkListViewController *forkListViewController = [[ForkListViewController alloc] initWithDish:_dish];
-	[self.navigationController pushViewController:forkListViewController animated:YES];
-}
-
-
-//- (void)textViewDidBeginEditing:(UITextView *)textView
-//{
-//	NSLog( @"%f, %f", _tableView.contentOffset.y, _tableView.contentSize.height );
-//	
-//	[UIView animateWithDuration:0.25 animations:^{
-//		_commentBar.frame = CGRectMake( 0, UIScreenHeight - 328 - _commentBar.frame.size.height + 48, 320, _commentBar.frame.size.height );
-//		
-//		_tableView.contentInset = UIEdgeInsetsMake( 0, 0, 216, 0 );
-//		_tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 0, 0, 216, 0 );
-//		
-//		if( _tableView.contentSize.height - _tableView.contentOffset.y <= UIScreenHeight - 89 )
-//			_tableView.contentOffset = CGPointMake( 0, _tableView.contentOffset.y + 216 );
-//	}];
-//}
-
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-	return YES;
 	static NSInteger fontHeight = 16;
 	
 	NSInteger maxLineCount = 8;
@@ -1143,7 +1134,7 @@ enum {
 	CGFloat commentHeight = [comment sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping].height;
 	if( commentHeight < fontHeight ) commentHeight = fontHeight;
 	
-	if( [text isEqualToString:@"\n"] && commentHeight < maxCommentInputHeight - fontHeight )
+	if( [text isEqualToString:@"\n"] && range.location == _commentInput.text.length && commentHeight < maxCommentInputHeight - fontHeight )
 	{
 		commentHeight += fontHeight;
 	}
@@ -1154,7 +1145,9 @@ enum {
 	
 	frame = _commentBar.frame;
 	frame.size.height = commentHeight + 24;
-	frame.origin.y = _tableView.contentSize.height + 31 - frame.size.height;
+	frame.origin.y = UIScreenHeight - 279 - frame.size.height;
+	_tableView.contentInset = UIEdgeInsetsMake( 0, 0, frame.size.height, 0 );
+	_tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 0, 0, frame.size.height, 0 );
 	_commentBar.frame = frame;
 	
 	frame = _commentInputBackgroundView.frame;
