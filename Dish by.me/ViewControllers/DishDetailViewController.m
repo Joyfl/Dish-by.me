@@ -65,7 +65,7 @@ enum {
 	_comments = [[NSMutableArray alloc] init];
 	
 	_commentBar = [[UIImageView alloc] initWithFrame:CGRectMake( 0, UIScreenHeight, 320, 40 )];
-	_commentBar.image = [UIImage imageNamed:@"tool_bar.png"];
+	_commentBar.image = [[UIImage imageNamed:@"tool_bar.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 20, 0, 20, 0 )];
 	_commentBar.userInteractionEnabled = YES;
 	[self.view addSubview:_commentBar];
 	
