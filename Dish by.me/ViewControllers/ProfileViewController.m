@@ -1039,6 +1039,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 		_user.name = text;
 		[self editUserInfo:@{ @"name": text }];
 		self.navigationItem.title = _nameLabel.text = userNameWithPlaceholder;
+		[self updateMessageLabelText];
 		return YES;
 	}];
 	textFieldViewController.trackedViewName = @"DMTextFieldViewController (Name)";
