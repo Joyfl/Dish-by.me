@@ -360,6 +360,15 @@ enum {
 
 - (void)bookmark
 {
+	DishListViewController *dishListViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate dishListViewController];
+	for( Dish *dish in dishListViewController.dishes )
+	{
+		if( dish.dishId == _dish.dishId )
+		{
+			dish.bookmarked = YES;
+		}
+	}
+	
 	ProfileViewController *profileViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController];
 	[profileViewController addBookmark:_dish];
 	
@@ -379,6 +388,15 @@ enum {
 
 - (void)unbookmark
 {
+	DishListViewController *dishListViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate dishListViewController];
+	for( Dish *dish in dishListViewController.dishes )
+	{
+		if( dish.dishId == _dish.dishId )
+		{
+			dish.bookmarked = NO;
+		}
+	}
+	
 	ProfileViewController *profileViewController = [(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController];
 	[profileViewController removeBookmark:_dish.dishId];
 	
