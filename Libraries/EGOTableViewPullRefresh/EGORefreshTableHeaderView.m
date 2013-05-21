@@ -27,7 +27,7 @@
 #import "EGORefreshTableHeaderView.h"
 
 
-#define TEXT_COLOR	 [UIColor colorWithRed:87.0/255.0 green:83.0/255.0 blue:80.0/255.0 alpha:1.0]
+#define TEXT_COLOR	 [UIColor colorWithHex:0x6B6663 alpha:1] //[UIColor colorWithRed:87.0/255.0 green:83.0/255.0 blue:80.0/255.0 alpha:1.0]
 #define FLIP_ANIMATION_DURATION 0.18f
 
 
@@ -57,10 +57,19 @@
 		[self addSubview:_statusLabel];
 		[_statusLabel release];
 		
+		CALayer *arrowLayer = [CALayer layer];
+		arrowLayer.frame = CGRectMake(0, 0, 23.0f, 23.0f);
+		arrowLayer.contentsGravity = kCAGravityResizeAspect;
+		arrowLayer.contents = (id)[UIImage imageNamed:arrow].CGImage;
+		
 		CALayer *layer = [CALayer layer];
 		layer.frame = CGRectMake(25.0f, frame.size.height - 50.0f, 23.0f, 23.0f);
 		layer.contentsGravity = kCAGravityResizeAspect;
-		layer.contents = (id)[UIImage imageNamed:arrow].CGImage;
+		[layer addSublayer:arrowLayer];
+		layer.shadowColor = [UIColor blackColor].CGColor;
+		layer.shadowOffset = CGSizeMake( 0, 1 );
+		layer.shadowRadius = 0;
+		layer.shadowOpacity = 0.2;
 		
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
 		if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)]) {
@@ -69,7 +78,7 @@
 #endif
 		
 		[[self layer] addSublayer:layer];
-		_arrowImage=layer;
+		_arrowImage=arrowLayer;
 		
 		self.dottedLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, frame.size.height - 7, self.frame.size.width, 2 )];
 		self.dottedLineView.image = [UIImage imageNamed:@"line_dotted.png"];
