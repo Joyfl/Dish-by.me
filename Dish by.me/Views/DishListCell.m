@@ -37,9 +37,9 @@ static const NSInteger PhotoViewMaxLength = 292;
 	_topGradientView.alpha = 0;
 	[self.contentView addSubview:_topGradientView];
 	
-	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 20, 18, 25, 25 )];
+	_userPhotoButton = [[UIButton alloc] initWithFrame:CGRectMake( 21, 19, 25, 25 )];
 	_userPhotoButton.adjustsImageWhenHighlighted = NO;
-	[_userPhotoButton setImage:[UIImage imageNamed:@"profile_thumbnail_border.png"] forState:UIControlStateNormal];
+	[_userPhotoButton setImage:[UIImage imageNamed:@"profile_thumbnail_border_list.png"] forState:UIControlStateNormal];
 	[_userPhotoButton addTarget:self action:@selector(userPhotoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	_userPhotoButton.layer.cornerRadius = 4;
 	_userPhotoButton.clipsToBounds = YES;
@@ -47,10 +47,10 @@ static const NSInteger PhotoViewMaxLength = 292;
 	[self addSubview:_userPhotoButton];
 	
 	_userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 50, 18, 240, 25 )];
-	_userNameLabel.textColor = [UIColor whiteColor];
+	_userNameLabel.textColor = [UIColor colorWithHex:0xFFFEFA alpha:1];
 	_userNameLabel.backgroundColor = [UIColor clearColor];
 	_userNameLabel.font = [UIFont systemFontOfSize:12];
-	_userNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.7];
+	_userNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.3];
 	_userNameLabel.shadowOffset = CGSizeMake( 0, 1 );
 	_userNameLabel.alpha = 0;
 	[self.contentView addSubview:_userNameLabel];
@@ -81,7 +81,7 @@ static const NSInteger PhotoViewMaxLength = 292;
 	[self.contentView addSubview:_bookmarkCountLabel];
 	
 	_dishNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 16, 312, 225, 20 )];
-	_dishNameLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+	_dishNameLabel.textColor = [UIColor colorWithHex:0x58595A alpha:1];
 	_dishNameLabel.font = [UIFont boldSystemFontOfSize:16];
 	_dishNameLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	_dishNameLabel.shadowOffset = CGSizeMake( 0, 1 );

@@ -500,7 +500,7 @@ enum {
 {
 	if( !_nameInput.text.length )
 	{
-		[_nameInput setValue:[UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
+		[_nameInput setValue:[UIColor colorWithHex:0x5B1612 alpha:1] forKeyPath:@"placeholderLabel.textColor"];
 		[_nameInput shakeCount:3 radius:4 duration:0.05 delay:0 completion:^{
 			[_nameInput becomeFirstResponder];
 		}];
@@ -508,7 +508,7 @@ enum {
 	}
 	else if( !_descriptionInput.text.length )
 	{
-		_descriptionInput.placeHolderLabel.textColor = [UIColor colorWithRed:1 green:0.5 blue:0.5 alpha:1];
+		_descriptionInput.placeHolderLabel.textColor = [UIColor colorWithHex:0x5B1612 alpha:1];
 		[_descriptionInput shakeCount:3 radius:4 duration:0.05 delay:0 completion:^{
 			[_descriptionInput becomeFirstResponder];
 		}];
