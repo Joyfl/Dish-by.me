@@ -186,7 +186,15 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	[_tableView reloadData];
 	
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", userId] method:@"GET" parameters:nil success:^(id response) {
-		_user = [User userFromDictionary:response];
+		if( [[response objectForKey:@"id"] integerValue] == [CurrentUser user].userId )
+		{
+			[[CurrentUser user] updateToDictionary:response];
+			_user = [CurrentUser user];
+		}
+		else
+		{
+			_user = [User userFromDictionary:response];
+		}
 		[self updateUserPhoto];
 		
 		self.navigationItem.title = userNameWithPlaceholder;
@@ -334,16 +342,24 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	_updating = YES;
 	
 	[[DMAPILoader sharedLoader] api:[NSString stringWithFormat:@"/user/%d", _user.userId] method:@"GET" parameters:nil success:^(id response) {
-		_user.userId = [[response objectForKeyNotNull:@"id"] integerValue];
-		_user.name = [response objectForKeyNotNull:@"name"];
-		_user.photoURL = [response objectForKeyNotNull:@"photo_url"];
-		_user.thumbnailURL = [response objectForKeyNotNull:@"thumbnail_url"];
-		_user.bio = [response objectForKeyNotNull:@"bio"];
-		_user.dishCount = [[response objectForKeyNotNull:@"dish_count"] integerValue];
-		_user.bookmarkCount = [[response objectForKeyNotNull:@"bookmark_count"] integerValue];
-		_user.followingCount = [[response objectForKeyNotNull:@"following_count"] integerValue];
-		_user.followersCount = [[response objectForKeyNotNull:@"followers_count"] integerValue];
-		_user.following = [[response objectForKeyNotNull:@"following"] boolValue];
+		if( [[response objectForKey:@"id"] integerValue] == [CurrentUser user].userId )
+		{
+			[[CurrentUser user] updateToDictionary:response];
+			_user = [CurrentUser user];
+		}
+		else
+		{
+			_user.userId = [[response objectForKeyNotNull:@"id"] integerValue];
+			_user.name = [response objectForKeyNotNull:@"name"];
+			_user.photoURL = [response objectForKeyNotNull:@"photo_url"];
+			_user.thumbnailURL = [response objectForKeyNotNull:@"thumbnail_url"];
+			_user.bio = [response objectForKeyNotNull:@"bio"];
+			_user.dishCount = [[response objectForKeyNotNull:@"dish_count"] integerValue];
+			_user.bookmarkCount = [[response objectForKeyNotNull:@"bookmark_count"] integerValue];
+			_user.followingCount = [[response objectForKeyNotNull:@"following_count"] integerValue];
+			_user.followersCount = [[response objectForKeyNotNull:@"followers_count"] integerValue];
+			_user.following = [[response objectForKeyNotNull:@"following"] boolValue];
+		}
 		
 		self.navigationItem.title = userNameWithPlaceholder;
 		
