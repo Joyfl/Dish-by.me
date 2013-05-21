@@ -420,6 +420,14 @@ enum {
 				dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(500 * NSEC_PER_MSEC));
 				dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
 					self.tabBarController.selectedIndex = 0;
+					
+					for( UIViewController *viewController in appDelegate.tabBarController.viewControllers )
+					{
+						if( [viewController isKindOfClass:[UINavigationController class]] )
+						{
+							[(UINavigationController *)viewController popToRootViewControllerAnimated:NO];
+						}
+					}
 				});
 			}
 		}] showInView:self.tabBarController.view];
