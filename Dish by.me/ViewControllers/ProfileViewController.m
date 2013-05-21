@@ -571,6 +571,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 {
 	[[DMAPILoader sharedLoader] api:@"/user" method:@"PUT" image:photo forName:@"photo" fileName:@"photo" parameters:nil success:^(id response) {
 		JLLog( @"Succeed" );
+		_user.photoURL = [response objectForKey:@"photo_url"];
 		
 	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
 		JLLog( @"statusCode : %d", statusCode );
