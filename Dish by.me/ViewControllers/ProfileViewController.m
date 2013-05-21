@@ -1038,7 +1038,7 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 	DMTextFieldViewController *textFieldViewController = [[DMTextFieldViewController alloc] initWithTitle:NSLocalizedString( @"NAME", nil ) shouldComplete:^BOOL(DMTextFieldViewController *textFieldViewController, NSString *text) {
 		_user.name = text;
 		[self editUserInfo:@{ @"name": text }];
-		self.navigationItem.title = userNameWithPlaceholder;
+		self.navigationItem.title = _nameLabel.text = userNameWithPlaceholder;
 		return YES;
 	}];
 	textFieldViewController.trackedViewName = @"DMTextFieldViewController (Name)";
