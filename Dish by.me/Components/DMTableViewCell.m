@@ -14,25 +14,25 @@
 {
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	
-	self.textLabel.font = [UIFont systemFontOfSize:16];
+	self.textLabel.font = [UIFont systemFontOfSize:15];
 	self.textLabel.textColor = [UIColor colorWithHex:0x4A4746 alpha:1];
 	self.textLabel.backgroundColor = self.detailTextLabel.backgroundColor = [UIColor clearColor];
 	self.textLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.07];
 	self.textLabel.shadowOffset = CGSizeMake( 0, 1 );
 	
-	self.detailTextLabel.font = [UIFont systemFontOfSize:15];
+	self.detailTextLabel.font = [UIFont systemFontOfSize:14];
 	self.detailTextLabel.textColor = [UIColor colorWithHex:0x888583 alpha:1];
 	self.detailTextLabel.backgroundColor = self.detailTextLabel.backgroundColor = [UIColor clearColor];
 	self.detailTextLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.04];
 	self.detailTextLabel.shadowOffset = CGSizeMake( 0, 1 );
 	
+	self.selectionStyle = UITableViewCellSelectionStyleNone;
+	
 	return self;
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)layoutSubviews
 {
-	[super drawRect:rect];
-	
 	UITableView *tableView = (UITableView *)self.superview;
 	NSIndexPath *indexPath = [tableView indexPathForCell:self];
 	
@@ -49,6 +49,8 @@
 	
 	else
 		self.backgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"cell_grouped_middle.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 2, 2, 2 )]];
+	
+	[super layoutSubviews];
 }
 
 @end

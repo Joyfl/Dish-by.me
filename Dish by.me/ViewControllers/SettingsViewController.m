@@ -94,8 +94,15 @@ enum {
 	return 0;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return 46;
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+	if( section == 0 )
+		return 44;
 	if( section == sectionCount - 1 )
 		return 0;
 	return 30;
@@ -108,7 +115,7 @@ enum {
 	if( !headerView )
 	{
 		headerView = [[UITableViewHeaderFooterView alloc] initWithReuseIdentifier:headerViewId];
-		headerView.textLabel.font = [UIFont boldSystemFontOfSize:15];
+		headerView.textLabel.font = [UIFont boldSystemFontOfSize:14];
 		headerView.textLabel.textColor = [UIColor colorWithHex:0x726C6C alpha:1];
 		headerView.textLabel.shadowColor = [UIColor whiteColor];
 		headerView.textLabel.shadowOffset = CGSizeMake( 0, 1 );
@@ -172,7 +179,7 @@ enum {
 			cell = [[DMTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
 		}
 		
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_arrow.png"]];
 		
 		if( indexPath.row == kRowChangeEmail )
 		{
@@ -197,7 +204,7 @@ enum {
 			cell = [[DMTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellId];
 		}
 		
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_arrow.png"]];
 		
 		if( indexPath.row == kRowFacebook )
 		{
@@ -258,6 +265,7 @@ enum {
 		cell.textLabel.text = NSLocalizedString( @"LOGOUT", nil );
 		cell.detailTextLabel.text = nil;
 		cell.accessoryType = UITableViewCellAccessoryNone;
+		cell.accessoryView = nil;
 		
 		return cell;
 	}
