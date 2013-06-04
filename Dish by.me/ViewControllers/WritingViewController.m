@@ -293,12 +293,19 @@ enum {
 
 - (void)cancelButtonDidTouchUpInside
 {
-	[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_REALLY_CANCEL", nil ) cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:@[NSLocalizedString( @"YES", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
-		
-		if( buttonIndex == 1 )
-			[self dismissViewControllerAnimated:YES completion:nil];
-		
-	}] show];
+	if( _isPhotoChanged || _nameInput.text.length > 0 || _descriptionInput.text.length > 0 || _recipeView.recipe.servings > 0 || _recipeView.recipe.minutes > 0 || _recipeView.recipe.ingredients.count > 0 || _recipeView.recipe.contents.count > 0 )
+	{
+		[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"OOPS", nil ) message:NSLocalizedString( @"MESSAGE_REALLY_CANCEL", nil ) cancelButtonTitle:NSLocalizedString( @"OH_MY_MISTAKE", nil ) otherButtonTitles:@[NSLocalizedString( @"YES", nil )] dismissBlock:^(UIAlertView *alertView, NSUInteger buttonIndex) {
+			
+			if( buttonIndex == 1 )
+				[self dismissViewControllerAnimated:YES completion:nil];
+			
+		}] show];
+	}
+	else
+	{
+		[self dismissViewControllerAnimated:YES completion:nil];
+	}
 }
 
 - (void)textViewDidBeginEditing:(id)sender
