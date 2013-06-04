@@ -121,6 +121,9 @@
 											 settingsNavigationController,
 											 nil];
 	
+	// 가운데 탭 비활성화
+	[(UIView *)[self.tabBarController.tabBar.subviews objectAtIndex:3] setUserInteractionEnabled:NO];
+	
 	UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	cameraButton.frame = CGRectMake( 128, -1, 64, 50 );
 	[cameraButton setImage:[UIImage imageNamed:@"tab_camera.png"] forState:UIControlStateNormal];
