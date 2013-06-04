@@ -73,6 +73,7 @@ enum {
 	
 	_facebookButton = [[UIButton alloc] init];
 	_facebookButton.adjustsImageWhenHighlighted = NO;
+	_facebookButton.selected = [[NSUserDefaults standardUserDefaults] boolForKey:DMUserDefaultsKeyShareToFacebook];
 	[_facebookButton setBackgroundImage:[UIImage imageNamed:@"facebook.png"] forState:UIControlStateNormal];
 	[_facebookButton setBackgroundImage:[UIImage imageNamed:@"facebook_selected.png"] forState:UIControlStateSelected];
 	[_facebookButton addTarget:self action:@selector(facebookButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
@@ -404,6 +405,8 @@ enum {
 		return;
 	}
 	_facebookButton.selected = !_facebookButton.selected;
+	[[NSUserDefaults standardUserDefaults] setBool:_facebookButton.selected forKey:DMUserDefaultsKeyShareToFacebook];
+	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)recipeButtonDidTouchUpInside
