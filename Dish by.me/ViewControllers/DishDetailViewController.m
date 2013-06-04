@@ -70,7 +70,7 @@ enum {
 	[self.view addSubview:_commentBar];
 	
 	_commentInputBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"textfield_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 10, 10, 10, 10 )]];
-	_commentInputBackgroundView.frame = CGRectMake( 5, 5, 235, 30 );
+	_commentInputBackgroundView.frame = CGRectMake( 4, 5, 245, 30 );
 	_commentInputBackgroundView.userInteractionEnabled = YES;
 	[_commentBar addSubview:_commentInputBackgroundView];
 	
@@ -83,7 +83,7 @@ enum {
 	[_commentBar addSubview:_commentInput];
 	
 	_sendButton = [[DMButton alloc] init];
-	_sendButton.frame = CGRectMake( 250, 5, 60, 30 );
+	_sendButton.frame = CGRectMake( 255, 5, 60, 30 );
 	_sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
 	[_sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	[_commentBar addSubview:_sendButton];
