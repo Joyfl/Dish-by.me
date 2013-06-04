@@ -106,7 +106,7 @@
 	[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
 	
 	CGRect frame = _photoButton.frame;
-	frame.size.height = floorf( 241 * image.size.height / image.size.width );
+	frame.size.height = floorf( 263 * image.size.height / image.size.width );
 	_photoButton.frame = frame;
 	
 	[self layoutScrollViewContent];
