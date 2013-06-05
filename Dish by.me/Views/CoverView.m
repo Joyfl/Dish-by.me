@@ -33,6 +33,7 @@
 
 - (void)openAfterDelay:(NSTimeInterval)delay
 {
+	[UIApplication sharedApplication].keyWindow.userInteractionEnabled = NO;
 	[self addToWindow];
 	
 	self.transform = CGAffineTransformMakeTranslation( 0, 0 );
@@ -46,12 +47,15 @@
 		self.layer.transform = transform;
 		
 	} completion:^(BOOL finished) {
+		[UIApplication sharedApplication].keyWindow.userInteractionEnabled = YES;
 		[self removeFromSuperview];
 	}];
 }
 
 - (void)closeCompletion:(void (^)(CoverView *coverView))completion
 {
+	[UIApplication sharedApplication].keyWindow.userInteractionEnabled = NO;
+	
 	[self addToWindow];
 	
 	CATransform3D transform = CATransform3DIdentity;
@@ -66,6 +70,7 @@
 		self.layer.transform = transform;
 		
 	} completion:^(BOOL finished) {
+		[UIApplication sharedApplication].keyWindow.userInteractionEnabled = YES;
 		if( completion ) completion( self );
 	}];
 }
