@@ -144,11 +144,17 @@
 		
 		if( offset >= _scrollView.contentSize.width - 304 )
 		{
+			_newContentEditorView.hidden = NO;
+			
 			CGFloat angle = M_PI * ( offset - 304 * (_contentEditorViews.count + 1) ) / 608.0;
 			CATransform3D transform = CATransform3DMakeRotation( angle, 0, 1, 0 );
 			transform.m34 = -1 / 500.0;
 			transform.m14 = -angle / 500;
 			_newContentEditorView.layer.transform = transform;
+		}
+		else
+		{
+			_newContentEditorView.hidden = YES;
 		}
 	}
 	
