@@ -15,6 +15,7 @@
 #import "CurrentUser.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import "DMNavigationController.h"
+#import "AppDelegate.h"
 
 @implementation AuthViewController
 
@@ -91,6 +92,7 @@
 
 - (void)lookAroundButtonDidTouchUpInside
 {
+	[(AppDelegate *)[UIApplication sharedApplication].delegate profileViewController].notificationsCount = 0;
 	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
