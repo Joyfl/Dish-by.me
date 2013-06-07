@@ -598,8 +598,13 @@ const NSInteger arrowXPositions[] = {36, 110, 185, 260};
 
 - (void)updateUserPhoto
 {
-	[_userPhotoButton setBackgroundImageWithURL:[NSURL URLWithString:_user.thumbnailURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
-	[_userPhotoButton setBackgroundImageWithURL:[NSURL URLWithString:_user.photoURL] placeholderImage:[_userPhotoButton backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal];
+	_userPhotoButton.userInteractionEnabled = NO;
+	[_userPhotoButton setBackgroundImageWithURL:[NSURL URLWithString:_user.thumbnailURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+		_userPhotoButton.userInteractionEnabled = YES;
+	} failure:nil];
+	[_userPhotoButton setBackgroundImageWithURL:[NSURL URLWithString:_user.photoURL] placeholderImage:[_userPhotoButton backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+		_userPhotoButton.userInteractionEnabled = YES;
+	} failure:nil];
 }
 
 

@@ -535,8 +535,13 @@ enum {
 		_photoView.frame = CGRectMake( 11, 11, 298, photoHeight );
 		_borderView.frame = CGRectMake( 5, 5, 310, _photoView.frame.size.height + 12 );
 		
-		[_photoView setBackgroundImageWithURL:[NSURL URLWithString:_dish.thumbnailURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal];
-		[_photoView setBackgroundImageWithURL:[NSURL URLWithString:_dish.photoURL] placeholderImage:[_photoView backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal];
+		_photoView.userInteractionEnabled = NO;
+		[_photoView setBackgroundImageWithURL:[NSURL URLWithString:_dish.thumbnailURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+			_photoView.userInteractionEnabled = YES;
+		} failure:nil];
+		[_photoView setBackgroundImageWithURL:[NSURL URLWithString:_dish.photoURL] placeholderImage:[_photoView backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+			_photoView.userInteractionEnabled = YES;
+		} failure:nil];
 		
 		return cell;
 	}
