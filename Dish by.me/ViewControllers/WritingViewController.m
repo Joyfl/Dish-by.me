@@ -180,6 +180,8 @@ enum {
 	_recipeView.delegate = self;
 	_recipeView.view.center = CGPointMake( UIScreenWidth / 2, UIScreenHeight / 2 );
 	
+	[self performSelector:@selector(textViewDidChange:) withObject:_descriptionInput afterDelay:0.1];
+	
 	return self;
 }
 
