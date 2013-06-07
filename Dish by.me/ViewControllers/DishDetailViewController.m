@@ -109,7 +109,7 @@ enum {
 		DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 		self.navigationItem.rightBarButtonItem = forkButton;
 		
-		_commentInput.editable = NO;
+		_commentInput.editable = YES;
 		_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
 		[_sendButton setTitle:NSLocalizedString( @"SEND", @"전송" ) forState:UIControlStateNormal];
 		
