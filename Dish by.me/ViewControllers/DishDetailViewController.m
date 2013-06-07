@@ -538,9 +538,11 @@ enum {
 		_photoView.userInteractionEnabled = NO;
 		[_photoView setBackgroundImageWithURL:[NSURL URLWithString:_dish.thumbnailURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
 			_photoView.userInteractionEnabled = YES;
+			[_photoView setBackgroundImage:image forState:UIControlStateNormal];
 		} failure:nil];
 		[_photoView setBackgroundImageWithURL:[NSURL URLWithString:_dish.photoURL] placeholderImage:[_photoView backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
 			_photoView.userInteractionEnabled = YES;
+			[_photoView setBackgroundImage:image forState:UIControlStateNormal];
 		} failure:nil];
 		
 		return cell;
