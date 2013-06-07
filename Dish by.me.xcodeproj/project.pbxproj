@@ -107,6 +107,21 @@
 		03CB74A4160CC42700A5C6A3 /* DMBarButtonItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A1160CC42700A5C6A3 /* DMBarButtonItem.m */; };
 		03CB74A5160CC42700A5C6A3 /* DMNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */; };
 		03CE40AE16D93B7F0084AF5A /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 03CE40AD16D9378B0084AF5A /* UIButton+AFNetworking.m */; };
+		03D694491761D6C9003B23A5 /* JLSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D694481761D6C9003B23A5 /* JLSwitch.m */; };
+		03D694591761D7C2003B23A5 /* switch_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D6944B1761D7C2003B23A5 /* switch_background.png */; };
+		03D6945A1761D7C2003B23A5 /* switch_background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D6944C1761D7C2003B23A5 /* switch_background@2x.png */; };
+		03D6945B1761D7C2003B23A5 /* switch_background_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D6944D1761D7C2003B23A5 /* switch_background_blue.png */; };
+		03D6945C1761D7C2003B23A5 /* switch_background_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D6944E1761D7C2003B23A5 /* switch_background_blue@2x.png */; };
+		03D6945D1761D7C2003B23A5 /* switch_icon_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D6944F1761D7C2003B23A5 /* switch_icon_off.png */; };
+		03D6945E1761D7C2003B23A5 /* switch_icon_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694501761D7C2003B23A5 /* switch_icon_off@2x.png */; };
+		03D6945F1761D7C2003B23A5 /* switch_icon_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694511761D7C2003B23A5 /* switch_icon_on.png */; };
+		03D694601761D7C2003B23A5 /* switch_icon_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694521761D7C2003B23A5 /* switch_icon_on@2x.png */; };
+		03D694611761D7C2003B23A5 /* switch_knob.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694531761D7C2003B23A5 /* switch_knob.png */; };
+		03D694621761D7C2003B23A5 /* switch_knob@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694541761D7C2003B23A5 /* switch_knob@2x.png */; };
+		03D694631761D7C2003B23A5 /* switch_knob_border_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694551761D7C2003B23A5 /* switch_knob_border_blue.png */; };
+		03D694641761D7C2003B23A5 /* switch_knob_border_blue@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694561761D7C2003B23A5 /* switch_knob_border_blue@2x.png */; };
+		03D694651761D7C2003B23A5 /* switch_knob_selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694571761D7C2003B23A5 /* switch_knob_selected.png */; };
+		03D694661761D7C2003B23A5 /* switch_knob_selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 03D694581761D7C2003B23A5 /* switch_knob_selected@2x.png */; };
 		03DD16CF17096EE90064D022 /* RecipeEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16CE17096EE90064D022 /* RecipeEditorViewController.m */; };
 		03DD16FB170976260064D022 /* RecipeInfoEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16FA170976260064D022 /* RecipeInfoEditorView.m */; };
 		03DD16FE1709A3220064D022 /* IngredientEditorCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03DD16FD1709A3220064D022 /* IngredientEditorCell.m */; };
@@ -735,6 +750,22 @@
 		03CB74A3160CC42700A5C6A3 /* DMNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMNavigationController.m; sourceTree = "<group>"; };
 		03CE40AC16D9378B0084AF5A /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+AFNetworking.h"; sourceTree = "<group>"; };
 		03CE40AD16D9378B0084AF5A /* UIButton+AFNetworking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+AFNetworking.m"; sourceTree = "<group>"; };
+		03D694471761D6C9003B23A5 /* JLSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JLSwitch.h; sourceTree = "<group>"; };
+		03D694481761D6C9003B23A5 /* JLSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JLSwitch.m; sourceTree = "<group>"; };
+		03D6944B1761D7C2003B23A5 /* switch_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_background.png; sourceTree = "<group>"; };
+		03D6944C1761D7C2003B23A5 /* switch_background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch_background@2x.png"; sourceTree = "<group>"; };
+		03D6944D1761D7C2003B23A5 /* switch_background_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_background_blue.png; sourceTree = "<group>"; };
+		03D6944E1761D7C2003B23A5 /* switch_background_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch_background_blue@2x.png"; sourceTree = "<group>"; };
+		03D6944F1761D7C2003B23A5 /* switch_icon_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_icon_off.png; sourceTree = "<group>"; };
+		03D694501761D7C2003B23A5 /* switch_icon_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch_icon_off@2x.png"; sourceTree = "<group>"; };
+		03D694511761D7C2003B23A5 /* switch_icon_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_icon_on.png; sourceTree = "<group>"; };
+		03D694521761D7C2003B23A5 /* switch_icon_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch_icon_on@2x.png"; sourceTree = "<group>"; };
+		03D694531761D7C2003B23A5 /* switch_knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_knob.png; sourceTree = "<group>"; };
+		03D694541761D7C2003B23A5 /* switch_knob@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch_knob@2x.png"; sourceTree = "<group>"; };
+		03D694551761D7C2003B23A5 /* switch_knob_border_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_knob_border_blue.png; sourceTree = "<group>"; };
+		03D694561761D7C2003B23A5 /* switch_knob_border_blue@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch_knob_border_blue@2x.png"; sourceTree = "<group>"; };
+		03D694571761D7C2003B23A5 /* switch_knob_selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = switch_knob_selected.png; sourceTree = "<group>"; };
+		03D694581761D7C2003B23A5 /* switch_knob_selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "switch_knob_selected@2x.png"; sourceTree = "<group>"; };
 		03DD16CD17096EE90064D022 /* RecipeEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecipeEditorViewController.h; path = ../Views/RecipeEditorViewController.h; sourceTree = "<group>"; };
 		03DD16CE17096EE90064D022 /* RecipeEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RecipeEditorViewController.m; path = ../Views/RecipeEditorViewController.m; sourceTree = "<group>"; };
 		03DD16F9170976260064D022 /* RecipeInfoEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RecipeInfoEditorView.h; path = Views/RecipeInfoEditorView.h; sourceTree = "<group>"; };
@@ -1354,6 +1385,7 @@
 		037EF5E916887B9200FA765D /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				03D694461761D6C9003B23A5 /* JLSwitch */,
 				0337A9071723C5B700E5EE05 /* DTCoreText */,
 				0392A52616F0464B0045209E /* HTBlock */,
 				0314A11116E775AC00DAF40A /* TTTAttributedLabel */,
@@ -1497,6 +1529,7 @@
 		03B59819160303E1007BD6AF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				03D6944A1761D7C2003B23A5 /* JLSwitch */,
 				03E1EFBE17327EEE001DABC9 /* Images */,
 				03A5E93A16B4DBE800C79F8D /* Fonts */,
 				03B598231603046E007BD6AF /* Localizable.strings */,
@@ -1552,6 +1585,37 @@
 				036174EB17294136002C7AB7 /* DMTableViewCell.m */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		03D694461761D6C9003B23A5 /* JLSwitch */ = {
+			isa = PBXGroup;
+			children = (
+				03D694471761D6C9003B23A5 /* JLSwitch.h */,
+				03D694481761D6C9003B23A5 /* JLSwitch.m */,
+			);
+			path = JLSwitch;
+			sourceTree = "<group>";
+		};
+		03D6944A1761D7C2003B23A5 /* JLSwitch */ = {
+			isa = PBXGroup;
+			children = (
+				03D6944B1761D7C2003B23A5 /* switch_background.png */,
+				03D6944C1761D7C2003B23A5 /* switch_background@2x.png */,
+				03D6944D1761D7C2003B23A5 /* switch_background_blue.png */,
+				03D6944E1761D7C2003B23A5 /* switch_background_blue@2x.png */,
+				03D6944F1761D7C2003B23A5 /* switch_icon_off.png */,
+				03D694501761D7C2003B23A5 /* switch_icon_off@2x.png */,
+				03D694511761D7C2003B23A5 /* switch_icon_on.png */,
+				03D694521761D7C2003B23A5 /* switch_icon_on@2x.png */,
+				03D694531761D7C2003B23A5 /* switch_knob.png */,
+				03D694541761D7C2003B23A5 /* switch_knob@2x.png */,
+				03D694551761D7C2003B23A5 /* switch_knob_border_blue.png */,
+				03D694561761D7C2003B23A5 /* switch_knob_border_blue@2x.png */,
+				03D694571761D7C2003B23A5 /* switch_knob_selected.png */,
+				03D694581761D7C2003B23A5 /* switch_knob_selected@2x.png */,
+			);
+			name = JLSwitch;
+			path = Resources/JLSwitch;
 			sourceTree = "<group>";
 		};
 		03E1EFBE17327EEE001DABC9 /* Images */ = {
@@ -2403,6 +2467,20 @@
 				034E82981732AB7400EC4B08 /* progress_check_icon@2x.png in Resources */,
 				034E829B1732BB3800EC4B08 /* progress_retry_button.png in Resources */,
 				034E829C1732BB3800EC4B08 /* progress_retry_button@2x.png in Resources */,
+				03D694591761D7C2003B23A5 /* switch_background.png in Resources */,
+				03D6945A1761D7C2003B23A5 /* switch_background@2x.png in Resources */,
+				03D6945B1761D7C2003B23A5 /* switch_background_blue.png in Resources */,
+				03D6945C1761D7C2003B23A5 /* switch_background_blue@2x.png in Resources */,
+				03D6945D1761D7C2003B23A5 /* switch_icon_off.png in Resources */,
+				03D6945E1761D7C2003B23A5 /* switch_icon_off@2x.png in Resources */,
+				03D6945F1761D7C2003B23A5 /* switch_icon_on.png in Resources */,
+				03D694601761D7C2003B23A5 /* switch_icon_on@2x.png in Resources */,
+				03D694611761D7C2003B23A5 /* switch_knob.png in Resources */,
+				03D694621761D7C2003B23A5 /* switch_knob@2x.png in Resources */,
+				03D694631761D7C2003B23A5 /* switch_knob_border_blue.png in Resources */,
+				03D694641761D7C2003B23A5 /* switch_knob_border_blue@2x.png in Resources */,
+				03D694651761D7C2003B23A5 /* switch_knob_selected.png in Resources */,
+				03D694661761D7C2003B23A5 /* switch_knob_selected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2513,6 +2591,7 @@
 				03509CBC172D14C000EE31F5 /* ForgotPasswordViewController.m in Sources */,
 				038F81EC1731079A00738F17 /* UITableViewCell+Utils.m in Sources */,
 				037CCEAE17420D3500BF8A5A /* DMPhotoViewerViewController.m in Sources */,
+				03D694491761D6C9003B23A5 /* JLSwitch.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

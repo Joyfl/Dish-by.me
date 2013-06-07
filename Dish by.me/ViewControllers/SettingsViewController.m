@@ -448,27 +448,32 @@ enum {
 
 - (void)switchCell:(DMSwitchCell *)switchCell valueChanged:(BOOL)on atIndexPath:(NSIndexPath *)indexPath
 {
+	NSLog( @"value changed" );
 	if( indexPath.section == kSectionNotifications )
 	{
 		NSDictionary *params = nil;
 		
 		if( indexPath.row == kRowFollow )
 		{
+			_settings.notifications.follow = on;
 			params = @{ @"follow": [NSNumber numberWithBool:on] };
 		}
 		
 		else if( indexPath.row == kRowBookmark )
 		{
+			_settings.notifications.bookmark = on;
 			params = @{ @"bookmark": [NSNumber numberWithBool:on] };
 		}
 		
 		else if( indexPath.row == kRowComment )
 		{
+			_settings.notifications.comment = on;
 			params = @{ @"comment": [NSNumber numberWithBool:on] };
 		}
 		
 		else if( indexPath.row == kRowFork )
 		{
+			_settings.notifications.fork = on;
 			params = @{ @"fork": [NSNumber numberWithBool:on] };
 		}
 		

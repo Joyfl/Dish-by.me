@@ -13,7 +13,7 @@
 
 @interface DMSwitchCell : DMTableViewCell
 {
-	UISwitch *_switchView;
+	JLSwitch *_switchView;
 }
 
 @property (nonatomic, weak) id<DMSwitchCellDelegate> delegate;

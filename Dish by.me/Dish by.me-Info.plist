@@ -30,7 +30,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.0.70</string>
+	<string>0.0.71</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -57,7 +57,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3915</string>
+	<string>3929</string>
 	<key>FacebookAppID</key>
 	<string>115946051893330</string>
 	<key>LSRequiresIPhoneOS</key>

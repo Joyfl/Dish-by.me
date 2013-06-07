@@ -15,7 +15,7 @@
 	self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	_switchView = [[UISwitch alloc] init];
+	_switchView = [[JLSwitch alloc] init];
 	[_switchView addTarget:self action:@selector(switchValueChanged) forControlEvents:UIControlEventValueChanged];
 	self.accessoryView = _switchView;
 	
