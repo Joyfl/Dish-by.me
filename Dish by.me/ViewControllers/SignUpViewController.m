@@ -16,6 +16,8 @@
 #import "AuthViewController.h"
 #import "UIButton+TouchAreaInsets.h"
 #import "UIButton+ActivityIndicatorView.h"
+#import "DMNavigationController.h"
+#import "DMBarButtonItem.h"
 
 @implementation SignUpViewController
 
@@ -107,6 +109,7 @@
 	agreementLabel.shadowOffset = CGSizeMake( 0, 1 );
 	agreementLabel.numberOfLines = 0;
 	[agreementLabel sizeToFit];
+	agreementLabel.userInteractionEnabled = YES;
 	agreementLabel.frame = CGRectOffset( agreementLabel.frame, 160 - agreementLabel.frame.size.width / 2, _signUpButton.frame.origin.y + _signUpButton.frame.size.height + 17 );
 	[agreementLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(agreementLabelDidTap)]];
 	[self.view addSubview:agreementLabel];
@@ -412,7 +415,35 @@
 
 - (void)agreementLabelDidTap
 {
+	GAITrackedViewController *viewController = [[GAITrackedViewController alloc] init];
+	viewController.trackedViewName = @"Agreement";
+	viewController.view.backgroundColor = [UIColor colorWithHex:0xF3EEEA alpha:1];
+	viewController.navigationItem.title = NSLocalizedString( @"AGREEMENT", nil );
+	viewController.navigationItem.leftBarButtonItem = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"CLOSE", nil ) target:self action:@selector(closeAgreementViewController)];
 	
+	UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 64 )];
+	webView.backgroundColor = viewController.view.backgroundColor;
+	webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal;
+	[viewController.view addSubview:webView];
+	for( UIView *subview in [[webView.subviews objectAtIndex:0] subviews] )
+	{
+		if( [subview isKindOfClass:[UIImageView class]] )
+		{
+			subview.hidden = YES;
+		}
+	}
+	
+	NSString *agreementPath = [[NSBundle mainBundle] pathForResource:@"agreement" ofType:@"html" inDirectory:nil];
+	NSURL *agreementURL = [NSURL fileURLWithPath:agreementPath];
+	[webView loadRequest:[NSURLRequest requestWithURL:agreementURL]];
+	
+	DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:viewController];
+	[self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)closeAgreementViewController
+{
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

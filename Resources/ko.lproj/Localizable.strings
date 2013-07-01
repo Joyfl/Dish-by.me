@@ -10,6 +10,7 @@
 "PROBABLY" = "그런 것 같아요";
 "OH_MY_MISTAKE" = "앗 실수!";
 "RETRY" = "다시 시도";
+"CLOSE" = "닫기";
 
 // Messages
 "MESSAGE_INTERNET_OFFLINE" = "인터넷 연결이 꺼져있습니다. 셀룰러 데이터 사용을 꺼놓았거나, 에어플레인모드가 켜져 있지는 않은지 확인해보세요.";
@@ -19,7 +20,7 @@
 "MESSAGE_" = "";
 
 "MESSAGE_EMAIL_NOT_VALIDATE" = "올바른 이메일 형식이 아니에요 :(";
-"MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관 및 개인정보취급방침에 동의합니다.";
+"MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관에 동의합니다.";
 "MESSAGE_SIGNUP_COMPLETE" = "회원가입이 완료되었습니다!\n프로필을 완성해주세요.";
 "MESSAGE_ALREADY_SIGNED_UP" = "누군가가 이미 %@ 이메일을 사용하고 있어요.\n혹시 가입했던 적이 있나요?";
 "MESSAGE_ALREADY_IN_USE_EMAIL" = "누군가가 이미 %@ 이메일을 사용하고 있어요.";
@@ -65,6 +66,8 @@
 "RESET_PASSWORD" = "비밀번호 재설정";
 "SIGNED_UP_EMAIL" = "가입할 때의 이메일";
 "SEND_EMAIL" = "본인확인메일 보내기";
+
+"AGREEMENT" = "서비스 이용 약관";
 
 // 
 "PULL_DOWN_TO_UPDATE" = "업데이트하시려면 아래로 당기세요.";

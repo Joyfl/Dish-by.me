@@ -58,6 +58,7 @@
 		03509CB9172CF00A00EE31F5 /* CoverView.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CB8172CF00900EE31F5 /* CoverView.m */; };
 		03509CBC172D14C000EE31F5 /* ForgotPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03509CBB172D14BF00EE31F5 /* ForgotPasswordViewController.m */; };
 		03549A9B17003D8000EFCB14 /* AFImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 03549A9A17003D8000EFCB14 /* AFImageCache.m */; };
+		03583EFC17704352001A434E /* agreement.html in Resources */ = {isa = PBXBuildFile; fileRef = 03583EFB17704352001A434E /* agreement.html */; };
 		0361726017292195002C7AB7 /* UIView+JLAnimations.m in Sources */ = {isa = PBXBuildFile; fileRef = 0361725F17292195002C7AB7 /* UIView+JLAnimations.m */; };
 		036174EC17294136002C7AB7 /* DMTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 036174EB17294136002C7AB7 /* DMTableViewCell.m */; };
 		036752AD16FB33B800D889E8 /* AuthViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 036752AB16FB33B800D889E8 /* AuthViewController.m */; };
@@ -657,6 +658,7 @@
 		03509CBB172D14BF00EE31F5 /* ForgotPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForgotPasswordViewController.m; sourceTree = "<group>"; };
 		03549A9917003D8000EFCB14 /* AFImageCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFImageCache.h; sourceTree = "<group>"; };
 		03549A9A17003D8000EFCB14 /* AFImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageCache.m; sourceTree = "<group>"; };
+		03583EFB17704352001A434E /* agreement.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = agreement.html; path = Resources/agreement.html; sourceTree = "<group>"; };
 		0361725E17292195002C7AB7 /* UIView+JLAnimations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+JLAnimations.h"; path = "Categories/UIView+JLAnimations.h"; sourceTree = "<group>"; };
 		0361725F17292195002C7AB7 /* UIView+JLAnimations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+JLAnimations.m"; path = "Categories/UIView+JLAnimations.m"; sourceTree = "<group>"; };
 		036174EA17294136002C7AB7 /* DMTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMTableViewCell.h; sourceTree = "<group>"; };
@@ -1529,6 +1531,7 @@
 		03B59819160303E1007BD6AF /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				03583EFB17704352001A434E /* agreement.html */,
 				03D6944A1761D7C2003B23A5 /* JLSwitch */,
 				03E1EFBE17327EEE001DABC9 /* Images */,
 				03A5E93A16B4DBE800C79F8D /* Fonts */,
@@ -2481,6 +2484,7 @@
 				03D694641761D7C2003B23A5 /* switch_knob_border_blue@2x.png in Resources */,
 				03D694651761D7C2003B23A5 /* switch_knob_selected.png in Resources */,
 				03D694661761D7C2003B23A5 /* switch_knob_selected@2x.png in Resources */,
+				03583EFC17704352001A434E /* agreement.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2704,7 +2708,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5EF50211-968D-4BC0-BF05-DCC06BE43955";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EA025576-5600-49A1-AC82-CEC2EE49305D";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2733,7 +2737,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5EF50211-968D-4BC0-BF05-DCC06BE43955";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "EA025576-5600-49A1-AC82-CEC2EE49305D";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

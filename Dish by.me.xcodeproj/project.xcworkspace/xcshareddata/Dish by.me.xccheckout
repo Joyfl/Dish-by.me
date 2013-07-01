@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>81CC0F29-1578-4B68-A739-D2F09D30A7C7</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Dish by.me</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>2A6C7CEF-E343-48B4-9410-53C1147B8AE9</key>
+		<string>https://github.com/Joyfl/Dish-by.me.git</string>
+		<key>5CF44ABB-7E94-47BF-A6F4-2E56C5A2D7D2</key>
+		<string>https://github.com/Joyfl/Dish-by.me-iPhone-Design.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Dish by.me.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>2A6C7CEF-E343-48B4-9410-53C1147B8AE9</key>
+		<string>../..</string>
+		<key>5CF44ABB-7E94-47BF-A6F4-2E56C5A2D7D2</key>
+		<string>../../Resources/Images</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/Joyfl/Dish-by.me.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>2A6C7CEF-E343-48B4-9410-53C1147B8AE9</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2A6C7CEF-E343-48B4-9410-53C1147B8AE9</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Dish by</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5CF44ABB-7E94-47BF-A6F4-2E56C5A2D7D2</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Images</string>
+		</dict>
+	</array>
+</dict>
+</plist>

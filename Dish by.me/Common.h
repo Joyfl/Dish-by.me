@@ -10,7 +10,7 @@
 #define BUILD [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]
 #define LANGUAGE [[NSLocale preferredLanguages] objectAtIndex:0]
 
-#define API_ROOT_URL	@"http://dishby.me/api/"
+#define API_ROOT_URL	@"https://dishby.me/api/"
 
 #define DMUserDefaultsKeyCurrentUser @"DMUserDefaultsKeyCurrentUser"
 #define DMUserDefaultsKeyShareToFacebook @"DMUserDefaultsKeyShareToFacebook"
