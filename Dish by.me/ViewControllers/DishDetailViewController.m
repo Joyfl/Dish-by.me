@@ -916,11 +916,8 @@ enum {
 
 - (void)photoViewDidTouchDown
 {
-	if( _dish.userId == [CurrentUser user].userId )
-	{
-		_photoViewTouchTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(showMenu) userInfo:nil repeats:NO];
-		[[NSRunLoop mainRunLoop] addTimer:_photoViewTouchTimer forMode:NSDefaultRunLoopMode];
-	}
+	_photoViewTouchTimer = [NSTimer timerWithTimeInterval:0.4 target:self selector:@selector(showMenu) userInfo:nil repeats:NO];
+	[[NSRunLoop mainRunLoop] addTimer:_photoViewTouchTimer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)photoViewDidTouchUp
@@ -936,30 +933,63 @@ enum {
 
 - (void)showMenu
 {
-	UIActionSheet *menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"EDIT_DISH", nil ) otherButtonTitles:@[NSLocalizedString( @"DELETE_DISH", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+	UIActionSheet *menu = nil;
+	if( _dish.userId == [CurrentUser user].userId )
+	{
+		menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"EDIT_DISH", nil ) otherButtonTitles:@[NSLocalizedString( @"DELETE_DISH", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+			
+			// 요리 수정
+			if( buttonIndex == 0 )
+			{
+				WritingViewController *writingViewController = [[WritingViewController alloc] initWithDish:_dish];
+				writingViewController.delegate = self;
+				DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
+				self.tabBarController.modalPresentationStyle = 0;
+				[self.navigationController presentViewController:navController animated:YES completion:NO];
+			}
+			
+			// 요리 삭제 -> 재확인
+			else if( buttonIndex == 1 )
+			{
+				[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REALLY_DELETE", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"DELETE_DISH", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+					if( buttonIndex == 0 )
+					{
+						[self deleteDish];
+					}
+				}] showInView:self.tabBarController.view];
+			}
+		}];
 		
-		// 요리 수정
-		if( buttonIndex == 0 )
-		{
-			WritingViewController *writingViewController = [[WritingViewController alloc] initWithDish:_dish];
-			writingViewController.delegate = self;
-			DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
-			self.tabBarController.modalPresentationStyle = 0;
-			[self.navigationController presentViewController:navController animated:YES completion:NO];
-		}
-		
-		// 요리 삭제 -> 재확인
-		else if( buttonIndex == 1 )
-		{
-			[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REALLY_DELETE", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"DELETE_DISH", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
-				if( buttonIndex == 0 )
-				{
-					[self deleteDish];
-				}
-			}] showInView:self.tabBarController.view];
-		}
-	}];
-	menu.destructiveButtonIndex = 1;
+		menu.destructiveButtonIndex = 1;
+	}
+	else
+	{
+		menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"REPORT", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+			
+			// 신고하기
+			if( buttonIndex == 0 )
+			{
+				[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REPORT_REASON", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"REPORT_REASON_SPAM", nil ), NSLocalizedString( @"REPORT_REASON_PORN", nil ), NSLocalizedString( @"REPORT_REASON_VIOLENCE", nil ), NSLocalizedString( @"REPORT_REASON_COPYRIGHT", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+					
+					if( buttonIndex < 4 )
+					{
+						[self.tabBarController dim];
+						NSString *api = [NSString stringWithFormat:@"/dish/%d/report", _dish.dishId];
+						NSDictionary *params = @{ @"type": [NSString stringWithFormat:@"%d", buttonIndex] };
+						[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
+							[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REPORT_ACCEPTED_TITLE", nil ) message:NSLocalizedString( @"MESSAGE_REPORT_ACCEPTED", nil ) cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", nil ) otherButtonTitles:nil dismissBlock:nil] show];
+							[self.tabBarController undim];
+						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+							showErrorAlert();
+							[self.tabBarController undim];
+						}];
+					}
+					
+				}] showInView:self.tabBarController.view];
+			}
+		}];
+	}
+	
 	[menu showInView:self.tabBarController.view];
 }
 

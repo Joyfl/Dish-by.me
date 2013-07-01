@@ -16,8 +16,6 @@
 "MESSAGE_INTERNET_OFFLINE" = "인터넷 연결이 꺼져있습니다. 셀룰러 데이터 사용을 꺼놓았거나, 에어플레인모드가 켜져 있지는 않은지 확인해보세요.";
 "MESSAGE_REQUEST_TIMEOUT" = "인터넷 연결이 원활하지 않습니다. 잠시 후 다시 시도해보세요.";
 "MESSAGE_BAD_GATEWAY" = "서버에 연결할 수 없습니다. 금방 복구될 예정이니 조금만 기다려주세요.";
-"MESSAGE_" = "";
-"MESSAGE_" = "";
 
 "MESSAGE_EMAIL_NOT_VALIDATE" = "올바른 이메일 형식이 아니에요 :(";
 "MESSAGE_AGREEMENT" = "회원가입을 통해 본인은 Dish by.me의 이용약관에 동의합니다.";
@@ -44,6 +42,9 @@
 "MESSAGE_NO_PHOTO_ON_N_TH_RECIPE" = "%d번째 레시피에 사진이 빠졌어요;;";
 
 "MESSAGE_REALLY_DELETE" = "정말로 삭제하실건가요?";
+"MESSAGE_REPORT_REASON" = "신고 사유를 선택해주세요.";
+"MESSAGE_REPORT_ACCEPTED_TITLE" = "신고가 접수되었습니다.";
+"MESSAGE_REPORT_ACCEPTED" = "24시간 안에 처리될 예정입니다.";
 
 // Auth
 "SIGNUP" = "가입하기";
@@ -91,6 +92,11 @@
 "SENDING" = "전송중";
 "LOGIN_TO_COMMENT" = "댓글을 남기려면 로그인해주세요.";
 "DELETE_DISH" = "요리 삭제";
+"REPORT" = "신고하기";
+"REPORT_REASON_SPAM" = "스팸성 글입니다.";
+"REPORT_REASON_PORN" = "음란물입니다.";
+"REPORT_REASON_VIOLENCE" = "폭력적인 내용입니다.";
+"REPORT_REASON_COPYRIGHT" = "저작권을 침해했습니다.";
 
 // ForkListView
 "N_DISHES" = "%d개의 요리";
