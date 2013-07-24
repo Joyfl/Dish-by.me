@@ -1,43 +1,185 @@
 // Common
-BACK = "Back";
-OOPS = "Oops";
-I_GOT_IT = "I got it";
-CANCEL = "Cancel";
+"BACK" = "Back";
+"OOPS" = "Oops!";
+"WOW" = "Wow!";
+"I_GOT_IT" = "I Got It";
+"CANCEL" = "Cancel";
+"YES" = "Yes";
+"NO" = "No";
+"NO_THANKS" = "No, Thanks";
+"PROBABLY" = "Probably";
+"OH_MY_MISTAKE" = "Oh My Mistake!";
+"RETRY" = "Retry";
+"CLOSE" = "Close";
 
 // Messages
-MESSAGE_LOGIN_FAILED = "Login failed.";
-MESSAGE_NO_SUPPORT_CAMERA = "We're sorry, this device doesn't support camera.";
-MESSAGE_REALLY_CANCEL = "Do you really cancel?";
+"MESSAGE_INTERNET_OFFLINE" = "Internet connection is off. Make sure cellular using is on and airplane mode is off.";
+"MESSAGE_REQUEST_TIMEOUT" = "Internet connection is ";
+"MESSAGE_BAD_GATEWAY" = "Couldn't connect to Dish by.me server. We'll soon fix it.";
 
-// Login
-EMAIL = "Email";
-PASSWORD = "Password";
-LOGIN = "Login";
-LOGIN_WITH_FACEBOOK = "Login with Facebook";
+"MESSAGE_EMAIL_NOT_VALIDATE" = "Invalid email :(";
+"MESSAGE_AGREEMENT" = "By creating account, I accept Dish by.me's Terms of Service.";
+"MESSAGE_SIGNUP_COMPLETE" = "You account has been created!\nPlease fill your profile.";
+"MESSAGE_ALREADY_SIGNED_UP" = "Somebody already uses %@.\nHave you ever signed up before?";
+"MESSAGE_PROFILE_UPDATE_COMPLETE" = "Your profile has been created!\n가입한 계정으로 로그인할게요 :D";
+"MESSAGE_LOGIN_FAILED" = "로그인에 실패했어요. 이메일과 비밀번호를 확인해주세요.";
+"MESSAGE_FACEBOOK_NOT_ALLOWED" = "페이스북 연동에 실패했어요.\n[설정] > [Facebook]에 가서\nDish by.me를 허용해주세요.";
+
+"MESSAGE_INVALID_USER" = "존재하지 않는 사용자입니다.";
+"MESSAGE_WRONG_PASSWORD" = "비밀번호가 잘못되었습니다.";
+"MESSAGE_INPUT_YOUR_EMAIL" = "본인확인을 위해 가입할 때 사용한 이메일을 입력해주세요.";
+
+"MESSAGE_NO_SUPPORT_CAMERA" = "아쉽게도 카메라를 지원하지 않는 기기입니다.";
+"MESSAGE_REALLY_CANCEL" = "정말로 취소하시겠어요?";
+"MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
+"MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
+"MESSAGE_NEED_ACCOUNT_TO_SET_SETTINGS" = "설정을 하려면 Dish by.me 계정이 필요합니다.";
+
+"MESSAGE_FACEBOOK_NOT_CONNECTED" = "페이스북 연동이 되어있지 않아요.\n지금 연동하시겠어요?";
+"MESSAGE_THIS_FACEBOOK_ACCOUNT_IS_ALREADY_LINKED" = "이미 누군가가 해당 페이스북 계정을 사용하고 있어요.";
+
+"MESSAGE_NO_PHOTO_ON_N_TH_RECIPE" = "%d번째 레시피에 사진이 빠졌어요;;";
+
+"MESSAGE_REALLY_DELETE" = "정말로 삭제하실건가요?";
+"MESSAGE_REPORT_REASON" = "신고 사유를 선택해주세요.";
+"MESSAGE_REPORT_ACCEPTED_TITLE" = "신고가 접수되었습니다.";
+"MESSAGE_REPORT_ACCEPTED" = "24시간 안에 처리될 예정입니다.";
+
+// Auth
+"SIGNUP" = "가입하기";
+"SIGNUP_WITH_FACEBOOK" = "페이스북에서 정보 가져오기";
+"LOGIN" = "로그인";
+"LOGIN_WITH_FACEBOOK" = "페이스북으로 로그인";
+"FORGOT_PASSWORD" = "비밀번호를 잊으셨나요?";
+"LOOK_AROUND" = "둘러보기";
+"OR" = "또는";
+"EMAIL" = "이메일";
+"PASSWORD" = "비밀번호";
+"CONFIRM_PASSWORD" = "비밀번호 확인";
+"LOGIN_OR_SIGNUP" = "로그인 또는 계정 생성";
+
+"DONE" = "완료";
+"WELCOME" = "환영합니다!";
+"DO_IT_LATER" = "나중에 하기";
+"PROFILE" = "프로필";
+
+"RESET_PASSWORD" = "비밀번호 재설정";
+"SIGNED_UP_EMAIL" = "가입할 때의 이메일";
+"SEND_EMAIL" = "본인확인메일 보내기";
+
+"AGREEMENT" = "서비스 이용 약관";
+
+//
+"PULL_DOWN_TO_UPDATE" = "업데이트하시려면 아래로 당기세요.";
+"RELEASE_TO_UPDATE" = "업데이트하시려면 당겼다 놓으세요.";
+"LAST_UPDATED" = "최근 업데이트";
+"LOADING" = "로딩중...";
+
+// DishListView
+"BOOKMARK" = "북마크";
+"UPLOAD_FAILURE" = "업로드 실패";
 
 // DishDetailView
-EDIT = "Edit";
-FORK = "Fork";
-FORKED_FROM_S = "Forked from %@.";
-N_LIKE = "	%d liked it.";
-SHOW_RECIPE = "Show recipe";
-LEAVE_A_COMMENT = "Leave a message";
-SEND = "Send";
+"EDIT" = "수정";
+"FORK" = "포크";
+"FORKED_FROM_S" = "%1$@%2$@ 포크했습니다.";
+"N_BOOKMAKRED" = "%d명이 이 요리를 북마크했습니다.";
+"SHOW_RECIPE" = "레시피 보기";
+"MORE_COMMENTS" = "이전 댓글 보기";
+"LEAVE_A_COMMENT" = "댓글 남기기";
+"SEND" = "전송";
+"SENDING" = "전송중";
+"LOGIN_TO_COMMENT" = "댓글을 남기려면 로그인해주세요.";
+"DELETE_DISH" = "요리 삭제";
+"REPORT" = "신고하기";
+"REPORT_REASON_SPAM" = "스팸성 글입니다.";
+"REPORT_REASON_PORN" = "음란물입니다.";
+"REPORT_REASON_VIOLENCE" = "폭력적인 내용입니다.";
+"REPORT_REASON_COPYRIGHT" = "저작권을 침해했습니다.";
+
+// ForkListView
+"N_DISHES" = "%d개의 요리";
 
 // SearchView
-SEARCH_INPUT = "Search dishes";
-SEARCH = "Search";
+"SEARCH_INPUT" = "요리 검색";
+"SEARCH" = "검색";
+"ONE_DISH_WAS_FOUND" = "%d개의 요리가 검색되었습니다.";
+"N_DISHES_WERE_FOUND" = "%d개의 요리가 검색되었습니다.";
+"NO_SEARCH_RESULT" = "검색결과가 없습니다.";
 
 // WritingView
-TAKE_A_PHOTO = "Take a photo";
-FROM_LIBRARY = "From library";
-INPUT_DISH_NAME = "Dish name";
-INPUT_MESSAGE = "Message";
-WRITE_RECIPE = "Write recipe";
-UPLOAD = "Upload";
+"NEW_DISH" = "새 요리";
+"EDIT_DISH" = "요리 수정";
+"DO_FORK" = "포크하기";
+"TAKE_A_PHOTO" = "사진 찍기";
+"FROM_LIBRARY" = "라이브러리에서 선택";
+"INPUT_DISH_NAME" = "요리 이름";
+"INPUT_DESCRIPTION" = "내용";
+"WRITE_RECIPE" = "레시피 작성하기";
+"UPLOAD" = "업로드";
+
+// Recipe
+"HOW_MANY_SERVINGS" = "몇 인분 기준인가요?";
+"HOW_MANY_MINUTES" = "몇 분 걸리나요?";
+"INGREDIENT" = "재료";
+"AMOUNT" = "양";
+"N_SERVINGS" = "%d인분";
+"N_MINUTES" = "%d분";
+"SERVINGS" = "인분";
+"MINUTES" = "분";
+"ADD_INGREDIENT" = "재료 추가하기";
+"INPUT_CONTENT" = "내용 입력하기";
 
 // ProfileView
-DISHES = "Dishes";
-LIKES = "Likes";
+"FOLLOW" = "팔로우";
+"NO_NAME" = "이름이 아직 없습니다.";
+"NO_BIO" = "Dish by.me에 처음 왔어요!";
+"NAME" = "이름";
+"BIO" = "자기소개";
+"SAVE" = "저장";
+"DISHES" = "요리";
+"BOOKMARKS" = "북마크";
+"FOLLOWING" = "팔로잉";
+"FOLLOWERS" = "팔로워";
+"NO_DISHES" = "%@님은 아직 등록한 요리가 없어요 :)";
+"NO_BOOKMARKS" = "%@님은 아직 북마크한 요리가 없어요 :)";
+"NO_FOLLOWING" = "%@님이 팔로잉한 사용자는 아직 없어요 :)";
+"NO_FOLLOWERS" = "%@님을 팔로우하는 사용자는 아직 없어요 :)";
 
 // SettingsView
+"SETTINGS" = "설정";
+"ACCOUNT_SETTINGS" = "계정 설정";
+"CHANGE_EMAIL" = "이메일 변경";
+"CHANGE_PASSWORD" = "비밀번호 변경";
+"SHARE_SETTINGS" = "공유 설정";
+"FACEBOOK" = "페이스북";
+"SHARE_ACTIVITIES" = "활동 공유";
+"DISCONNECT" = "연동 해제";
+"REALLY_DISCONNECT" = "계정 연동을 해제하시려구요?";
+"PUSH_NOTIFICATIONS_SETTINGS" = "푸시 알림 설정";
+"COMMENT" = "댓글";
+"LOGOUT" = "로그아웃";
+"REALLY_LOGOUT" = "로그아웃 하시겠습니까?";
+"LOGOUT_SUCCEED" = "로그아웃되었습니다.";
+
+// Date
+"JUST_NOW" = "방금";
+"A_FEW_SECONDS_AGO" = "몇 초 전";
+"N_SECONDS_AGO" = "%d초 전";
+"A_MINUTE_AGO" = "1분 전";
+"N_MINUTES_AGO" = "%d분 전";
+"AN_HOUR_AGO" = "1시간 전";
+"N_HOURS_AGO" = "%d시간 전";
+"YESTERDAY" = "어제";
+"N_DAYS_AGO" = "%d일 전";
+"A_WEEK_AGO" = "일주일 전";
+"DATE_FORMAT_WITH_MONTH_DAY" = "M월 d일";
+"DATE_FORMAT_WITH_YEAR_MONTH_DAY" = "yyyy년 M월 d일";
+
+// Notifications
+"NOTIFICATIONS" = "알림";
+"S_FOLLOWED_YOU" = "%@님이 이제 회원님을 팔로우합니다.";
+"S_BOOKMARKED_YOUR_DISH" = "%@님이 회원님의 요리를 북마크했습니다.";
+"S_COMMENTED_ON_YOUR_DISH" = "%1$@님이 회원님의 요리에 댓글을 남겼습니다: \"%2$@\"";
+"S_FORKED_YOUR_DISH" = "%@님이 회원님의 요리를 포크했습니다.";
+"S_COMMENTED_ON_DISH_S_TOO" = "%1$@님도 요리 '%2$@'에 댓글을 남겼습니다: \"%3$@\"";

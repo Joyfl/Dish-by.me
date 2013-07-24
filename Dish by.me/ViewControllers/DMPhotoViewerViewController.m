@@ -16,8 +16,9 @@
 	self.trackedViewName = [self.class description];
 	self.view.backgroundColor = [UIColor clearColor];
 	[self.view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewDidTap)]];
+	[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
 	
-	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 0, 0, UIScreenWidth, UIScreenHeight - 20 )];
+	_scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake( 0, 0, UIScreenWidth, UIScreenHeight )];
 	_scrollView.delegate = self;
 	_scrollView.minimumZoomScale = 1;
 	_scrollView.maximumZoomScale = 2;
@@ -27,6 +28,7 @@
 	[self.view addSubview:_scrollView];
 	
 	_imageView = [[UIImageView alloc] init];
+	_imageView.backgroundColor = [UIColor redColor];
 	[_imageView setImageWithURL:url placeholderImage:thumbnailImage];
 	[_scrollView addSubview:_imageView];
 	
@@ -43,7 +45,7 @@
 		_aspectFitRect = CGRectMake( 0, (maxHeight - height) / 2.0, maxWidth, height );
 	}
 	
-	// 스크롤뷰의 가로 비율이 더 클 경우
+	// 스크롤뷰의 세로 비율이 더 클 경우
 	else if( imageRatio < scrollViewRatio )
 	{
 		CGFloat width = thumbnailImage.size.width * maxHeight / thumbnailImage.size.height;
@@ -55,6 +57,9 @@
 	{
 		_aspectFitRect = CGRectMake( 0, 0, maxWidth, maxHeight );
 	}
+	
+	[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationDidChange:) name:UIDeviceOrientationDidChangeNotification object:[UIDevice currentDevice]];
 	
 	return self;
 }
@@ -99,6 +104,100 @@
 	} completion:^(BOOL finished) {
 		[self dismissViewControllerAnimated:NO completion:nil];
 	}];
+	
+	[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+}
+
+- (void)orientationDidChange:(NSNotification *)notification
+{
+	UIDevice * device = notification.object;
+	CGAffineTransform transform;
+	
+	switch( device.orientation )
+	{
+		case UIDeviceOrientationPortrait:
+			transform = CGAffineTransformMakeRotation( 0 );
+			break;
+			
+		case UIDeviceOrientationLandscapeRight:
+			transform = CGAffineTransformMakeRotation( 3 * M_PI_2 );
+			break;
+			
+		case UIDeviceOrientationPortraitUpsideDown:
+			transform = CGAffineTransformMakeRotation( M_PI );
+			break;
+			
+		case UIDeviceOrientationLandscapeLeft:
+			transform = CGAffineTransformMakeRotation( M_PI_2 );
+			break;
+			
+		default:
+			transform = CGAffineTransformMakeRotation( 0 );
+			break;
+	}
+	
+	[UIView animateWithDuration:0.25 animations:^{
+		_scrollView.zoomScale = 1.0;
+		_scrollView.transform = transform;
+		_scrollView.frame = CGRectMake( 0, 0, UIScreenWidth, UIScreenHeight );
+		[self resetAspectFitRect];
+	} completion:^(BOOL finished) {}];
+}
+
+- (void)resetAspectFitRect
+{
+	CGFloat scrollViewWidth, scrollViewHeight;
+	
+	switch( [UIDevice currentDevice].orientation )
+	{
+		case UIDeviceOrientationLandscapeRight:
+		case UIDeviceOrientationLandscapeLeft:
+			scrollViewWidth = _scrollView.frame.size.height;
+			scrollViewHeight = _scrollView.frame.size.width;
+			break;
+			
+		default:
+			scrollViewWidth = _scrollView.frame.size.width;
+			scrollViewHeight = _scrollView.frame.size.height;
+			break;
+	}
+	
+	CGFloat imageRatio = _imageView.image.size.width / _imageView.image.size.height;
+	CGFloat scrollViewRatio = scrollViewWidth / scrollViewHeight;
+	
+	CGFloat maxWidth = scrollViewWidth;
+	CGFloat maxHeight = scrollViewHeight;
+	
+	CGFloat x, y, width, height;
+	
+	// 이미지의 가로 비율이 더 클 경우
+	if( imageRatio > scrollViewRatio )
+	{
+		width = maxWidth;
+		height = _imageView.image.size.height * maxWidth / _imageView.image.size.width;
+		x = 0;
+		y = (maxHeight - height) / 2.0;
+	}
+	
+	// 스크롤뷰의 세로 비율이 더 클 경우
+	else if( imageRatio < scrollViewRatio )
+	{
+		width = _imageView.image.size.width * maxHeight / _imageView.image.size.height;
+		height = maxHeight;
+		x = (maxWidth - width) / 2.0;
+		y = 0;
+	}
+	
+	// 이미지와 스크롤뷰의 가로 비율이 같을 경우
+	else
+	{
+		x = y = 0;
+		width = maxWidth;
+		height = maxHeight;
+	}
+	
+	_aspectFitRect = CGRectMake( x, y, width, height );
+	_imageView.frame = _aspectFitRect;
 }
 
 
@@ -112,14 +211,15 @@
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView
 {
-    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
+	// Center the imageview.
+	CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
     (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
 	
     CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
     (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
 	
-    _imageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-                                 scrollView.contentSize.height * 0.5 + offsetY);
+	_imageView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+									scrollView.contentSize.height * 0.5 + offsetY);
 }
 
 @end
