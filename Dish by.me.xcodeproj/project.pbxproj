@@ -734,7 +734,6 @@
 		03B598091602FDC0007BD6AF /* Dish by.me-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Dish by.me-Prefix.pch"; sourceTree = "<group>"; };
 		03B5980A1602FDC0007BD6AF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		03B5980B1602FDC0007BD6AF /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		03B598221603046E007BD6AF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		03B5982416030475007BD6AF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		03C52CBB16F435D9005B1B4C /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		03C52CBE16F435F5005B1B4C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -2613,7 +2612,6 @@
 		03B598231603046E007BD6AF /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				03B598221603046E007BD6AF /* en */,
 				03B5982416030475007BD6AF /* ko */,
 			);
 			name = Localizable.strings;
