@@ -378,6 +378,8 @@
 		033FAD9317A5234000FE5B91 /* textfield_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 033FAC3C17A5234000FE5B91 /* textfield_bg@2x.png */; };
 		033FAD9417A5234000FE5B91 /* tool_bar.png in Resources */ = {isa = PBXBuildFile; fileRef = 033FAC3E17A5234000FE5B91 /* tool_bar.png */; };
 		033FAD9517A5234000FE5B91 /* tool_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 033FAC3F17A5234000FE5B91 /* tool_bar@2x.png */; };
+		033FAD9817A58AFF00FE5B91 /* icon_more.png in Resources */ = {isa = PBXBuildFile; fileRef = 033FAD9617A58AFF00FE5B91 /* icon_more.png */; };
+		033FAD9917A58AFF00FE5B91 /* icon_more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 033FAD9717A58AFF00FE5B91 /* icon_more@2x.png */; };
 		033FBC3016F746DD00934FC8 /* SignUpProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033FBC2F16F746DD00934FC8 /* SignUpProfileViewController.m */; };
 		0349EA5116D8F0350057BD12 /* DMAPILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5016D8F0350057BD12 /* DMAPILoader.m */; };
 		0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5416D8F6E90057BD12 /* JLLogger.m */; };
@@ -982,6 +984,8 @@
 		033FAC3C17A5234000FE5B91 /* textfield_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textfield_bg@2x.png"; sourceTree = "<group>"; };
 		033FAC3E17A5234000FE5B91 /* tool_bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tool_bar.png; sourceTree = "<group>"; };
 		033FAC3F17A5234000FE5B91 /* tool_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool_bar@2x.png"; sourceTree = "<group>"; };
+		033FAD9617A58AFF00FE5B91 /* icon_more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_more.png; sourceTree = "<group>"; };
+		033FAD9717A58AFF00FE5B91 /* icon_more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_more@2x.png"; sourceTree = "<group>"; };
 		033FBC2E16F746DC00934FC8 /* SignUpProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpProfileViewController.h; sourceTree = "<group>"; };
 		033FBC2F16F746DD00934FC8 /* SignUpProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpProfileViewController.m; sourceTree = "<group>"; };
 		0349EA4F16D8F0350057BD12 /* DMAPILoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DMAPILoader.h; path = "Dish by.me/DMAPILoader.h"; sourceTree = SOURCE_ROOT; };
@@ -1491,6 +1495,8 @@
 				033FAB3A17A5233F00FE5B91 /* icon_like_selected@2x.png */,
 				033FAB3B17A5233F00FE5B91 /* icon_logo.png */,
 				033FAB3C17A5233F00FE5B91 /* icon_logo@2x.png */,
+				033FAD9617A58AFF00FE5B91 /* icon_more.png */,
+				033FAD9717A58AFF00FE5B91 /* icon_more@2x.png */,
 				033FAB3D17A5233F00FE5B91 /* icon_notification.png */,
 				033FAB3E17A5233F00FE5B91 /* icon_notification@2x.png */,
 				033FAB3F17A5233F00FE5B91 /* line.png */,
@@ -2532,6 +2538,8 @@
 				033FAD9317A5234000FE5B91 /* textfield_bg@2x.png in Resources */,
 				033FAD9417A5234000FE5B91 /* tool_bar.png in Resources */,
 				033FAD9517A5234000FE5B91 /* tool_bar@2x.png in Resources */,
+				033FAD9817A58AFF00FE5B91 /* icon_more.png in Resources */,
+				033FAD9917A58AFF00FE5B91 /* icon_more@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

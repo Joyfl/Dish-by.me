@@ -21,8 +21,8 @@
 	[button setTitleColor:[UIColor colorWithWhite:1 alpha:0.7] forState:UIControlStateDisabled];
 	[button setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
 	button.adjustsImageWhenHighlighted = NO;
-	[button setBackgroundImage:[UIImage imageNamed:@"bar_button.png"] forState:UIControlStateNormal];
-	[button setBackgroundImage:[UIImage imageNamed:@"bar_button_selected.png"] forState:UIControlStateHighlighted];
+	[button setBackgroundImage:[[UIImage imageNamed:@"bar_button.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 15, 30, 15, 30 )] forState:UIControlStateNormal];
+	[button setBackgroundImage:[[UIImage imageNamed:@"bar_button_selected.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 15, 30, 15, 30 )] forState:UIControlStateHighlighted];
 	[button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
 	
 	DMBarButtonItem *barButtonItem = [[DMBarButtonItem alloc] initWithCustomView:button];
@@ -44,8 +44,8 @@
 	[button setTitleShadowColor:[UIColor colorWithWhite:0 alpha:0.2] forState:UIControlStateNormal];
 	
 	button.titleEdgeInsets = UIEdgeInsetsMake( -1, 8, 0, 0 );
-	[button setBackgroundImage:[UIImage imageNamed:@"navigation_bar_button_back.png"] forState:UIControlStateNormal];
-	[button setBackgroundImage:[UIImage imageNamed:@"navigation_bar_button_back_selected.png"] forState:UIControlStateHighlighted];
+	[button setBackgroundImage:[[UIImage imageNamed:@"navigation_bar_button_back.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 15, 30, 15, 30 )] forState:UIControlStateNormal];
+	[button setBackgroundImage:[[UIImage imageNamed:@"back_button_selected.png"]resizableImageWithCapInsets:UIEdgeInsetsMake( 15, 30, 15, 30 )] forState:UIControlStateHighlighted];
 	
 	[button addTargetBlock:^(id sender) {
 		if( viewControllerWillBePopped ) viewControllerWillBePopped();
@@ -92,6 +92,13 @@
 {
 	UIButton *button = (UIButton *)self.customView;
 	[button setTitle:title forState:UIControlStateNormal];
+}
+
+- (void)setImage:(UIImage *)image forState:(UIControlState)state
+{
+	UIButton *button = (UIButton *)self.customView;
+	[button setImage:image forState:state];
+	button.frame = CGRectMake( 0, 0, image.size.width + 25, 30 );
 }
 
 @end

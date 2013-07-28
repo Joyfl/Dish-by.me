@@ -6,6 +6,7 @@
 "CANCEL" = "취소";
 "YES" = "네";
 "NO" = "아니오";
+"OK" = "네";
 "NO_THANKS" = "괜찮아요";
 "PROBABLY" = "그런 것 같아요";
 "OH_MY_MISTAKE" = "앗 실수!";
@@ -39,6 +40,9 @@
 "MESSAGE_THIS_FACEBOOK_ACCOUNT_IS_ALREADY_LINKED" = "이미 누군가가 해당 페이스북 계정을 사용하고 있어요.";
 
 "MESSAGE_NO_PHOTO_ON_N_TH_RECIPE" = "%d번째 레시피에 사진이 빠졌어요;;";
+
+"MESSAGE_PHOTO_HAS_BEEN_SAVED" = "사진이 예쁘게 잘 저장되었습니다.";
+"MESSAGE_FAILED_TO_SAVE_PHOTO" = "사진을 저장하는데 실패했습니다.";
 
 "MESSAGE_REALLY_DELETE" = "정말로 삭제하실건가요?";
 "MESSAGE_REPORT_REASON" = "신고 사유를 선택해주세요.";
@@ -93,6 +97,7 @@
 "SEND" = "전송";
 "SENDING" = "전송중";
 "LOGIN_TO_COMMENT" = "댓글을 남기려면 로그인해주세요.";
+"SAVE_PHOTO" = "사진 저장";
 "DELETE_DISH" = "요리 삭제";
 "REPORT" = "신고하기";
 "REPORT_REASON_SPAM" = "스팸성 글입니다.";
