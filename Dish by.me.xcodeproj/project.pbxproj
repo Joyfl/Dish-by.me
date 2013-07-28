@@ -379,7 +379,7 @@
 		033FAD9517A5234000FE5B91 /* tool_bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 033FAC3F17A5234000FE5B91 /* tool_bar@2x.png */; };
 		033FAD9817A58AFF00FE5B91 /* icon_more.png in Resources */ = {isa = PBXBuildFile; fileRef = 033FAD9617A58AFF00FE5B91 /* icon_more.png */; };
 		033FAD9917A58AFF00FE5B91 /* icon_more@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 033FAD9717A58AFF00FE5B91 /* icon_more@2x.png */; };
-		033FAD9D17A5A82000FE5B91 /* DTCoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 033FAD9B17A5A82000FE5B91 /* DTCoreText.framework */; };
+		033FB15E17A5AB8400FE5B91 /* MGMushParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 033FB15D17A5AB8400FE5B91 /* MGMushParser.m */; };
 		033FBC3016F746DD00934FC8 /* SignUpProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033FBC2F16F746DD00934FC8 /* SignUpProfileViewController.m */; };
 		0349EA5116D8F0350057BD12 /* DMAPILoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5016D8F0350057BD12 /* DMAPILoader.m */; };
 		0349EA5516D8F6E90057BD12 /* JLLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0349EA5416D8F6E90057BD12 /* JLLogger.m */; };
@@ -875,7 +875,8 @@
 		033FAC3F17A5234000FE5B91 /* tool_bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tool_bar@2x.png"; sourceTree = "<group>"; };
 		033FAD9617A58AFF00FE5B91 /* icon_more.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_more.png; sourceTree = "<group>"; };
 		033FAD9717A58AFF00FE5B91 /* icon_more@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_more@2x.png"; sourceTree = "<group>"; };
-		033FAD9B17A5A82000FE5B91 /* DTCoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DTCoreText.framework; sourceTree = "<group>"; };
+		033FB15C17A5AB8400FE5B91 /* MGMushParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGMushParser.h; sourceTree = "<group>"; };
+		033FB15D17A5AB8400FE5B91 /* MGMushParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGMushParser.m; sourceTree = "<group>"; };
 		033FBC2E16F746DC00934FC8 /* SignUpProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpProfileViewController.h; sourceTree = "<group>"; };
 		033FBC2F16F746DD00934FC8 /* SignUpProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpProfileViewController.m; sourceTree = "<group>"; };
 		0349EA4F16D8F0350057BD12 /* DMAPILoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DMAPILoader.h; path = "Dish by.me/DMAPILoader.h"; sourceTree = SOURCE_ROOT; };
@@ -1070,7 +1071,6 @@
 				031AAB15160EFFB9007B42B3 /* QuartzCore.framework in Frameworks */,
 				03F6FF0D16DA66AC008B5D9C /* FacebookSDK.framework in Frameworks */,
 				0396E09116E5E60D00CA2531 /* libGoogleAnalytics_debug.a in Frameworks */,
-				033FAD9D17A5A82000FE5B91 /* DTCoreText.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1574,6 +1574,15 @@
 			path = tool_bar;
 			sourceTree = "<group>";
 		};
+		033FB15B17A5AB8400FE5B91 /* MGMushParser */ = {
+			isa = PBXGroup;
+			children = (
+				033FB15C17A5AB8400FE5B91 /* MGMushParser.h */,
+				033FB15D17A5AB8400FE5B91 /* MGMushParser.m */,
+			);
+			path = MGMushParser;
+			sourceTree = "<group>";
+		};
 		0349EA5216D8F6E90057BD12 /* JLLogger */ = {
 			isa = PBXGroup;
 			children = (
@@ -1586,7 +1595,7 @@
 		037EF5E916887B9200FA765D /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				033FAD9B17A5A82000FE5B91 /* DTCoreText.framework */,
+				033FB15B17A5AB8400FE5B91 /* MGMushParser */,
 				03D694461761D6C9003B23A5 /* JLSwitch */,
 				0392A52616F0464B0045209E /* HTBlock */,
 				0314A11116E775AC00DAF40A /* TTTAttributedLabel */,
@@ -2415,6 +2424,7 @@
 				038F81EC1731079A00738F17 /* UITableViewCell+Utils.m in Sources */,
 				037CCEAE17420D3500BF8A5A /* DMPhotoViewerViewController.m in Sources */,
 				03D694491761D6C9003B23A5 /* JLSwitch.m in Sources */,
+				033FB15E17A5AB8400FE5B91 /* MGMushParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2520,6 +2530,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Libraries/GoogleAnalytics\"",
 					"\"$(SRCROOT)/Libraries/DTCoreText\"",
+					"\"$(SRCROOT)/Libraries\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lsqlite3.0",
@@ -2549,6 +2560,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Libraries/GoogleAnalytics\"",
 					"\"$(SRCROOT)/Libraries/DTCoreText\"",
+					"\"$(SRCROOT)/Libraries\"",
 				);
 				OTHER_LDFLAGS = (
 					"-lsqlite3.0",

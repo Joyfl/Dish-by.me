@@ -7,7 +7,7 @@
 //
 
 #import "NotificationCell.h"
-#import "DTCoreText.h"
+#import "MGMushParser.h"
 
 @implementation NotificationCell
 
@@ -21,8 +21,11 @@
 	_thumbnailView.image = [UIImage imageNamed:@"placeholder.png"];
 	[self.contentView addSubview:_thumbnailView];
 	
-	_descriptionLabel = [[DTAttributedLabel alloc] initWithFrame:CGRectMake( 84, 9, 227, 70 )];
+	_descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake( 84, 9, 227, 0 )];
 	_descriptionLabel.backgroundColor = [UIColor clearColor];
+	_descriptionLabel.textColor = [UIColor colorWithHex:0x514F4D alpha:1];
+	_descriptionLabel.font = [UIFont systemFontOfSize:13];
+	_descriptionLabel.numberOfLines = 2;
 	[self.contentView addSubview:_descriptionLabel];
 	
 	_timeLabel = [[UILabel alloc] initWithFrame:CGRectMake( 84, 50, 227, 15 )];
@@ -58,7 +61,8 @@
 	
 	[_thumbnailView setImageWithURL:[NSURL URLWithString:notification.photoURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"]];
 	
-	_descriptionLabel.attributedString = notification.attributedDescription;
+	_descriptionLabel.attributedText = _notification.attributedDescription;
+	[_descriptionLabel sizeToFit];
 	_timeLabel.text = notification.relativeCreatedTime;
 	[_timeLabel sizeToFit];
 	
