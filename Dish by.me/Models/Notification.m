@@ -8,7 +8,7 @@
 
 #import "Notification.h"
 #import "NSString+ArgumentArray.h"
-#import "DTCoreText.h"
+#import "MGMushParser.h"
 
 @implementation Notification
 
@@ -25,11 +25,11 @@
 	NSMutableArray *args = [NSMutableArray arrayWithArray:[dictionary objectForKeyNotNull:@"loc-args"]];
 	for( NSInteger i = 0; i < args.count; i++ )
 	{
-		[args replaceObjectAtIndex:i withObject:[NSString stringWithFormat:@"<font style='color: #2E2C2A;'><b>%@</b></font>", [args objectAtIndex:i]]];
+		[args replaceObjectAtIndex:i withObject:[NSString stringWithFormat:@"**%@**", [args objectAtIndex:i]]];
 	}
 	
-	NSString *descriptionHTML = [NSString stringWithFormat:@"<font style='font-size: 13px; color: #514F4D; font-family: Helvetica; line-height: 16px; shadow-color: red; text-shadow: 0 0.5px white;'>%@</font>", [NSString stringWithFormat:NSLocalizedString( [dictionary objectForKeyNotNull:@"loc-key"], nil ) arguments:args]];
-	notification.attributedDescription = [[NSAttributedString alloc] initWithHTMLData:[descriptionHTML dataUsingEncoding:NSUTF8StringEncoding] documentAttributes:NULL];
+	NSString *markdown = [NSString stringWithFormat:@"%@", [NSString stringWithFormat:NSLocalizedString( [dictionary objectForKeyNotNull:@"loc-key"], nil ) arguments:args]];
+	notification.attributedDescription = [MGMushParser attributedStringFromMush:markdown font:[UIFont systemFontOfSize:13] color:[UIColor colorWithHex:0x514F4D alpha:1]];
 	
 	[notification updateRelativeTime];
 	
