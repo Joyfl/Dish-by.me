@@ -1209,7 +1209,7 @@ enum {
 											  self.commentCountLabel.frame.size.width,
 											  self.commentCountLabel.frame.size.height);
 	
-	self.commentIconView.frame = CGRectMake(self.commentCountLabel.frame.origin.x - self.commentIconView.frame.size.width - 3,
+	self.commentIconView.frame = CGRectMake(self.commentCountLabel.frame.origin.x - self.commentIconView.frame.size.width - 5,
 											self.commentIconView.frame.origin.y,
 											self.commentIconView.frame.size.width,
 											self.commentIconView.frame.size.height);
@@ -1222,7 +1222,7 @@ enum {
 										   self.likeCountLabel.frame.size.width,
 										   self.likeCountLabel.frame.size.height);
 	
-	self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 1,
+	self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 3,
 										 self.likeIconView.frame.origin.y,
 										 self.likeIconView.frame.size.width,
 										 self.likeIconView.frame.size.height);
