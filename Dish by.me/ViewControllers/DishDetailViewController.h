@@ -80,9 +80,9 @@
 @property (nonatomic, strong) UILabel *bookmarkLabel;
 @property (nonatomic, strong) BookmarkButton *bookmarkButton;
 @property (nonatomic, strong) UIImageView *bookmarkDotLineView;
-@property (nonatomic, strong) UIButton *likeButton;
+@property (nonatomic, strong) JLLabelButton *likeButton;
 @property (nonatomic, strong) UILabel *likeButtonCommentButtonSeparator;
-@property (nonatomic, strong) UIButton *commentButton;
+@property (nonatomic, strong) JLLabelButton *commentButton;
 @property (nonatomic, strong) UIImageView *likeIconView;
 @property (nonatomic, strong) UILabel *likeCountLabel;
 @property (nonatomic, strong) UIImageView *commentIconView;

@@ -86,7 +86,7 @@
 "N_BOOKMAKRED" = "%d명이 이 요리를 북마크했습니다.";
 "SHOW_RECIPE" = "레시피 보기";
 "LIKE" = "좋아요";
-"CANCEL_LIKE" = "좋아요 취소";
+"UNLIKE" = "좋아요 취소";
 "WRITE_COMMENT" = "댓글 쓰기";
 "MORE_COMMENTS" = "이전 댓글 보기";
 "LEAVE_A_COMMENT" = "댓글 남기기";

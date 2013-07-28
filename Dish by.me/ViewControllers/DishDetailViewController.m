@@ -182,13 +182,15 @@ enum {
 	self.bookmarkDotLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 8, 48, 304, 2 )];
 	self.bookmarkDotLineView.image = [UIImage imageNamed:@"line_dotted.png"];
 	
-	self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 64, 0, 0 )];
+	self.likeButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 12, 64, 0, 0 )];
 	self.likeButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
 	[self.likeButton setTitle:NSLocalizedString( @"LIKE", nil ) forState:UIControlStateNormal];
-	[self.likeButton setTitle:NSLocalizedString( @"CANCEL_LIKE", nil ) forState:UIControlStateSelected];
+	[self.likeButton setTitle:NSLocalizedString( @"UNLIKE", nil ) forState:UIControlStateSelected];
 	[self.likeButton setTitleColor:[UIColor colorWithHex:0x717374 alpha:1] forState:UIControlStateNormal];
 	[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
 	self.likeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	self.likeButton.hightlightViewInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
+	[self.likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
 	self.likeButtonCommentButtonSeparator = [[UILabel alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
 	self.likeButtonCommentButtonSeparator.backgroundColor = [UIColor clearColor];
@@ -199,17 +201,18 @@ enum {
 	self.likeButtonCommentButtonSeparator.text = @"・";
 	[self.likeButtonCommentButtonSeparator sizeToFit];
 	
-	self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
+	self.commentButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
 	self.commentButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
 	[self.commentButton setTitle:NSLocalizedString( @"WRITE_COMMENT", nil ) forState:UIControlStateNormal];
 	[self.commentButton setTitleColor:[UIColor colorWithHex:0x717374 alpha:1] forState:UIControlStateNormal];
 	[self.commentButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
 	self.commentButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[self.commentButton sizeToFit];
+	self.commentButton.hightlightViewInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
 	
-	self.likeIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 64, 15, 17 )];
+	self.likeIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 63, 19, 18 )];
 	
-	self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
+	self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 62, 0, 0 )];
 	self.likeCountLabel.backgroundColor = [UIColor clearColor];
 	self.likeCountLabel.font = [UIFont boldSystemFontOfSize:13];
 	self.likeCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
@@ -218,7 +221,7 @@ enum {
 	self.commentIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 64, 14, 17 )];
 	self.commentIconView.image = [UIImage imageNamed:@"icon_comment_gray.png"];
 	
-	self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
+	self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 62, 0, 0 )];
 	self.commentCountLabel.backgroundColor = [UIColor clearColor];
 	self.commentCountLabel.font = [UIFont boldSystemFontOfSize:13];
 	self.commentCountLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
@@ -591,6 +594,47 @@ enum {
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
 	}];
+}
+
+- (void)like
+{
+	self.dish.liked = YES;
+	self.dish.likeCount ++;
+	[self updateLikeUI];
+	
+	self.likeIconView.transform = CGAffineTransformMakeScale( 0.78, 0.78 );
+	[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+		self.likeIconView.transform = CGAffineTransformMakeScale( 1.21, 1.21 );
+	} completion:^(BOOL finished) {
+		[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+			self.likeIconView.transform = CGAffineTransformMakeScale( 0.89, 0.89 );
+		} completion:^(BOOL finished) {
+			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+				self.likeIconView.transform = CGAffineTransformMakeScale( 1, 1 );
+			} completion:nil];
+		}];
+	}];
+	
+	JLLog( @"<Dish:%d> like", self.dish.dishId );
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/like", self.dish.dishId];
+	[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		
+		self.dish.updatedTime = [response objectForKey:@"updated_time"];
+		self.dish.likeCount = [[response objectForKey:@"like_count"] integerValue];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+	}];
+}
+
+- (void)unlike
+{
+	self.dish.liked = NO;
+	self.dish.likeCount --;
+	[self updateLikeUI];
 }
 
 - (void)deleteDish
@@ -1144,26 +1188,18 @@ enum {
 										   self.likeCountLabel.frame.size.width,
 										   self.likeCountLabel.frame.size.height);
 	
-	self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 3,
+	self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 1,
 										 self.likeIconView.frame.origin.y,
 										 self.likeIconView.frame.size.width,
 										 self.likeIconView.frame.size.height);
 	
 	if( !self.dish.liked || ![CurrentUser user].loggedIn )
 	{
-		self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 3,
-											 self.likeCountLabel.frame.origin.y,
-											 self.likeIconView.frame.size.width,
-											 self.likeIconView.frame.size.height);
 		self.likeIconView.image = [UIImage imageNamed:@"icon_like.png"];
 		self.likeCountLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	}
 	else
 	{
-		self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 5,
-											 self.likeCountLabel.frame.origin.y - 1,
-											 self.likeIconView.frame.size.width,
-											 self.likeIconView.frame.size.height);
 		self.likeIconView.image = [UIImage imageNamed:@"icon_like_selected.png"];
 		self.likeCountLabel.textColor = [UIColor colorWithHex:0x098CA6 alpha:1];
 	}
@@ -1288,6 +1324,18 @@ enum {
 {
 	ForkListViewController *forkListViewController = [[ForkListViewController alloc] initWithDish:self.dish];
 	[self.navigationController pushViewController:forkListViewController animated:YES];
+}
+
+- (void)likeButtonDidTouchUpInside
+{
+	if( !self.likeButton.selected )
+	{
+		[self like];
+	}
+	else
+	{
+		[self unlike];
+	}
 }
 
 - (void)recipeButtonDidTouchUpInside
