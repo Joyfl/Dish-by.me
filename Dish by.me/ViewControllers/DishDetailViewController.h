@@ -30,22 +30,9 @@
 	UIImageView *_midView;
 	UIImageView *_botView;
 	
-	CGFloat _contentRowHeight;
-	
-	UIImageView *_borderView;
-	NSTimer *_photoViewTouchTimer;
-	
-	UILabel *_timeLabel;
-	
-	UIImageView *_messageBoxView;
-	UILabel *_messageLabel;
-	UIImageView *_messageBoxDotLineView;
-	
 	TTTAttributedLabel *_forkedFromLabel;
 	JLLabelButton *_forkCountButton;
 	
-	UIButton *_moreCommentsButton;
-	UIActivityIndicatorView *_moreCommentsIndicatorView;
 	UIImageView *_commentInputBackgroundView;
 	UIPlaceHolderTextView *_commentInput;
 	DMButton *_sendButton;
@@ -100,6 +87,12 @@
 @property (nonatomic, strong) UILabel *likeCountLabel;
 @property (nonatomic, strong) UIImageView *commentIconView;
 @property (nonatomic, strong) UILabel *commentCountLabel;
+
+//
+// More Comments
+//
+@property (nonatomic, strong) UIButton *moreCommentsButton;
+@property (nonatomic, strong) UIActivityIndicatorView *moreCommentsIndicatorView;
 
 
 @property (nonatomic, strong) UIImageView *commentBar;

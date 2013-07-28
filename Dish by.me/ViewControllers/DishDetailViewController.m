@@ -60,7 +60,7 @@ enum {
 	
 	self.navigationItem.title = dishName;
 	
-	self.tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 108 )];
+	self.tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 )];
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -223,9 +223,26 @@ enum {
 	self.commentCountLabel.shadowOffset = CGSizeMake( 0, 1 );
 	
 	
+	//
+	// More Comments
+	//
+	self.moreCommentsButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 2, 320, 43 )];
+	[self.moreCommentsButton setImage:[UIImage imageNamed:@"icon_comment_gray.png"] forState:UIControlStateNormal];
+	[self.moreCommentsButton setTitle:NSLocalizedString( @"MOREself.comments", @"" ) forState:UIControlStateNormal];
+	[self.moreCommentsButton setTitleColor:[UIColor colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
+	[self.moreCommentsButton setTitleColor:[UIColor colorWithHex:0x343535 alpha:1] forState:UIControlStateHighlighted];
+	[self.moreCommentsButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:1] forState:UIControlStateNormal];
+	self.moreCommentsButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	self.moreCommentsButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+	self.moreCommentsButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 12, 0, 0 );
+	self.moreCommentsButton.titleEdgeInsets = UIEdgeInsetsMake( 0, 18, 0, 0 );
+	self.moreCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+	[self.moreCommentsButton addTarget:self action:@selector(moreCommentsButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
 	
-	
+	//
+	// Comment
+	//
 	self.commentBar = [[UIImageView alloc] initWithFrame:CGRectMake( 0, UIScreenHeight, 320, 40 )];
 	self.commentBar.image = [[UIImage imageNamed:@"tool_bar.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 20, 0, 20, 0 )];
 	self.commentBar.userInteractionEnabled = YES;
@@ -438,7 +455,7 @@ enum {
 				
 				[self.view addSubview:self.tableView];
 				[self.view bringSubviewToFront:self.commentBar];
-				[_moreCommentsIndicatorView removeFromSuperview];
+				[self.moreCommentsIndicatorView removeFromSuperview];
 				
 				// _loadedAllComments를 위에서 먼저 정하게 되면 새 댓글을 insert할 때와 겹치면서 에러가 발생함. 따라서 댓글을 모두 로드한 후 더보기 버튼 제거.
 				_loadedAllComments = _commentOffset == self.dish.commentCount;
@@ -613,7 +630,7 @@ enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 5;
+	return 7;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -772,7 +789,7 @@ enum {
 												 self.descriptionLabel.frame.size.height);
 		
 		return cell;
-		
+/*
 		if( !cell )
 		{
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:contentCellId];
@@ -907,8 +924,8 @@ enum {
 		_contentRowHeight = recipeButtonBottomY + 65;
 		
 		return cell;
+ */
 	}
-	
 	
 	//
 	// Recipe
@@ -986,22 +1003,7 @@ enum {
 			UIImageView *lineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line.png"]];
 			[cell.contentView addSubview:lineView];
 			
-			if( !_moreCommentsButton )
-			{
-				_moreCommentsButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 2, 320, 43 )];
-				[_moreCommentsButton setImage:[UIImage imageNamed:@"icon_comment_gray.png"] forState:UIControlStateNormal];
-				[_moreCommentsButton setTitle:NSLocalizedString( @"MOREself.comments", @"" ) forState:UIControlStateNormal];
-				[_moreCommentsButton setTitleColor:[UIColor colorWithHex:0x808283 alpha:1] forState:UIControlStateNormal];
-				[_moreCommentsButton setTitleColor:[UIColor colorWithHex:0x343535 alpha:1] forState:UIControlStateHighlighted];
-				[_moreCommentsButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:1] forState:UIControlStateNormal];
-				_moreCommentsButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-				_moreCommentsButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
-				_moreCommentsButton.imageEdgeInsets = UIEdgeInsetsMake( 2, 12, 0, 0 );
-				_moreCommentsButton.titleEdgeInsets = UIEdgeInsetsMake( 0, 18, 0, 0 );
-				_moreCommentsButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-				[_moreCommentsButton addTarget:self action:@selector(moreCommentsButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-				[cell.contentView addSubview:_moreCommentsButton];
-			}
+			[cell.contentView addSubview:self.moreCommentsButton];
 		}
 		
 		return cell;
@@ -1317,14 +1319,14 @@ enum {
 
 - (void)moreCommentsButtonDidTouchUpInside
 {
-	if( !_moreCommentsIndicatorView )
+	if( !self.moreCommentsIndicatorView )
 	{
-		_moreCommentsIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-		[_moreCommentsIndicatorView startAnimating];
+		self.moreCommentsIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		[self.moreCommentsIndicatorView startAnimating];
 	}
 	
-	_moreCommentsIndicatorView.frame = CGRectMake( -1, [_moreCommentsButton convertPoint:_moreCommentsButton.frame.origin toView:self.tableView].y, 37, 37 );
-	[self.tableView addSubview:_moreCommentsIndicatorView];
+	self.moreCommentsIndicatorView.frame = CGRectMake( -1, [self.moreCommentsButton convertPoint:self.moreCommentsButton.frame.origin toView:self.tableView].y, 37, 37 );
+	[self.tableView addSubview:self.moreCommentsIndicatorView];
 	
 	[self loadComments];
 }
