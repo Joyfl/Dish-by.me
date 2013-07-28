@@ -627,6 +627,10 @@ enum {
 		JLLog( @"statusCode : %d", statusCode );
 		JLLog( @"errorCode : %d", errorCode );
 		JLLog( @"message : %@", message );
+		
+		self.dish.liked = NO;
+		self.dish.likeCount --;
+		[self updateLikeUI];
 	}];
 }
 
@@ -635,6 +639,24 @@ enum {
 	self.dish.liked = NO;
 	self.dish.likeCount --;
 	[self updateLikeUI];
+	
+	JLLog( @"<Dish:%d> unlike", self.dish.dishId );
+	NSString *api = [NSString stringWithFormat:@"/dish/%d/like", self.dish.dishId];
+	[[DMAPILoader sharedLoader] api:api method:@"DELETE" parameters:nil success:^(id response) {
+		JLLog( @"Success" );
+		
+		self.dish.updatedTime = [response objectForKey:@"updated_time"];
+		self.dish.likeCount = [[response objectForKey:@"like_count"] integerValue];
+		
+	} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+		JLLog( @"statusCode : %d", statusCode );
+		JLLog( @"errorCode : %d", errorCode );
+		JLLog( @"message : %@", message );
+		
+		self.dish.liked = YES;
+		self.dish.likeCount ++;
+		[self updateLikeUI];
+	}];
 }
 
 - (void)deleteDish
