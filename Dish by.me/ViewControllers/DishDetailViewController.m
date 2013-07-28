@@ -60,7 +60,7 @@ enum {
 	
 	self.navigationItem.title = dishName;
 	
-	self.tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 64 )];
+	self.tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 108 )];
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
 	self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -135,8 +135,8 @@ enum {
 	//
 	// Recipe
 	//
-	self.dotLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 8, 20, 304, 2 )];
-	self.dotLineView.image = [UIImage imageNamed:@"line_dotted.png"];
+	self.recipeDotLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 8, 20, 304, 2 )];
+	self.recipeDotLineView.image = [UIImage imageNamed:@"line_dotted.png"];
 	
 	self.recipeButtonContainer = [[UIView alloc] initWithFrame:CGRectMake( 0, 34, 320, 50 )];
 	
@@ -165,7 +165,7 @@ enum {
 	//
 	self.bookmarkIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 12, 16, 13, 17 )];
 	
-	self.bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 29, 16, 0, 0 )];
+	self.bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 33, 16, 0, 0 )];
 	self.bookmarkLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	self.bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
 	self.bookmarkLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
@@ -174,8 +174,53 @@ enum {
 	
 	self.bookmarkButton = [[BookmarkButton alloc] init];
 	self.bookmarkButton.delegate = self;
-	
 	self.bookmarkButton.position = CGPointMake( 320, 13 );
+	
+	self.bookmarkDotLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 8, 48, 304, 2 )];
+	self.bookmarkDotLineView.image = [UIImage imageNamed:@"line_dotted.png"];
+	
+	self.likeButton = [[UIButton alloc] initWithFrame:CGRectMake( 12, 64, 0, 0 )];
+	self.likeButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+	[self.likeButton setTitle:NSLocalizedString( @"LIKE", nil ) forState:UIControlStateNormal];
+	[self.likeButton setTitle:NSLocalizedString( @"CANCEL_LIKE", nil ) forState:UIControlStateSelected];
+	[self.likeButton setTitleColor:[UIColor colorWithHex:0x717374 alpha:1] forState:UIControlStateNormal];
+	[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
+	self.likeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	
+	self.likeButtonCommentButtonSeparator = [[UILabel alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
+	self.likeButtonCommentButtonSeparator.backgroundColor = [UIColor clearColor];
+	self.likeButtonCommentButtonSeparator.font = [UIFont boldSystemFontOfSize:12];
+	self.likeButtonCommentButtonSeparator.textColor = [UIColor colorWithHex:0x717374 alpha:1];
+	self.likeButtonCommentButtonSeparator.shadowColor = [UIColor colorWithWhite:1 alpha:0.8];
+	self.likeButtonCommentButtonSeparator.shadowOffset = CGSizeMake( 0, 1 );
+	self.likeButtonCommentButtonSeparator.text = @"・";
+	[self.likeButtonCommentButtonSeparator sizeToFit];
+	
+	self.commentButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
+	self.commentButton.titleLabel.font = [UIFont boldSystemFontOfSize:12];
+	[self.commentButton setTitle:NSLocalizedString( @"WRITE_COMMENT", nil ) forState:UIControlStateNormal];
+	[self.commentButton setTitleColor:[UIColor colorWithHex:0x717374 alpha:1] forState:UIControlStateNormal];
+	[self.commentButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
+	self.commentButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	[self.commentButton sizeToFit];
+	
+	self.likeIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 64, 15, 17 )];
+	
+	self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
+	self.likeCountLabel.backgroundColor = [UIColor clearColor];
+	self.likeCountLabel.font = [UIFont boldSystemFontOfSize:13];
+	self.likeCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+	self.likeCountLabel.shadowOffset = CGSizeMake( 0, 1 );
+	
+	self.commentIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 64, 14, 17 )];
+	self.commentIconView.image = [UIImage imageNamed:@"icon_comment_gray.png"];
+	
+	self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
+	self.commentCountLabel.backgroundColor = [UIColor clearColor];
+	self.commentCountLabel.font = [UIFont boldSystemFontOfSize:13];
+	self.commentCountLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+	self.commentCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
+	self.commentCountLabel.shadowOffset = CGSizeMake( 0, 1 );
 	
 	
 	
@@ -619,7 +664,7 @@ enum {
 			return self.dish.recipe ? 84 : 22;
 			
 		case kSectionBookmark:
-			return 50;
+			return 97;
 			
 		case kSectionMoreComments:
 			return 45;
@@ -848,8 +893,6 @@ enum {
 		NSInteger messageBoxBottomY = _messageBoxView.frame.origin.y + _messageBoxView.frame.size.height;
 		NSInteger recipeButtonBottomY = messageBoxBottomY + 8;
 		
-		_dotLineView.frame = CGRectMake( 8, messageBoxBottomY + 18, 304, 2 );
-		_dotLineView.hidden = self.recipeButtonContainer.hidden = !self.dish.recipe;
 		
 		if( self.dish.recipe )
 		{
@@ -878,12 +921,12 @@ enum {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:recipeCellId];
 			cell.selectionStyle = UITableViewCellSelectionStyleNone;
 			
-			[cell.contentView addSubview:self.dotLineView];
+			[cell.contentView addSubview:self.recipeDotLineView];
 			[cell.contentView addSubview:self.recipeButtonContainer];
 			[cell.contentView addSubview:self.recipeBottomLine];
 		}
 		
-		self.dotLineView.hidden = self.recipeButtonContainer.hidden = !self.dish.recipe;
+		self.recipeDotLineView.hidden = self.recipeButtonContainer.hidden = !self.dish.recipe;
 		self.recipeBottomLine.frame = CGRectMake(self.recipeBottomLine.frame.origin.x,
 												 self.dish.recipe ? 71 : 7,
 												 self.recipeBottomLine.frame.size.width,
@@ -906,6 +949,15 @@ enum {
 			[cell.contentView addSubview:self.bookmarkLabel];
 			[cell.contentView addSubview:self.bookmarkIconView];
 			self.bookmarkButton.parentView = cell.contentView;
+			
+			[cell.contentView addSubview:self.bookmarkDotLineView];
+			[cell.contentView addSubview:self.likeButton];
+			[cell.contentView addSubview:self.likeButtonCommentButtonSeparator];
+			[cell.contentView addSubview:self.commentButton];
+			[cell.contentView addSubview:self.likeIconView];
+			[cell.contentView addSubview:self.likeCountLabel];
+			[cell.contentView addSubview:self.commentIconView];
+			[cell.contentView addSubview:self.commentCountLabel];
 		}
 		
 		if( self.dish.bookmarked )
@@ -915,6 +967,7 @@ enum {
 		
 		self.bookmarkButton.hidden = ![CurrentUser user].loggedIn;
 		[self updateBookmarkUI];
+		[self updateLikeUI];
 		
 		return cell;
 	}
@@ -1051,6 +1104,64 @@ enum {
 	self.bookmarkIconView.image = !self.dish.bookmarked || ![CurrentUser user].loggedIn ? [UIImage imageNamed:@"icon_bookmark_gray.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
 	self.bookmarkLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), self.dish.bookmarkCount];
 	[self.bookmarkLabel sizeToFit];
+}
+
+- (void)updateLikeUI
+{
+	self.likeButton.selected = self.dish.liked;
+	[self.likeButton sizeToFit];
+	self.likeButtonCommentButtonSeparator.frame = CGRectMake(self.likeButton.frame.origin.x + self.likeButton.frame.size.width,
+															 self.likeButtonCommentButtonSeparator.frame.origin.y,
+															 self.likeButtonCommentButtonSeparator.frame.size.width,
+															 self.likeButtonCommentButtonSeparator.frame.size.height);
+	self.commentButton.frame = CGRectMake(self.likeButtonCommentButtonSeparator.frame.origin.x + self.likeButtonCommentButtonSeparator.frame.size.width,
+										  self.commentButton.frame.origin.y,
+										  self.commentButton.frame.size.width,
+										  self.commentButton.frame.size.height);
+	
+	self.commentCountLabel.text = [NSString stringWithFormat:@"%d", self.dish.commentCount];
+	[self.commentCountLabel sizeToFit];
+	self.commentCountLabel.frame = CGRectMake(320 - self.commentCountLabel.frame.size.width - 12,
+											  self.commentCountLabel.frame.origin.y,
+											  self.commentCountLabel.frame.size.width,
+											  self.commentCountLabel.frame.size.height);
+	
+	self.commentIconView.frame = CGRectMake(self.commentCountLabel.frame.origin.x - self.commentIconView.frame.size.width - 3,
+											self.commentIconView.frame.origin.y,
+											self.commentIconView.frame.size.width,
+											self.commentIconView.frame.size.height);
+	
+	
+	self.likeCountLabel.text = [NSString stringWithFormat:@"%d", self.dish.likeCount];
+	[self.likeCountLabel sizeToFit];
+	self.likeCountLabel.frame = CGRectMake(self.commentIconView.frame.origin.x - self.likeCountLabel.frame.size.width - 7,
+										   self.likeCountLabel.frame.origin.y,
+										   self.likeCountLabel.frame.size.width,
+										   self.likeCountLabel.frame.size.height);
+	
+	self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 3,
+										 self.likeIconView.frame.origin.y,
+										 self.likeIconView.frame.size.width,
+										 self.likeIconView.frame.size.height);
+	
+	if( !self.dish.liked || ![CurrentUser user].loggedIn )
+	{
+		self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 3,
+											 self.likeCountLabel.frame.origin.y,
+											 self.likeIconView.frame.size.width,
+											 self.likeIconView.frame.size.height);
+		self.likeIconView.image = [UIImage imageNamed:@"icon_like.png"];
+		self.likeCountLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+	}
+	else
+	{
+		self.likeIconView.frame = CGRectMake(self.likeCountLabel.frame.origin.x - self.likeIconView.frame.size.width - 5,
+											 self.likeCountLabel.frame.origin.y - 1,
+											 self.likeIconView.frame.size.width,
+											 self.likeIconView.frame.size.height);
+		self.likeIconView.image = [UIImage imageNamed:@"icon_like_selected.png"];
+		self.likeCountLabel.textColor = [UIColor colorWithHex:0x098CA6 alpha:1];
+	}
 }
 
 - (void)updateAllCommentsRelativeTime

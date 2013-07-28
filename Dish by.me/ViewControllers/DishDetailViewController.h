@@ -80,7 +80,7 @@
 //
 // Recipe
 //
-@property (nonatomic, strong) UIImageView *dotLineView;
+@property (nonatomic, strong) UIImageView *recipeDotLineView;
 @property (nonatomic, strong) UIView *recipeButtonContainer;
 @property (nonatomic, strong) UIButton *recipeButton;
 @property (nonatomic, strong) UIImageView *recipeBottomLine;
@@ -92,6 +92,14 @@
 @property (nonatomic, strong) UIImageView *bookmarkIconView;
 @property (nonatomic, strong) UILabel *bookmarkLabel;
 @property (nonatomic, strong) BookmarkButton *bookmarkButton;
+@property (nonatomic, strong) UIImageView *bookmarkDotLineView;
+@property (nonatomic, strong) UIButton *likeButton;
+@property (nonatomic, strong) UILabel *likeButtonCommentButtonSeparator;
+@property (nonatomic, strong) UIButton *commentButton;
+@property (nonatomic, strong) UIImageView *likeIconView;
+@property (nonatomic, strong) UILabel *likeCountLabel;
+@property (nonatomic, strong) UIImageView *commentIconView;
+@property (nonatomic, strong) UILabel *commentCountLabel;
 
 
 @property (nonatomic, strong) UIImageView *commentBar;

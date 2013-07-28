@@ -28,8 +28,10 @@
 @property (nonatomic, strong) NSString *forkedFromName;
 @property (nonatomic, assign) NSInteger forkCount;
 @property (nonatomic, assign) NSInteger bookmarkCount;
+@property (nonatomic, assign) NSInteger likeCount;
 @property (nonatomic, assign) NSInteger commentCount;
 @property (nonatomic, assign) BOOL bookmarked;
+@property (nonatomic, assign) BOOL liked;
 @property (nonatomic, strong) NSDate *createdTime;
 @property (nonatomic, strong) NSString *relativeCreatedTime;
 @property (nonatomic, strong) NSDate *updatedTime;
