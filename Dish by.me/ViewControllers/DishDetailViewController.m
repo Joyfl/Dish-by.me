@@ -360,7 +360,8 @@ enum {
 		self.dish.commentCount = [[response objectForKey:@"count"] integerValue];
 		_commentOffset += data.count;
 		
-		self.commentInput.editable = YES;
+		if( [CurrentUser user].loggedIn )
+			self.commentInput.editable = YES;
 		
 		// 로드된 댓글이 없을 경우
 		if( data.count == 0 )
@@ -1146,7 +1147,7 @@ enum {
 			self.commentBar.frame = frame;
 		}
 	}
-	else
+	else if( self.commentInput.editable )
 	{
 		CGRect frame = self.commentBar.frame;
 		frame.origin.y = UIScreenHeight - 279 - frame.size.height;
@@ -1257,7 +1258,23 @@ enum {
 - (void)showNavigationMenu
 {
 	UIActionSheet *menu = nil;
-	if( self.dish.userId == [CurrentUser user].userId )
+	
+	// 로그인되어있지 않을 경우
+	if( ![CurrentUser user].loggedIn )
+	{
+		menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"LOGIN_OR_SIGNUP", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+			
+			// 요리 수정
+			if( buttonIndex == 0 )
+			{
+				AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+				[appDelegate presentAuthViewControllerWithClosingAnimation:YES];
+			}
+		}];
+	}
+	
+	// 내 요리
+	else if( self.dish.userId == [CurrentUser user].userId )
 	{
 		menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"EDIT_DISH", nil ) otherButtonTitles:@[NSLocalizedString( @"DELETE_DISH", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
 			
@@ -1285,6 +1302,8 @@ enum {
 		
 		menu.destructiveButtonIndex = 1;
 	}
+	
+	// 다른사람의 요리
 	else
 	{
 		menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"REPORT", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
@@ -1351,8 +1370,11 @@ enum {
 	{
 		[[[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"SAVE_PHOTO", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
 			
-			[self.tabBarController dim];
-			UIImageWriteToSavedPhotosAlbum( self.dishPhotoView.image, self, @selector(dishPhoto:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), NULL );
+			if( buttonIndex == 0 )
+			{
+				[self.tabBarController dim];
+				UIImageWriteToSavedPhotosAlbum( self.dishPhotoView.image, self, @selector(dishPhoto:hasBeenSavedInPhotoAlbumWithError:usingContextInfo:), NULL );
+			}
 			
 		}] showInView:self.tabBarController.view];
 	}
@@ -1386,7 +1408,12 @@ enum {
 
 - (void)likeButtonDidTouchUpInside
 {
-	if( !self.likeButton.selected )
+	if( ![CurrentUser user].loggedIn )
+	{
+		AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+		[appDelegate presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_LIKE_DISH", nil )];
+	}
+	else if( !self.likeButton.selected )
 	{
 		[self like];
 	}
@@ -1398,8 +1425,15 @@ enum {
 
 - (void)commentButtonDidTouchUpInside
 {
-	if( [CurrentUser user].loggedIn )
+	if( ![CurrentUser user].loggedIn )
+	{
+		AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+		[appDelegate presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_LEAVE_COMMENTS", nil )];
+	}
+	else
+	{
 		[self.commentInput becomeFirstResponder];
+	}
 }
 
 - (void)recipeButtonDidTouchUpInside
@@ -1469,17 +1503,18 @@ enum {
 
 - (void)sendButtonDidTouchUpInside
 {
-	if( [CurrentUser user].loggedIn )
+	if( ![CurrentUser user].loggedIn )
+	{
+		AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+		[appDelegate presentNeedLoginActionSheetWithTitle:NSLocalizedString( @"MESSAGE_NEED_ACCOUNT_TO_LEAVE_COMMENTS", nil )];
+	}
+	else
 	{
 		if( self.commentInput.text.length == 0 || [self.commentInput.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0 )
 			return;
 		
 		[self backgroundDidTap];
 		[self sendComment];
-	}
-	else
-	{
-		[(AppDelegate *)[UIApplication sharedApplication].delegate presentAuthViewControllerWithClosingAnimation:YES];
 	}
 }
 

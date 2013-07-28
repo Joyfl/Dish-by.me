@@ -35,6 +35,8 @@
 "MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_SET_SETTINGS" = "설정을 하려면 Dish by.me 계정이 필요합니다.";
+"MESSAGE_NEED_ACCOUNT_TO_LIKE_DISH" = "좋아요를 하려면 Dish by.me 계정이 필요합니다.";
+"MESSAGE_NEED_ACCOUNT_TO_LEAVE_COMMENTS" = "댓글을 남기려면 Dish by.me 계정이 필요합니다.";
 
 "MESSAGE_FACEBOOK_NOT_CONNECTED" = "페이스북 연동이 되어있지 않아요.\n지금 연동하시겠어요?";
 "MESSAGE_THIS_FACEBOOK_ACCOUNT_IS_ALREADY_LINKED" = "이미 누군가가 해당 페이스북 계정을 사용하고 있어요.";
