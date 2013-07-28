@@ -167,12 +167,11 @@ enum {
 	
 	_editingDishId = dish.dishId;
 	
-	[_photoButton setBackgroundImageWithURL:[NSURL URLWithString:dish.thumbnailURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+	[_photoButton setBackgroundImageWithURL:[NSURL URLWithString:dish.photoURL] placeholderImage:[_photoButton backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
 		[_photoButton setImage:nil forState:UIControlStateNormal];
 		[_photoButton setBackgroundImage:image forState:UIControlStateNormal];
 		[self resizePhotoButton];
 	} failure:nil];
-	[_photoButton setBackgroundImageWithURL:[NSURL URLWithString:dish.photoURL] placeholderImage:[_photoButton backgroundImageForState:UIControlStateNormal] forState:UIControlStateNormal];
 	
 	_nameInput.text = dish.dishName;
 	_descriptionInput.text = dish.description;
