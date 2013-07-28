@@ -60,6 +60,10 @@ enum {
 	
 	self.navigationItem.title = dishName;
 	
+	DMBarButtonItem *moreButton = [DMBarButtonItem barButtonItemWithTitle:nil target:self action:@selector(showNavigationMenu)];
+	[moreButton setImage:[UIImage imageNamed:@"icon_more.png"] forState:UIControlStateNormal];
+	self.navigationItem.rightBarButtonItem = moreButton;
+	
 	self.tableView = [[UITableView alloc] initWithFrame:CGRectMake( 0, 0, 320, UIScreenHeight - 114 )];
 	self.tableView.delegate = self;
 	self.tableView.dataSource = self;
@@ -292,9 +296,6 @@ enum {
 {
 	if( [CurrentUser user].loggedIn )
 	{
-		DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
-		self.navigationItem.rightBarButtonItem = forkButton;
-		
 		self.commentInput.editable = YES;
 		self.commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
 		[self.sendButton setTitle:NSLocalizedString( @"SEND", @"전송" ) forState:UIControlStateNormal];
@@ -306,8 +307,6 @@ enum {
 	
 	else
 	{
-		self.navigationItem.rightBarButtonItem = nil;
-		
 		self.commentInput.editable = NO;
 		self.commentInput.placeholder = NSLocalizedString( @"LOGIN_TO_COMMENT", @"댓글을 남기려면 로그인해주세요." );
 		[self.sendButton setTitle:NSLocalizedString( @"LOGIN", @"로그인" ) forState:UIControlStateNormal];
@@ -1255,6 +1254,12 @@ enum {
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)showNavigationMenu
+{
+	
+}
+
+#warning not used
 - (void)forkButtonDidTouchUpInside
 {
 	WritingViewController *writingViewController = [[WritingViewController alloc] initWithOriginalDishId:self.dish.dishId];
