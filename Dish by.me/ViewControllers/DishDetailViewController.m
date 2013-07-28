@@ -181,7 +181,7 @@ enum {
 	
 	self.bookmarkButton = [[BookmarkButton alloc] init];
 	self.bookmarkButton.delegate = self;
-	self.bookmarkButton.position = CGPointMake( 320, 13 );
+	self.bookmarkButton.position = CGPointMake( 321, 13 );
 	
 	self.bookmarkDotLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 8, 48, 304, 2 )];
 	self.bookmarkDotLineView.image = [UIImage imageNamed:@"line_dotted.png"];
