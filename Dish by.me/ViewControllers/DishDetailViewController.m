@@ -37,6 +37,7 @@ enum {
 	kSectionPhoto,
 	kSectionContent,
 	kSectionRecipe,
+	kSectionBookmark,
 	kSectionMoreComments,
 	kSectionComment,
 };
@@ -68,6 +69,10 @@ enum {
 	self.tableView.contentInset = UIEdgeInsetsMake( 0, 0, 40, 0 );
 	[self.view addSubview:self.tableView];
 	
+	
+	//
+	// User
+	//
 	self.userPhotoView = [[UIImageView alloc] initWithFrame:CGRectMake( 14, 13, 25, 26 )];
 	self.userPhotoView.layer.cornerRadius = 5;
 	self.userPhotoView.clipsToBounds = YES;
@@ -89,12 +94,21 @@ enum {
 	self.timeLabel.font = [UIFont systemFontOfSize:10];
 	self.timeLabel.textColor = [UIColor colorWithHex:0xAAA5A3 alpha:1];
 	
+	
+	//
+	// Photo
+	//
 	self.contentBoxTopView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_content_box_top.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 15, 15, 0, 10 )]];
-	self.contentBoxBottomView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_content_box_bottom.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 10, 10, 10 )]];
 	
 	self.dishPhotoView = [[UIImageView alloc] init];
 	[self.dishPhotoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showDishPhotoViewer)]];
 	[self.dishPhotoView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showDishPhotoMenu)]];
+	
+	
+	//
+	// Content
+	//
+	self.contentBoxBottomView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_content_box_bottom.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 10, 10, 10 )]];
 	
 	self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 16, 9, 134, 0 )];
 	self.titleLabel.backgroundColor = [UIColor clearColor];
@@ -117,6 +131,52 @@ enum {
 	self.descriptionLabel.textColor = [UIColor colorWithHex:0x48494B alpha:1];
 	self.descriptionLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	self.descriptionLabel.shadowOffset = CGSizeMake( 0, 1 );
+	
+	//
+	// Recipe
+	//
+	self.dotLineView = [[UIImageView alloc] initWithFrame:CGRectMake( 8, 20, 304, 2 )];
+	self.dotLineView.image = [UIImage imageNamed:@"line_dotted.png"];
+	
+	self.recipeButtonContainer = [[UIView alloc] initWithFrame:CGRectMake( 0, 34, 320, 50 )];
+	
+	self.recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 50 )];
+	[self.recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
+	[self.recipeButton setTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) forState:UIControlStateNormal];
+	[self.recipeButton setTitleColor:[UIColor colorWithHex:0x5B5046 alpha:1] forState:UIControlStateNormal];
+	[self.recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
+	self.recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	self.recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
+	self.recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+	[self.recipeButtonContainer addSubview:self.recipeButton];
+	
+	CALayer *maskLayer = [CALayer layer];
+	maskLayer.bounds = CGRectMake( 0, 0, 640, 100 );
+	maskLayer.contents = (id)[UIImage imageNamed:@"placeholder"].CGImage;
+	self.recipeButtonContainer.layer.mask = maskLayer;
+	
+	self.recipeBottomLine = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, 15 )];
+	self.recipeBottomLine.image = [UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"];
+	
+	
+	//
+	// Bookmark
+	//
+	self.bookmarkIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 12, 16, 13, 17 )];
+	
+	self.bookmarkLabel = [[UILabel alloc] initWithFrame:CGRectMake( 29, 16, 0, 0 )];
+	self.bookmarkLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
+	self.bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
+	self.bookmarkLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
+	self.bookmarkLabel.shadowOffset = CGSizeMake( 0, 1 );
+	self.bookmarkLabel.backgroundColor= [UIColor clearColor];
+	
+	self.bookmarkButton = [[BookmarkButton alloc] init];
+	self.bookmarkButton.delegate = self;
+	
+	self.bookmarkButton.position = CGPointMake( 320, 13 );
+	
 	
 	
 	
@@ -508,7 +568,7 @@ enum {
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return 4;
+	return 5;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -525,7 +585,10 @@ enum {
 			return 1;
 			
 		case kSectionRecipe:
-			return self.dish.recipe ? 1 : 0;
+			return 1;
+			
+		case kSectionBookmark:
+			return 1;
 			
 		case kSectionMoreComments:
 			return self.comments.count == 0 ? 0 : !_loadedAllComments;
@@ -550,10 +613,13 @@ enum {
 			return photoHeight + 9;
 			
 		case kSectionContent:
-			return titleHeight + descriptionHeight + self.contentSeparatorView.frame.size.height + 60;
+			return titleHeight + descriptionHeight + self.contentSeparatorView.frame.size.height + 40;
 			
 		case kSectionRecipe:
-			return 64;
+			return self.dish.recipe ? 84 : 22;
+			
+		case kSectionBookmark:
+			return 50;
 			
 		case kSectionMoreComments:
 			return 45;
@@ -572,6 +638,8 @@ enum {
 	static NSString *userCellId = @"userCellId";
 	static NSString *photoCellId = @"photoCellId";
 	static NSString *contentCellId = @"contentCellId";
+	static NSString *recipeCellId = @"recipeCellId";
+	static NSString *bookmarkCellId = @"bookmarkCellId";
 	static NSString *moreCommentCellId = @"moreCommentCellId";
 	static NSString *commentCellId = @"commentCellId";
 	static NSString *loadingCellId = @"loadingCellId";
@@ -757,53 +825,6 @@ enum {
 			[_forkCountButton addTarget:self action:@selector(forkCountButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 			[_messageBoxView addSubview:_forkCountButton];
 			
-			//
-			// Recipe
-			//
-			_dotLineView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"line_dotted.png"]];
-			[cell.contentView addSubview:_dotLineView];
-			
-			_recipeButtonContainer = [[UIView alloc] init];
-			[cell.contentView addSubview:_recipeButtonContainer];
-			
-			_recipeButton = [[UIButton alloc] initWithFrame:CGRectMake( 0, 0, 320, 50 )];
-			[_recipeButton addTarget:self action:@selector(recipeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-			[_recipeButton setBackgroundImage:[UIImage imageNamed:@"dish_detail_recipe_button.png"] forState:UIControlStateNormal];
-			[_recipeButton setTitle:NSLocalizedString( @"SHOW_RECIPE", @"" ) forState:UIControlStateNormal];
-			[_recipeButton setTitleColor:[UIColor colorWithHex:0x5B5046 alpha:1] forState:UIControlStateNormal];
-			[_recipeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
-			_recipeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
-			_recipeButton.titleEdgeInsets = UIEdgeInsetsMake( 20, 0, 0, 0 );
-			_recipeButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
-			[_recipeButtonContainer addSubview:_recipeButton];
-			
-			CALayer *maskLayer = [CALayer layer];
-			maskLayer.bounds = CGRectMake( 0, 0, 640, 100 );
-			maskLayer.contents = (id)[UIImage imageNamed:@"placeholder"].CGImage;
-			_recipeButtonContainer.layer.mask = maskLayer;
-			
-			_recipeBottomLine = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"dish_detail_recipe_bottom_line.png"]];
-			[cell.contentView addSubview:_recipeBottomLine];
-			
-			//
-			// Bookmark
-			//
-			_bookmarkLabel = [[UILabel alloc] init];
-			_bookmarkLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
-			_bookmarkLabel.font = [UIFont boldSystemFontOfSize:12];
-			_bookmarkLabel.shadowColor = [UIColor colorWithWhite:1 alpha:1];
-			_bookmarkLabel.shadowOffset = CGSizeMake( 0, 1 );
-			_bookmarkLabel.backgroundColor= [UIColor clearColor];
-			[cell.contentView addSubview:_bookmarkLabel];
-			
-			_bookmarkIconView = [[UIImageView alloc] init];
-			[cell.contentView addSubview:_bookmarkIconView];
-			
-			_bookmarkButton = [[BookmarkButton alloc] init];
-			_bookmarkButton.delegate = self;
-			_bookmarkButton.parentView = cell.contentView;
-			_bookmarkButton.bookmarked = self.dish.bookmarked;
-			
 			[self.tableView reloadData];
 		}
 		
@@ -828,29 +849,72 @@ enum {
 		NSInteger recipeButtonBottomY = messageBoxBottomY + 8;
 		
 		_dotLineView.frame = CGRectMake( 8, messageBoxBottomY + 18, 304, 2 );
-		_dotLineView.hidden = _recipeButtonContainer.hidden = !self.dish.recipe;
+		_dotLineView.hidden = self.recipeButtonContainer.hidden = !self.dish.recipe;
 		
 		if( self.dish.recipe )
 		{
-			_recipeButtonContainer.frame = CGRectMake( 0, messageBoxBottomY + 36, 320, 50 );
+			self.recipeButtonContainer.frame = CGRectMake( 0, messageBoxBottomY + 36, 320, 50 );
 			recipeButtonBottomY = messageBoxBottomY + 74;
 		}
 		
 		_recipeBottomLine.frame = CGRectMake( 0, recipeButtonBottomY, 320, 15 );
 		
-		_bookmarkLabel.frame = CGRectMake( 28, recipeButtonBottomY + 35, 180, 12 );
-		_bookmarkIconView.frame = CGRectMake( 10, recipeButtonBottomY + 33, 13, 17 );
-		_bookmarkButton.position = CGPointMake( 320, recipeButtonBottomY + 30 );
 		
-		if( self.dish.bookmarked )
-			_bookmarkButton.buttonX = 10;
-		else
-			_bookmarkButton.buttonX = 75;
-
-		_bookmarkButton.hidden = ![CurrentUser user].loggedIn;
-		[self updateBookmarkUI];
 		
 		_contentRowHeight = recipeButtonBottomY + 65;
+		
+		return cell;
+	}
+	
+	
+	//
+	// Recipe
+	//
+	else if( indexPath.section == kSectionRecipe )
+	{
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:recipeCellId];
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:recipeCellId];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			
+			[cell.contentView addSubview:self.dotLineView];
+			[cell.contentView addSubview:self.recipeButtonContainer];
+			[cell.contentView addSubview:self.recipeBottomLine];
+		}
+		
+		self.dotLineView.hidden = self.recipeButtonContainer.hidden = !self.dish.recipe;
+		self.recipeBottomLine.frame = CGRectMake(self.recipeBottomLine.frame.origin.x,
+												 self.dish.recipe ? 71 : 7,
+												 self.recipeBottomLine.frame.size.width,
+												 self.recipeBottomLine.frame.size.height);
+		
+		return cell;
+	}
+	
+	//
+	// Bookmark
+	//
+	else if( indexPath.section == kSectionBookmark )
+	{
+		UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:bookmarkCellId];
+		if( !cell )
+		{
+			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:bookmarkCellId];
+			cell.selectionStyle = UITableViewCellSelectionStyleNone;
+			
+			[cell.contentView addSubview:self.bookmarkLabel];
+			[cell.contentView addSubview:self.bookmarkIconView];
+			self.bookmarkButton.parentView = cell.contentView;
+		}
+		
+		if( self.dish.bookmarked )
+			self.bookmarkButton.buttonX = 10;
+		else
+			self.bookmarkButton.buttonX = 75;
+		
+		self.bookmarkButton.hidden = ![CurrentUser user].loggedIn;
+		[self updateBookmarkUI];
 		
 		return cell;
 	}
@@ -984,8 +1048,9 @@ enum {
 
 - (void)updateBookmarkUI
 {
-	_bookmarkIconView.image = !self.dish.bookmarked || ![CurrentUser user].loggedIn ? [UIImage imageNamed:@"icon_bookmark_gray.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
-	_bookmarkLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), self.dish.bookmarkCount];
+	self.bookmarkIconView.image = !self.dish.bookmarked || ![CurrentUser user].loggedIn ? [UIImage imageNamed:@"icon_bookmark_gray.png"] : [UIImage imageNamed:@"icon_bookmark_selected.png"];
+	self.bookmarkLabel.text = [NSString stringWithFormat:NSLocalizedString( @"N_BOOKMAKRED", @"" ), self.dish.bookmarkCount];
+	[self.bookmarkLabel sizeToFit];
 }
 
 - (void)updateAllCommentsRelativeTime
@@ -1113,7 +1178,7 @@ enum {
 	[self.tabBarController dim];
 	
 	[UIView animateWithDuration:0.25 animations:^{
-		_recipeButton.frame = CGRectMake( 0, 50, 320, 50 );
+		self.recipeButton.frame = CGRectMake( 0, 50, 320, 50 );
 	}];
 	
 	self.tabBarController.modalPresentationStyle = UIModalPresentationCurrentContext;
@@ -1135,7 +1200,7 @@ enum {
 - (void)recipeViewerViewControllerDidDismiss:(RecipeEditorViewController *)recipeEditorView
 {
 	[UIView animateWithDuration:0.25 animations:^{
-		_recipeButton.frame = CGRectMake( 0, 0, 320, 50 );
+		self.recipeButton.frame = CGRectMake( 0, 0, 320, 50 );
 	}];
 }
 
@@ -1211,16 +1276,16 @@ enum {
 		[self updateBookmarkUI];
 		
 		[UIView animateWithDuration:0.18 animations:^{
-			_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+			self.bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
 		} completion:^(BOOL finished) {
 			[UIView animateWithDuration:0.14 animations:^{
-				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
+				self.bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
 			} completion:^(BOOL finished) {
 				[UIView animateWithDuration:0.12 animations:^{
-					_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
+					self.bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
 				} completion:^(BOOL finished) {
 					[UIView animateWithDuration:0.1 animations:^{
-						_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
+						self.bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
 					}];
 				}];
 			}];

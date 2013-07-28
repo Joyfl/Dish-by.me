@@ -44,17 +44,8 @@
 	TTTAttributedLabel *_forkedFromLabel;
 	JLLabelButton *_forkCountButton;
 	
-	UIImageView *_dotLineView;
-	UIView *_recipeButtonContainer;
-	UIButton *_recipeButton;
-	UIImageView *_recipeBottomLine;
-	
-	UIImageView *_bookmarkIconView;
-	UILabel *_bookmarkLabel;
-	BookmarkButton *_bookmarkButton;
 	UIButton *_moreCommentsButton;
 	UIActivityIndicatorView *_moreCommentsIndicatorView;
-//	UIImageView *_commentBar;
 	UIImageView *_commentInputBackgroundView;
 	UIPlaceHolderTextView *_commentInput;
 	DMButton *_sendButton;
@@ -65,16 +56,43 @@
 
 @property (nonatomic, strong) UITableView *tableView;
 
+//
+// User
+//
 @property (nonatomic, strong) UIImageView *userPhotoView;
 @property (nonatomic, strong) UILabel *userNameLabel;
 @property (nonatomic, strong) UILabel *timeLabel;
 
+//
+// Photo
+//
 @property (nonatomic, strong) UIImageView *contentBoxTopView;
-@property (nonatomic, strong) UIImageView *contentBoxBottomView;
 @property (nonatomic, strong) UIImageView *dishPhotoView;
+
+//
+// Content
+//
+@property (nonatomic, strong) UIImageView *contentBoxBottomView;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UIView *contentSeparatorView;
 @property (nonatomic, strong) UILabel *descriptionLabel;
+
+//
+// Recipe
+//
+@property (nonatomic, strong) UIImageView *dotLineView;
+@property (nonatomic, strong) UIView *recipeButtonContainer;
+@property (nonatomic, strong) UIButton *recipeButton;
+@property (nonatomic, strong) UIImageView *recipeBottomLine;
+
+
+//
+// Bookmark
+//
+@property (nonatomic, strong) UIImageView *bookmarkIconView;
+@property (nonatomic, strong) UILabel *bookmarkLabel;
+@property (nonatomic, strong) BookmarkButton *bookmarkButton;
+
 
 @property (nonatomic, strong) UIImageView *commentBar;
 
