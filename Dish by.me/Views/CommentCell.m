@@ -17,7 +17,8 @@
 	self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:resueIdentifier];
 	self.selectionStyle = UITableViewCellSelectionStyleNone;
 	
-	_lineView = [[UIImageView alloc] init];
+	_lineView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 320, 2 )];
+	_lineView.image = [UIImage imageNamed:@"line.png"];
 	[self addSubview:_lineView];
 	
 	_profileImageButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -63,11 +64,6 @@
 
 - (void)fillContents
 {
-	if( _indexPath.row == 0 )
-		_lineView.image = [UIImage imageNamed:@"line_dotted.png"];
-	else
-		_lineView.image = [UIImage imageNamed:@"line.png"];
-	
 	[_profileImageButton setBackgroundImageWithURL:[NSURL URLWithString:_comment.userPhotoURL] placeholderImage:[UIImage imageNamed:@"profile_placeholder.png"] forState:UIControlStateNormal];
 	
 	_nameLabel.text = _comment.userName;
@@ -82,11 +78,6 @@
 
 - (void)layoutContentView
 {
-	if( _indexPath.row == 0 )
-		_lineView.frame = CGRectMake( 8, 0, 304, 2 );
-	else
-		_lineView.frame = CGRectMake( 0, 0, 320, 2 );
-	
 	[_timeLabel sizeToFit];
 	CGRect frame = _timeLabel.frame;
 	frame.origin.x = 310 - _timeLabel.frame.size.width;

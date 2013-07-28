@@ -21,48 +21,81 @@
 
 @interface DishDetailViewController : GAITrackedViewController <UITableViewDelegate, UITableViewDataSource, TTTAttributedLabelDelegate, RecipeViewerViewControllerDelegate, BookmarkButtonDelegate, CommentCellDelegate, WritingViewControllerDelegate, AuthViewControllerDelegate, UITextViewDelegate>
 {
-	Dish *_dish;
-	NSMutableArray *_comments;
 	NSInteger _commentOffset;
 	BOOL _loadedAllComments;
 	
 	BOOL lastLoggedIn;
 	
-	UITableView *_tableView;
 	UIImageView *_topView;
 	UIImageView *_midView;
 	UIImageView *_botView;
 	
-	CGFloat _contentRowHeight;
-	
-	UIButton *_photoView;
-	UIImageView *_borderView;
-	NSTimer *_photoViewTouchTimer;
-	
-	UILabel *_timeLabel;
-	
-	UIImageView *_messageBoxView;
-	UILabel *_messageLabel;
-	UIImageView *_messageBoxDotLineView;
-	
 	TTTAttributedLabel *_forkedFromLabel;
 	JLLabelButton *_forkCountButton;
-	
-	UIImageView *_dotLineView;
-	UIView *_recipeButtonContainer;
-	UIButton *_recipeButton;
-	UIImageView *_recipeBottomLine;
-	
-	UIImageView *_bookmarkIconView;
-	UILabel *_bookmarkLabel;
-	BookmarkButton *_bookmarkButton;
-	UIButton *_moreCommentsButton;
-	UIActivityIndicatorView *_moreCommentsIndicatorView;
-	UIImageView *_commentBar;
-	UIImageView *_commentInputBackgroundView;
-	UIPlaceHolderTextView *_commentInput;
-	DMButton *_sendButton;
 }
+
+@property (nonatomic, strong) Dish *dish;
+@property (nonatomic, strong) NSMutableArray *comments;
+
+@property (nonatomic, strong) UITableView *tableView;
+
+//
+// User
+//
+@property (nonatomic, strong) UIImageView *userPhotoView;
+@property (nonatomic, strong) UILabel *userNameLabel;
+@property (nonatomic, strong) UILabel *timeLabel;
+
+//
+// Photo
+//
+@property (nonatomic, strong) UIImageView *contentBoxTopView;
+@property (nonatomic, strong) UIImageView *dishPhotoView;
+
+//
+// Content
+//
+@property (nonatomic, strong) UIImageView *contentBoxBottomView;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIView *contentSeparatorView;
+@property (nonatomic, strong) UILabel *descriptionLabel;
+
+//
+// Recipe
+//
+@property (nonatomic, strong) UIImageView *recipeDotLineView;
+@property (nonatomic, strong) UIView *recipeButtonContainer;
+@property (nonatomic, strong) UIButton *recipeButton;
+@property (nonatomic, strong) UIImageView *recipeBottomLine;
+
+
+//
+// Bookmark
+//
+@property (nonatomic, strong) UIImageView *bookmarkIconView;
+@property (nonatomic, strong) UILabel *bookmarkLabel;
+@property (nonatomic, strong) BookmarkButton *bookmarkButton;
+@property (nonatomic, strong) UIImageView *bookmarkDotLineView;
+@property (nonatomic, strong) JLLabelButton *likeButton;
+@property (nonatomic, strong) UILabel *likeButtonCommentButtonSeparator;
+@property (nonatomic, strong) JLLabelButton *commentButton;
+@property (nonatomic, strong) UIImageView *likeIconView;
+@property (nonatomic, strong) UILabel *likeCountLabel;
+@property (nonatomic, strong) UIImageView *commentIconView;
+@property (nonatomic, strong) UILabel *commentCountLabel;
+
+//
+// More Comments
+//
+@property (nonatomic, strong) UIButton *moreCommentsButton;
+@property (nonatomic, strong) UIActivityIndicatorView *moreCommentsIndicatorView;
+
+
+@property (nonatomic, strong) UIImageView *commentBar;
+@property (nonatomic, strong) UIImageView *commentInputBackgroundView;
+@property (nonatomic, strong) UIPlaceHolderTextView *commentInput;
+@property (nonatomic, strong) DMButton *sendButton;
+
 
 - (id)initWithDish:(Dish *)dish;
 - (id)initWithDishId:(NSInteger)dishId dishName:(NSString *)dishName;

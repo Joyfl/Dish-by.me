@@ -35,8 +35,10 @@
 	self.forkedFromName = [[dictionary objectForKeyNotNull:@"forked_from"] objectForKeyNotNull:@"name"];
 	self.forkCount = [[dictionary objectForKeyNotNull:@"fork_count"] integerValue];
 	self.bookmarkCount = [[dictionary objectForKeyNotNull:@"bookmark_count"] integerValue];
+	self.likeCount = [[dictionary objectForKeyNotNull:@"like_count"] integerValue];
 	self.commentCount = [[dictionary objectForKeyNotNull:@"comment_count"] integerValue];
 	self.bookmarked = [[dictionary objectForKeyNotNull:@"bookmarked"] boolValue];
+	self.liked = [[dictionary objectForKeyNotNull:@"liked"] boolValue];
 	self.createdTime = [Utils dateFromString:[dictionary objectForKeyNotNull:@"created_time"]];
 	self.updatedTime = [Utils dateFromString:[dictionary objectForKeyNotNull:@"updated_time"]];
 	[self updateRelativeTime];

@@ -23,5 +23,6 @@ enum {
 + (void)setBackButtonToViewController:(UIViewController *)viewController;
 + (void)setBackButtonToViewController:(UIViewController *)viewController viewControllerWillBePopped:(void (^)(void))viewControllerWillBePopped;
 - (void)updateFrame;
+- (void)setImage:(UIImage *)image forState:(UIControlState)state;
 
 @end

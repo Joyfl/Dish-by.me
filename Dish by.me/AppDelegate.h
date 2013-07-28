@@ -28,6 +28,7 @@
 @property (nonatomic, assign) BOOL isLastNotificationLoaded;
 
 - (void)cameraButtonDidTouchUpInside;
+- (void)presentNeedLoginActionSheetWithTitle:(NSString *)title;
 - (void)presentAuthViewControllerWithClosingAnimation:(BOOL)withClosingAnimation;
 - (void)updateNotificationsSuccess:(void (^)(void))success failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;
 - (void)loadMoreNotificationsSuccess:(void (^)(void))success failure:(void (^)(NSInteger statusCode, NSInteger errorCode, NSString *message))failure;

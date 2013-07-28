@@ -83,7 +83,7 @@
 		JLLog( @"Not logged in." );
 		
 		[self buildViewControllers];
-		[self presentAuthViewControllerWithClosingAnimation:NO];
+		[self.coverView open];
 	}
 	
 	[self handleRemoteNotificationFromLaunchOptions:launchOptions];

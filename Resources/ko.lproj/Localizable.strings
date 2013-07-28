@@ -6,6 +6,7 @@
 "CANCEL" = "취소";
 "YES" = "네";
 "NO" = "아니오";
+"OK" = "네";
 "NO_THANKS" = "괜찮아요";
 "PROBABLY" = "그런 것 같아요";
 "OH_MY_MISTAKE" = "앗 실수!";
@@ -34,11 +35,16 @@
 "MESSAGE_NEED_ACCOUNT_TO_UPLOAD" = "요리를 업로드하려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_VIEW_PROFILE" = "프로필을 보려면 Dish by.me 계정이 필요합니다.";
 "MESSAGE_NEED_ACCOUNT_TO_SET_SETTINGS" = "설정을 하려면 Dish by.me 계정이 필요합니다.";
+"MESSAGE_NEED_ACCOUNT_TO_LIKE_DISH" = "좋아요를 하려면 Dish by.me 계정이 필요합니다.";
+"MESSAGE_NEED_ACCOUNT_TO_LEAVE_COMMENTS" = "댓글을 남기려면 Dish by.me 계정이 필요합니다.";
 
 "MESSAGE_FACEBOOK_NOT_CONNECTED" = "페이스북 연동이 되어있지 않아요.\n지금 연동하시겠어요?";
 "MESSAGE_THIS_FACEBOOK_ACCOUNT_IS_ALREADY_LINKED" = "이미 누군가가 해당 페이스북 계정을 사용하고 있어요.";
 
 "MESSAGE_NO_PHOTO_ON_N_TH_RECIPE" = "%d번째 레시피에 사진이 빠졌어요;;";
+
+"MESSAGE_PHOTO_HAS_BEEN_SAVED" = "사진이 예쁘게 잘 저장되었습니다.";
+"MESSAGE_FAILED_TO_SAVE_PHOTO" = "사진을 저장하는데 실패했습니다.";
 
 "MESSAGE_REALLY_DELETE" = "정말로 삭제하실건가요?";
 "MESSAGE_REPORT_REASON" = "신고 사유를 선택해주세요.";
@@ -85,11 +91,15 @@
 "FORKED_FROM_S" = "%1$@%2$@ 포크했습니다.";
 "N_BOOKMAKRED" = "%d명이 이 요리를 북마크했습니다.";
 "SHOW_RECIPE" = "레시피 보기";
+"LIKE" = "좋아요";
+"UNLIKE" = "좋아요 취소";
+"WRITE_COMMENT" = "댓글 쓰기";
 "MORE_COMMENTS" = "이전 댓글 보기";
 "LEAVE_A_COMMENT" = "댓글 남기기";
 "SEND" = "전송";
 "SENDING" = "전송중";
 "LOGIN_TO_COMMENT" = "댓글을 남기려면 로그인해주세요.";
+"SAVE_PHOTO" = "사진 저장";
 "DELETE_DISH" = "요리 삭제";
 "REPORT" = "신고하기";
 "REPORT_REASON_SPAM" = "스팸성 글입니다.";
