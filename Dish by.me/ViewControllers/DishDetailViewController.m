@@ -74,6 +74,8 @@ enum {
 	UIImageView *userPhotoShadowView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 0, 25, 26 )];
 	userPhotoShadowView.image = [UIImage imageNamed:@"profile_thumbnail_border_small.png"];
 	[self.userPhotoView addSubview:userPhotoShadowView];
+	self.userPhotoView.userInteractionEnabled = YES;
+	[self.userPhotoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(viewProfile)]];
 	
 	self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake( 45, 13, 200, 26 )];
 	self.userNameLabel.backgroundColor = [UIColor clearColor];
@@ -1092,7 +1094,7 @@ enum {
 	[menu showInView:self.tabBarController.view];
 }
 
-- (void)profileImageButtonDidTouchUpInside
+- (void)viewProfile
 {
 	ProfileViewController *profileViewController = [[ProfileViewController alloc] init];
 	[profileViewController loadUserId:self.dish.userId];
