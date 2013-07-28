@@ -217,18 +217,18 @@ enum {
 	
 	self.likeIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 63, 19, 18 )];
 	
-	self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 62, 0, 0 )];
+	self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 60, 0, 0 )];
 	self.likeCountLabel.backgroundColor = [UIColor clearColor];
-	self.likeCountLabel.font = [UIFont boldSystemFontOfSize:13];
+	self.likeCountLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:13];
 	self.likeCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	self.likeCountLabel.shadowOffset = CGSizeMake( 0, 1 );
 	
 	self.commentIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 64, 14, 17 )];
 	self.commentIconView.image = [UIImage imageNamed:@"icon_comment_gray.png"];
 	
-	self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 62, 0, 0 )];
+	self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 60, 0, 0 )];
 	self.commentCountLabel.backgroundColor = [UIColor clearColor];
-	self.commentCountLabel.font = [UIFont boldSystemFontOfSize:13];
+	self.commentCountLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:13];
 	self.commentCountLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	self.commentCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	self.commentCountLabel.shadowOffset = CGSizeMake( 0, 1 );
