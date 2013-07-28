@@ -101,8 +101,9 @@ enum {
 	self.contentBoxTopView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_content_box_top.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 15, 15, 0, 10 )]];
 	
 	self.dishPhotoView = [[UIImageView alloc] init];
+	self.dishPhotoView.userInteractionEnabled = YES;
 	[self.dishPhotoView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showDishPhotoViewer)]];
-	[self.dishPhotoView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showDishPhotoMenu)]];
+	[self.dishPhotoView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(showDishPhotoMenu:)]];
 	
 	
 	//
@@ -110,12 +111,13 @@ enum {
 	//
 	self.contentBoxBottomView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"dish_content_box_bottom.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 0, 10, 10, 10 )]];
 	
-	self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 16, 9, 134, 0 )];
+	self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 16, 9, 288, 0 )];
 	self.titleLabel.backgroundColor = [UIColor clearColor];
 	self.titleLabel.font = [UIFont boldSystemFontOfSize:17];
 	self.titleLabel.textColor = [UIColor colorWithHex:0x514F4D alpha:1];
 	self.titleLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	self.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
+	self.titleLabel.numberOfLines = 0;
 	
 	self.contentSeparatorView = [[UIView alloc] initWithFrame:CGRectMake( 10, 0, 300, 2 )];
 	UIView *contentSeparatorTopView = [[UIView alloc] initWithFrame:CGRectMake( 0, 0, 300, 1 )];
@@ -125,12 +127,13 @@ enum {
 	[self.contentSeparatorView addSubview:contentSeparatorTopView];
 	[self.contentSeparatorView addSubview:contentSeparatorBottomView];
 	
-	self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake( 18, 0, 132, 0 )];
+	self.descriptionLabel = [[UILabel alloc] initWithFrame:CGRectMake( 18, 0, 284, 0 )];
 	self.descriptionLabel.backgroundColor = [UIColor clearColor];
 	self.descriptionLabel.font = [UIFont systemFontOfSize:13];
 	self.descriptionLabel.textColor = [UIColor colorWithHex:0x48494B alpha:1];
 	self.descriptionLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
 	self.descriptionLabel.shadowOffset = CGSizeMake( 0, 1 );
+	self.descriptionLabel.numberOfLines = 0;
 	
 	//
 	// Recipe
@@ -1203,73 +1206,75 @@ enum {
 
 - (void)showDishPhotoViewer
 {
-	NSLog( @"asdasd" );
 	DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] initWithPhotoURL:[NSURL URLWithString:self.dish.photoURL] thumbnailImage:self.dishPhotoView.image];
-	photoViewer.originRect = [photoViewer.view convertRect:self.dishPhotoView.frame fromView:self.tableView];
+	photoViewer.originRect = [photoViewer.view convertRect:self.dishPhotoView.frame fromView:self.dishPhotoView.superview];
 	self.tabBarController.modalPresentationStyle = UIModalPresentationCurrentContext;
 	[self presentViewController:photoViewer animated:NO completion:nil];
 }
 
-- (void)showDishPhotoMenu
+- (void)showDishPhotoMenu:(UILongPressGestureRecognizer *)recognizer
 {
-	UIActionSheet *menu = nil;
-	if( self.dish.userId == [CurrentUser user].userId )
+	if( recognizer.state == UIGestureRecognizerStateBegan )
 	{
-		menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"EDITself.dish", nil ) otherButtonTitles:@[NSLocalizedString( @"DELETEself.dish", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+		UIActionSheet *menu = nil;
+		if( self.dish.userId == [CurrentUser user].userId )
+		{
+			menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"EDIT_DISH", nil ) otherButtonTitles:@[NSLocalizedString( @"DELETE_DISH", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+				
+				// 요리 수정
+				if( buttonIndex == 0 )
+				{
+					WritingViewController *writingViewController = [[WritingViewController alloc] initWithDish:self.dish];
+					writingViewController.delegate = self;
+					DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
+					self.tabBarController.modalPresentationStyle = 0;
+					[self.navigationController presentViewController:navController animated:YES completion:NO];
+				}
+				
+				// 요리 삭제 -> 재확인
+				else if( buttonIndex == 1 )
+				{
+					[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REALLY_DELETE", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"DELETE_DISH", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+						if( buttonIndex == 0 )
+						{
+							[self deleteDish];
+						}
+					}] showInView:self.tabBarController.view];
+				}
+			}];
 			
-			// 요리 수정
-			if( buttonIndex == 0 )
-			{
-				WritingViewController *writingViewController = [[WritingViewController alloc] initWithDish:self.dish];
-				writingViewController.delegate = self;
-				DMNavigationController *navController = [[DMNavigationController alloc] initWithRootViewController:writingViewController];
-				self.tabBarController.modalPresentationStyle = 0;
-				[self.navigationController presentViewController:navController animated:YES completion:NO];
-			}
-			
-			// 요리 삭제 -> 재확인
-			else if( buttonIndex == 1 )
-			{
-				[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REALLY_DELETE", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"DELETEself.dish", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
-					if( buttonIndex == 0 )
-					{
-						[self deleteDish];
-					}
-				}] showInView:self.tabBarController.view];
-			}
-		}];
+			menu.destructiveButtonIndex = 1;
+		}
+		else
+		{
+			menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"REPORT", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+				
+				// 신고하기
+				if( buttonIndex == 0 )
+				{
+					[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REPORT_REASON", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"REPORT_REASON_SPAM", nil ), NSLocalizedString( @"REPORT_REASON_PORN", nil ), NSLocalizedString( @"REPORT_REASON_VIOLENCE", nil ), NSLocalizedString( @"REPORT_REASON_COPYRIGHT", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
+						
+						if( buttonIndex < 4 )
+						{
+							[self.tabBarController dim];
+							NSString *api = [NSString stringWithFormat:@"/dish/%d/report", self.dish.dishId];
+							NSDictionary *params = @{ @"type": [NSString stringWithFormat:@"%d", buttonIndex] };
+							[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
+								[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REPORT_ACCEPTED_TITLE", nil ) message:NSLocalizedString( @"MESSAGE_REPORT_ACCEPTED", nil ) cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", nil ) otherButtonTitles:nil dismissBlock:nil] show];
+								[self.tabBarController undim];
+							} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
+								showErrorAlert();
+								[self.tabBarController undim];
+							}];
+						}
+						
+					}] showInView:self.tabBarController.view];
+				}
+			}];
+		}
 		
-		menu.destructiveButtonIndex = 1;
+		[menu showInView:self.tabBarController.view];
 	}
-	else
-	{
-		menu = [[UIActionSheet alloc] initWithTitle:nil cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:NSLocalizedString( @"REPORT", nil ) otherButtonTitles:nil dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
-			
-			// 신고하기
-			if( buttonIndex == 0 )
-			{
-				[[[UIActionSheet alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REPORT_REASON", nil ) cancelButtonTitle:NSLocalizedString( @"CANCEL", nil ) destructiveButtonTitle:nil otherButtonTitles:@[NSLocalizedString( @"REPORT_REASON_SPAM", nil ), NSLocalizedString( @"REPORT_REASON_PORN", nil ), NSLocalizedString( @"REPORT_REASON_VIOLENCE", nil ), NSLocalizedString( @"REPORT_REASON_COPYRIGHT", nil )] dismissBlock:^(UIActionSheet *actionSheet, NSUInteger buttonIndex) {
-					
-					if( buttonIndex < 4 )
-					{
-						[self.tabBarController dim];
-						NSString *api = [NSString stringWithFormat:@"/dish/%d/report", self.dish.dishId];
-						NSDictionary *params = @{ @"type": [NSString stringWithFormat:@"%d", buttonIndex] };
-						[[DMAPILoader sharedLoader] api:api method:@"POST" parameters:params success:^(id response) {
-							[[[UIAlertView alloc] initWithTitle:NSLocalizedString( @"MESSAGE_REPORT_ACCEPTED_TITLE", nil ) message:NSLocalizedString( @"MESSAGE_REPORT_ACCEPTED", nil ) cancelButtonTitle:NSLocalizedString( @"I_GOT_IT", nil ) otherButtonTitles:nil dismissBlock:nil] show];
-							[self.tabBarController undim];
-						} failure:^(NSInteger statusCode, NSInteger errorCode, NSString *message) {
-							showErrorAlert();
-							[self.tabBarController undim];
-						}];
-					}
-					
-				}] showInView:self.tabBarController.view];
-			}
-		}];
-	}
-	
-	[menu showInView:self.tabBarController.view];
 }
 
 - (void)viewProfile

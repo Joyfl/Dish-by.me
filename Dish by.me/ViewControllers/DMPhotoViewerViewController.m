@@ -68,7 +68,8 @@
 {
 	CGFloat scale = [UIScreen mainScreen].scale;
 	CGFloat y = originRect.origin.y / scale;
-	if( scale == 2.0 ) y -= 10;
+	if( scale == 2.0 ) y += 10;
+	else y += 20;
 	_originRect = CGRectMake( originRect.origin.x / scale, y, originRect.size.width / scale, originRect.size.height / scale );
 }
 
