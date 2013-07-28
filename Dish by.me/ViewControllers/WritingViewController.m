@@ -64,6 +64,7 @@ enum {
 	[_photoButton addTarget:self action:@selector(photoButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
 	_nameInput = [[UITextField alloc] init];
+	_nameInput.delegate = self;
 	_nameInput.placeholder = NSLocalizedString( @"INPUT_DISH_NAME", @"" );
 	_nameInput.textColor = [UIColor colorWithHex:0x808283 alpha:1];
 	_nameInput.font = [UIFont boldSystemFontOfSize:15];
@@ -234,7 +235,7 @@ enum {
 		
 		_photoButton.frame = CGRectMake( 11, 11, PhotoButtonMaxWidth, _photoHeight );
 		_borderView.frame = _borderView.frame = CGRectMake( 5, 5, 310, _photoButton.frame.size.height + 42 );
-		_nameInput.frame = CGRectMake( 20, _photoHeight + 12, 280, 20 );
+		_nameInput.frame = CGRectMake( 20, _photoHeight + 12, 255, 20 );
 		_facebookButton.frame = CGRectMake( 279, _photoHeight + 9, 24, 25 );
 	}
 	
@@ -309,6 +310,17 @@ enum {
 	{
 		[self dismissViewControllerAnimated:YES completion:nil];
 	}
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+	NSUInteger oldLength = [textField.text length];
+    NSUInteger replacementLength = [string length];
+    NSUInteger rangeLength = range.length;
+	
+    NSUInteger newLength = oldLength - rangeLength + replacementLength;
+	
+    return newLength <= 40;
 }
 
 - (void)textViewDidBeginEditing:(id)sender

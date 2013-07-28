@@ -22,7 +22,7 @@ typedef enum {
 	DMProgressStateFailure
 } DMProgressState;
 
-@interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextViewDelegate, RecipeEditorViewControllerDelegate>
+@interface WritingViewController : GAITrackedViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UITextFieldDelegate, UITextViewDelegate, RecipeEditorViewControllerDelegate>
 {
 	UITableView *_tableView;
 	
