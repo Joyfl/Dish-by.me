@@ -32,10 +32,6 @@
 	
 	TTTAttributedLabel *_forkedFromLabel;
 	JLLabelButton *_forkCountButton;
-	
-	UIImageView *_commentInputBackgroundView;
-	UIPlaceHolderTextView *_commentInput;
-	DMButton *_sendButton;
 }
 
 @property (nonatomic, strong) Dish *dish;
@@ -96,6 +92,9 @@
 
 
 @property (nonatomic, strong) UIImageView *commentBar;
+@property (nonatomic, strong) UIImageView *commentInputBackgroundView;
+@property (nonatomic, strong) UIPlaceHolderTextView *commentInput;
+@property (nonatomic, strong) DMButton *sendButton;
 
 
 - (id)initWithDish:(Dish *)dish;

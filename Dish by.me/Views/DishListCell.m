@@ -181,35 +181,27 @@ static const NSInteger PhotoViewMaxLength = 292;
 		_dish.bookmarkCount++;
 		[self updateBookmarkUI];
 		
-		[UIView animateWithDuration:0.18 animations:^{
-			_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+		[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+			_bookmarkIconView.transform = CGAffineTransformMakeScale( 1.3, 1.3 );
 		} completion:^(BOOL finished) {
-			[UIView animateWithDuration:0.14 animations:^{
-				_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
+			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+				_bookmarkIconView.transform = CGAffineTransformMakeScale( 0.92, 0.92 );
 			} completion:^(BOOL finished) {
-				[UIView animateWithDuration:0.12 animations:^{
-					_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
-				} completion:^(BOOL finished) {
-					[UIView animateWithDuration:0.1 animations:^{
-						_bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-					}];
-				}];
+				[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+					_bookmarkIconView.transform = CGAffineTransformMakeScale( 1, 1 );
+				} completion:nil];
 			}];
 		}];
 		
-		[UIView animateWithDuration:0.2 delay:0.14 options:0 animations:^{
-			_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.4, 1.4);
+		[UIView animateWithDuration:0.2 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+			_bookmarkCountLabel.transform = CGAffineTransformMakeScale( 1.3, 1.3 );
 		} completion:^(BOOL finished) {
-			[UIView animateWithDuration:0.15 animations:^{
-				_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
+			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+				_bookmarkCountLabel.transform = CGAffineTransformMakeScale( 0.9, 0.9 );
 			} completion:^(BOOL finished) {
-				[UIView animateWithDuration:0.12 animations:^{
-					_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.1, 1.1);
-				} completion:^(BOOL finished) {
-					[UIView animateWithDuration:0.1 animations:^{
-						_bookmarkCountLabel.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-					}];
-				}];
+				[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+					_bookmarkCountLabel.transform = CGAffineTransformMakeScale( 1, 1 );
+				} completion:nil];
 			}];
 		}];
 	}

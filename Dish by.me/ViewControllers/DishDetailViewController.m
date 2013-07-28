@@ -198,7 +198,7 @@ enum {
 	self.likeButtonCommentButtonSeparator.textColor = [UIColor colorWithHex:0x717374 alpha:1];
 	self.likeButtonCommentButtonSeparator.shadowColor = [UIColor colorWithWhite:1 alpha:0.8];
 	self.likeButtonCommentButtonSeparator.shadowOffset = CGSizeMake( 0, 1 );
-	self.likeButtonCommentButtonSeparator.text = @"・";
+	self.likeButtonCommentButtonSeparator.text = @" ・ ";
 	[self.likeButtonCommentButtonSeparator sizeToFit];
 	
 	self.commentButton = [[JLLabelButton alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
@@ -209,6 +209,7 @@ enum {
 	self.commentButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[self.commentButton sizeToFit];
 	self.commentButton.hightlightViewInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
+	[self.commentButton addTarget:self action:@selector(commentButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
 	self.likeIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 63, 19, 18 )];
 	
@@ -254,24 +255,24 @@ enum {
 	self.commentBar.userInteractionEnabled = YES;
 	[self.view addSubview:self.commentBar];
 	
-	_commentInputBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"textfield_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 10, 10, 10, 10 )]];
-	_commentInputBackgroundView.frame = CGRectMake( 4, 5, 245, 30 );
-	_commentInputBackgroundView.userInteractionEnabled = YES;
-	[self.commentBar addSubview:_commentInputBackgroundView];
+	self.commentInputBackgroundView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"textfield_bg.png"] resizableImageWithCapInsets:UIEdgeInsetsMake( 10, 10, 10, 10 )]];
+	self.commentInputBackgroundView.frame = CGRectMake( 4, 5, 245, 30 );
+	self.commentInputBackgroundView.userInteractionEnabled = YES;
+	[self.commentBar addSubview:self.commentInputBackgroundView];
 	
-	_commentInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
-	_commentInput.font = [UIFont systemFontOfSize:13];
-	_commentInput.delegate = self;
-	_commentInput.editable = NO;
-	_commentInput.contentInset = UIEdgeInsetsMake( -8, -8, -8, -8 );
-	_commentInput.backgroundColor = [UIColor clearColor];
-	[self.commentBar addSubview:_commentInput];
+	self.commentInput = [[UIPlaceHolderTextView alloc] initWithFrame:CGRectMake( 12, 11, 230, 20 )];
+	self.commentInput.font = [UIFont systemFontOfSize:13];
+	self.commentInput.delegate = self;
+	self.commentInput.editable = NO;
+	self.commentInput.contentInset = UIEdgeInsetsMake( -8, -8, -8, -8 );
+	self.commentInput.backgroundColor = [UIColor clearColor];
+	[self.commentBar addSubview:self.commentInput];
 	
-	_sendButton = [[DMButton alloc] init];
-	_sendButton.frame = CGRectMake( 255, 5, 60, 30 );
-	_sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
-	[_sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
-	[self.commentBar addSubview:_sendButton];
+	self.sendButton = [[DMButton alloc] init];
+	self.sendButton.frame = CGRectMake( 255, 5, 60, 30 );
+	self.sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:13];
+	[self.sendButton addTarget:self action:@selector(sendButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
+	[self.commentBar addSubview:self.sendButton];
 	
 	UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(backgroundDidTap)];
 	tapRecognizer.enabled = NO; // 댓글입력중일때만 활성화 (TTTAttributedLabel 링크 터치 중복문제)
@@ -294,9 +295,9 @@ enum {
 		DMBarButtonItem *forkButton = [DMBarButtonItem barButtonItemWithTitle:NSLocalizedString( @"FORK", @"" ) target:self	action:@selector(forkButtonDidTouchUpInside)];
 		self.navigationItem.rightBarButtonItem = forkButton;
 		
-		_commentInput.editable = YES;
-		_commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
-		[_sendButton setTitle:NSLocalizedString( @"SEND", @"전송" ) forState:UIControlStateNormal];
+		self.commentInput.editable = YES;
+		self.commentInput.placeholder = NSLocalizedString( @"LEAVE_A_COMMENT", @"" );
+		[self.sendButton setTitle:NSLocalizedString( @"SEND", @"전송" ) forState:UIControlStateNormal];
 		
 		// 로그아웃상태에서 로그인상태로
 		if( !lastLoggedIn )
@@ -307,9 +308,9 @@ enum {
 	{
 		self.navigationItem.rightBarButtonItem = nil;
 		
-		_commentInput.editable = NO;
-		_commentInput.placeholder = NSLocalizedString( @"LOGIN_TO_COMMENT", @"댓글을 남기려면 로그인해주세요." );
-		[_sendButton setTitle:NSLocalizedString( @"LOGIN", @"로그인" ) forState:UIControlStateNormal];
+		self.commentInput.editable = NO;
+		self.commentInput.placeholder = NSLocalizedString( @"LOGIN_TO_COMMENT", @"댓글을 남기려면 로그인해주세요." );
+		[self.sendButton setTitle:NSLocalizedString( @"LOGIN", @"로그인" ) forState:UIControlStateNormal];
 	}
 	
 	[self updateAllCommentsRelativeTime];
@@ -360,7 +361,7 @@ enum {
 		self.dish.commentCount = [[response objectForKey:@"count"] integerValue];
 		_commentOffset += data.count;
 		
-		_commentInput.editable = YES;
+		self.commentInput.editable = YES;
 		
 		// 로드된 댓글이 없을 경우
 		if( data.count == 0 )
@@ -487,7 +488,7 @@ enum {
 	comment.userId = [CurrentUser user].userId;
 	comment.userName = [CurrentUser user].name;
 	comment.userPhotoURL = [CurrentUser user].photoURL;
-	comment.message = _commentInput.text;
+	comment.message = self.commentInput.text;
 	comment.createdTime = [NSDate date];
 	comment.relativeCreatedTime = NSLocalizedString( @"SENDING", @"전송중" );
 	comment.sending = YES;
@@ -497,10 +498,10 @@ enum {
 	[self.tableView reloadData];
 	
 	NSString *api = [NSString stringWithFormat:@"/dish/%d/comment", self.dish.dishId];
-	NSDictionary *params = @{ @"message": _commentInput.text };
+	NSDictionary *params = @{ @"message": self.commentInput.text };
 	
-	[self textView:_commentInput shouldChangeTextInRange:(NSRange){0, _commentInput.text.length} replacementText:@""];
-	_commentInput.text = @"";
+	[self textView:self.commentInput shouldChangeTextInRange:(NSRange){0, self.commentInput.text.length} replacementText:@""];
+	self.commentInput.text = @"";
 	
 	[self.tableView setContentOffset:CGPointMake( 0, self.tableView.contentSize.height - UIScreenHeight + 114 + self.commentBar.frame.size.height ) animated:YES];
 	
@@ -611,6 +612,18 @@ enum {
 		} completion:^(BOOL finished) {
 			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 				self.likeIconView.transform = CGAffineTransformMakeScale( 1, 1 );
+			} completion:nil];
+		}];
+	}];
+	
+	[UIView animateWithDuration:0.2 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+		self.likeCountLabel.transform = CGAffineTransformMakeScale( 1.3, 1.3 );
+	} completion:^(BOOL finished) {
+		[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+			self.likeCountLabel.transform = CGAffineTransformMakeScale( 0.9, 0.9 );
+		} completion:^(BOOL finished) {
+			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+				self.likeCountLabel.transform = CGAffineTransformMakeScale( 1, 1 );
 			} completion:nil];
 		}];
 	}];
@@ -750,7 +763,7 @@ enum {
 			return self.dish.recipe ? 84 : 22;
 			
 		case kSectionBookmark:
-			return 97;
+			return 95;
 			
 		case kSectionMoreComments:
 			return 45;
@@ -1119,7 +1132,7 @@ enum {
 	if( scrollView.contentSize.height < 50 )
 		return;
 	
-	if( !_commentInput.isFirstResponder )
+	if( !self.commentInput.isFirstResponder )
 	{
 		if( scrollView.contentSize.height - scrollView.contentOffset.y > UIScreenHeight - 114 - self.commentBar.frame.size.height )
 		{
@@ -1254,7 +1267,7 @@ enum {
 - (void)backgroundDidTap
 {
 	[[self.view.gestureRecognizers objectAtIndex:0] setEnabled:NO];
-	[_commentInput resignFirstResponder];
+	[self.commentInput resignFirstResponder];
 	
 	[UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^
 	{
@@ -1360,6 +1373,12 @@ enum {
 	}
 }
 
+- (void)commentButtonDidTouchUpInside
+{
+	if( [CurrentUser user].loggedIn )
+		[self.commentInput becomeFirstResponder];
+}
+
 - (void)recipeButtonDidTouchUpInside
 {
 	[self backgroundDidTap];
@@ -1429,7 +1448,7 @@ enum {
 {
 	if( [CurrentUser user].loggedIn )
 	{
-		if( _commentInput.text.length == 0 || [_commentInput.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0 )
+		if( self.commentInput.text.length == 0 || [self.commentInput.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]].length == 0 )
 			return;
 		
 		[self backgroundDidTap];
@@ -1463,19 +1482,15 @@ enum {
 		self.dish.bookmarkCount++;
 		[self updateBookmarkUI];
 		
-		[UIView animateWithDuration:0.18 animations:^{
-			self.bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.8, 1.8);
+		[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+			self.bookmarkIconView.transform = CGAffineTransformMakeScale( 1.3, 1.3 );
 		} completion:^(BOOL finished) {
-			[UIView animateWithDuration:0.14 animations:^{
-				self.bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.6, 0.6);
+			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+				self.bookmarkIconView.transform = CGAffineTransformMakeScale( 0.92, 0.92 );
 			} completion:^(BOOL finished) {
-				[UIView animateWithDuration:0.12 animations:^{
-					self.bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.2, 1.2);
-				} completion:^(BOOL finished) {
-					[UIView animateWithDuration:0.1 animations:^{
-						self.bookmarkIconView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1, 1);
-					}];
-				}];
+				[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+					self.bookmarkIconView.transform = CGAffineTransformMakeScale( 1, 1 );
+				} completion:nil];
 			}];
 		}];
 	}
@@ -1538,21 +1553,21 @@ enum {
 	NSInteger maxLineCount = 8;
 	CGFloat maxCommentInputHeight = maxLineCount * fontHeight;
 	
-	NSString *comment = [_commentInput.text stringByReplacingCharactersInRange:range withString:text];
+	NSString *comment = [self.commentInput.text stringByReplacingCharactersInRange:range withString:text];
 	
-	UIFont *font = _commentInput.font;
-	CGSize constraintSize = CGSizeMake( _commentInput.frame.size.width - 16, maxCommentInputHeight ); // 최대 8줄
+	UIFont *font = self.commentInput.font;
+	CGSize constraintSize = CGSizeMake( self.commentInput.frame.size.width - 16, maxCommentInputHeight ); // 최대 8줄
 	CGFloat commentHeight = [comment sizeWithFont:font constrainedToSize:constraintSize lineBreakMode:NSLineBreakByWordWrapping].height;
 	if( commentHeight < fontHeight ) commentHeight = fontHeight;
 	
-	if( [text isEqualToString:@"\n"] && range.location == _commentInput.text.length && commentHeight < maxCommentInputHeight - fontHeight )
+	if( [text isEqualToString:@"\n"] && range.location == self.commentInput.text.length && commentHeight < maxCommentInputHeight - fontHeight )
 	{
 		commentHeight += fontHeight;
 	}
 	
-	CGRect frame = _commentInput.frame;
+	CGRect frame = self.commentInput.frame;
 	frame.size.height = commentHeight;
-	_commentInput.frame = frame;
+	self.commentInput.frame = frame;
 	
 	frame = self.commentBar.frame;
 	frame.size.height = commentHeight + 24;
@@ -1561,20 +1576,20 @@ enum {
 	self.tableView.scrollIndicatorInsets = UIEdgeInsetsMake( 0, 0, frame.size.height, 0 );
 	self.commentBar.frame = frame;
 	
-	frame = _commentInputBackgroundView.frame;
+	frame = self.commentInputBackgroundView.frame;
 	frame.size.height = commentHeight + 14;
-	_commentInputBackgroundView.frame = frame;
+	self.commentInputBackgroundView.frame = frame;
 	
-	frame =_sendButton.frame;
+	frame =self.sendButton.frame;
 	frame.origin.y = self.commentBar.frame.size.height - 35;
-	_sendButton.frame = frame;
+	self.sendButton.frame = frame;
 	
 	return YES;
 }
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-	_sendButton.enabled = _commentInput.text.length > 0;
+	self.sendButton.enabled = self.commentInput.text.length > 0;
 }
 
 @end
