@@ -24,6 +24,7 @@
 #import "ForkListViewController.h"
 #import "AppDelegate.h"
 #import "DMPhotoViewerViewController.h"
+#import "UIButton+TouchAreaInsets.h"
 
 #define photoHeight !self.dish ? 296 : 296 * self.dish.photoHeight / self.dish.photoWidth
 #define titleHeight [self.dish.dishName sizeWithFont:self.titleLabel.font constrainedToSize:self.titleLabel.frame.size lineBreakMode:NSLineBreakByWordWrapping].height
@@ -194,6 +195,7 @@ enum {
 	[self.likeButton setTitleShadowColor:[UIColor colorWithWhite:1 alpha:0.8] forState:UIControlStateNormal];
 	self.likeButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 	self.likeButton.hightlightViewInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
+	self.likeButton.touchAreaInsets = UIEdgeInsetsMake( 16, 10, 16, 10 );
 	[self.likeButton addTarget:self action:@selector(likeButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
 	self.likeButtonCommentButtonSeparator = [[UILabel alloc] initWithFrame:CGRectMake( 0, 64, 0, 0 )];
@@ -213,11 +215,12 @@ enum {
 	self.commentButton.titleLabel.shadowOffset = CGSizeMake( 0, 1 );
 	[self.commentButton sizeToFit];
 	self.commentButton.hightlightViewInsets = UIEdgeInsetsMake( -4, -4, -4, -4 );
+	self.commentButton.touchAreaInsets = UIEdgeInsetsMake( 16, 10, 16, 10 );
 	[self.commentButton addTarget:self action:@selector(commentButtonDidTouchUpInside) forControlEvents:UIControlEventTouchUpInside];
 	
 	self.likeIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 63, 19, 18 )];
 	
-	self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 60, 0, 0 )];
+	self.likeCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 61, 0, 0 )];
 	self.likeCountLabel.backgroundColor = [UIColor clearColor];
 	self.likeCountLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:13];
 	self.likeCountLabel.shadowColor = [UIColor colorWithWhite:0 alpha:0.1];
@@ -226,7 +229,7 @@ enum {
 	self.commentIconView = [[UIImageView alloc] initWithFrame:CGRectMake( 0, 64, 14, 17 )];
 	self.commentIconView.image = [UIImage imageNamed:@"icon_comment_gray.png"];
 	
-	self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 60, 0, 0 )];
+	self.commentCountLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0, 61, 0, 0 )];
 	self.commentCountLabel.backgroundColor = [UIColor clearColor];
 	self.commentCountLabel.font = [UIFont fontWithName:@"SegoeUI-Bold" size:13];
 	self.commentCountLabel.textColor = [UIColor colorWithHex:0x808283 alpha:1];
@@ -605,24 +608,24 @@ enum {
 	
 	self.likeIconView.transform = CGAffineTransformMakeScale( 0.78, 0.78 );
 	[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-		self.likeIconView.transform = CGAffineTransformMakeScale( 1.21, 1.21 );
+		self.likeIconView.transform = CGAffineTransformMakeScale( 1.41, 1.41 );
 	} completion:^(BOOL finished) {
 		[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-			self.likeIconView.transform = CGAffineTransformMakeScale( 0.89, 0.89 );
+			self.likeIconView.transform = CGAffineTransformMakeScale( 0.84, 0.84 );
 		} completion:^(BOOL finished) {
-			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+			[UIView animateWithDuration:0.35 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 				self.likeIconView.transform = CGAffineTransformMakeScale( 1, 1 );
 			} completion:nil];
 		}];
 	}];
 	
 	[UIView animateWithDuration:0.2 delay:0.1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-		self.likeCountLabel.transform = CGAffineTransformMakeScale( 1.3, 1.3 );
+		self.likeCountLabel.transform = CGAffineTransformMakeScale( 1.4, 1.4 );
 	} completion:^(BOOL finished) {
 		[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-			self.likeCountLabel.transform = CGAffineTransformMakeScale( 0.9, 0.9 );
+			self.likeCountLabel.transform = CGAffineTransformMakeScale( 0.84, 0.84 );
 		} completion:^(BOOL finished) {
-			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+			[UIView animateWithDuration:0.35 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 				self.likeCountLabel.transform = CGAffineTransformMakeScale( 1, 1 );
 			} completion:nil];
 		}];
@@ -1541,12 +1544,12 @@ enum {
 		[self updateBookmarkUI];
 		
 		[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-			self.bookmarkIconView.transform = CGAffineTransformMakeScale( 1.3, 1.3 );
+			self.bookmarkIconView.transform = CGAffineTransformMakeScale( 1.41, 1.41 );
 		} completion:^(BOOL finished) {
 			[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-				self.bookmarkIconView.transform = CGAffineTransformMakeScale( 0.92, 0.92 );
+				self.bookmarkIconView.transform = CGAffineTransformMakeScale( 0.84, 0.84 );
 			} completion:^(BOOL finished) {
-				[UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+				[UIView animateWithDuration:0.35 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
 					self.bookmarkIconView.transform = CGAffineTransformMakeScale( 1, 1 );
 				} completion:nil];
 			}];
