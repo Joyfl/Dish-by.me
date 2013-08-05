@@ -26,7 +26,7 @@
 #import "DMPhotoViewerViewController.h"
 #import "UIButton+TouchAreaInsets.h"
 
-#define photoHeight !self.dish ? 296 : 296 * self.dish.photoHeight / self.dish.photoWidth
+#define dishPhotoHeight !self.dish ? 296 : 296 * self.dish.photoHeight / self.dish.photoWidth
 #define titleHeight [self.dish.dishName sizeWithFont:self.titleLabel.font constrainedToSize:self.titleLabel.frame.size lineBreakMode:NSLineBreakByWordWrapping].height
 #define descriptionHeight [self.dish.description sizeWithFont:self.descriptionLabel.font constrainedToSize:self.descriptionLabel.frame.size lineBreakMode:NSLineBreakByWordWrapping].height
 #define isFirstCommentLoaded self.dish.commentCount > 0 && _commentOffset == 0
@@ -757,7 +757,7 @@ enum {
 			return 44;
 			
 		case kSectionPhoto:
-			return photoHeight + 9;
+			return dishPhotoHeight + 9;
 			
 		case kSectionContent:
 			return titleHeight + descriptionHeight + self.contentSeparatorView.frame.size.height + 40;
@@ -832,8 +832,8 @@ enum {
 			[cell.contentView addSubview:self.contentBoxTopView];
 		}
 		
-		self.contentBoxTopView.frame = CGRectMake( 8, 0, 304, photoHeight + 9 );
-		self.dishPhotoView.frame = CGRectMake( 12, 9, 296, photoHeight );
+		self.contentBoxTopView.frame = CGRectMake( 8, 0, 304, dishPhotoHeight + 9 );
+		self.dishPhotoView.frame = CGRectMake( 12, 9, 296, dishPhotoHeight );
 		[self.dishPhotoView setImageWithURL:[NSURL URLWithString:self.dish.photoURL] placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
 		
 		return cell;
@@ -1361,7 +1361,7 @@ enum {
 
 - (void)showDishPhotoViewer
 {
-	DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] initWithPhotoURL:[NSURL URLWithString:self.dish.photoURL] thumbnailImage:self.dishPhotoView.image];
+	DMPhotoViewerViewController *photoViewer = [[DMPhotoViewerViewController alloc] initWithPhotoURL:[NSURL URLWithString:self.dish.photoURL] thumbnailImage:self.dishPhotoView.image imageRatio:(CGFloat)self.dish.photoWidth / (CGFloat)self.dish.photoHeight];
 	photoViewer.originRect = [photoViewer.view convertRect:self.dishPhotoView.frame fromView:self.dishPhotoView.superview];
 	self.tabBarController.modalPresentationStyle = UIModalPresentationCurrentContext;
 	[self presentViewController:photoViewer animated:NO completion:nil];

@@ -12,6 +12,11 @@
 
 - (id)initWithPhotoURL:(NSURL *)url thumbnailImage:(UIImage *)thumbnailImage
 {
+	return [self initWithPhotoURL:url thumbnailImage:thumbnailImage imageRatio:thumbnailImage.size.width / thumbnailImage.size.height];
+}
+
+- (id)initWithPhotoURL:(NSURL *)url thumbnailImage:(UIImage *)thumbnailImage imageRatio:(CGFloat)imageRatio
+{
 	self = [super init];
 	self.trackedViewName = [self.class description];
 	self.view.backgroundColor = [UIColor clearColor];
@@ -32,7 +37,6 @@
 	[_imageView setImageWithURL:url placeholderImage:thumbnailImage];
 	[_scrollView addSubview:_imageView];
 	
-	CGFloat imageRatio = thumbnailImage.size.width / thumbnailImage.size.height;
 	CGFloat scrollViewRatio = _scrollView.frame.size.width / _scrollView.frame.size.height;
 	
 	CGFloat maxWidth = _scrollView.frame.size.width;

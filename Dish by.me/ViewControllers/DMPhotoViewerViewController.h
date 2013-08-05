@@ -18,5 +18,6 @@
 @property (nonatomic, readonly) UIImageView *imageView;
 
 - (id)initWithPhotoURL:(NSURL *)url thumbnailImage:(UIImage *)thumbnailImage;
+- (id)initWithPhotoURL:(NSURL *)url thumbnailImage:(UIImage *)thumbnailImage imageRatio:(CGFloat)imageRatio;
 
 @end

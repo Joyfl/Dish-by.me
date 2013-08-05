@@ -430,7 +430,6 @@
 		03B598061602FDC0007BD6AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03B598041602FDC0007BD6AF /* InfoPlist.strings */; };
 		03B598081602FDC0007BD6AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B598071602FDC0007BD6AF /* main.m */; };
 		03B5980C1602FDC0007BD6AF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 03B5980B1602FDC0007BD6AF /* AppDelegate.m */; };
-		03B598211603046E007BD6AF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03B598231603046E007BD6AF /* Localizable.strings */; };
 		03C52CBD16F435E7005B1B4C /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C52CBB16F435D9005B1B4C /* Accounts.framework */; };
 		03C52CBF16F435F5005B1B4C /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C52CBE16F435F5005B1B4C /* libsqlite3.dylib */; };
 		03C52CC316F43618005B1B4C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03C52CC216F43618005B1B4C /* AdSupport.framework */; };
@@ -1947,7 +1946,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				03B598061602FDC0007BD6AF /* InfoPlist.strings in Resources */,
-				03B598211603046E007BD6AF /* Localizable.strings in Resources */,
 				03A5E94116B4DBE800C79F8D /* SEGOEUI.TTF in Resources */,
 				03A5E94216B4DBE800C79F8D /* SEGOEUIB.TTF in Resources */,
 				03A5E94316B4DBE800C79F8D /* SEGOEUII.TTF in Resources */,
